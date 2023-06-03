@@ -93,6 +93,6 @@ pushd "build"
 
 
 @REM Compiling with g++
-g++ -g -std=c++17 ..\main.cpp -o main -I..\include -L..\lib -l:libglfw3.a -lOpengl32
+g++ -g -std=c++17 ../src/main.cpp -o main -I../include -L../lib -l:libglfw3.a -lOpengl32
 
 popd
