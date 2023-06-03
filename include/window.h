@@ -2,17 +2,84 @@
 
 #include <string>
 #include <stdexcept>
+#include <iostream>
 #include <GLFW/glfw3.h>
 
 namespace Dralgeer {
+    struct WindowData {
+        // * =================
+        // * Standard Data
+        // * =================
+
+        uint16_t width, height;
+        std::string title;
+
+        // * =========================
+        // * Mouse Listener Stuff
+        // * =========================
+
+        double mScrollX = 0, mScrollY = 0;
+        double mX = 0, mY = 0, mLastX = 0, mLastY = 0;
+        // double mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0;
+
+        uint8_t mButtonsDown = 0;
+        bool mIsDragging = 0;
+        bool mButtonPressed[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    };
+
     class Window {
         private:
-            uint16_t width, height;
-            std::string title;
+            WindowData data;
             GLFWwindow* window;
 
+            // * =================
+            // * Error Callback
+            // * =================
+
+            static void errorCallback(int error_code, const char* description) {
+                std::cout << "Error " << error_code << ": " << description << "\n";
+            };
+
+            // * ==================
+            // * Mouse Listener
+            // * ==================
+
+            static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+                WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
+                
+                if (data.mButtonsDown) { data.mIsDragging = 1; }
+
+                data.mLastX = data.mX;
+                data.mLastY = data.mY;
+                data.mX = xpos;
+                data.mY = ypos;
+            };
+
+            static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+                WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
+
+                if (button < 9) {
+                    if (action == GLFW_PRESS) {
+                        data.mButtonsDown++;
+                        data.mButtonPressed[button] = 1;
+
+                    } else if (action == GLFW_RELEASE) {
+                        data.mButtonsDown--;
+                        data.mButtonPressed[button] = 0;
+                        data.mIsDragging = 0;
+                    }
+                }
+            };
+
+            static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+                WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
+
+                data.mScrollX = xoffset;
+                data.mScrollY = yoffset;
+            };
+
         public:
-            Window(uint16_t width, uint16_t height, std::string title) : width(width), height(height), title(title) {};
+            Window(uint16_t width, uint16_t height, std::string title) : data({width, height, title}) {};
 
             // * =========================================
             // * Rule of 3 to ensure no reassignment.
@@ -22,14 +89,43 @@ namespace Dralgeer {
             Window& operator = (Window const &w) { throw std::runtime_error("Dralgeer::Window objects CANNOT be assigned or reassigned."); };
 
             void init() {
-                if (!glfwInit()) { throw std::runtime_error("GLFW failed to initialize."); } // initialize glfw
+                // error callback
+                glfwSetErrorCallback(errorCallback);
+
+                // initialize glfw
+                if (!glfwInit()) { throw std::runtime_error("GLFW failed to initialize."); }
+
+                // configure glfw
+                glfwDefaultWindowHints();
+                glfwWindowHint(GLFW_VISIBLE, 0);
+                glfwWindowHint(GLFW_RESIZABLE, 1);
+                glfwWindowHint(GLFW_MAXIMIZED, 1);
 
                 // create the window
-                window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+                window = glfwCreateWindow(data.width, data.height, data.title.c_str(), NULL, NULL);
                 if (!window) { throw std::runtime_error("The window failed to be created."); }
 
                 glfwMakeContextCurrent(window); // make the window's context current
+                glfwSetWindowUserPointer(window, &data); // add the data as a pointer to the window
                 glfwSwapInterval(1); // enable v-sync
+                glfwShowWindow(window); // show the window
+
+                // setup callbacks
+                // windows
+                glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+                    WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
+                    data.width = width;
+                    data.height = height;
+                });
+
+                // mouse
+                glfwSetCursorPosCallback(window, cursor_position_callback);
+                glfwSetMouseButtonCallback(window, mouse_button_callback);
+                glfwSetScrollCallback(window, scroll_callback);
+
+                // keyboard
+
+                // joystick
 
                 // enable alpha blending
                 glEnable(GL_BLEND);
@@ -61,7 +157,5 @@ namespace Dralgeer {
                 glfwDestroyWindow(window);
                 glfwTerminate();
             };
-
-            ~Window() { delete window; };
     };
 }
