@@ -20,11 +20,24 @@ namespace Dralgeer {
 
         double mScrollX = 0, mScrollY = 0;
         double mX = 0, mY = 0, mLastX = 0, mLastY = 0;
-        // double mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0;
+        // double mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0; // todo add when adding Dear ImGUI
 
         uint8_t mButtonsDown = 0;
         bool mIsDragging = 0;
-        bool mButtonPressed[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        bool mButtonPressed[9] = {0};
+
+        // * ======================
+        // * Key Listener Stuff
+        // * ======================
+
+        bool keyPressed[350] = {0};
+
+        // * ===========================
+        // * Joystick Listener Stuff
+        // * ===========================
+
+        // int jId;
+        // bool jConnected, jGamepad;
     };
 
     class Window {
@@ -78,6 +91,28 @@ namespace Dralgeer {
                 data.mScrollY = yoffset;
             };
 
+            // * ===============
+            // * Key Listener
+            // * ===============
+
+            static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+                if (key < 350) {
+                    WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
+
+                    if (action == GLFW_PRESS) { data.keyPressed[key] = 1; }
+                    else if (action == GLFW_RELEASE) { data.keyPressed[key] = 1; }
+                }
+            };
+
+            // * ====================
+            // * Joystick Listener
+            // * ====================
+
+            // todo add when event system is set up (as it doesn't have the window as a parameter)
+            // static void joystick_callback(int jid, int event) {
+                
+            // };
+
         public:
             Window(uint16_t width, uint16_t height, std::string title) : data({width, height, title}) {};
 
@@ -124,8 +159,10 @@ namespace Dralgeer {
                 glfwSetScrollCallback(window, scroll_callback);
 
                 // keyboard
+                glfwSetKeyCallback(window, key_callback);
 
                 // joystick
+                // todo will add
 
                 // enable alpha blending
                 glEnable(GL_BLEND);
