@@ -68,7 +68,7 @@ namespace Dralgeer {
                 data.mY = ypos;
             };
 
-            static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+            static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
                 WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
                 if (button < 9) {
@@ -114,7 +114,7 @@ namespace Dralgeer {
             // };
 
         public:
-            Window(uint16_t width, uint16_t height, std::string title) : data({width, height, title}) {};
+            Window(uint16_t width, uint16_t height, std::string const &title) : data({width, height, title}) {};
 
             // * =========================================
             // * Rule of 3 to ensure no reassignment.
@@ -155,7 +155,7 @@ namespace Dralgeer {
 
                 // mouse
                 glfwSetCursorPosCallback(window, cursor_position_callback);
-                glfwSetMouseButtonCallback(window, mouse_button_callback);
+                glfwSetMouseButtonCallback(window, mouseButtonCallback);
                 glfwSetScrollCallback(window, scroll_callback);
 
                 // keyboard
@@ -192,6 +192,7 @@ namespace Dralgeer {
 
             void destroy() {
                 glfwDestroyWindow(window);
+                glfwSetErrorCallback(NULL);
                 glfwTerminate();
             };
     };
