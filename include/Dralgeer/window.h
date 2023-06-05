@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
 #include <stdexcept>
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include "gameobject.h"
 
 namespace Dralgeer {
     struct WindowData {

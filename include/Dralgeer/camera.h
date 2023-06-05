@@ -1,15 +1,15 @@
 #pragma once
 
-// todo download GLM
+#include <GLM/glm/glm.hpp>
 
 namespace Dralgeer {
     struct Camera {
-        // ZMath::Vec2D pos;
-        // ZMath::Vec2D projectionSize;
+        glm::mat4 projection, invProjection;
+        glm::mat4 view, invView;
+        glm::vec2 pos;
+        glm::vec2 projectionSize = {1024, 576}; // 32 * 32, 32 * 18
+        float zoom = 1.0f;
 
-        // Camera(ZMath::Vec2D const &pos) : pos(pos) {};
-
-        inline void adjustProjection();
-        // inline ZMath::Mat4D getViewMatrix();
+        // ! add adjustment functions
     };
 }

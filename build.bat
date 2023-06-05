@@ -1,5 +1,7 @@
 @echo off
 
+@REM todo look up how to precompile headers
+
 @REM Can only be compiled with GNU
 
 if not exist "build" (
