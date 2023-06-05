@@ -85,7 +85,7 @@ namespace Dralgeer {
                     glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
                     std::cout << "ERROR: '" << filepath << "'\n\tShader compilation failed.\n";
                     
-                    char* errorLog;
+                    char* errorLog = nullptr;
                     glGetShaderInfoLog(id, len, &len, errorLog);
 
                     for (int i = 0; i < len; ++i) { std::cout << errorLog[i]; }
@@ -108,7 +108,7 @@ namespace Dralgeer {
                     glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &len);
                     std::cout << "ERROR: '" << filepath << "'\n\tShader linking failed.\n";
 
-                    char* errorLog;
+                    char* errorLog = nullptr;
                     glGetShaderInfoLog(shaderID, len, &len, errorLog);
 
                     for (int i = 0; i < len; ++i) { std::cout << errorLog[i]; }
