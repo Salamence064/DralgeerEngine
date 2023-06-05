@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../camera.h"
+#include "../gameobject.h"
 
 namespace Dralgeer {
     class Scene {

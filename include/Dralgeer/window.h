@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include "gameobject.h"
+#include "scenes/scene.h"
 
 namespace Dralgeer {
     struct WindowData {
