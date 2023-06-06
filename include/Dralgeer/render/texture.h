@@ -1,5 +1,7 @@
 #pragma once
 
+#define GLEW_STATIC
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -8,6 +10,7 @@
 #include <regex>
 #include <unordered_map>
 #include <STB/stb_image.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GLM/glm/glm.hpp>
 
@@ -22,6 +25,8 @@ namespace Dralgeer {
             bool inUse = 0;
 
         public:
+            Shader() {};
+
             // * parse the shader passed in
             Shader(std::string const &filepath) {
                 this->filepath = filepath;

@@ -1,19 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <regex>
-#include <unordered_map>
-#include <GL/glew.h>
-#include <STB/stb_image.h>
-#include <GLFW/glfw3.h>
-#include <GLM/glm/glm.hpp>
-
-
-// #include "render/debugdraw.h"
+#include "render/debugdraw.h"
 // #include "scenes/scene.h"
 
 namespace Dralgeer {
