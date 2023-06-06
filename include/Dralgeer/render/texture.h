@@ -1,5 +1,3 @@
-// todo put AssetPool
-
 #pragma once
 
 #include <iostream>
@@ -9,7 +7,6 @@
 #include <string>
 #include <regex>
 #include <unordered_map>
-#include <gl.h>
 #include <STB/stb_image.h>
 #include <GLFW/glfw3.h>
 #include <GLM/glm/glm.hpp>
