@@ -263,17 +263,19 @@ namespace Dralgeer {
                 stbi_image_free(image);
             };
 
-            bool operator == (Texture const &tex) { return tex.width == width && tex.height == height && tex.texID == texID && tex.filepath == filepath; };
+            bool operator == (Texture const &tex) const { return tex.width == width && tex.height == height && tex.texID == texID && tex.filepath == filepath; };
 
-            inline void bind() { glBindTexture(GL_TEXTURE_2D, texID); };
-            inline void unbind() { glBindTexture(GL_TEXTURE_2D, 0); };
+            inline void bind() const { glBindTexture(GL_TEXTURE_2D, texID); };
+            inline void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); };
     };
 
 
     namespace AssetPool {
-        std::unordered_map<std::string, Shader> shaders;
-        std::unordered_map<std::string, Texture> textures;
-        // std::unordered_map<std::string, SpriteSheet> spriteSheets; // todo add when I create sprites and sprite sheets
+        namespace {
+            static std::unordered_map<std::string, Shader> shaders;
+            static std::unordered_map<std::string, Texture> textures;
+            // static std::unordered_map<std::string, SpriteSheet> spriteSheets; // todo add when I create sprites and sprite sheets
+        }
 
         inline Shader getShader(std::string const &filepath) {
             if (shaders.find(filepath) != shaders.end()) { return shaders[filepath]; }
