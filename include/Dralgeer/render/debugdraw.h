@@ -1,7 +1,6 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-#include <GLM/glm/glm.hpp>
+#include "texture.h"
 
 namespace Dralgeer {
     namespace DebugDraw {

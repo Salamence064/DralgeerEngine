@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <string>
 #include <regex>
+#include <unordered_map>
 #include <gl.h>
 #include <STB/stb_image.h>
 #include <GLFW/glfw3.h>
@@ -267,4 +268,31 @@ namespace Dralgeer {
             inline void bind() { glBindTexture(GL_TEXTURE_2D, texID); };
             inline void unbind() { glBindTexture(GL_TEXTURE_2D, 0); };
     };
+
+
+    namespace AssetPool {
+        std::unordered_map<std::string, Shader> shaders;
+        std::unordered_map<std::string, Texture> textures;
+        // std::unordered_map<std::string, SpriteSheet> spriteSheets; // todo add when I create sprites and sprite sheets
+
+        inline Shader getShader(std::string const &filepath) {
+            if (shaders.find(filepath) != shaders.end()) { return shaders[filepath]; }
+
+            // add new shader if it is not included
+            Shader shader(filepath);
+            shader.compile();
+            shaders.insert({filepath, shader});
+            return shader;
+        };
+
+        inline Texture getTexture(std::string const &filepath) {
+            if (textures.find(filepath) != textures.end()) { return textures[filepath]; }
+
+            // add new texture if it is not included
+            Texture texture;
+            texture.init(filepath);
+            textures.insert({filepath, texture});
+            return texture;
+        };
+    }
 }

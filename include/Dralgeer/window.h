@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 #include <iostream>
-#include <GLFW/glfw3.h>
+#include "render/debugdraw.h"
 #include "scenes/scene.h"
 
 namespace Dralgeer {
