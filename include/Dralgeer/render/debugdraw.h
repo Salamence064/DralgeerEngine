@@ -26,7 +26,7 @@ namespace Dralgeer {
 
             // 6 floats per vertex, 2 vertices per line
             static float vertexArray[VERTEX_ARR_SIZE];
-            static Shader shader = AssetPool::getShader("assets/shaders/debugLine2D.glsl");
+            static Shader shader = AssetPool::getShader("C:/VS/DralgeerEngine/assets/shaders/debugLine2D.glsl");
 
             static unsigned int vaoID, vboID;
             static bool started = 0;

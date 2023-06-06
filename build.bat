@@ -22,18 +22,14 @@ if not exist "lib" (
 
 @REM check if GLFW folder is empty
 dir /b /s /a "glfw/" | findstr . > nul || (
-    @REM The program should never really run this nest of commands
-    echo GLFW Folder is empty
-
-    pushd "glfw"
-    call git submodule init
-    call git submodule update
-    popd
+    echo GLFW folder is empty
+    GOTO FAILED
 )
 
 if exist "build/vendor/glfw3.dll" (
     GOTO skip_GLFW_build
 )
+
 
 @REM --------- Start of GLFW Build ------------
 
@@ -67,8 +63,8 @@ for %%W in (%search_words%) do (
 )
 
 pushd "./build"
-    gcc -c ../*.c -I../../deps -D_GLFW_BUILD_DLL -D_GLFW_USE_CONFIG_H -lOpengl32 -lShell32 -lGdi32 -lUser32
-    gcc -shared -o glfw3.dll *.o -Wl,--out-implib,libglfw3.a -lOpengl32 -lShell32 -lGdi32 -lUser32
+    gcc -c ../*.c -I../../deps -D_GLFW_BUILD_DLL -D_GLFW_USE_CONFIG_H -lGlew32s -lOpengl32 -lShell32 -lGdi32 -lUser32
+    gcc -shared -o glfw3.dll *.o -Wl,--out-implib,libglfw3.a -lGlew32s -lOpengl32 -lShell32 -lGdi32 -lUser32
     copy "glfw3.dll" "../../../build/vendor" 
     copy "libglfw3.a" "../../../lib"
 popd
@@ -84,6 +80,7 @@ rmdir "temp"
 
 @REM --------- End of GLFW Build ------------
 
+
 set source_folder= 
 set destination_folder= 
 set search_words= 
@@ -95,6 +92,8 @@ pushd "build"
 
 
 @REM Compiling with g++
-g++ -g -std=c++17 ../src/main.cpp -o main -I../include -L../lib -l:libglfw3.a -lOpengl32
+g++ -g -std=c++17 ../src/main.cpp -o main -I../include -L../lib -l:libglfw3.a -lGlew32s -lOpengl32 -lGdi32
 
 popd
+
+:FAILED

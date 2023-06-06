@@ -47,8 +47,8 @@ namespace Dralgeer {
                     std::smatch match;
                     
                     for (int i = 0; std::regex_search(s, match, std::regex("(#type)( )+([a-zA-Z]+)")); i+=2) {
-                        indices[i] = match.position() + offset;
-                        indices[i + 1] = indices[i] + match.length();
+                        indices[i] = match.position() + offset + 6;
+                        indices[i + 1] = match.length() - 6;
                         s = match.suffix();
                         offset = source.length() - s.length();
                     }
