@@ -21,11 +21,11 @@ namespace Dralgeer {
             public:
                 int uID;
                 std::string name;
-                Transform transform;
+                Transform transform; // ! DO NOT serialize
                 // ! add list of components attached to the object (probs use templates for that though or void*)
 
-                bool serialize = 1;
-                bool dead = 0;
+                bool serialize = 1; // ! DO NOT serialize
+                bool dead = 0; // ! DO NOT serialize
                 
                 GameObject(std::string const &str) : name(str) {};
 
