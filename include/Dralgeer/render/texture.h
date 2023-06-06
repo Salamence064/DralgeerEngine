@@ -135,6 +135,8 @@ namespace Dralgeer {
             };
 
 
+            // ? Note: OpenGL expects matrices in column major order.
+
             inline void uploadMat4(char const* name, glm::mat4 const &mat) {
                 int loc = glGetUniformLocation(shaderID, name);
                 use(); // make sure it is in use
