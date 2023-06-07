@@ -59,7 +59,7 @@ namespace Dralgeer {
         };
 
         inline void beginFrame() {
-            if (!started) { start(); }
+            // if (!started) { start(); }
 
             // remove dead lines
             for (int i = lines.size() - 1; i >= 0; i--) {
@@ -108,13 +108,14 @@ namespace Dralgeer {
             glBufferSubData(GL_ARRAY_BUFFER, 0, s, arr);
 
             // ! This is temp code, this will not be here once scenes are made
-            camera.adjustProjection();
-            camera.adjustView();
+            // camera.adjustProjection();
+            // camera.adjustView();
+            // !==============================================================
 
             // use our shader
-            shader.use();
-            shader.uploadMat4("uProjection", camera.proj);
-            shader.uploadMat4("uView", camera.view);
+            // shader.use();
+            // shader.uploadMat4("uProjection", camera.proj);
+            // shader.uploadMat4("uView", camera.view);
 
             // bind the VAO
             glBindVertexArray(vaoID);
@@ -130,7 +131,7 @@ namespace Dralgeer {
             glBindVertexArray(0);
 
             // unbind shader and free memory
-            shader.detach();
+            // shader.detach();
             delete[] arr;
         };
 

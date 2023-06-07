@@ -1,7 +1,6 @@
 #pragma once
 
 #include "render/debugdraw.h"
-// #include "scenes/scene.h"
 
 namespace Dralgeer {
     struct WindowData {
