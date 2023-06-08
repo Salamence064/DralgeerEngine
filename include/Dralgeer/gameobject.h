@@ -10,12 +10,14 @@ namespace Dralgeer {
         glm::vec2 pos;
         glm::vec2 scale;
 
-        float rotation = 0.0f;
         int zIndex;
+        float rotation = 0.0f;
+
+        bool operator != (Transform const &t) { return pos != t.pos || scale != t.scale || zIndex != t.zIndex || rotation != t.rotation; };
     };
 
     namespace GameObject {
-        int IDCounter = 0; // used to track the game object's ID // ! Will be updated when serialization is implemented based on that
+        int idCounter = 0; // used to track the game object's ID // ! Will be updated when serialization is implemented based on that
 
         class GameObject {
             public:
