@@ -18,7 +18,6 @@ namespace Dralgeer {
     class Shader {
         private:
             char const* sources[2]; // sources for the vertex and fragment shaders (vertex at 0, fragment at 1)
-            int sizes[2]; // sizes for the vertex and fragment shaders (vertex at 0, fragment at 1)
             std::string filepath;
 
             int shaderID;
@@ -28,7 +27,7 @@ namespace Dralgeer {
             Shader() {};
 
             // * parse the shader passed in
-            Shader(std::string const &filepath) {
+            void readSource(std::string const &filepath) {
                 this->filepath = filepath;
                 
                 try {
@@ -53,20 +52,30 @@ namespace Dralgeer {
                         offset = source.length() - s.length();
                     }
                     
+                    size_t i1 = source.find("\n", indices[0]);
+                    size_t i2 = source.find("\n", indices[2]);
+
                     splitStr[0] = source.substr(indices[0], indices[1]); // type of the first part
-                    splitStr[1] = source.substr(indices[1] + 1, indices[2]); // store the first part of the shader data 
+                    splitStr[1] = source.substr(i1 + 1, indices[2] - i1 - 7); // store the first part of the shader data 
                     splitStr[2] = source.substr(indices[2], indices[3]); // type of the second part
-                    splitStr[3] = source.substr(indices[3] + 1); // store the second part of the shader data
+                    splitStr[3] = source.substr(i2 + 1, source.length() - i2 - 1); // store the second part of the shader data
                     
+                    // std::cout << splitStr[0] << ":\n";
+                    // std::cout << splitStr[1] << "\n\n";
+                    // std::cout << splitStr[2] << ":\n";
+                    // std::cout << splitStr[3] << "\n\n";
+
                     // first part
-                    if (splitStr[0] == "vertex") { sources[0] = splitStr[1].c_str(); sizes[0] = splitStr[1].length(); }
-                    else if (splitStr[0] == "fragment") { sources[1] = splitStr[1].c_str(); sizes[1] = splitStr[1].length(); }
+                    if (splitStr[0] == "vertex") { sources[0] = splitStr[1].c_str(); }
+                    else if (splitStr[0] == "fragment") { sources[1] = splitStr[1].c_str(); }
                     else { throw std::runtime_error("Unexpected token '" + splitStr[0] + "'"); }
 
                     // second part
-                    if (splitStr[2] == "vertex") { sources[0] = splitStr[3].c_str(); sizes[0] = splitStr[3].length(); }
-                    else if (splitStr[2] == "fragment") { sources[1] = splitStr[3].c_str(); sizes[1] = splitStr[3].length(); }
+                    if (splitStr[2] == "vertex") { sources[0] = splitStr[3].c_str(); }
+                    else if (splitStr[2] == "fragment") { sources[1] = splitStr[3].c_str(); }
                     else { throw std::runtime_error("Unexpected token '" + splitStr[2] + "'"); }
+
+                    std::cout << sources[1] << "\n";
 
                 } catch (std::runtime_error e) {
                     // todo: for future log the error
@@ -77,33 +86,61 @@ namespace Dralgeer {
             // * compile and link the vertex and fragment shaders
             void compile() {
                 // Load and compile the vertex shader, then pass it to the GPU
-                int id = glCreateShader(GL_VERTEX_SHADER);
-                glShaderSource(id, 2, sources, sizes);
-                glCompileShader(id);
+                GLuint vertexID = glCreateShader(GL_VERTEX_SHADER);
+                glShaderSource(vertexID, 1, &sources[0], NULL);
+                glCompileShader(vertexID);
 
                 // check for compilation errors
                 int success = 0;
-                glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+                glGetShaderiv(vertexID, GL_COMPILE_STATUS, &success);
                 if (!success) {
                     int len = 0;
-                    glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
-                    std::cout << "ERROR: '" << filepath << "'\n\tShader compilation failed.\n";
+                    glGetShaderiv(vertexID, GL_INFO_LOG_LENGTH, &len);
+                    std::cout << "ERROR: '" << filepath << "'\n\tVertex shader compilation failed.\n";
                     
-                    char* errorLog = nullptr;
-                    glGetShaderInfoLog(id, len, &len, errorLog);
+                    char* errorLog = new char[len];
+                    glGetShaderInfoLog(vertexID, len, &len, errorLog);
 
                     for (int i = 0; i < len; ++i) { std::cout << errorLog[i]; }
                     std::cout << "\n";
 
-                    glDeleteShader(id);
-                    if (errorLog) { delete[] errorLog; }
+                    glDeleteShader(vertexID);
+                    delete[] errorLog;
+                    return;
+                }
+
+                // Load and compile the fragment shader, then pass it to the GPU
+                GLuint fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
+                glShaderSource(fragmentID, 1, &sources[1], NULL);
+                glCompileShader(fragmentID);
+
+                // check for compilation errors
+                glGetShaderiv(fragmentID, GL_COMPILE_STATUS, &success);
+                if (!success) {
+                    int len = 0;
+                    glGetShaderiv(fragmentID, GL_INFO_LOG_LENGTH, &len);
+                    std::cout << "ERROR: '" << filepath << "'\n\tFragment shader compilation failed.\n";
+                    
+                    char* errorLog = new char[len];
+                    glGetShaderInfoLog(fragmentID, len, &len, errorLog);
+
+                    for (int i = 0; i < len; ++i) { std::cout << errorLog[i]; }
+                    std::cout << "\n";
+
+                    glDeleteShader(vertexID);
+                    glDeleteShader(fragmentID);
+                    delete[] errorLog;
                     return;
                 }
 
                 // link shader
                 shaderID = glCreateProgram();
-                glAttachShader(shaderID, id);
+                glAttachShader(shaderID, vertexID);
+                glAttachShader(shaderID, fragmentID);
                 glLinkProgram(shaderID);
+
+                glDeleteShader(vertexID);
+                glDeleteShader(fragmentID);
 
                 // check for linking errors
                 glGetProgramiv(shaderID, GL_LINK_STATUS, &success);
@@ -112,15 +149,14 @@ namespace Dralgeer {
                     glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &len);
                     std::cout << "ERROR: '" << filepath << "'\n\tShader linking failed.\n";
 
-                    char* errorLog = nullptr;
+                    char* errorLog = new char[len];
                     glGetShaderInfoLog(shaderID, len, &len, errorLog);
 
                     for (int i = 0; i < len; ++i) { std::cout << errorLog[i]; }
                     std::cout << "\n";
 
                     glDeleteProgram(shaderID);
-                    glDeleteShader(id);
-                    if (errorLog) { delete[] errorLog; }
+                    delete[] errorLog;
                 }
             };
 
@@ -194,6 +230,8 @@ namespace Dralgeer {
                 use(); // ensure it is in use
                 glUniform1iv(loc, size, nums);
             };
+
+            ~Shader() { glDeleteProgram(shaderID); };
     };
 
 
@@ -269,6 +307,8 @@ namespace Dralgeer {
 
             inline void bind() const { glBindTexture(GL_TEXTURE_2D, texID); };
             inline void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); };
+
+            ~Texture() { glDeleteTextures(1, &texID); };
     };
 
 
@@ -283,7 +323,8 @@ namespace Dralgeer {
             if (shaders.find(filepath) != shaders.end()) { return shaders[filepath]; }
 
             // add new shader if it is not included
-            Shader shader(filepath);
+            Shader shader;
+            shader.readSource(filepath);
             shader.compile();
             shaders.insert({filepath, shader});
             return shader;

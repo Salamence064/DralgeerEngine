@@ -26,7 +26,9 @@ namespace Dralgeer {
 
             // 6 floats per vertex, 2 vertices per line
             static float vertexArray[VERTEX_ARR_SIZE];
-            static Shader shader = AssetPool::getShader("C:/VS/DralgeerEngine/assets/shaders/debugLine2D.glsl");
+            static Shader shader;
+            // todo issue results from the above line -- maybe use some couts and stuff to debug here shortly
+            // todo we can also try dumb stuff like commenting out the annonymous namespaces
 
             static unsigned int vaoID, vboID;
             static bool started = 0;
@@ -36,6 +38,9 @@ namespace Dralgeer {
         }
 
         inline void start() {
+            // initialize the shader
+            shader = AssetPool::getShader("C:/VS/DralgeerEngine/assets/shaders/debugLine2D.glsl");
+
             // generate the VAO
             glGenVertexArrays(1, &vaoID);
             glBindVertexArray(vaoID);
@@ -59,7 +64,7 @@ namespace Dralgeer {
         };
 
         inline void beginFrame() {
-            // if (!started) { start(); }
+            if (!started) { start(); }
 
             // remove dead lines
             for (int i = lines.size() - 1; i >= 0; i--) {
@@ -108,14 +113,14 @@ namespace Dralgeer {
             glBufferSubData(GL_ARRAY_BUFFER, 0, s, arr);
 
             // ! This is temp code, this will not be here once scenes are made
-            // camera.adjustProjection();
-            // camera.adjustView();
+            camera.adjustProjection();
+            camera.adjustView();
             // !==============================================================
 
             // use our shader
-            // shader.use();
-            // shader.uploadMat4("uProjection", camera.proj);
-            // shader.uploadMat4("uView", camera.view);
+            shader.use();
+            shader.uploadMat4("uProjection", camera.proj);
+            shader.uploadMat4("uView", camera.view);
 
             // bind the VAO
             glBindVertexArray(vaoID);
@@ -131,7 +136,7 @@ namespace Dralgeer {
             glBindVertexArray(0);
 
             // unbind shader and free memory
-            // shader.detach();
+            shader.detach();
             delete[] arr;
         };
 

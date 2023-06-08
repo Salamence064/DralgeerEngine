@@ -129,6 +129,9 @@ namespace Dralgeer {
 
                 // configure glfw
                 glfwDefaultWindowHints();
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
                 glfwWindowHint(GLFW_VISIBLE, 0);
                 glfwWindowHint(GLFW_RESIZABLE, 1);
                 glfwWindowHint(GLFW_MAXIMIZED, 1);
@@ -141,6 +144,9 @@ namespace Dralgeer {
                 glfwSetWindowUserPointer(window, &data); // add the data as a pointer to the window
                 glfwSwapInterval(1); // enable v-sync
                 glfwShowWindow(window); // show the window
+
+                // initialize glew
+                if (glewInit() != GLEW_OK) { throw std::runtime_error("GLEW failed to initialize."); }
 
                 // setup callbacks
                 // windows
@@ -169,6 +175,8 @@ namespace Dralgeer {
             void run() {
                 float startTime = (float) glfwGetTime(), endTime;
                 float dt = 0.0f;
+
+                DebugDraw::start();
 
                 // * Game Loop
                 while(!glfwWindowShouldClose(window)) {
