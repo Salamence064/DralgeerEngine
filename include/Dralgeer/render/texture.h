@@ -17,7 +17,9 @@
 namespace Dralgeer {
     class Shader {
         private:
-            char const* sources[2]; // sources for the vertex and fragment shaders (vertex at 0, fragment at 1)
+            std::string vertexSource;
+            std::string fragmentSource;
+            
             std::string filepath;
 
             int shaderID;
@@ -58,24 +60,17 @@ namespace Dralgeer {
                     splitStr[0] = source.substr(indices[0], indices[1]); // type of the first part
                     splitStr[1] = source.substr(i1 + 1, indices[2] - i1 - 7); // store the first part of the shader data 
                     splitStr[2] = source.substr(indices[2], indices[3]); // type of the second part
-                    splitStr[3] = source.substr(i2 + 1, source.length() - i2 - 1); // store the second part of the shader data
-                    
-                    // std::cout << splitStr[0] << ":\n";
-                    // std::cout << splitStr[1] << "\n\n";
-                    // std::cout << splitStr[2] << ":\n";
-                    // std::cout << splitStr[3] << "\n\n";
+                    splitStr[3] = source.substr(i2 + 1); // store the second part of the shader data
 
                     // first part
-                    if (splitStr[0] == "vertex") { sources[0] = splitStr[1].c_str(); }
-                    else if (splitStr[0] == "fragment") { sources[1] = splitStr[1].c_str(); }
+                    if (splitStr[0] == "vertex") { vertexSource = splitStr[1]; }
+                    else if (splitStr[0] == "fragment") { fragmentSource = splitStr[1]; }
                     else { throw std::runtime_error("Unexpected token '" + splitStr[0] + "'"); }
 
                     // second part
-                    if (splitStr[2] == "vertex") { sources[0] = splitStr[3].c_str(); }
-                    else if (splitStr[2] == "fragment") { sources[1] = splitStr[3].c_str(); }
+                    if (splitStr[2] == "vertex") { vertexSource = splitStr[3]; }
+                    else if (splitStr[2] == "fragment") { fragmentSource = splitStr[3]; }
                     else { throw std::runtime_error("Unexpected token '" + splitStr[2] + "'"); }
-
-                    std::cout << sources[1] << "\n";
 
                 } catch (std::runtime_error e) {
                     // todo: for future log the error
@@ -85,9 +80,12 @@ namespace Dralgeer {
 
             // * compile and link the vertex and fragment shaders
             void compile() {
+                char const* vSrc = vertexSource.c_str();
+                char const* fSrc = fragmentSource.c_str();
+
                 // Load and compile the vertex shader, then pass it to the GPU
                 GLuint vertexID = glCreateShader(GL_VERTEX_SHADER);
-                glShaderSource(vertexID, 1, &sources[0], NULL);
+                glShaderSource(vertexID, 1, &vSrc, NULL);
                 glCompileShader(vertexID);
 
                 // check for compilation errors
@@ -111,7 +109,7 @@ namespace Dralgeer {
 
                 // Load and compile the fragment shader, then pass it to the GPU
                 GLuint fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-                glShaderSource(fragmentID, 1, &sources[1], NULL);
+                glShaderSource(fragmentID, 1, &fSrc, NULL);
                 glCompileShader(fragmentID);
 
                 // check for compilation errors
