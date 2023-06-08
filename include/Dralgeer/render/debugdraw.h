@@ -4,6 +4,9 @@
 #include "texture.h"
 #include "../camera.h"
 
+#define MAX_DEBUG_LINES 500
+#define VERTEX_ARR_SIZE 6000
+
 namespace Dralgeer {
     namespace DebugDraw {
         struct Line2D {
@@ -20,8 +23,6 @@ namespace Dralgeer {
 
 
         namespace {
-            static const int MAX_LINES = 500;
-            static const int VERTEX_ARR_SIZE = 12 * 500;
             static std::vector<Line2D> lines;
 
             // 6 floats per vertex, 2 vertices per line
@@ -44,6 +45,8 @@ namespace Dralgeer {
             // generate the VAO
             glGenVertexArrays(1, &vaoID);
             glBindVertexArray(vaoID);
+
+            // todo may have to do with this
 
             // create the VBO and buffer some memory
             glGenBuffers(1, &vboID);
@@ -77,40 +80,41 @@ namespace Dralgeer {
             if (!size) { return; }
 
             int index = 0;
-            size_t s = 12*size;
-            float* arr = new float[s];
-            for (int i = 0; i < size; ++i) {
+            for (int i = 0; i < size; ++i) { // todo the lines are not being drawn to the specifications
                 // * Populate the vertexArray
                 // technically more efficient to not use a loop of two here
 
                 // load starting point
-                vertexArray[index] = arr[index] = lines[i].start.x;
-                vertexArray[index + 1] = arr[index + 1] = lines[i].start.y;
-                vertexArray[index + 2] = arr[index + 2] = 10.0f;
+                vertexArray[index] = lines[i].start.x;
+                vertexArray[index + 1] = lines[i].start.y;
+                vertexArray[index + 2] = 10.0f;
 
                 // load color
-                vertexArray[index + 3] = arr[index + 3] = lines[i].color.x;
-                vertexArray[index + 4] = arr[index + 4] = lines[i].color.y;
-                vertexArray[index + 5] = arr[index + 5] = lines[i].color.z;
+                vertexArray[index + 3] = lines[i].color.x;
+                vertexArray[index + 4] = lines[i].color.y;
+                vertexArray[index + 5] = lines[i].color.z;
 
                 index += 6;
 
 
                 // load ending point
-                vertexArray[index] = arr[index] = lines[i].end.x;
-                vertexArray[index + 1] = arr[index + 1] = lines[i].end.y;
-                vertexArray[index + 2] = arr[index + 2] = 10.0f;
+                vertexArray[index] = lines[i].end.x;
+                vertexArray[index + 1] = lines[i].end.y;
+                vertexArray[index + 2] = 10.0f;
 
                 // load color
-                vertexArray[index + 3] = arr[index + 3] = lines[i].color.x;
-                vertexArray[index + 4] = arr[index + 4] = lines[i].color.y;
-                vertexArray[index + 5] = arr[index + 5] = lines[i].color.z;
+                vertexArray[index + 3] = lines[i].color.x;
+                vertexArray[index + 4] = lines[i].color.y;
+                vertexArray[index + 5] = lines[i].color.z;
 
                 index += 6;
             }
 
+            // todo issue might be because I don't have a subarray and pass in the full vertex array instead
+
+            size_t s = 12*size;
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, s, arr);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, s, vertexArray);
 
             // ! This is temp code, this will not be here once scenes are made
             camera.adjustProjection();
@@ -137,11 +141,10 @@ namespace Dralgeer {
 
             // unbind shader and free memory
             shader.detach();
-            delete[] arr;
         };
 
         inline void addLine2D (glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.882f, 0.004f, 0.004f), int lifetime = 1) {
-            if (lines.size() >= MAX_LINES) { return; }
+            if (lines.size() >= MAX_DEBUG_LINES) { return; }
             lines.push_back({start, end, color, lifetime});
         };
 

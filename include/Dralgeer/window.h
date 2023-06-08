@@ -1,5 +1,7 @@
 #pragma once
 
+// todo add bitfields to stuff to indicate things (like if it's a component)
+
 #include "render/debugdraw.h"
 
 namespace Dralgeer {
@@ -177,11 +179,17 @@ namespace Dralgeer {
                 float dt = 0.0f;
 
                 DebugDraw::start();
+                DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 500);
+                DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
+
 
                 // * Game Loop
                 while(!glfwWindowShouldClose(window)) {
                     // ! Render here
                     glClear(GL_COLOR_BUFFER_BIT);
+
+                    DebugDraw::beginFrame();
+                    DebugDraw::draw();
 
                     glfwSwapBuffers(window); // swaps front and back buffers
 

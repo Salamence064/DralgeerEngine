@@ -12,7 +12,7 @@ void main()
 {
     fColor = aColor;
 
-    gl_Position = uProjection * uView * vec4(aPos, 1.0);
+    gl_Position = uProjection * uView * vec4(aPos, 1.0f);
 }
 
 #type fragment
@@ -23,5 +23,5 @@ out vec4 color;
 
 void main()
 {
-    color = vec4(fColor, 1);
+    color = vec4(fColor, 1.0f);
 }
