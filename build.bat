@@ -69,8 +69,8 @@ for %%W in (%search_words%) do (
 )
 
 pushd "build"
-    gcc -c ../*.c -I../../deps -D_GLFW_BUILD_DLL -D_GLFW_USE_CONFIG_H -lGlew32s -lOpengl32 -lShell32 -lGdi32 -lUser32
-    gcc -shared -o glfw3.dll *.o -Wl,--out-implib,libglfw3.a -lGlew32s -lOpengl32 -lShell32 -lGdi32 -lUser32
+    gcc -c ../*.c -I../../deps -D_GLFW_BUILD_DLL -D_GLFW_USE_CONFIG_H -lOpengl32 -lShell32 -lGdi32 -lUser32
+    gcc -shared -o glfw3.dll *.o -Wl,--out-implib,libglfw3.a -lOpengl32 -lShell32 -lGdi32 -lUser32
     copy "glfw3.dll" "../../../build/vendor" 
     copy "libglfw3.a" "../../../lib"
 popd
@@ -102,7 +102,7 @@ if exist "build/vendor/glew32.dll" (
 
 @REM --------- Start of GLEW Build ------------
 
-echo "Build GLEW"
+echo "Building GLEW"
 pushd "glew"
 
 gcc -DGLEW_NO_GLU -O2 -w -Iinclude -DGLEW_BUILD -o src/glew.o -c src/glew.c
@@ -127,6 +127,9 @@ copy "libglew32mx.a" "../../lib"
 copy "libglew32mx.dll.a" "../../lib"
 
 popd
+
+copy "libglew32mx.dll" "../build/vendor"
+
 popd
 
 @REM --------- End of GLEW Build ------------
