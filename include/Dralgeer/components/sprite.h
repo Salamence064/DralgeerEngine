@@ -13,6 +13,8 @@
 #define IMGUI_COLOR_PCIKER_HEIGHT 450
 
 namespace Dralgeer {
+    // todo having this sprite struct almost seems unnecessary.
+    // ! consider removing it and moving all the fields into the SpriteRenderer directly
     struct Sprite {
         float width, height;
         Texture* texture = nullptr;

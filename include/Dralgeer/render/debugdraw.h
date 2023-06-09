@@ -35,7 +35,7 @@ namespace Dralgeer {
             static bool started = 0;
 
             // ! fuck it, we are using a temporary camera for now -- replace when I finish scene.h
-            Camera camera = {glm::vec2(0.0f)};
+            Camera camera = {glm::vec2(0.0f)}; // ! could be the cause of some issues
         }
 
         inline void start() {
