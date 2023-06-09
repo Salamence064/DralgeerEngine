@@ -26,8 +26,8 @@ namespace Dralgeer {
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
-        public: // todo make rule of 3 operators with throw exceptions for copy constructor and copy assignment
-            uint32_t flags = COMPONENT_FLAG;
+        public: // todo add rule of 5 operators
+            const uint32_t flags = COMPONENT_FLAG;
             GameObject::GameObject gameObject;
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
@@ -39,6 +39,24 @@ namespace Dralgeer {
             // * ==========================================================
 
             SpriteRenderer() {};
+            SpriteRenderer(SpriteRenderer const &spr) : gameObject(spr.gameObject), color(spr.color), lastTransform(spr.lastTransform) {
+                imGuiSetup = spr.imGuiSetup;
+                isDirty = spr.isDirty;
+
+                sprite.texture = new Texture();
+                sprite.texture->init(spr.sprite.texture->filepath);
+            };
+
+            SpriteRenderer& operator = (SpriteRenderer const &spr) {
+                gameObject = spr.gameObject;
+                color = spr.color;
+                lastTransform = spr.lastTransform;
+                imGuiSetup = spr.imGuiSetup;
+                isDirty = spr.isDirty;
+
+                sprite.texture = new Texture();
+                sprite.texture->init(spr.sprite.texture->filepath);
+            };
 
             inline void start() { lastTransform = gameObject.transform; };
 

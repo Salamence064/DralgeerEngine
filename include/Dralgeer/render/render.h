@@ -43,7 +43,7 @@ namespace Dralgeer {
 
                 // Texture ID
                 int texID = 0;
-                if (sprites[index].sprite.texture != nullptr) {
+                if (sprites[index].sprite.texture) {
                     for (int i = 0; i < numTextures; ++i) {
                         if (textures[i] == *(sprites[index].sprite.texture)) {
                             texID = i + 1;
@@ -214,6 +214,39 @@ namespace Dralgeer {
                 shader.detach();
             };
 
-            
+            // * Returns true if the GameObject is successfully destroyed and false if it doesn't exist.
+            bool destroyIfExists(SpriteRenderer const &spr) {
+                for (int i = 0; i < numSprites; ++i) {
+                    if (&sprites[i] == &spr) {
+                        for (int j = i; j < numSprites - 1; ++j) {
+                            sprites[j] = sprites[j + 1];
+                            sprites[j].isDirty = 1;
+                        }
+
+                        numSprites--;
+                        return 1;
+                    }
+                }
+
+                return 0;
+            };
+
+            void addSprite(SpriteRenderer const &spr) {
+                if (numSprites < MAX_RENDER_BATCH_SIZE) {
+                    sprites[numSprites++] = spr;
+
+                    // add texture if the sprite has a texture and we don't already have that texture
+                    // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
+                    if (spr.sprite.texture && numTextures < MAX_TEXTURES) {
+                        for (int i = 0; i < numTextures; ++i) { if (textures[i] == (*spr.sprite.texture)) { goto ADDED; }}
+                        textures[numTextures++] = (*spr.sprite.texture);
+                    }
+
+                    ADDED:
+
+                    // add properties to local vertices array
+                    loadVertexProperties(numSprites - 1);
+                }
+            };
     };
 }
