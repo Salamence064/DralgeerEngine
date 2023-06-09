@@ -5,6 +5,8 @@
 #include "../components/sprite.h"
 #include "../camera.h"
 
+// todo if needed up the max number of batches
+#define MAX_RENDER_BATCHES 2500
 #define MAX_RENDER_BATCH_SIZE 1000
 #define MAX_RENDER_VERTICES_LIST_SIZE 40000
 #define MAX_TEXTURES 16
@@ -24,7 +26,7 @@
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
 
 namespace Dralgeer {
-    namespace Render { Shader currentShader; }
+    namespace Renderer { Shader currentShader; }
 
     class RenderBatch {
         private:
@@ -100,13 +102,15 @@ namespace Dralgeer {
             };
 
         public:
+            int zIndex; // zIndex of the RenderBatch
             int numSprites = 0;
             int numTextures = 0;
-            // todo if needed add zIndex for the RenderBatch
 
             RenderBatch() {};
 
-            void start() {
+            void start(int xIndex) {
+                this->zIndex = zIndex;
+
                 // generate and bind a vertex array object
                 glGenVertexArrays(1, &vaoID);
                 glBindVertexArray(vaoID);
@@ -187,7 +191,7 @@ namespace Dralgeer {
                 // !==============================================================
 
                 // use shader
-                Shader shader = Render::currentShader;
+                Shader shader = Renderer::currentShader;
                 shader.uploadMat4("uProjection", camera.proj);
                 shader.uploadMat4("uView", camera.view);
 
@@ -248,5 +252,41 @@ namespace Dralgeer {
                     loadVertexProperties(numSprites - 1);
                 }
             };
+
+            // todo maybe change to be an l-value instead of a pointer
+            bool hasTexture(Texture* tex) const {
+                if (!tex) { return 0; }
+                for (int i = 0; i < numTextures; ++i) { if (textures[i] == (*tex)) { return 1; }}
+                return 0;
+            };
     };
+
+    
+    namespace Renderer {
+        namespace {
+            RenderBatch batches[MAX_RENDER_BATCHES];
+            int numBatches = 0;
+        }
+
+        // todo add the GameObject related functions after fleshing out the GameObject class
+
+        void add(SpriteRenderer const &spr) {
+            for (int i = 0; i < numBatches; ++i) {
+                // todo this last line of the conditional might be wrong
+                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr.gameObject.transform.zIndex &&
+                        spr.sprite.texture && !batches[i].hasTexture(spr.sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
+                    
+                    batches[i].addSprite(spr);
+                    return;
+                }
+            }
+
+            RenderBatch newBatch;
+            newBatch.start(spr.gameObject.transform.zIndex);
+            newBatch.addSprite(spr);
+            batches[numBatches++] = newBatch;
+
+            // todo sort the batches based on their zIndices
+        };
+    }
 }
