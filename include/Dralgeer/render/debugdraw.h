@@ -58,7 +58,7 @@ namespace Dralgeer {
             glVertexAttribPointer(0, 3, GL_FLOAT, 0, 6*sizeof(float), ptr);
             glEnable(0);
 
-            ptr += 3*sizeof(float);
+            ptr += 3*sizeof(float); // todo, this may be causing some issues
             glVertexAttribPointer(1, 3, GL_FLOAT, 0, 6*sizeof(float), ptr);
             glEnable(1);
 

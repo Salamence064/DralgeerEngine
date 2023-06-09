@@ -15,7 +15,7 @@
 namespace Dralgeer {
     struct Sprite {
         float width, height;
-        Texture texture;
+        Texture* texture = nullptr;
         glm::vec2 texCords[4] = {glm::vec2(1, 1), glm::vec2(1, 0), glm::vec2(0, 0), glm::vec2(0, 1)};
     };
 
@@ -24,7 +24,7 @@ namespace Dralgeer {
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
-        public:
+        public: // todo make rule of 3 operators with throw exceptions for copy constructor and copy assignment
             uint32_t flags = COMPONENT_FLAG;
             GameObject::GameObject gameObject;
 
@@ -33,6 +33,10 @@ namespace Dralgeer {
 
             Transform lastTransform; // ! DO NOT serialize
             bool isDirty = 1; // ! DO NOT serialize
+
+            // * ==========================================================
+
+            SpriteRenderer() {};
 
             inline void start() { lastTransform = gameObject.transform; };
 
@@ -45,5 +49,7 @@ namespace Dralgeer {
                     isDirty = 1;
                 }
             };
+
+            ~SpriteRenderer() { if (sprite.texture != nullptr) { delete sprite.texture; }};
     };
 }

@@ -13,7 +13,8 @@ namespace Dralgeer {
         int zIndex;
         float rotation = 0.0f;
 
-        bool operator != (Transform const &t) { return pos != t.pos || scale != t.scale || zIndex != t.zIndex || rotation != t.rotation; };
+        inline bool operator == (Transform const &t) const { return pos == t.pos && scale == t.scale && zIndex == t.zIndex && rotation == t.rotation; };
+        inline bool operator != (Transform const &t) const { return pos != t.pos || scale != t.scale || zIndex != t.zIndex || rotation != t.rotation; };
     };
 
     namespace GameObject {
@@ -29,6 +30,7 @@ namespace Dralgeer {
                 bool serialize = 1; // ! DO NOT serialize
                 bool dead = 0; // ! DO NOT serialize
                 
+                GameObject() {}; // todo for now until I get the chance to do something better
                 GameObject(std::string const &str) : name(str) {};
 
                 
