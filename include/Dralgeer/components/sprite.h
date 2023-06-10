@@ -72,4 +72,6 @@ namespace Dralgeer {
 
             ~SpriteRenderer() { if (sprite.texture != nullptr) { delete sprite.texture; }};
     };
+
+    // todo add SpriteSheet here
 }
