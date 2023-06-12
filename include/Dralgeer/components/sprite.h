@@ -6,6 +6,8 @@
 #include "../gameobject.h"
 #include "component.h"
 
+#define SPRITE_RENDERER_FLAG 0x000008U
+
 // ! will use when adding ImGui
 #define IMGUI_COLOR_PICKER_X 1370
 #define IMGUI_COLOR_PCIKER_Y 35
@@ -27,7 +29,7 @@ namespace Dralgeer {
             bool imGuiSetup = 1; // ! DO NOT serialize
 
         public: // todo add rule of 5 operators
-            const uint32_t flags = COMPONENT_FLAG;
+            const uint32_t flags = COMPONENT_FLAG | SPRITE_RENDERER_FLAG;
             GameObject::GameObject gameObject;
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
@@ -35,6 +37,8 @@ namespace Dralgeer {
 
             Transform lastTransform; // ! DO NOT serialize
             bool isDirty = 1; // ! DO NOT serialize
+
+            // todo add component ID
 
             // * ==========================================================
 
