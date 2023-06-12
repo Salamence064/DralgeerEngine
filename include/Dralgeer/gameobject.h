@@ -25,7 +25,7 @@ namespace Dralgeer {
 
         class GameObject {
             private:
-                int id;
+                int id; // todo make public again tbh
                 void** components;
                 int capacity = 8; // start with 8 slots for components // todo probs up this later
                 int numComponents = 0;
@@ -88,7 +88,15 @@ namespace Dralgeer {
                     components[numComponents++] = component;
                 };
 
-                int getID() { return id; };
+                // todo may not be able to do void*
+                // todo maybe use a union + enum
+                // todo also look up the entity component system and model it how it should be for C++
+                inline void start(); // ! placeholder for when I figure out a good gameObject system
+                inline void destory(); // ! placeholder for when I figure out a good gameObject system -- tbh may not even do it with a function call
+
+                inline void update(float dt); // ! placeholder
+
+                inline int getID() { return id; };
 
                 ~GameObject() {
                     for (int i = 0; i < numComponents; ++i) { delete components[i]; }

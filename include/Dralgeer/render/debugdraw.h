@@ -23,7 +23,7 @@ namespace Dralgeer {
 
 
         namespace {
-            static std::vector<Line2D> lines;
+            static std::vector<Line2D> lines = {};
 
             // 6 floats per vertex, 2 vertices per line
             static float vertexArray[VERTEX_ARR_SIZE];

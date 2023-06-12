@@ -95,7 +95,7 @@ namespace Dralgeer {
                     vertices[offset + 8] = texID;
 
                     // load entity IDs
-                    vertices[offset + 9] = sprites[index].gameObject.uID + 1;
+                    vertices[offset + 9] = sprites[index].gameObject.getID() + 1;
 
                     offset += VERTEX_SIZE;
                 }
@@ -335,5 +335,9 @@ namespace Dralgeer {
 
             numBatches++;
         };
+
+        // todo finish this namespace
+        // todo add a render thing
+        // todo add a destory gameObject thing
     }
 }
