@@ -48,7 +48,7 @@ namespace Dralgeer {
 
                 // todo test to make sure templates can be used like this
                 // todo if this doesnt work try it without casting components[i] to T* in the statement retrieving the flags
-                template <typename T> T* getComponent(uint32_t const objectFlag) {
+                template <typename T> T* getComponent(uint32_t objectFlag) {
                     if (!(objectFlag & COMPONENT_FLAG)) { return nullptr; }
 
                     for (int i = 0; i < numComponents; ++i) {
@@ -58,7 +58,35 @@ namespace Dralgeer {
                     return nullptr;
                 };
 
-                
+                // todo test as well
+                template <typename T> void removeComponent(uint32_t objectFlag) {
+                    if (!objectFlag & COMPONENT_FLAG) { return; }
+
+                    for (int i = 0; i < numComponents; ++i) {
+                        if ((objectFlag ^ COMPONENT_FLAG) & ((T*) components[i])->flags) {
+                            delete components[i];
+                            numComponents--;
+                            for (int j = i; j < numComponents; ++j) { components[j] = components[j + 1]; }
+                            return;
+                        }
+                    }
+                };
+
+                void addComponent(void* component) {
+                    if (!component) { return; }
+
+                    if (numComponents == capacity) {
+                        capacity *= 2;
+
+                        void** temp = new void*[capacity];
+                        for (int i = 0; i < numComponents; ++i) { temp[i] = components[i]; }
+                        
+                        delete[] components;
+                        components = temp;
+                    }
+
+                    components[numComponents++] = component;
+                };
 
                 int getID() { return id; };
 
