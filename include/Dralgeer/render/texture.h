@@ -239,7 +239,7 @@ namespace Dralgeer {
 
             Texture() {};
 
-            // ! Not sure if we need this constructor
+            // ! may not need this and could have a second init function instead
             Texture(int width, int height) : width(width), height(height) {
                 filepath = "generated";
 
