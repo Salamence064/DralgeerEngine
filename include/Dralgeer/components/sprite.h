@@ -6,8 +6,6 @@
 #include "../gameobject.h"
 #include "component.h"
 
-#define SPRITE_RENDERER_FLAG 0x000008U
-
 // ! will use when adding ImGui
 #define IMGUI_COLOR_PICKER_X 1370
 #define IMGUI_COLOR_PCIKER_Y 35
@@ -24,13 +22,12 @@ namespace Dralgeer {
     };
 
     // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer {
+    class SpriteRenderer : public Component::Component {
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
         public: // todo add rule of 5 operators
-            const uint32_t flags = COMPONENT_FLAG | SPRITE_RENDERER_FLAG;
-            GameObject::GameObject gameObject;
+            // const uint32_t flags = COMPONENT_FLAG | SPRITE_RENDERER_FLAG;
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
             Sprite sprite;
@@ -38,12 +35,13 @@ namespace Dralgeer {
             Transform lastTransform; // ! DO NOT serialize
             bool isDirty = 1; // ! DO NOT serialize
 
-            // todo add component ID
-
             // * ==========================================================
 
-            SpriteRenderer() {};
-            SpriteRenderer(SpriteRenderer const &spr) : gameObject(spr.gameObject), color(spr.color), lastTransform(spr.lastTransform) {
+            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; };
+            SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
+                gameObject = spr.gameObject;
+                flags = SPRITE_RENDERER_FLAG;
+
                 imGuiSetup = spr.imGuiSetup;
                 isDirty = spr.isDirty;
 
@@ -64,12 +62,12 @@ namespace Dralgeer {
                 return (*this);
             };
 
-            inline void start() { lastTransform = gameObject.transform; };
+            inline void start() override { lastTransform = gameObject.transform; };
 
             // ! Not convinced we even need this function
-            inline void editorUpdate();
+            // inline void editorUpdate();
 
-            inline void update() {
+            inline void update(float dt) override {
                 if (lastTransform != gameObject.transform) {
                     gameObject.transform = lastTransform;
                     isDirty = 1;

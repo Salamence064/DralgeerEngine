@@ -336,6 +336,12 @@ namespace Dralgeer {
             numBatches++;
         };
 
+        // destroy a sprite renderer contained in the renderer
+        // returns 1 if it successfully found and destroyed it and 0 otherwise
+        bool destroy(SpriteRenderer const &spr) {
+            
+        };
+
         // todo finish this namespace
         // todo add a render thing
         // todo add a destory gameObject thing

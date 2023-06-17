@@ -2,22 +2,28 @@
 
 #pragma once
 
-#define COMPONENT_FLAG 0x000001U
-#define NON_PICKABLE 0x000002U
+#include "gameobject.h"
+
+#define NON_PICKABLE_FLAG 0x000001U
+#define SPRITE_RENDERER_FLAG 0x000004U
 
 namespace Dralgeer {
     namespace Component {
         int idCounter = 0;
 
-        // // todo store the current ComponentID in the class
-        // // todo will possibly be a flag class
-        // // todo maybe resort to void* instead though
-        // // todo make this an abstract class with the needed functions
-        // // todo maybe contain the flags in here
-        // class Component {
-        //     public:
-        //         int uID;
-        //         Component() {};
-        // }; // // todo refactor to either get rid of this or actually make this part of it useful.
+        // todo maybe find a way to do stuff with just a flag inside of this class
+            // ! This would probably be ideal seeing as we have to store it like that already
+            // ! The only hurdle left would be storing the unique data for the different subclasses as inside functions we can use a switch
+        class Component {
+            public:
+                uint32_t flags;
+
+                int id = -1;
+                GameObject::GameObject gameObject; // should this even be here??
+
+                virtual inline void start() = 0;
+                virtual inline void update(float dt) = 0;
+                // virtual inline void destroy() = 0;
+        };
     }
 }
