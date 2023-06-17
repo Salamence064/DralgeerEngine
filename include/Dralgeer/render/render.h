@@ -339,11 +339,14 @@ namespace Dralgeer {
         // destroy a sprite renderer contained in the renderer
         // returns 1 if it successfully found and destroyed it and 0 otherwise
         bool destroy(SpriteRenderer const &spr) {
-            
+            for (int i = 0; i < numBatches; ++i) { if (batches[i].destroyIfExists(spr)) { return 1; }}
+            return 0;
         };
 
-        // todo finish this namespace
-        // todo add a render thing
-        // todo add a destory gameObject thing
+        // render each batch
+        void render() {
+            currentShader.use();
+            for (int i = 0; i < numBatches; ++i) { batches[i].render(); }
+        };
     }
 }
