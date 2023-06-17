@@ -22,7 +22,7 @@ namespace Dralgeer {
     };
 
     // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer : public Component::Component {
+    class SpriteRenderer : public Component {
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
@@ -37,10 +37,11 @@ namespace Dralgeer {
 
             // * ==========================================================
 
-            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; };
+            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; id = idCounter++; };
             SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
                 gameObject = spr.gameObject;
                 flags = SPRITE_RENDERER_FLAG;
+                id = idCounter++;
 
                 imGuiSetup = spr.imGuiSetup;
                 isDirty = spr.isDirty;
@@ -50,7 +51,7 @@ namespace Dralgeer {
             };
 
             SpriteRenderer& operator = (SpriteRenderer const &spr) {
-                gameObject = spr.gameObject;
+                gameObject = spr.gameObject; // todo this reassignment will fail meaning we need a better method of doing this than just failing reassignment
                 color = spr.color;
                 lastTransform = spr.lastTransform;
                 imGuiSetup = spr.imGuiSetup;
@@ -58,6 +59,9 @@ namespace Dralgeer {
 
                 sprite.texture = new Texture();
                 sprite.texture->init(spr.sprite.texture->filepath);
+
+                flags = spr.flags;
+                id = idCounter++;
 
                 return (*this);
             };

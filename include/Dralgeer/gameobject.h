@@ -28,7 +28,7 @@ namespace Dralgeer {
         class GameObject {
             private:
                 int id; // todo make public again tbh
-                Component::Component** components;
+                Component** components;
                 int capacity = 8; // start with 8 slots for components // todo probs up this later
                 int numComponents = 0;
 
@@ -40,7 +40,7 @@ namespace Dralgeer {
                 bool dead = 0; // ! DO NOT serialize
                 
                 GameObject() {
-                    components = new Component::Component*[8];
+                    components = new Component*[8];
                     id = idCounter++;
                 };
 
@@ -67,11 +67,11 @@ namespace Dralgeer {
                     }
                 };
 
-                void addComponent(Component::Component* c) {
+                void addComponent(Component* c) {
                     if (numComponents == capacity) {
                         capacity *= 2;
 
-                        Component::Component** temp = new Component::Component*[capacity];
+                        Component** temp = new Component*[capacity];
                         for (int i = 0; i < numComponents; ++i) { temp[i] = components[i]; }
                         
                         delete[] components;
@@ -81,10 +81,9 @@ namespace Dralgeer {
                     components[numComponents++] = c;
                 };
 
-                inline void start(); // ! placeholder for when I figure out a good gameObject system
-                inline void destory(); // ! placeholder for when I figure out a good gameObject system -- tbh may not even do it with a function call
-
-                inline void update(float dt); // ! placeholder
+                inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
+                inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
+                inline void update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
 
                 inline int getID() { return id; };
 
