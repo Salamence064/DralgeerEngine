@@ -37,7 +37,7 @@ namespace Dralgeer {
 
             // * ==========================================================
 
-            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; id = idCounter++; };
+            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; id = idCounter++; }; // todo test if you need to do = SpriteRenderer(); or not for default
             SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
                 gameObject = spr.gameObject;
                 flags = SPRITE_RENDERER_FLAG;

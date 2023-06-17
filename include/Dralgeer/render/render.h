@@ -1,9 +1,9 @@
-// todo add renderbatch and render in here
-
 #pragma once
 
 #include "../components/sprite.h"
 #include "../camera.h"
+
+// todo add functions for GameObjects and take the sprite renderers from those.
 
 // todo if needed up the max number of batches
 #define MAX_RENDER_BATCHES 2500

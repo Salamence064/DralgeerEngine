@@ -19,7 +19,7 @@ namespace Dralgeer {
             uint32_t flags;
 
             int id;
-            GameObject::GameObject gameObject; // should this even be here??
+            GameObject gameObject; // should this even be here??
 
             virtual inline void start() = 0;
             virtual inline void update(float dt) = 0;
