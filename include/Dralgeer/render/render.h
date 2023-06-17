@@ -26,7 +26,7 @@
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
 
 namespace Dralgeer {
-    namespace Renderer { Shader currentShader; }
+    namespace Renderer { Shader currentShader; } // todo probs do something a bit different for the actual thing
 
     class RenderBatch {
         private:
@@ -219,9 +219,9 @@ namespace Dralgeer {
             };
 
             // * Returns true if the GameObject is successfully destroyed and false if it doesn't exist.
-            bool destroyIfExists(SpriteRenderer const &spr) {
+            bool destroyIfExists(SpriteRenderer* spr) {
                 for (int i = 0; i < numSprites; ++i) {
-                    if (&sprites[i] == &spr) {
+                    if (&sprites[i] == spr) {
                         for (int j = i; j < numSprites - 1; ++j) {
                             sprites[j] = sprites[j + 1];
                             sprites[j].isDirty = 1;
@@ -338,7 +338,7 @@ namespace Dralgeer {
 
         // destroy a sprite renderer contained in the renderer
         // returns 1 if it successfully found and destroyed it and 0 otherwise
-        bool destroy(SpriteRenderer const &spr) {
+        bool destroy(SpriteRenderer* spr) {
             for (int i = 0; i < numBatches; ++i) { if (batches[i].destroyIfExists(spr)) { return 1; }}
             return 0;
         };

@@ -10,7 +10,7 @@ namespace Dralgeer {
             bool isRunning = 0;
 
         public:
-            std::vector<GameObject::GameObject*> gameObjects;
+            std::vector<GameObject::GameObject*> gameObjects; // todo use a resizeable dynamic array instead of a vector probably
             Camera camera;
 
             Scene() : gameObjects({}) { camera.pos = glm::vec2(0, 0); };
@@ -41,14 +41,14 @@ namespace Dralgeer {
                     gameObjects[i]->update(dt);
 
                     if (gameObjects[i]->dead) {
+                        Renderer::destroy(gameObjects[i]->getComponent<SpriteRenderer>(SPRITE_RENDERER_FLAG));
+                        delete gameObjects[i];
                         gameObjects.erase(std::next(gameObjects.begin(), i)); // todo should be able to erase at 0 (test to be sure)
-                        // Renderer::destroyGameObject();
                     }
                 }
             };
 
-            // todo for when we finish the render namespace
-            inline void render();
+            inline void render() { Renderer::render(); };
 
             
     };
