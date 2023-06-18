@@ -6,6 +6,7 @@
 
 #define NON_PICKABLE_FLAG 0x000001U
 #define SPRITE_RENDERER_FLAG 0x000004U
+#define EDITOR_CAMERA_FLAG 0x000008U
 
 namespace Dralgeer {
     // todo maybe find a way to do stuff with just a flag inside of this class
@@ -16,13 +17,14 @@ namespace Dralgeer {
             int idCounter = 0;
 
         public:
-            uint32_t flags;
+            uint32_t flags; // maybe serialize?
 
             int id;
-            GameObject gameObject; // should this even be here??
+            GameObject gameObject; // should this even be here?? // ! do not serialize
 
-            virtual inline void start() = 0;
-            virtual inline void update(float dt) = 0;
+            // todo test if this use of virtual functions works
+            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
+            virtual inline void update(float dt) = 0; // every component needs to override update.
             virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
     };
 }
