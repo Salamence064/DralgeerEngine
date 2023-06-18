@@ -135,6 +135,12 @@ popd
 @REM --------- End of GLEW Build ------------
 
 
+@REM Copy the headers for ImGui to the project's include
+if not exist "include/IMGUI/imgui.h" (
+    copy "imgui/*.h" "include/IMGUI/"
+)
+
+
 :SKIP_GLEW_BUILD
 
 pushd "build"
