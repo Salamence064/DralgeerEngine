@@ -135,18 +135,19 @@ popd
 @REM --------- End of GLEW Build ------------
 
 
+:SKIP_GLEW_BUILD
+
 @REM Copy the headers for ImGui to the project's include
 if not exist "include/IMGUI/imgui.h" (
-    copy "imgui/*.h" "include/IMGUI/"
+    pushd "imgui"
+    copy "*.h" "../include/IMGUI"
+    popd
 )
-
-
-:SKIP_GLEW_BUILD
 
 pushd "build"
 
 @REM Compiling with g++
-g++ -g -std=c++17 ../src/main.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
+g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/main.cpp ../imgui/imgui*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
 
 popd
 
