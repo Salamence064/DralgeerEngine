@@ -26,6 +26,9 @@ namespace Dralgeer {
         static bool mIsDragging = 0;
         static bool mButtonPressed[9] = {0};
 
+        static float mGameViewPortX = 0.0f, mGameViewPortY = 0.0f;
+        static float mGameViewPortWidth = 0.0f, mGameViewPortHeight = 0.0f;
+
         static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
             if (mButtonsDown) { mIsDragging = 1; }
 
@@ -53,6 +56,17 @@ namespace Dralgeer {
             mScrollX = xoffset;
             mScrollY = yoffset;
         };
+
+        inline static void endFrame() {
+            mScrollX = 0; mScrollY = 0;
+            mLastX = mX; mLastY = mY;
+            mLastWorldX = mWorldX; mLastWorldY = mWorldY;
+        };
+
+        inline static float getScreenX() { return ((mX - mGameViewPortX)/mGameViewPortWidth) * 1920.0f; };
+        inline static float getScreenY() { return 1080.0f - (((mY - mGameViewPortY)/mGameViewPortHeight) * 1080.0f); };
+
+        // todo add in the calculate orthoX and orthoY after the scenes are implemented into window.h (and made accessible)
     }
 
     // * ==================
