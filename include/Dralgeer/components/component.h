@@ -5,9 +5,9 @@
 #include "gameobject.h"
 
 #define NON_PICKABLE_FLAG 0x000001U
-#define SPRITE_RENDERER_FLAG 0x000004U
-#define EDITOR_CAMERA_FLAG 0x000008U
-#define GRID_LINES_FLAG 0x000010U
+#define SPRITE_RENDERER_FLAG 0x000002U
+#define EDITOR_CAMERA_FLAG 0x000004U
+#define GRID_LINES_FLAG 0x000008U
 
 namespace Dralgeer {
     // todo maybe find a way to do stuff with just a flag inside of this class

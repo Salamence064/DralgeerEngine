@@ -1,12 +1,17 @@
 #pragma once
 
-// todo add bitfields to stuff to indicate things (like if it's a component)
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
-
 // todo go through each class and make sure assignment stuff can't be used for GPU related ones (unless I set it up to call init and stuff)
 
 // todo find a way to make the window data accessible for other stuff, too
 
+// todo this is the next main thing to work on getting done.
+// todo  further, add ImGui stuff, too
+
+// todo create the editor library from the existing code-base
+// todo go through and make certain constructors inline
+
+#include <IMGUI/imgui.h>
 #include "render/debugdraw.h"
 #include "listeners.h"
 
@@ -76,6 +81,13 @@ namespace Dralgeer {
                 // enable alpha blending
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+                // frame buffer config
+                // todo will add
+
+                // initialize imgui
+
+                // initialize scene
             };
 
             void run() {
