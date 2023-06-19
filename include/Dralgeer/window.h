@@ -16,6 +16,11 @@
 #include "listeners.h"
 
 namespace Dralgeer {
+    struct WindowData {
+        uint16_t width, height;
+        std::string title;
+    };
+
     class Window {
         private:
             WindowData data;

@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 #include <IMGUI/imgui.h>
+#include "../gameobject.h"
+#include "../render/framebuffer.h"
 
 namespace Dralgeer {
     struct GameViewWindow {
@@ -37,5 +39,21 @@ namespace Dralgeer {
 
         inline ImVec2 getLargestSize() const;
         inline ImVec2 getCenteredPos(ImVec2 const &size) const;
+    };
+
+    class PropertiesWindow {
+        private:
+            PickingTexture pickingTexture;
+            float debounce = 0.2f;
+
+        public:
+            GameObject activeGameObject;
+
+            inline PropertiesWindow(PickingTexture const &tex) : pickingTexture(tex) {};
+
+            // todo implement once we have the MouseListener stuff figured out, too
+            inline void update(float dt); // todo update the function signature after adding scenes and stuff
+
+            // todo add the other functions and stuff
     };
 }
