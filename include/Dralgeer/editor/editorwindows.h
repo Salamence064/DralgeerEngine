@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdexcept>
 #include <IMGUI/imgui.h>
+#include "../window.h"
 #include "../gameobject.h"
 #include "../render/framebuffer.h"
 
@@ -30,15 +30,41 @@ namespace Dralgeer {
 
             // todo add a way to get the textureID from the framebuffer from the window
 
-            // todo add a way to set the game viewport through the mouse listener
+            MouseListener::mGameViewPortX = bottomLeft.x;
+            MouseListener::mGameViewPortY = bottomLeft.y;
+            MouseListener::mGameViewPortWidth = windowSize.x;
+            MouseListener::mGameViewPortHeight = windowSize.y;
 
             ImGui::End();
         };
 
-        inline bool getWantCaptureMouse() const; // todo add the functionality of this once we update the mouse listener to be able to hold this information
+        inline bool getWantCaptureMouse() const {
+            return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
+        };
 
-        inline ImVec2 getLargestSize() const;
-        inline ImVec2 getCenteredPos(ImVec2 const &size) const;
+        inline ImVec2 getLargestSize() const {
+            ImVec2 windowSize = ImGui::GetContentRegionAvail();
+            windowSize.x -= ImGui::GetScrollX();
+            windowSize.y -= ImGui::GetScrollY();
+
+            float aspectWidth = windowSize.x;
+            float aspectHeight = aspectWidth/TARGET_ASPECT_RATIO;
+
+            if (aspectHeight > aspectWidth) {
+                // must switch to pillar box mode
+                aspectHeight = windowSize.y;
+                aspectWidth = aspectHeight/TARGET_ASPECT_RATIO;
+            }
+
+            return ImVec2(aspectWidth, aspectHeight);
+        };
+
+        inline ImVec2 getCenteredPos(ImVec2 const &size) const {
+            ImVec2 windowSize = ImGui::GetContentRegionAvail();
+            windowSize.x -= ImGui::GetScrollX();
+            windowSize.y -= ImGui::GetScrollY();
+            return ImVec2((0.5f*(windowSize.x - size.x)) + ImGui::GetCursorPosX(), (0.5f*(windowSize.y - size.y)) + ImGui::GetCursorPosY());
+        };
     };
 
     class PropertiesWindow {

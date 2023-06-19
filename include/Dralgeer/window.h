@@ -15,6 +15,9 @@
 #include "render/debugdraw.h"
 #include "listeners.h"
 
+// equivalent of 16:9 aspect ratio
+#define TARGET_ASPECT_RATIO 1.77778f
+
 namespace Dralgeer {
     struct WindowData {
         uint16_t width, height;
