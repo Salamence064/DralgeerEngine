@@ -10,7 +10,7 @@ namespace Dralgeer {
             bool isRunning = 0;
 
         public:
-            std::vector<GameObject::GameObject*> gameObjects; // todo use a resizeable dynamic array instead of a vector probably
+            std::vector<GameObject*> gameObjects; // todo use a resizeable dynamic array instead of a vector probably
             Camera camera;
 
             Scene() : gameObjects({}) { camera.pos = glm::vec2(0, 0); };
@@ -21,7 +21,7 @@ namespace Dralgeer {
                 isRunning = 1;
             };
 
-            inline void addGameObject(GameObject::GameObject* go) {
+            inline void addGameObject(GameObject* go) {
                 gameObjects.push_back(go);
                 if (isRunning) { go->start(); }
             };
@@ -29,7 +29,7 @@ namespace Dralgeer {
             inline void destroy() { for (int i = 0; i < gameObjects.size(); ++i) { gameObjects[i]->destory(); }};
 
             // ! not sure if this is really needed either
-            inline GameObject::GameObject* getGameObject(int id) const {
+            inline GameObject* getGameObject(int id) const {
                 for (int i = 0; i < gameObjects.size(); ++i) { if (gameObjects[i]->getID() == id) { return gameObjects[i]; }}
                 return nullptr;
             };

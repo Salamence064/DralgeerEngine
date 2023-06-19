@@ -1,4 +1,4 @@
-#include "../include/Dralgeer/window.h"
+#include <Dralgeer/window.h>
 
 int main() {
     Dralgeer::Window window(1920, 1080, "Dungeon of Dralgeer");

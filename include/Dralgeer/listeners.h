@@ -18,9 +18,9 @@ namespace Dralgeer {
     // * ====================
 
     namespace MouseListener { // todo add ImGui stuff
-        static double mScrollX = 0, mScrollY = 0;
-        static double mX = 0, mY = 0, mLastX = 0, mLastY = 0;
-        static double mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0;
+        static float mScrollX = 0, mScrollY = 0;
+        static float mX = 0, mY = 0, mLastX = 0, mLastY = 0;
+        static float mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0;
 
         static uint8_t mButtonsDown = 0;
         static bool mIsDragging = 0;

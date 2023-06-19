@@ -19,7 +19,7 @@ namespace ZMath {
     // * ============================================
 
     // * Macro to get the sign of a number.
-    #define SIGNOF(num)( num < 0 ? -1 : 1 )
+    #define SIGNOF(num)( num < 0 ? -1 : (num == 0 ? 0 : 1) )
 
     // * Macro to convert to radians.
     #define TORADIANS(degrees)( (degrees/180) * PI )
