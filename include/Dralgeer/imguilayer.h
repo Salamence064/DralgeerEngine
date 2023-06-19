@@ -8,6 +8,7 @@ namespace Dralgeer {
         private:
             GLFWwindow* window;
             // todo google what I need to include for these
+            // todo read through imGui docs
             // ImGuiImplGlfw imGuiGlfw;
             // ImGuiImplGl3 imGuiGl3;
 
