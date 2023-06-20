@@ -2,15 +2,17 @@
 
 #pragma once
 
-#include "gameobject.h"
+// todo we might wanna merge both component and game objects into the same file
+#include "../gameobject.h"
 
 #define NON_PICKABLE_FLAG 0x000001U
 #define SPRITE_RENDERER_FLAG 0x000002U
 #define EDITOR_CAMERA_FLAG 0x000004U
 #define GRID_LINES_FLAG 0x000008U
-#define EDITOR_CAMERA_FLAG 0x000010U
 
 namespace Dralgeer {
+    class GameObject; // allow it to be used by Component class
+
     // todo maybe find a way to do stuff with just a flag inside of this class
         // ! This would probably be ideal seeing as we have to store it like that already
         // ! The only hurdle left would be storing the unique data for the different subclasses as inside functions we can use a switch

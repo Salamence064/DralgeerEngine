@@ -5,7 +5,7 @@
 #include "../camera.h"
 
 #define MAX_DEBUG_LINES 500
-#define VERTEX_ARR_SIZE 6000
+#define DEBUG_VERTEX_ARR_SIZE 6000
 
 namespace Dralgeer {
     namespace DebugDraw {
@@ -26,7 +26,7 @@ namespace Dralgeer {
             static std::vector<Line2D> lines = {};
 
             // 6 floats per vertex, 2 vertices per line
-            static float vertexArray[VERTEX_ARR_SIZE];
+            static float vertexArray[DEBUG_VERTEX_ARR_SIZE];
             static Shader shader;
             // todo issue results from the above line -- maybe use some couts and stuff to debug here shortly
             // todo we can also try dumb stuff like commenting out the annonymous namespaces
@@ -51,7 +51,7 @@ namespace Dralgeer {
             // create the VBO and buffer some memory
             glGenBuffers(1, &vboID);
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
-            glBufferData(GL_ARRAY_BUFFER, VERTEX_ARR_SIZE * sizeof(float), vertexArray, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, DEBUG_VERTEX_ARR_SIZE * sizeof(float), vertexArray, GL_DYNAMIC_DRAW);
 
             // enable the vertex array attributes
             const float* ptr = 0;

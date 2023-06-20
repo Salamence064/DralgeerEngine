@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include <iostream>
 #include <fstream>
@@ -337,6 +338,9 @@ namespace Dralgeer {
             return texture;
         };
 
+
+        // todo figure out why it thinks there's an error tomorrow
+        // ! I think intelisense is bugging. I'll run it to test
         inline static void addSpriteSheet(std::string const &filepath, SpriteSheet const &spr) {
             if (spriteSheets.find(filepath) == spriteSheets.end()) { spriteSheets.insert({filepath, spr}); }
         };
@@ -344,7 +348,9 @@ namespace Dralgeer {
         inline static SpriteSheet getSpriteSheet(std::string const &filepath) {
             if (spriteSheets.find(filepath) != spriteSheets.end()) { return spriteSheets[filepath]; };
             // todo remove the error thrown in the future in favor of a log message + returning nullptr
-            throw std::runtime_error("[ERROR] Invalid SpriteSheet acces.\n\tNo SpriteSheet is associated with '" + filepath + "'\n");
+            return SpriteSheet();
         };
     }
 }
+
+#endif // ! TEXTURE_H

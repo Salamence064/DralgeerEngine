@@ -1,10 +1,13 @@
-#pragma once
+#ifndef WINDOW_H
+#define WINDOW_H
 
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
 // todo go through each class and make sure assignment stuff can't be used for GPU related ones (unless I set it up to call init and stuff)
 
 // todo create the editor library from the existing code-base
 // todo go through and make certain constructors inline
+
+// todo go through and make major changes to the architecture until the errors are gone. Main issue is with included files in a loop
 
 #include <IMGUI/imgui.h>
 #include "render/debugdraw.h"
@@ -129,3 +132,5 @@ namespace Dralgeer {
             };
     };
 }
+
+#endif // ! WINDOW_H
