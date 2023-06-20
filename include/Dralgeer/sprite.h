@@ -1,16 +1,8 @@
-// todo include Sprite, SpriteRenderer, and SpriteSheet in here
+#ifndef SPRITE_H
+#define SPRITE_H
 
-#pragma once
-
-#include "../render/texture.h"
-#include "../gameobject.h"
-#include "component.h"
-
-// ! will use when adding ImGui
-#define IMGUI_COLOR_PICKER_X 1370
-#define IMGUI_COLOR_PCIKER_Y 35
-#define IMGUI_COLOR_PICKER_WIDTH 550
-#define IMGUI_COLOR_PCIKER_HEIGHT 450
+#include "constants.h"
+#include "texture.h"
 
 namespace Dralgeer {
     // todo having this sprite struct almost seems unnecessary.
@@ -21,67 +13,6 @@ namespace Dralgeer {
         glm::vec2 texCords[4] = {glm::vec2(1, 1), glm::vec2(1, 0), glm::vec2(0, 0), glm::vec2(0, 1)};
     };
 
-    // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer : public Component {
-        private:
-            bool imGuiSetup = 1; // ! DO NOT serialize
-
-        public: // todo add rule of 5 operators
-            // const uint32_t flags = COMPONENT_FLAG | SPRITE_RENDERER_FLAG;
-
-            glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
-            Sprite sprite;
-
-            Transform lastTransform; // ! DO NOT serialize
-            bool isDirty = 1; // ! DO NOT serialize
-
-            // * ==========================================================
-
-            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; id = idCounter++; }; // todo test if you need to do = SpriteRenderer(); or not for default
-            SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
-                gameObject = spr.gameObject;
-                flags = SPRITE_RENDERER_FLAG;
-                id = idCounter++;
-
-                imGuiSetup = spr.imGuiSetup;
-                isDirty = spr.isDirty;
-
-                sprite.texture = new Texture();
-                sprite.texture->init(spr.sprite.texture->filepath);
-            };
-
-            SpriteRenderer& operator = (SpriteRenderer const &spr) {
-                gameObject = spr.gameObject; // todo this reassignment will fail meaning we need a better method of doing this than just failing reassignment
-                color = spr.color;
-                lastTransform = spr.lastTransform;
-                imGuiSetup = spr.imGuiSetup;
-                isDirty = spr.isDirty;
-
-                sprite.texture = new Texture();
-                sprite.texture->init(spr.sprite.texture->filepath);
-
-                flags = spr.flags;
-                id = idCounter++;
-
-                return (*this);
-            };
-
-            inline void start() override { lastTransform = gameObject.transform; };
-
-            // ! Not convinced we even need this function
-            // inline void editorUpdate();
-
-            inline void update(float dt) override {
-                if (lastTransform != gameObject.transform) {
-                    gameObject.transform = lastTransform;
-                    isDirty = 1;
-                }
-            };
-
-            ~SpriteRenderer() { if (sprite.texture != nullptr) { delete sprite.texture; }};
-    };
-
-    // todo maybe make it a struct instead
     // todo add rule of 5 operators
     class SpriteSheet {
         public:
@@ -175,3 +106,5 @@ namespace Dralgeer {
             };
     };
 }
+
+#endif // !SPRITE_H
