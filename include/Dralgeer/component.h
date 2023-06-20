@@ -2,28 +2,32 @@
 #define COMPONENT_H
 
 #include <Zeta2D/zmath2D.h>
+#include <utility>
 #include "sprite.h"
 #include "listeners.h"
 #include "camera.h"
 
 namespace Dralgeer {
-    // Forward declaration to allow for use in Component.
-    class GameObject;
-
-
     // * ===========================
     // * Abstract Component Class
     // * ===========================
 
+    enum ComponentType {
+        SPRITE_RENDERER,
+        EDITOR_CAMERA,
+        GRID_LINES
+    };
+
     // todo maybe find a way to do stuff with just a flag inside of this class
         // ! This would probably be ideal seeing as we have to store it like that already
         // ! The only hurdle left would be storing the unique data for the different subclasses as inside functions we can use a switch
+    // * Implement rule of 5 for anything that extends this.
     class Component {
         protected:
             int idCounter = 0;
 
         public:
-            uint32_t flags; // maybe serialize? // ! will figure out after implementing serialization stuff
+            ComponentType type;
 
             int id;
             GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
@@ -50,43 +54,123 @@ namespace Dralgeer {
         inline bool operator != (Transform const &t) const { return pos != t.pos || scale != t.scale || zIndex != t.zIndex || rotation != t.rotation; };
     };
 
-    class GameObject { // todo definitely change it so that it can do rule or 5 stuff -- add that in
+    class GameObject {
         private:
             int idCounter = 0; // used to track the game object's ID
-
-        public:
-            int id;
-            Component** components;
+            Component** components = nullptr;
             int capacity = 8; // start with 8 slots for components // todo probs up this later
             int numComponents = 0;
 
+        public:
+            // * ==============
+            // * Attributes
+            // * ==============
+
+            int id;
             std::string name;
             Transform transform; // ! DO NOT serialize
 
             bool serialize = 1; // ! DO NOT serialize
             bool dead = 0; // ! DO NOT serialize
             
+            // * ===============================================
+
             GameObject() {
                 components = new Component*[8];
                 id = idCounter++;
             };
 
-            // todo allow for both
-            // don't allow for reassignment or constructruction from another game object
-            // GameObject(GameObject const &go) { throw std::runtime_error("GameObject objects CANNOT be created from another GameObject."); };
-            // GameObject operator = (GameObject const &go) { throw std::runtime_error("GameObject objects CANNOT be reassigned."); };
 
-            template <typename T> T* getComponent(uint32_t objectFlag) {
+            // * ====================
+            // * Rule of 5 Stuff
+            // * ====================
+
+            GameObject(GameObject const &go) : name(go.name), serialize(go.serialize), transform(go.transform) {
+                id = idCounter++;
+                dead = 0;
+
+                capacity = go.capacity;
+                numComponents = go.numComponents;
+                components = new Component*[capacity];
+
                 for (int i = 0; i < numComponents; ++i) {
-                    if (objectFlag & components[i]->flags) { return (T*) components[i]; }
+                    switch (go.components[i]->type) {
+                        case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
+                        case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
+                        case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                    }
+                }
+            };
+
+            GameObject(GameObject &&go) : name(std::move(go.name)), serialize(go.serialize), transform(std::move(go.transform)) {
+                id = idCounter++;
+                dead = 0;
+
+                capacity = go.capacity;
+                numComponents = go.numComponents;
+                components = go.components;
+                go.components = NULL;
+            };
+
+            GameObject& operator = (GameObject const &go) {
+                name = go.name;
+                transform = go.transform;
+                serialize = go.serialize;
+                
+                for (int i = 0; i < numComponents; ++i) { delete components[i]; }
+                delete[] components;
+
+                capacity = go.capacity;
+                numComponents = go.numComponents;
+                components = new Component*[capacity];
+
+                for (int i = 0; i < numComponents; ++i) {
+                    switch (go.components[i]->type) {
+                        case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
+                        case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
+                        case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                    }
+                }
+
+                return *this;
+            };
+
+            GameObject& operator = (GameObject &&go) {
+                if (this != &go) { // ensure there is not self assignment
+                    name = std::move(go.name);
+                    transform = std::move(go.transform);
+                    serialize = go.serialize;
+
+                    capacity = go.capacity;
+                    numComponents = go.numComponents;
+                    components = go.components;
+                    go.components = NULL;
+                }
+
+                return *this;
+            };
+
+            ~GameObject() {
+                for (int i = 0; i < numComponents; ++i) { delete components[i]; }
+                delete[] components;
+            };
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
+
+            template <typename T> inline T* getComponent(ComponentType type) {
+                for (int i = 0; i < numComponents; ++i) {
+                    if (type == components[i]->type) { return (T*) components[i]; }
                 }
 
                 return nullptr;
             };
 
-            template <typename T> void removeComponent(uint32_t objectFlag) {
+            template <typename T> inline void removeComponent(ComponentType type) {
                 for (int i = 0; i < numComponents; ++i) {
-                    if (objectFlag & components[i]->flags) {
+                    if (type == components[i]->type) {
                         delete components[i];
                         numComponents--;
                         for (int j = i; j < numComponents; ++j) { components[j] = components[j + 1]; }
@@ -95,7 +179,7 @@ namespace Dralgeer {
                 }
             };
 
-            void addComponent(Component* c) {
+            inline void addComponent(Component* c) {
                 if (numComponents == capacity) {
                     capacity *= 2;
 
@@ -112,11 +196,6 @@ namespace Dralgeer {
             inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
             inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
             inline void update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
-
-            ~GameObject() {
-                for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-                delete[] components;
-            };
     };
 
 
@@ -129,7 +208,7 @@ namespace Dralgeer {
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
-        public: // todo add rule of 5 operators
+        public:
             // * ==============
             // * Attributes
             // * ==============
@@ -142,15 +221,16 @@ namespace Dralgeer {
 
             // * ==========================================================
 
-            SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; id = idCounter++; }; // todo test if you need to do = SpriteRenderer(); or not for default
+            SpriteRenderer() { type = ComponentType::SPRITE_RENDERER; id = idCounter++; }; // todo test if you need to do = SpriteRenderer(); or not for default
             
             
             // * =====================
             // * Rule of 5 stuff
             // * =====================
             
+            // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
             SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
-                flags = spr.flags;
+                type = spr.type;
                 id = idCounter++;
 
                 imGuiSetup = 1;
@@ -163,11 +243,15 @@ namespace Dralgeer {
                     sprite.texture->init(spr.sprite.texture->filepath);
                 }
 
-                if (spr.gameObject) { gameObject = new GameObject(*(spr.gameObject)); }
+                if (spr.gameObject) {
+                    gameObject = new GameObject();
+                    gameObject->transform = spr.gameObject->transform;
+                    gameObject->name = spr.gameObject->name;
+                }
             };
 
-            SpriteRenderer(SpriteRenderer &&spr) : color(spr.color), lastTransform(spr.lastTransform) {
-                flags = spr.flags;
+            SpriteRenderer(SpriteRenderer &&spr) : color(std::move(spr.color)), lastTransform(std::move(spr.lastTransform)) {
+                type = spr.type;
                 id = idCounter++;
 
                 imGuiSetup = 1;
@@ -182,8 +266,9 @@ namespace Dralgeer {
                 spr.gameObject = NULL;
             };
 
+            // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
             SpriteRenderer& operator = (SpriteRenderer const &spr) {
-                flags = spr.flags;
+                type = spr.type;
                 color = spr.color;
                 lastTransform = spr.lastTransform;
                 imGuiSetup = 1;
@@ -195,16 +280,20 @@ namespace Dralgeer {
                 sprite.texture->init(spr.sprite.texture->filepath);
 
                 if (gameObject) { delete gameObject; gameObject = nullptr; }
-                if (spr.gameObject) { gameObject = new GameObject(*(spr.gameObject)); }
+                if (spr.gameObject) {
+                    gameObject = new GameObject();
+                    gameObject->transform = spr.gameObject->transform;
+                    gameObject->name = spr.gameObject->name;
+                }
 
                 return *this;
             };
 
             SpriteRenderer& operator = (SpriteRenderer &&spr) {
                 if (this != &spr) { // ensure it is not self assignment
-                    flags = spr.flags;
-                    color = spr.color;
-                    lastTransform = spr.lastTransform;
+                    type = spr.type;
+                    color = std::move(spr.color);
+                    lastTransform = std::move(spr.lastTransform);
                     imGuiSetup = 1;
                     isDirty = 1;
 
@@ -249,8 +338,8 @@ namespace Dralgeer {
             Camera camera;
             glm::vec2 clickOrigin;
 
-        public:
-            EditorCamera() { flags = EDITOR_CAMERA_FLAG; id = idCounter++; };
+        public: // todo add rule of 5
+            EditorCamera() { type = ComponentType::EDITOR_CAMERA; id = idCounter++; };
 
             inline void update(float dt) override {
                 // todo check if the ImGui layer in the window wants to be updated (will have to add the thing to the window first though)
@@ -294,9 +383,9 @@ namespace Dralgeer {
             };
     };
 
-    class GridLines : public Component {
+    class GridLines : public Component { // todo add rule of 5 once making this useable
         public:
-            GridLines() { flags = GRID_LINES_FLAG; id = idCounter++; };
+            GridLines() { type = ComponentType::GRID_LINES; id = idCounter++; };
 
             inline void update(float dt) override; // todo make once we have access to the camera from the current scene in the window
     };

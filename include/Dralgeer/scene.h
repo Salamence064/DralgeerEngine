@@ -5,6 +5,8 @@
 #include "assetpool.h"
 
 namespace Dralgeer {
+    // todo refactor because the forward declaration will not allow it to work.
+
     // todo for now will do this the OOP way just to get things up and runnings
     // todo  will refactor in the future
     // todo Consider refactoring this using void* (in window.h) and an enum
@@ -65,7 +67,7 @@ namespace Dralgeer {
                     gameObjects[i]->update(dt);
 
                     if (gameObjects[i]->dead) {
-                        Renderer::destroy(gameObjects[i]->getComponent<SpriteRenderer>(SPRITE_RENDERER_FLAG));
+                        Renderer::destroy(gameObjects[i]->getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER));
                         delete gameObjects[i];
                         gameObjects.erase(std::next(gameObjects.begin(), i)); // todo should be able to erase at 0 (test to be sure)
                     }

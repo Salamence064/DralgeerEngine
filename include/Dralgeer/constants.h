@@ -8,9 +8,6 @@
 
 // flags
 #define NON_PICKABLE_FLAG 0x000001U
-#define SPRITE_RENDERER_FLAG 0x000002U
-#define EDITOR_CAMERA_FLAG 0x000004U
-#define GRID_LINES_FLAG 0x000008U
 
 // sprite's ImGui color picker
 #define IMGUI_COLOR_PICKER_X 1370
