@@ -54,7 +54,7 @@ namespace Dralgeer {
 
             // ! not sure if this is really needed either
             inline GameObject* getGameObject(int id) const {
-                for (int i = 0; i < gameObjects.size(); ++i) { if (gameObjects[i]->getID() == id) { return gameObjects[i]; }}
+                for (int i = 0; i < gameObjects.size(); ++i) { if (gameObjects[i]->id == id) { return gameObjects[i]; }}
                 return nullptr;
             };
 

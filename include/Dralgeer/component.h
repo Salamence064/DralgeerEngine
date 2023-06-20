@@ -23,10 +23,10 @@ namespace Dralgeer {
             int idCounter = 0;
 
         public:
-            uint32_t flags; // maybe serialize?
+            uint32_t flags; // maybe serialize? // ! will figure out after implementing serialization stuff
 
             int id;
-            GameObject gameObject; // should this even be here?? // ! do not serialize
+            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
             // todo test if this use of virtual functions works
             virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
@@ -53,12 +53,13 @@ namespace Dralgeer {
     class GameObject { // todo definitely change it so that it can do rule or 5 stuff -- add that in
         private:
             int idCounter = 0; // used to track the game object's ID
-            int id; // todo make public again tbh
+
+        public:
+            int id;
             Component** components;
             int capacity = 8; // start with 8 slots for components // todo probs up this later
             int numComponents = 0;
 
-        public:
             std::string name;
             Transform transform; // ! DO NOT serialize
 
@@ -112,8 +113,6 @@ namespace Dralgeer {
             inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
             inline void update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
 
-            inline int getID() { return id; };
-
             ~GameObject() {
                 for (int i = 0; i < numComponents; ++i) { delete components[i]; }
                 delete[] components;
@@ -131,7 +130,9 @@ namespace Dralgeer {
             bool imGuiSetup = 1; // ! DO NOT serialize
 
         public: // todo add rule of 5 operators
-            // const uint32_t flags = COMPONENT_FLAG | SPRITE_RENDERER_FLAG;
+            // * ==============
+            // * Attributes
+            // * ==============
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
             Sprite sprite;
@@ -142,47 +143,101 @@ namespace Dralgeer {
             // * ==========================================================
 
             SpriteRenderer() { flags = SPRITE_RENDERER_FLAG; id = idCounter++; }; // todo test if you need to do = SpriteRenderer(); or not for default
+            
+            
+            // * =====================
+            // * Rule of 5 stuff
+            // * =====================
+            
             SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
-                gameObject = spr.gameObject;
-                flags = SPRITE_RENDERER_FLAG;
-                id = idCounter++;
-
-                imGuiSetup = spr.imGuiSetup;
-                isDirty = spr.isDirty;
-
-                sprite.texture = new Texture();
-                sprite.texture->init(spr.sprite.texture->filepath);
-            };
-
-            SpriteRenderer& operator = (SpriteRenderer const &spr) {
-                gameObject = spr.gameObject; // todo this reassignment will fail meaning we need a better method of doing this than just failing reassignment
-                color = spr.color;
-                lastTransform = spr.lastTransform;
-                imGuiSetup = spr.imGuiSetup;
-                isDirty = spr.isDirty;
-
-                sprite.texture = new Texture();
-                sprite.texture->init(spr.sprite.texture->filepath);
-
                 flags = spr.flags;
                 id = idCounter++;
 
-                return (*this);
+                imGuiSetup = 1;
+                isDirty = 1;
+
+                if (spr.sprite.texture) {
+                    sprite.width = spr.sprite.width;
+                    sprite.height = spr.sprite.height;
+                    sprite.texture = new Texture();
+                    sprite.texture->init(spr.sprite.texture->filepath);
+                }
+
+                if (spr.gameObject) { gameObject = new GameObject(*(spr.gameObject)); }
             };
 
-            inline void start() override { lastTransform = gameObject.transform; };
+            SpriteRenderer(SpriteRenderer &&spr) : color(spr.color), lastTransform(spr.lastTransform) {
+                flags = spr.flags;
+                id = idCounter++;
 
-            // ! Not convinced we even need this function
-            // inline void editorUpdate();
+                imGuiSetup = 1;
+                isDirty = 1;
+
+                sprite.width = spr.sprite.width;
+                sprite.height = spr.sprite.height;
+                sprite.texture = spr.sprite.texture;
+                spr.sprite.texture = NULL;
+
+                gameObject = spr.gameObject;
+                spr.gameObject = NULL;
+            };
+
+            SpriteRenderer& operator = (SpriteRenderer const &spr) {
+                flags = spr.flags;
+                color = spr.color;
+                lastTransform = spr.lastTransform;
+                imGuiSetup = 1;
+                isDirty = 1;
+
+                sprite.width = spr.sprite.width;
+                sprite.height = spr.sprite.height;
+                sprite.texture = new Texture();
+                sprite.texture->init(spr.sprite.texture->filepath);
+
+                if (gameObject) { delete gameObject; gameObject = nullptr; }
+                if (spr.gameObject) { gameObject = new GameObject(*(spr.gameObject)); }
+
+                return *this;
+            };
+
+            SpriteRenderer& operator = (SpriteRenderer &&spr) {
+                if (this != &spr) { // ensure it is not self assignment
+                    flags = spr.flags;
+                    color = spr.color;
+                    lastTransform = spr.lastTransform;
+                    imGuiSetup = 1;
+                    isDirty = 1;
+
+                    sprite.width = spr.sprite.width;
+                    sprite.height = spr.sprite.height;
+                    sprite.texture = spr.sprite.texture;
+                    spr.sprite.texture = NULL;
+
+                    gameObject = spr.gameObject;
+                    spr.gameObject = NULL;
+                }
+
+                return *this;
+            };
+
+            ~SpriteRenderer() {
+                if (sprite.texture != nullptr) { delete sprite.texture; }
+                if (gameObject) { delete gameObject; }
+            };
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
+
+            inline void start() override { lastTransform = gameObject->transform; };
 
             inline void update(float dt) override {
-                if (lastTransform != gameObject.transform) {
-                    gameObject.transform = lastTransform;
+                if (lastTransform != gameObject->transform) {
+                    gameObject->transform = lastTransform;
                     isDirty = 1;
                 }
             };
-
-            ~SpriteRenderer() { if (sprite.texture != nullptr) { delete sprite.texture; }};
     };
 
     class EditorCamera : public Component {
