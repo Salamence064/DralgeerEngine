@@ -1,6 +1,7 @@
 // todo should include pickingtexture
 
-#pragma once
+#ifndef FRAME_BUFFER_H
+#define FRAME_BUFFER_H
 
 #include "texture.h"
 
@@ -104,3 +105,5 @@ namespace Dralgeer {
             inline void disableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); };
     };  
 }
+
+#endif // !FRAME_BUFFER_H

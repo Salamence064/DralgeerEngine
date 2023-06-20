@@ -1,11 +1,7 @@
-#pragma once
+#ifndef DEBUG_DRAW_H
+#define DEBUG_DRAW_H
 
-#include <vector>
-#include "texture.h"
-#include "../camera.h"
-
-#define MAX_DEBUG_LINES 500
-#define DEBUG_VERTEX_ARR_SIZE 6000
+#include "assetpool.h"
 
 namespace Dralgeer {
     namespace DebugDraw {
@@ -23,7 +19,8 @@ namespace Dralgeer {
 
 
         namespace {
-            static std::vector<Line2D> lines = {};
+            static std::vector<Line2D> lines = {}; // not sure if we even want this
+            // probs make a dynamic pointer array
 
             // 6 floats per vertex, 2 vertices per line
             static float vertexArray[DEBUG_VERTEX_ARR_SIZE];
@@ -153,3 +150,5 @@ namespace Dralgeer {
         // TODO: add constants for common colors
     }
 }
+
+#endif // !DEBUG_DRAW_H

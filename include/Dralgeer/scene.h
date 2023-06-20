@@ -1,15 +1,21 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
 
-#include "../camera.h"
-#include "../gameobject.h"
-#include "../render/render.h"
+#include "render.h"
+#include "assetpool.h"
 
 namespace Dralgeer {
     // todo for now will do this the OOP way just to get things up and runnings
     // todo  will refactor in the future
     // todo Consider refactoring this using void* (in window.h) and an enum
 
-    class Scene; // declare it so we can use it in the SceneInitializer class
+    // Forward declaration to allow for use in SceneInitializer.
+    class Scene;
+
+
+    // * ===================
+    // * SceneInitializer
+    // * ===================
 
     class SceneInitializer {
         public:
@@ -17,6 +23,11 @@ namespace Dralgeer {
             inline virtual void loadResources(Scene const &scene) = 0;
             inline virtual void imGui() = 0;
     };
+
+
+    // * ================
+    // * Scene Stuff
+    // * ================
 
     class Scene { // todo add the OOP stuff for now
         private:
@@ -63,6 +74,44 @@ namespace Dralgeer {
 
             inline void render() { Renderer::render(); };
 
-            
+            // todo refactor around the initializer approach for now
+            // todo will later refactor around void*
+    };
+
+
+    // * ======================
+    // * Scene Initializers
+    // * ======================
+
+    class LevelEditorInitializer : public SceneInitializer {
+        private:
+            // todo add physics stuff here
+
+            SpriteSheet sprites;
+            GameObject components;
+            bool imGuiSetup = 1; // ! DO NOT serialize
+
+        public:
+            LevelEditorInitializer() {};
+
+            inline void init(Scene const &scene) override {
+                // load the spritesheet
+                sprites = AssetPool::getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
+                
+                components.name = "LevelEditor";
+                // todo maybe add transform as a component class for the GameObject if necessary
+                EditorCamera* camera = new EditorCamera(); // defo refactor this stuff
+                components.addComponent(camera);
+
+                // todo call components.setNoSerialize() when I have serialization setup
+                // todo add gizmo stuff after creating them
+                // todo add MouseControls after creating that, too
+            };
+
+            inline void loadResources(Scene const &scene) override;
+
+            inline void imGui() override;
     };
 }
+
+#endif // !SCENE_H

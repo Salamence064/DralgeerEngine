@@ -1,1 +1,0 @@
-This folder will be temporary until I set up the external editor library

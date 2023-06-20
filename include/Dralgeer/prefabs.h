@@ -1,7 +1,6 @@
 #pragma once
 
-#include "sprite.h"
-#include "gameobject.h"
+#include "component.h"
 
 namespace Dralgeer {
     namespace Prefabs {

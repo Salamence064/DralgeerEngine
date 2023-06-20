@@ -1,11 +1,10 @@
 #ifndef ASSET_POOL_H
 #define ASSET_POOL_H
 
-// todo not sure why this is littered in errors but we will run the program to see
-
 #include "component.h"
 
-namespace AssetPool {
+namespace Dralgeer {
+    namespace AssetPool {
         namespace {
             static std::unordered_map<std::string, Shader> shaders;
             static std::unordered_map<std::string, Texture> textures;
@@ -44,5 +43,6 @@ namespace AssetPool {
             return SpriteSheet();
         };
     }
+}
 
 #endif // !ASSET_POOL_H
