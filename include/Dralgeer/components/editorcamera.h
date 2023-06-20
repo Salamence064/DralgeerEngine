@@ -21,6 +21,8 @@ namespace Dralgeer {
             glm::vec2 clickOrigin;
 
         public:
+            EditorCamera() { flags = EDITOR_CAMERA_FLAG; };
+
             inline void update(float dt) override {
                 // todo check if the ImGui layer in the window wants to be updated (will have to add the thing to the window first though)
 

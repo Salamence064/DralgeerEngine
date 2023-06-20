@@ -8,6 +8,7 @@
 #define SPRITE_RENDERER_FLAG 0x000002U
 #define EDITOR_CAMERA_FLAG 0x000004U
 #define GRID_LINES_FLAG 0x000008U
+#define EDITOR_CAMERA_FLAG 0x000010U
 
 namespace Dralgeer {
     // todo maybe find a way to do stuff with just a flag inside of this class
