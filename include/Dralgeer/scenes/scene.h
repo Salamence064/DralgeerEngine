@@ -5,7 +5,20 @@
 #include "../render/render.h"
 
 namespace Dralgeer {
-    class Scene {
+    // todo for now will do this the OOP way just to get things up and runnings
+    // todo  will refactor in the future
+    // todo Consider refactoring this using void* and an enum
+
+    class Scene; // declare it so we can use it in the SceneInitializer class
+
+    class SceneInitializer {
+        public:
+            inline virtual void init(Scene const &scene) = 0;
+            inline virtual void loadResources(Scene const &scene) = 0;
+            inline virtual void imGui() = 0;
+    };
+
+    class Scene { // todo add the OOP stuff for now
         private:
             bool isRunning = 0;
 

@@ -11,6 +11,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GLM/glm/glm.hpp>
+#include "../components/sprite.h"
 
 namespace Dralgeer {
     class Shader {
@@ -312,10 +313,10 @@ namespace Dralgeer {
         namespace {
             static std::unordered_map<std::string, Shader> shaders;
             static std::unordered_map<std::string, Texture> textures;
-            // static std::unordered_map<std::string, SpriteSheet> spriteSheets; // todo add when I create sprites and sprite sheets
+            static std::unordered_map<std::string, SpriteSheet> spriteSheets;
         }
 
-        inline Shader getShader(std::string const &filepath) {
+        inline static Shader getShader(std::string const &filepath) {
             if (shaders.find(filepath) != shaders.end()) { return shaders[filepath]; }
 
             // add new shader if it is not included
@@ -326,7 +327,7 @@ namespace Dralgeer {
             return shader;
         };
 
-        inline Texture getTexture(std::string const &filepath) {
+        inline static Texture getTexture(std::string const &filepath) {
             if (textures.find(filepath) != textures.end()) { return textures[filepath]; }
 
             // add new texture if it is not included
@@ -334,6 +335,16 @@ namespace Dralgeer {
             texture.init(filepath);
             textures.insert({filepath, texture});
             return texture;
+        };
+
+        inline static void addSpriteSheet(std::string const &filepath, SpriteSheet const &spr) {
+            if (spriteSheets.find(filepath) == spriteSheets.end()) { spriteSheets.insert({filepath, spr}); }
+        };
+
+        inline static SpriteSheet getSpriteSheet(std::string const &filepath) {
+            if (spriteSheets.find(filepath) != spriteSheets.end()) { return spriteSheets[filepath]; };
+            // todo remove the error thrown in the future in favor of a log message + returning nullptr
+            throw std::runtime_error("[ERROR] Invalid SpriteSheet acces.\n\tNo SpriteSheet is associated with '" + filepath + "'\n");
         };
     }
 }
