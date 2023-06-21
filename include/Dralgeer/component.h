@@ -8,6 +8,10 @@
 #include "camera.h"
 
 namespace Dralgeer {
+    class GameObject;
+
+    // todo create a separate .cpp file.
+
     // * ===========================
     // * Abstract Component Class
     // * ===========================
@@ -81,6 +85,8 @@ namespace Dralgeer {
             };
 
 
+            // todo it seems the time has come to use both .cpp files and .h files
+
             // * ====================
             // * Rule of 5 Stuff
             // * ====================
@@ -95,9 +101,9 @@ namespace Dralgeer {
 
                 for (int i = 0; i < numComponents; ++i) {
                     switch (go.components[i]->type) {
-                        case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
-                        case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                        case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                        case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(((SpriteRenderer*) go.components[i])); }
+                        case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(((EditorCamera*) go.components[i])); }
+                        case ComponentType::GRID_LINES: { components[i] = new GridLines(((GridLines*) go.components[i])); }
                     }
                 }
             };
@@ -319,6 +325,13 @@ namespace Dralgeer {
             };
 
 
+            // * =======================
+            // * Pointer Constructor
+            // * =======================
+
+            SpriteRenderer(SpriteRenderer* spr);
+
+
             // * ====================
             // * Normal Functions
             // * ====================
@@ -407,6 +420,12 @@ namespace Dralgeer {
 
             ~EditorCamera() { delete gameObject; };
 
+            // * ======================
+            // * Pointer Constructor
+            // * ======================
+
+            EditorCamera(EditorCamera* cam);
+
 
             // * ===================
             // * Normal Functions
@@ -425,7 +444,10 @@ namespace Dralgeer {
                     glm::vec2 mousePos(MouseListener::mWorldX, MouseListener::mWorldY);
                     glm::vec2 delta = mousePos - clickOrigin;
                     camera.pos -= delta * (dt * EDITOR_DRAG_SENSITIVITY);
-                    clickOrigin = glm::mix<glm::vec2, float>(clickOrigin, mousePos, dt);
+
+                    // interpolate
+                    clickOrigin.x += (mousePos.x - clickOrigin.x) * dt;
+                    clickOrigin.y += (mousePos.y - clickOrigin.y) * dt;
 
                 } else if (dragDebounce <= 0.0f) {
                     dragDebounce = 0.032f;
@@ -437,9 +459,12 @@ namespace Dralgeer {
                 }
 
                 if (reset) {
-                    camera.pos = glm::mix<glm::vec2, float>(camera.pos, glm::vec2(0, 0), lerpTime);
+                    // interpolate
+                    camera.pos.x -= camera.pos.x * dt;
+                    camera.pos.y -= camera.pos.y * dt;
+
                     camera.zoom += ((1.0f - camera.zoom) * lerpTime);
-                    lerpTime += 0.1f * dt; // ! maybe move this to the front of all of this if I experience issues
+                    lerpTime += 0.1f * dt;
 
                     if (std::fabs(camera.pos.x) <= 5.0f && std::fabs(camera.pos.y) <= 5.0f) {
                         camera.pos = {0, 0};
@@ -498,9 +523,17 @@ namespace Dralgeer {
             GridLines& operator = (GridLines &&gl) {
                 gameObject = gl.gameObject;
                 gl.gameObject = NULL;
+                return *this;
             };
 
             ~GridLines() { delete gameObject; };
+
+
+            // * ======================
+            // * Pointer Constructor
+            // * ======================
+
+            GridLines(GridLines* gl);
 
 
             // * ====================
