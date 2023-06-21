@@ -74,7 +74,7 @@ namespace Dralgeer {
             inline void start() {
                 for (int i = 0; i < numObjects; ++i) {
                     gameObjects[i].start();
-                    Renderer::add(*(gameObjects[i].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER)));
+                    Renderer::add(*((SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER)));
                 }
 
                 running = 1;
@@ -86,7 +86,7 @@ namespace Dralgeer {
                 if (running) {
                     int n = numObjects - 1;
                     gameObjects[n].start();
-                    Renderer::add(*(gameObjects[n].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER)));
+                    Renderer::add(*((SpriteRenderer*) gameObjects[n].getComponent(ComponentType::SPRITE_RENDERER)));
                 }
             };
 
@@ -103,7 +103,7 @@ namespace Dralgeer {
                     gameObjects[i].update(dt);
 
                     if (gameObjects[i].dead) {
-                        Renderer::destroy(gameObjects[i].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER));
+                        Renderer::destroy((SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER));
                         for (int j = i; j < numObjects - 1; ++j) { gameObjects[j] = gameObjects[j + 1]; }
                         numObjects--;
                     }
@@ -131,7 +131,7 @@ namespace Dralgeer {
                 // todo add gizmos
 
                 for (int i = 0; i < numObjects; ++i) {
-                    SpriteRenderer* spr = gameObjects[i].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER);
+                    SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER);
                     if (spr && spr->sprite.texture) {
                         Texture* temp = spr->sprite.texture;
                         spr->sprite.texture = new Texture(AssetPool::getTexture(temp->filepath));

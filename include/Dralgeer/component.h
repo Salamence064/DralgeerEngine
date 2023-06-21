@@ -97,8 +97,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            // todo this could use void* instead of the template
-            template <typename T> inline T* getComponent(ComponentType type);
+            inline void* getComponent(ComponentType type);
             inline void removeComponent(ComponentType type);
             inline void addComponent(Component* c);
 

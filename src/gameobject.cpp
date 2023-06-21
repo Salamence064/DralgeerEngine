@@ -89,9 +89,9 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    template <typename T> inline T* GameObject::getComponent(ComponentType type) {
+    inline void* GameObject::getComponent(ComponentType type) {
         for (int i = 0; i < numComponents; ++i) {
-            if (type == components[i]->type) { return (T*) components[i]; }
+            if (type == components[i]->type) { return components[i]; }
         }
 
         return nullptr;
