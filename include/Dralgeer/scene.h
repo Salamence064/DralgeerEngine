@@ -18,7 +18,7 @@ namespace Dralgeer {
             // * Protected Attributes
             // * ======================
 
-            GameObject* gameObjects;
+            GameObject* gameObjects = nullptr;
             int capacity = 8; // default capacity of 8 // todo probs will up in the future
             int numObjects = 0;
 
@@ -114,7 +114,7 @@ namespace Dralgeer {
             inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i].destory(); }};
     };
 
-    class LevelEditorScene : public Scene { // todo add rule of 5 stuff
+    class LevelEditorScene : public Scene {
         private:
             SpriteSheet sprites;
             GameObject components;
@@ -145,6 +145,74 @@ namespace Dralgeer {
                 type = SceneType::LEVEL_EDITOR_SCENE;
                 gameObjects = new GameObject[capacity];
             };
+
+
+            // * ===================
+            // * Rule of 5 Stuff
+            // * ===================
+
+            LevelEditorScene(LevelEditorScene const &scene) {
+                type = scene.type;
+                camera = scene.camera;
+                sprites = scene.sprites;
+                components = scene.components;
+                
+                capacity = scene.capacity;
+                numObjects = scene.numObjects;
+
+                gameObjects = new GameObject[capacity];
+                for (int i = 0; i < numObjects; ++i) { gameObjects[i] = scene.gameObjects[i]; }
+            };
+
+            LevelEditorScene(LevelEditorScene &&scene) {
+                type = scene.type;
+                camera = std::move(scene.camera);
+                sprites = std::move(scene.sprites);
+                components = std::move(scene.components);
+
+                capacity = scene.capacity;
+                numObjects = scene.numObjects;
+                gameObjects = scene.gameObjects;
+                scene.gameObjects = NULL;
+            };
+
+            LevelEditorScene& operator = (LevelEditorScene const &scene) {
+                if (this != &scene) {
+                    camera = scene.camera;
+                    sprites = scene.sprites;
+                    components = scene.components;
+
+                    capacity = scene.capacity;
+                    numObjects = scene.numObjects;
+
+                    gameObjects = new GameObject[capacity];
+                    for (int i = 0; i < numObjects; ++i) { gameObjects[i] = scene.gameObjects[i]; }
+                }
+
+                return *this;
+            };
+
+            LevelEditorScene& operator = (LevelEditorScene &&scene) {
+                if (this != &scene) {
+                    camera = std::move(scene.camera);
+                    sprites = std::move(scene.sprites);
+                    components = std::move(scene.components);
+
+                    capacity = scene.capacity;
+                    numObjects = scene.numObjects;
+                    gameObjects = scene.gameObjects;
+                    scene.gameObjects = NULL;
+                }
+
+                return *this;
+            };
+
+            ~LevelEditorScene() { delete[] gameObjects; };
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
 
             void init() override {
                 camera.pos = glm::vec2(0.0f, 0.0f);
