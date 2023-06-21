@@ -1,6 +1,6 @@
 // ? Provide definitions for the GameObject functions.
 
-#include "component.h"
+#include <Dralgeer/component.h>
 
 namespace Dralgeer {
     // * ====================

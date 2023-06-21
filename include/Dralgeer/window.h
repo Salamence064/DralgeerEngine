@@ -9,7 +9,7 @@
 
 // todo go through and make major changes to the architecture until the errors are gone. Main issue is with included files in a loop
 
-// #include <IMGUI/imgui.h>
+#include <IMGUI/imgui.h>
 #include "debugdraw.h"
 
 // equivalent of 16:9 aspect ratio
