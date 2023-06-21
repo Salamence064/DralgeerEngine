@@ -338,8 +338,73 @@ namespace Dralgeer {
             Camera camera;
             glm::vec2 clickOrigin;
 
-        public: // todo add rule of 5
+        public:
             EditorCamera() { type = ComponentType::EDITOR_CAMERA; id = idCounter++; };
+
+            // * ===================
+            // * Rule of 5 Stuff
+            // * ===================
+
+            // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
+            EditorCamera(EditorCamera const &cam) {
+                id = idCounter++;
+                type = cam.type;
+                camera = cam.camera;
+
+                if (cam.gameObject) {
+                    gameObject = new GameObject();
+                    gameObject->transform = cam.gameObject->transform;
+                    gameObject->name = cam.gameObject->name;
+                }
+            };
+
+            EditorCamera(EditorCamera &&cam) {
+                id = idCounter++;
+                type = cam.type;
+                camera = std::move(cam.camera);
+                gameObject = cam.gameObject;
+                cam.gameObject = NULL;
+            };
+
+            // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
+            EditorCamera& operator = (EditorCamera const &cam) {
+                clickOrigin = {0, 0};
+                dragDebounce = 0.032f;
+                lerpTime = 0.0f;
+                reset = 0;
+                camera = cam.camera;
+
+                if (gameObject) { delete gameObject; gameObject = nullptr; }
+                if (cam.gameObject) {
+                    gameObject = new GameObject();
+                    gameObject->transform = cam.gameObject->transform;
+                    gameObject->name = cam.gameObject->name;
+                }
+
+                return *this;
+            };
+
+            EditorCamera& operator = (EditorCamera &&cam) {
+                if (this != &cam) {
+                    clickOrigin = {0, 0};
+                    dragDebounce = 0.032f;
+                    lerpTime = 0.0f;
+                    reset = 0;
+
+                    camera = std::move(cam.camera);
+                    gameObject = cam.gameObject;
+                    cam.gameObject = NULL;
+                }
+
+                return *this;
+            };
+
+            ~EditorCamera() { delete gameObject; };
+
+
+            // * ===================
+            // * Normal Functions
+            // * ===================
 
             inline void update(float dt) override {
                 // todo check if the ImGui layer in the window wants to be updated (will have to add the thing to the window first though)
