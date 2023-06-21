@@ -97,7 +97,7 @@ namespace Dralgeer {
         return nullptr;
     };
 
-    template <typename T> inline void GameObject::removeComponent(ComponentType type) {
+    inline void GameObject::removeComponent(ComponentType type) {
         for (int i = 0; i < numComponents; ++i) {
             if (type == components[i]->type) {
                 delete components[i];

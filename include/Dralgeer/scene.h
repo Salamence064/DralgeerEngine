@@ -5,114 +5,130 @@
 #include "assetpool.h"
 
 namespace Dralgeer {
-    // todo refactor because the forward declaration will not allow it to work.
+    // todo probably refactor to use a struct that stores a void* and the enum type of the scene instead of this OOP solution
+    // todo  but use the OOP solution for now
 
-    // todo for now will do this the OOP way just to get things up and runnings
-    // todo  will refactor in the future
-    // todo Consider refactoring this using void* (in window.h) and an enum
-
-    // Forward declaration to allow for use in SceneInitializer.
-    class Scene;
-
-
-    // * ===================
-    // * SceneInitializer
-    // * ===================
-
-    class SceneInitializer {
-        public:
-            inline virtual void init(Scene const &scene) = 0;
-            inline virtual void loadResources(Scene const &scene) = 0;
-            inline virtual void imGui() = 0;
+    enum SceneType {
+        LEVEL_EDITOR_SCENE
     };
 
+    class Scene {
+        protected:
+            // * ======================
+            // * Protected Attributes
+            // * ======================
 
-    // * ================
-    // * Scene Stuff
-    // * ================
+            GameObject* gameObjects;
+            int capacity = 8; // default capacity of 8 // todo probs will up in the future
+            int numObjects = 0;
 
-    class Scene { // todo add the OOP stuff for now
-        private:
-            bool isRunning = 0;
+            bool running = 0;
+            // todo add physics handler here.
+
+            // * ==============================
+            // * Protected abstract function
+            // * ==============================
+
+            virtual inline void loadResources() = 0;
+
+
+            // * ====================
+            // * Helper Functions
+            // * ====================
+
+            inline void addGO(GameObject const &go) {
+                if (numObjects == capacity) {
+                    capacity *= 2;
+                    GameObject* temp = new GameObject[capacity];
+
+                    for (int i = 0; i < numObjects; ++i) { temp[i] = gameObjects[i]; }
+
+                    delete[] gameObjects;
+                    gameObjects = temp;
+                }
+
+                gameObjects[numObjects++] = go;
+            };
 
         public:
-            std::vector<GameObject*> gameObjects; // todo use a resizeable dynamic array instead of a vector probably
+            // * ==============
+            // * Attributes
+            // * ==============
+
+            SceneType type;
             Camera camera;
 
-            Scene() : gameObjects({}) { camera.pos = glm::vec2(0, 0); };
 
-            // ??? Are these even necessary??? (probs not)
+            // * ======================
+            // * Abstract Functions
+            // * ======================
+
+            virtual void init() = 0;
+            virtual void imGui() = 0;
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
+
             inline void start() {
-                for (int i = 0; i < gameObjects.size(); ++i) { gameObjects[i]->start(); }
-                isRunning = 1;
+                for (int i = 0; i < numObjects; ++i) {
+                    gameObjects[i].start();
+                    Renderer::add(*(gameObjects[i].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER)));
+                }
+
+                running = 1;
             };
 
-            inline void addGameObject(GameObject* go) {
-                gameObjects.push_back(go);
-                if (isRunning) { go->start(); }
+            inline void addGameObject(GameObject const &go) {
+                addGO(go);
+                
+                if (running) {
+                    int n = numObjects - 1;
+                    gameObjects[n].start();
+                    Renderer::add(*(gameObjects[n].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER)));
+                }
             };
 
-            inline void destroy() { for (int i = 0; i < gameObjects.size(); ++i) { gameObjects[i]->destory(); }};
-
-            // ! not sure if this is really needed either
-            inline GameObject* getGameObject(int id) const {
-                for (int i = 0; i < gameObjects.size(); ++i) { if (gameObjects[i]->id == id) { return gameObjects[i]; }}
-                return nullptr;
+            inline GameObject getGameObject(int id) {
+                for (int i = 0; i < numObjects; ++i) {
+                    if (gameObjects[i].id == id) { return gameObjects[i]; }
+                }
             };
 
             void update(float dt) {
                 camera.adjustProjection();
+                
+                for (int i = numObjects - 1; i >= 0; --i) {
+                    gameObjects[i].update(dt);
 
-                for (int i = gameObjects.size() - 1; i >= 0; --i) {
-                    gameObjects[i]->update(dt);
-
-                    if (gameObjects[i]->dead) {
-                        Renderer::destroy(gameObjects[i]->getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER));
-                        delete gameObjects[i];
-                        gameObjects.erase(std::next(gameObjects.begin(), i)); // todo should be able to erase at 0 (test to be sure)
+                    if (gameObjects[i].dead) {
+                        Renderer::destroy(gameObjects[i].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER));
+                        for (int j = i; j < numObjects - 1; ++j) { gameObjects[j] = gameObjects[j + 1]; }
+                        numObjects--;
                     }
                 }
             };
 
             inline void render() { Renderer::render(); };
-
-            // todo refactor around the initializer approach for now
-            // todo will later refactor around void*
+            inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i].destory(); }};
     };
 
-
-    // * ======================
-    // * Scene Initializers
-    // * ======================
-
-    class LevelEditorInitializer : public SceneInitializer {
-        private:
-            // todo add physics stuff here
-
-            SpriteSheet sprites;
-            GameObject components;
-            bool imGuiSetup = 1; // ! DO NOT serialize
+    class LevelEditorScene : public Scene { // todo add rule of 5 stuff
+        protected:
+            inline void loadResources() override;
 
         public:
-            LevelEditorInitializer() {};
-
-            inline void init(Scene const &scene) override {
-                // load the spritesheet
-                sprites = AssetPool::getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
-                
-                components.name = "LevelEditor";
-                // todo maybe add transform as a component class for the GameObject if necessary
-                EditorCamera* camera = new EditorCamera(); // defo refactor this stuff
-                components.addComponent(camera);
-
-                // todo call components.setNoSerialize() when I have serialization setup
-                // todo add gizmo stuff after creating them
-                // todo add MouseControls after creating that, too
+            LevelEditorScene() {
+                type = SceneType::LEVEL_EDITOR_SCENE;
+                gameObjects = new GameObject[capacity];
             };
 
-            inline void loadResources(Scene const &scene) override;
+            void init() override {
+                camera.pos = glm::vec2(0.0f, 0.0f);
+            };
 
-            inline void imGui() override;
+            void imGui() override;
     };
 }
 

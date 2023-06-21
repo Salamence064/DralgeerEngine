@@ -35,12 +35,10 @@ namespace Dralgeer {
                     }
                 }
 
-                // todo add DMath in a utils thing for compare to ensure no floating point errors
-
                 glm::mat4 transformMat(1);
-                Transform t = sprites[index].gameObject.transform;
+                Transform t = sprites[index].gameObject->transform;
 
-                if (t.rotation) {
+                if (!ZMath::compare(t.rotation, 0.0f)) {
                     transformMat = glm::translate(transformMat, glm::vec3(t.pos.x, t.pos.y, 0.0f));
                     transformMat = glm::rotate(transformMat, (float) glm::radians(t.rotation), glm::vec3(0, 0, 1));
                     transformMat = glm::scale(transformMat, glm::vec3(t.scale.x, t.scale.y, 1.0f));
@@ -56,7 +54,7 @@ namespace Dralgeer {
                     if (i == 3) { yAdd = 1.0f; }
 
                     glm::vec4 currPos(t.pos.x + (xAdd * t.scale.x), t.pos.y + (yAdd * t.scale.y), 0.0f, 1.0f);
-                    if (t.rotation) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); }
+                    if (!ZMath::compare(t.rotation, 0.0f)) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); }
 
                     // load position
                     vertices[offset] = currPos.x;
@@ -76,7 +74,7 @@ namespace Dralgeer {
                     vertices[offset + 8] = texID;
 
                     // load entity IDs
-                    vertices[offset + 9] = sprites[index].gameObject.getID() + 1;
+                    vertices[offset + 9] = sprites[index].gameObject->id + 1;
 
                     offset += VERTEX_SIZE;
                 }
@@ -254,7 +252,7 @@ namespace Dralgeer {
         void add(SpriteRenderer const &spr) {
             for (int i = 0; i < numBatches; ++i) {
                 // todo this last line of the conditional might be wrong
-                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr.gameObject.transform.zIndex &&
+                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr.gameObject->transform.zIndex &&
                         spr.sprite.texture && !batches[i].hasTexture(spr.sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
                     
                     batches[i].addSprite(spr);
@@ -268,7 +266,7 @@ namespace Dralgeer {
             }
 
             RenderBatch newBatch;
-            newBatch.start(spr.gameObject.transform.zIndex);
+            newBatch.start(spr.gameObject->transform.zIndex);
             newBatch.addSprite(spr);
 
             // determine the spot to put the new render batch in so that batches are sorted based on zIndex
