@@ -24,7 +24,7 @@ namespace Dralgeer {
             switch (go.components[i]->type) {
                 case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
                 case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                // case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
             }
         }
     };
@@ -56,7 +56,7 @@ namespace Dralgeer {
                 switch (go.components[i]->type) {
                     case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
                     case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                    case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                    // case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
                 }
             }
         }

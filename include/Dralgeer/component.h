@@ -250,7 +250,11 @@ namespace Dralgeer {
             glm::vec2 clickOrigin;
 
         public:
-            EditorCamera() { type = ComponentType::EDITOR_CAMERA; id = idCounter++; };
+            EditorCamera(Camera const &cam) {
+                type = ComponentType::EDITOR_CAMERA;
+                id = idCounter++;
+                camera = cam;
+            };
 
             // * ===================
             // * Rule of 5 Stuff
@@ -421,7 +425,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            inline void update(float dt) override; // todo make once we have access to the camera from the current scene in the window
+            // inline void update(float dt) override; // todo make once we have access to the camera from the current scene in the window
     };
 }
 

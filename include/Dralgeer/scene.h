@@ -64,7 +64,7 @@ namespace Dralgeer {
             // * ======================
 
             virtual void init() = 0;
-            virtual void imGui() = 0;
+            // virtual void imGui() = 0; // todo add when ImGui is properly added
 
 
             // * ====================
@@ -115,8 +115,30 @@ namespace Dralgeer {
     };
 
     class LevelEditorScene : public Scene { // todo add rule of 5 stuff
+        private:
+            SpriteSheet sprites;
+            GameObject components;
+            bool imGuiSetup = 1; // ! DO NOT serialize
+
         protected:
-            inline void loadResources() override;
+            inline void loadResources() override {
+                AssetPool::getShader("assets/shaders/default.glsl");
+
+                SpriteSheet spr;
+                spr.init(AssetPool::getTexture("assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
+                AssetPool::addSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png", spr);
+
+                // todo add gizmos
+
+                for (int i = 0; i < numObjects; ++i) {
+                    SpriteRenderer* spr = gameObjects[i].getComponent<SpriteRenderer>(ComponentType::SPRITE_RENDERER);
+                    if (spr && spr->sprite.texture) {
+                        Texture* temp = spr->sprite.texture;
+                        spr->sprite.texture = new Texture(AssetPool::getTexture(temp->filepath));
+                        delete temp;
+                    }
+                }
+            };
 
         public:
             LevelEditorScene() {
@@ -126,9 +148,24 @@ namespace Dralgeer {
 
             void init() override {
                 camera.pos = glm::vec2(0.0f, 0.0f);
+                loadResources();
+
+                // load sprite sheet
+                sprites = AssetPool::getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
+
+                components.name = "LevelEditor";
+                components.transform.zIndex = 0;
+                components.transform.pos = {0.0f, 0.0f};
+                components.transform.scale = {0.0f, 0.0f};
+                components.serialize = 0;
+
+                // todo add other components once they are created
+                components.addComponent(new EditorCamera(camera));
+
+                addGameObject(components);
             };
 
-            void imGui() override;
+            // void imGui() override; // todo add when ImGui is properly added
     };
 }
 
