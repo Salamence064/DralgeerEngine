@@ -113,22 +113,24 @@ namespace Dralgeer {
             };
 
             GameObject& operator = (GameObject const &go) {
-                name = go.name;
-                transform = go.transform;
-                serialize = go.serialize;
-                
-                for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-                delete[] components;
+                if (this != &go) {
+                    name = go.name;
+                    transform = go.transform;
+                    serialize = go.serialize;
+                    
+                    for (int i = 0; i < numComponents; ++i) { delete components[i]; }
+                    delete[] components;
 
-                capacity = go.capacity;
-                numComponents = go.numComponents;
-                components = new Component*[capacity];
+                    capacity = go.capacity;
+                    numComponents = go.numComponents;
+                    components = new Component*[capacity];
 
-                for (int i = 0; i < numComponents; ++i) {
-                    switch (go.components[i]->type) {
-                        case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
-                        case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                        case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                    for (int i = 0; i < numComponents; ++i) {
+                        switch (go.components[i]->type) {
+                            case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
+                            case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
+                            case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                        }
                     }
                 }
 
@@ -268,22 +270,24 @@ namespace Dralgeer {
 
             // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
             SpriteRenderer& operator = (SpriteRenderer const &spr) {
-                type = spr.type;
-                color = spr.color;
-                lastTransform = spr.lastTransform;
-                imGuiSetup = 1;
-                isDirty = 1;
+                if (this != &spr) {
+                    type = spr.type;
+                    color = spr.color;
+                    lastTransform = spr.lastTransform;
+                    imGuiSetup = 1;
+                    isDirty = 1;
 
-                sprite.width = spr.sprite.width;
-                sprite.height = spr.sprite.height;
-                sprite.texture = new Texture();
-                sprite.texture->init(spr.sprite.texture->filepath);
+                    sprite.width = spr.sprite.width;
+                    sprite.height = spr.sprite.height;
+                    sprite.texture = new Texture();
+                    sprite.texture->init(spr.sprite.texture->filepath);
 
-                if (gameObject) { delete gameObject; gameObject = nullptr; }
-                if (spr.gameObject) {
-                    gameObject = new GameObject();
-                    gameObject->transform = spr.gameObject->transform;
-                    gameObject->name = spr.gameObject->name;
+                    if (gameObject) { delete gameObject; gameObject = nullptr; }
+                    if (spr.gameObject) {
+                        gameObject = new GameObject();
+                        gameObject->transform = spr.gameObject->transform;
+                        gameObject->name = spr.gameObject->name;
+                    }
                 }
 
                 return *this;
@@ -368,17 +372,19 @@ namespace Dralgeer {
 
             // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
             EditorCamera& operator = (EditorCamera const &cam) {
-                clickOrigin = {0, 0};
-                dragDebounce = 0.032f;
-                lerpTime = 0.0f;
-                reset = 0;
-                camera = cam.camera;
+                if (this != &cam) {
+                    clickOrigin = {0, 0};
+                    dragDebounce = 0.032f;
+                    lerpTime = 0.0f;
+                    reset = 0;
+                    camera = cam.camera;
 
-                if (gameObject) { delete gameObject; gameObject = nullptr; }
-                if (cam.gameObject) {
-                    gameObject = new GameObject();
-                    gameObject->transform = cam.gameObject->transform;
-                    gameObject->name = cam.gameObject->name;
+                    if (gameObject) { delete gameObject; gameObject = nullptr; }
+                    if (cam.gameObject) {
+                        gameObject = new GameObject();
+                        gameObject->transform = cam.gameObject->transform;
+                        gameObject->name = cam.gameObject->name;
+                    }
                 }
 
                 return *this;
@@ -448,9 +454,58 @@ namespace Dralgeer {
             };
     };
 
-    class GridLines : public Component { // todo add rule of 5 once making this useable
+    class GridLines : public Component {
         public:
             GridLines() { type = ComponentType::GRID_LINES; id = idCounter++; };
+
+            // * ====================
+            // * Rule of 5 Stuff
+            // * ====================
+
+            // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
+            GridLines(GridLines const &gl) {
+                type = gl.type;
+                id = idCounter++;
+
+                if (gl.gameObject) {
+                    gameObject = new GameObject();
+                    gameObject->transform = gl.gameObject->transform;
+                    gameObject->name = gl.gameObject->name;
+                }
+            };
+
+            GridLines(GridLines &&gl) {
+                type = gl.type;
+                id = idCounter++;
+                gameObject = gl.gameObject;
+                gl.gameObject = NULL;
+            };
+
+            // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
+            GridLines& operator = (GridLines const &gl) {
+                if (this != &gl) {
+                    if (gameObject) { delete gameObject; }
+                    if (gl.gameObject) {
+                        gameObject = new GameObject();
+                        gameObject->transform = gl.gameObject->transform;
+                        gameObject->name = gl.gameObject->name;
+                    }
+                }
+
+                return *this;
+            };
+
+            GridLines& operator = (GridLines &&gl) {
+                gameObject = gl.gameObject;
+                gl.gameObject = NULL;
+            };
+
+            ~GridLines() { delete gameObject; };
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
 
             inline void update(float dt) override; // todo make once we have access to the camera from the current scene in the window
     };
