@@ -10,8 +10,6 @@
 namespace Dralgeer {
     class GameObject;
 
-    // todo create a separate .cpp file.
-
     // * ===========================
     // * Abstract Component Class
     // * ===========================
@@ -79,131 +77,33 @@ namespace Dralgeer {
             
             // * ===============================================
 
-            GameObject() {
-                components = new Component*[8];
-                id = idCounter++;
-            };
+            GameObject();
 
-
-            // todo it seems the time has come to use both .cpp files and .h files
 
             // * ====================
             // * Rule of 5 Stuff
             // * ====================
 
-            GameObject(GameObject const &go) : name(go.name), serialize(go.serialize), transform(go.transform) {
-                id = idCounter++;
-                dead = 0;
+            GameObject(GameObject const &go);
+            GameObject(GameObject &&go);
 
-                capacity = go.capacity;
-                numComponents = go.numComponents;
-                components = new Component*[capacity];
+            GameObject& operator = (GameObject const &go);
+            GameObject& operator = (GameObject &&go);
 
-                for (int i = 0; i < numComponents; ++i) {
-                    switch (go.components[i]->type) {
-                        case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(((SpriteRenderer*) go.components[i])); }
-                        case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(((EditorCamera*) go.components[i])); }
-                        case ComponentType::GRID_LINES: { components[i] = new GridLines(((GridLines*) go.components[i])); }
-                    }
-                }
-            };
-
-            GameObject(GameObject &&go) : name(std::move(go.name)), serialize(go.serialize), transform(std::move(go.transform)) {
-                id = idCounter++;
-                dead = 0;
-
-                capacity = go.capacity;
-                numComponents = go.numComponents;
-                components = go.components;
-                go.components = NULL;
-            };
-
-            GameObject& operator = (GameObject const &go) {
-                if (this != &go) {
-                    name = go.name;
-                    transform = go.transform;
-                    serialize = go.serialize;
-                    
-                    for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-                    delete[] components;
-
-                    capacity = go.capacity;
-                    numComponents = go.numComponents;
-                    components = new Component*[capacity];
-
-                    for (int i = 0; i < numComponents; ++i) {
-                        switch (go.components[i]->type) {
-                            case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
-                            case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                            case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
-                        }
-                    }
-                }
-
-                return *this;
-            };
-
-            GameObject& operator = (GameObject &&go) {
-                if (this != &go) { // ensure there is not self assignment
-                    name = std::move(go.name);
-                    transform = std::move(go.transform);
-                    serialize = go.serialize;
-
-                    capacity = go.capacity;
-                    numComponents = go.numComponents;
-                    components = go.components;
-                    go.components = NULL;
-                }
-
-                return *this;
-            };
-
-            ~GameObject() {
-                for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-                delete[] components;
-            };
+            ~GameObject();
 
 
             // * ====================
             // * Normal Functions
             // * ====================
 
-            template <typename T> inline T* getComponent(ComponentType type) {
-                for (int i = 0; i < numComponents; ++i) {
-                    if (type == components[i]->type) { return (T*) components[i]; }
-                }
+            template <typename T> inline T* getComponent(ComponentType type);
+            template <typename T> inline void removeComponent(ComponentType type);
+            inline void addComponent(Component* c);
 
-                return nullptr;
-            };
-
-            template <typename T> inline void removeComponent(ComponentType type) {
-                for (int i = 0; i < numComponents; ++i) {
-                    if (type == components[i]->type) {
-                        delete components[i];
-                        numComponents--;
-                        for (int j = i; j < numComponents; ++j) { components[j] = components[j + 1]; }
-                        return;
-                    }
-                }
-            };
-
-            inline void addComponent(Component* c) {
-                if (numComponents == capacity) {
-                    capacity *= 2;
-
-                    Component** temp = new Component*[capacity];
-                    for (int i = 0; i < numComponents; ++i) { temp[i] = components[i]; }
-                    
-                    delete[] components;
-                    components = temp;
-                }
-
-                components[numComponents++] = c;
-            };
-
-            inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
-            inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
-            inline void update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
+            inline void start();
+            inline void destory();
+            inline void update(float dt);
     };
 
 
@@ -325,13 +225,6 @@ namespace Dralgeer {
             };
 
 
-            // * =======================
-            // * Pointer Constructor
-            // * =======================
-
-            SpriteRenderer(SpriteRenderer* spr);
-
-
             // * ====================
             // * Normal Functions
             // * ====================
@@ -419,12 +312,6 @@ namespace Dralgeer {
             };
 
             ~EditorCamera() { delete gameObject; };
-
-            // * ======================
-            // * Pointer Constructor
-            // * ======================
-
-            EditorCamera(EditorCamera* cam);
 
 
             // * ===================
@@ -527,13 +414,6 @@ namespace Dralgeer {
             };
 
             ~GridLines() { delete gameObject; };
-
-
-            // * ======================
-            // * Pointer Constructor
-            // * ======================
-
-            GridLines(GridLines* gl);
 
 
             // * ====================
