@@ -124,5 +124,6 @@ namespace Dralgeer {
 
     inline void GameObject::start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
     inline void GameObject::destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
+    inline void GameObject::imGui() { for (int i = 0; i < numComponents; ++i) { components[i]->imGui(); }};
     inline void GameObject::update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
 }

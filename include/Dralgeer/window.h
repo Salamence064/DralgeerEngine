@@ -7,6 +7,7 @@
 #include <IMGUI/imgui.h>
 #include "scene.h"
 #include "debugdraw.h"
+#include "framebuffer.h"
 
 namespace Dralgeer {
     struct WindowData {
@@ -19,6 +20,9 @@ namespace Dralgeer {
         static WindowData data;
         static GLFWwindow* window;
         static Scene* currScene = nullptr;
+
+        static FrameBuffer frameBuffer;
+        static PickingTexture pickingTexture;
 
         inline static void changeScene(SceneType scene) {
             switch(scene) {
@@ -86,7 +90,9 @@ namespace Dralgeer {
             glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
             // frame buffer config
-            // todo will add
+            frameBuffer = FrameBuffer(1920, 1080);
+            pickingTexture = PickingTexture(1920, 1080);
+            glViewport(0, 0, 1920, 1080);
 
             // initialize imgui
 

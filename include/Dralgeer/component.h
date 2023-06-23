@@ -80,6 +80,7 @@ namespace Dralgeer {
 
             bool serialize = 1; // ! DO NOT serialize
             bool dead = 0; // ! DO NOT serialize
+            bool pickable = 1;
             
             // * ===============================================
 
@@ -109,6 +110,7 @@ namespace Dralgeer {
 
             inline void start();
             inline void destory();
+            inline void imGui();
             inline void update(float dt);
     };
 

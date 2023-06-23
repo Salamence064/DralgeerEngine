@@ -19,7 +19,7 @@ namespace Dralgeer {
             // * Protected Attributes
             // * ======================
 
-            GameObject* gameObjects = nullptr;
+            GameObject* gameObjects = nullptr; // todo maybe make a pointer of pointers
             int capacity = 8; // default capacity of 8 // todo probs will up in the future
             int numObjects = 0;
 
@@ -91,10 +91,13 @@ namespace Dralgeer {
                 }
             };
 
-            inline GameObject getGameObject(int id) {
+            // Returns nullptr if no game object was found.
+            inline GameObject* getGameObject(int id) {
                 for (int i = 0; i < numObjects; ++i) {
-                    if (gameObjects[i].id == id) { return gameObjects[i]; }
+                    if (gameObjects[i].id == id) { return &gameObjects[i]; }
                 }
+
+                return nullptr;
             };
 
             void update(float dt) {

@@ -12,7 +12,7 @@ namespace Dralgeer {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
-        ImGui::Begin("Dockspace Demo", nullptr, windowFlags);
+        ImGui::Begin("Dockspace Demo", NULL, windowFlags);
         ImGui::PopStyleVar(2);
 
         // Dockspace
