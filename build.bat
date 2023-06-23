@@ -141,13 +141,25 @@ popd
 if not exist "include/IMGUI/imgui.h" (
     pushd "imgui"
     copy "*.h" "../include/IMGUI"
+    
+    pushd "backends"
+    copy "imgui_impl_glfw.h" "../../include/IMGUI"
+    copy "imgui_impl_opengl3.h" "../../include/IMGUI"
+
+    copy "imgui_impl_glfw.h" ".."
+    copy "imgui_impl_opengl3*.h" ".."
+
+    copy "imgui_impl_glfw.cpp" ".."
+    copy "imgui_impl_opengl3.cpp" ".."
+    
+    popd
     popd
 )
 
 pushd "build"
 
 @REM Compiling with g++
-g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/component.cpp ../src/gameobject.cpp ../src/main.cpp ../imgui/imgui*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
+g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/*.cpp ../imgui/imgui*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
 
 popd
 

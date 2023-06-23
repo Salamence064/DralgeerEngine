@@ -2,6 +2,8 @@
 #define IMGUI_LAYER_H
 
 #include <GLFW/glfw3.h>
+#include <IMGUI/imgui_impl_glfw.h>
+#include <IMGUI/imgui_impl_opengl3.h>
 #include "editor.h"
 #include "listeners.h"
 
@@ -9,10 +11,6 @@ namespace Dralgeer {
     class ImGuiLayer {
         private:
             GLFWwindow* window;
-
-            // todo google which headers are needed for these
-            // ImGuiImplGlfw imGuiGlfw;
-            // ImGuiImplGl3 imGuiGl3;
 
         public:
             ImGuiLayer(GLFWwindow* window) {
@@ -32,10 +30,11 @@ namespace Dralgeer {
                 if (JoystickListener::jGamepad) { io.ConfigFlags |= ImGuiConfigFlags_::ImGuiConfigFlags_NavEnableGamepad; }
 
                 io.BackendFlags |= ImGuiBackendFlags_::ImGuiBackendFlags_HasMouseCursors;
-                // io.BackendPlatformName = "imgui_"; // todo look up what is needed for c++
+                io.BackendPlatformName = "imgui_impl_glfw";
 
-                std::string glslVersion = "#version 330";
-                // todo initialize the imGui attribs
+                // initialize the ImGui attributes
+                ImGui_ImplGlfw_InitForOpenGL(window, 1);
+                ImGui_ImplOpenGL3_Init("#version 330");
             };
 
             
