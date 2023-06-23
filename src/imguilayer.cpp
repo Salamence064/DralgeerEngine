@@ -19,12 +19,10 @@ namespace Dralgeer {
         ImGui::DockSpace(ImGui::GetID("Dockspace"));
     };
 
-    ImGuiLayer::ImGuiLayer(GLFWwindow* window, PickingTexture const &pickingTexture) {
+    void ImGuiLayer::init(GLFWwindow* window, PickingTexture const &pickingTexture) {
         propertiesWindow.init(pickingTexture);
         this->window = window;
-    };
 
-    void ImGuiLayer::init() const {
         // create the context
         ImGui::CreateContext();
 

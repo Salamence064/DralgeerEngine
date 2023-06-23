@@ -5,9 +5,8 @@
 // todo go through and make certain constructors inline
 
 #include <IMGUI/imgui.h>
-#include "scene.h"
+#include "imguilayer.h"
 #include "debugdraw.h"
-#include "framebuffer.h"
 
 namespace Dralgeer {
     struct WindowData {
@@ -21,6 +20,7 @@ namespace Dralgeer {
         static GLFWwindow* window;
         static Scene* currScene = nullptr;
 
+        static ImGuiLayer imGuiLayer;
         static FrameBuffer frameBuffer;
         static PickingTexture pickingTexture;
 
@@ -95,6 +95,7 @@ namespace Dralgeer {
             glViewport(0, 0, 1920, 1080);
 
             // initialize imgui
+            imGuiLayer.init(window, pickingTexture);
 
             // initialize scene
             currScene = new LevelEditorScene();
