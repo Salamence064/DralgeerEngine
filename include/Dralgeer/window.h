@@ -1,12 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-// todo make the Window class a namespace as we only need one window from glfw for this
-
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
-// todo go through each class and make sure assignment stuff can't be used for GPU related ones (unless I set it up to call init and stuff)
-
-// todo create the editor library from the existing code-base
 // todo go through and make certain constructors inline
 
 #include <IMGUI/imgui.h>
@@ -14,140 +9,128 @@
 #include "debugdraw.h"
 
 namespace Dralgeer {
-    namespace WindowAttrib {
-        Scene* currScene = nullptr;
-    }
-
     struct WindowData {
         uint16_t width, height;
         std::string title;
     };
 
-    class Window {
-        private:
-            WindowData data;
-            GLFWwindow* window;
+    // Model a window
+    namespace Window {
+        static WindowData data;
+        static GLFWwindow* window;
+        static Scene* currScene = nullptr;
 
-            inline void changeScene(SceneType scene) {
-                switch(scene) {
-                    case SceneType::LEVEL_EDITOR_SCENE: {
-                        delete WindowAttrib::currScene;
-                        WindowAttrib::currScene = new LevelEditorScene();
-                        WindowAttrib::currScene->init();
-                        break;
-                    }
+        inline static void changeScene(SceneType scene) {
+            switch(scene) {
+                case SceneType::LEVEL_EDITOR_SCENE: {
+                    delete currScene;
+                    currScene = new LevelEditorScene();
+                    currScene->init();
+                    break;
                 }
-            };
+            }
+        };
 
-        public:
-            Window(uint16_t width, uint16_t height, std::string const &title) : data({width, height, title}) {};
+        static void init(uint16_t width, uint16_t height, std::string const &title) {
+            data = {width, height, title};
 
-            // * =========================================
-            // * Rule of 3 to ensure no reassignment.
-            // * =========================================
+            // error callback
+            glfwSetErrorCallback(ErrorListener::errorCallback);
 
-            Window(Window const &w) { throw std::runtime_error("Dralgeer::Window objects CANNOT be created from another Dralgeer::Window object."); };
-            Window& operator = (Window const &w) { throw std::runtime_error("Dralgeer::Window objects CANNOT be assigned or reassigned."); };
+            // initialize glfw
+            if (!glfwInit()) { throw std::runtime_error("GLFW failed to initialize."); }
 
-            void init() {
-                // error callback
-                glfwSetErrorCallback(ErrorListener::errorCallback);
+            // todo could add some sort of check here for various OS's
+            // configure glfw
+            glfwDefaultWindowHints();
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            glfwWindowHint(GLFW_VISIBLE, 0);
+            glfwWindowHint(GLFW_RESIZABLE, 1);
+            glfwWindowHint(GLFW_MAXIMIZED, 1);
 
-                // initialize glfw
-                if (!glfwInit()) { throw std::runtime_error("GLFW failed to initialize."); }
+            // create the window
+            window = glfwCreateWindow(data.width, data.height, data.title.c_str(), NULL, NULL);
+            if (!window) { throw std::runtime_error("The window failed to be created."); }
 
-                // todo could add some sort of check here for various OS's
-                // configure glfw
-                glfwDefaultWindowHints();
-                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-                glfwWindowHint(GLFW_VISIBLE, 0);
-                glfwWindowHint(GLFW_RESIZABLE, 1);
-                glfwWindowHint(GLFW_MAXIMIZED, 1);
+            glfwMakeContextCurrent(window); // make the window's context current
+            glfwSetWindowUserPointer(window, &data); // add the data as a pointer to the window
+            glfwSwapInterval(1); // enable v-sync
+            glfwShowWindow(window); // show the window
 
-                // create the window
-                window = glfwCreateWindow(data.width, data.height, data.title.c_str(), NULL, NULL);
-                if (!window) { throw std::runtime_error("The window failed to be created."); }
+            // initialize glew
+            if (glewInit() != GLEW_OK) { throw std::runtime_error("GLEW failed to initialize."); }
 
-                glfwMakeContextCurrent(window); // make the window's context current
-                glfwSetWindowUserPointer(window, &data); // add the data as a pointer to the window
-                glfwSwapInterval(1); // enable v-sync
-                glfwShowWindow(window); // show the window
+            // setup callbacks
+            // windows
+            glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+                WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
+                data.width = width;
+                data.height = height;
+            });
 
-                // initialize glew
-                if (glewInit() != GLEW_OK) { throw std::runtime_error("GLEW failed to initialize."); }
+            // mouse
+            glfwSetCursorPosCallback(window, MouseListener::cursor_position_callback);
+            glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
+            glfwSetScrollCallback(window, MouseListener::scroll_callback);
 
-                // setup callbacks
-                // windows
-                glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
-                    WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
-                    data.width = width;
-                    data.height = height;
-                });
+            // keyboard
+            glfwSetKeyCallback(window, KeyListener::key_callback);
 
-                // mouse
-                glfwSetCursorPosCallback(window, MouseListener::cursor_position_callback);
-                glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
-                glfwSetScrollCallback(window, MouseListener::scroll_callback);
+            // joystick
+            glfwSetJoystickCallback(JoystickListener::joystick_callback);
 
-                // keyboard
-                glfwSetKeyCallback(window, KeyListener::key_callback);
+            // enable alpha blending
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-                // joystick
-                glfwSetJoystickCallback(JoystickListener::joystick_callback);
+            // frame buffer config
+            // todo will add
 
-                // enable alpha blending
-                glEnable(GL_BLEND);
-                glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+            // initialize imgui
 
-                // frame buffer config
-                // todo will add
+            // initialize scene
+            currScene = new LevelEditorScene();
+            currScene->init();
+        };
 
-                // initialize imgui
+        static void run() {
+            float startTime = (float) glfwGetTime(), endTime;
+            float dt = 0.0f;
 
-                // initialize scene
-                WindowAttrib::currScene = new LevelEditorScene();
-                WindowAttrib::currScene->init();
-            };
-
-            void run() {
-                float startTime = (float) glfwGetTime(), endTime;
-                float dt = 0.0f;
-
-                DebugDraw::start();
-                DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 500);
-                DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
+            DebugDraw::start();
+            DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 500);
+            DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
 
 
-                // * Game Loop
-                while(!glfwWindowShouldClose(window)) {
-                    // ! Render here
-                    glClear(GL_COLOR_BUFFER_BIT);
+            // * Game Loop
+            while(!glfwWindowShouldClose(window)) {
+                // ! Render here
+                glClear(GL_COLOR_BUFFER_BIT);
 
-                    DebugDraw::beginFrame();
-                    DebugDraw::draw();
+                DebugDraw::beginFrame();
+                DebugDraw::draw();
 
-                    glfwSwapBuffers(window); // swaps front and back buffers
+                glfwSwapBuffers(window); // swaps front and back buffers
 
-                    // Poll for and process events
-                    glfwPollEvents();
+                // Poll for and process events
+                glfwPollEvents();
 
-                    // handle the dt value
-                    endTime = (float) glfwGetTime();
-                    dt += endTime - startTime;
-                    startTime = endTime;
-                }
-            };
+                // handle the dt value
+                endTime = (float) glfwGetTime();
+                dt += endTime - startTime;
+                startTime = endTime;
+            }
+        };
 
-            void destroy() {
-                glfwDestroyWindow(window);
-                glfwSetErrorCallback(NULL);
-                glfwTerminate();
-            };
-
-            ~Window() { delete WindowAttrib::currScene; };
-    };
+        static void destroy() {
+            glfwDestroyWindow(window);
+            glfwSetErrorCallback(NULL);
+            glfwTerminate();
+            delete currScene;
+        };
+    }
 }
 
 #endif // ! WINDOW_H

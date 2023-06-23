@@ -4,7 +4,7 @@
 
 namespace Dralgeer {
     inline void GridLines::update(float dt) {
-        Camera cam = WindowAttrib::currScene->camera; // make the code more readable
+        Camera cam = Window::currScene->camera; // make the code more readable
 
         int firstX = ((int) (cam.pos.x * cam.zoom) - GRID_WIDTH);
         int firstY = ((int) (cam.pos.y * cam.zoom) - GRID_HEIGHT);

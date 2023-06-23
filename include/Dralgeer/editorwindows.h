@@ -1,9 +1,11 @@
 #pragma once
 
+// todo come back to this
+
 #include <IMGUI/imgui.h>
-#include "../window.h"
-#include "../gameobject.h"
-#include "../render/framebuffer.h"
+#include "window.h"
+#include "component.h"
+#include "framebuffer.h"
 
 namespace Dralgeer {
     struct GameViewWindow {
