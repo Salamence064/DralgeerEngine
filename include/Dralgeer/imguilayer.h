@@ -3,7 +3,6 @@
 
 #include <IMGUI/imgui_impl_glfw.h>
 #include <IMGUI/imgui_impl_opengl3.h>
-#include "scene.h"
 #include "editor.h"
 
 namespace Dralgeer {
@@ -15,7 +14,10 @@ namespace Dralgeer {
             inline void setupDockerSpace() const;
 
         public:
-            ImGuiLayer(GLFWwindow* window);
+            PropertiesWindow propertiesWindow;
+            GameViewWindow gameViewWindow;
+
+            ImGuiLayer(GLFWwindow* window, PickingTexture const &pickingTexture);
             void init() const;
             void update(float dt, Scene* currScene);
             void dispose() const;

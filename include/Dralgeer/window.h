@@ -91,7 +91,7 @@ namespace Dralgeer {
 
             // frame buffer config
             frameBuffer = FrameBuffer(1920, 1080);
-            pickingTexture = PickingTexture(1920, 1080);
+            pickingTexture.init(1920, 1080);
             glViewport(0, 0, 1920, 1080);
 
             // initialize imgui

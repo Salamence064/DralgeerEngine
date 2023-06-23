@@ -118,58 +118,58 @@ namespace Dralgeer {
 
         public:
             inline void imGui() {
-            ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+                ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-            ImVec2 windowSize = getLargestSize();
-            ImVec2 windowPos = getCenteredPos(windowSize);
-            ImGui::SetCursorPos(windowPos);
+                ImVec2 windowSize = getLargestSize();
+                ImVec2 windowPos = getCenteredPos(windowSize);
+                ImGui::SetCursorPos(windowPos);
 
-            ImVec2 bottomLeft = ImGui::GetCursorScreenPos();
-            bottomLeft.x -= ImGui::GetScrollX();
-            bottomLeft.y -= ImGui::GetScrollY();
+                ImVec2 bottomLeft = ImGui::GetCursorScreenPos();
+                bottomLeft.x -= ImGui::GetScrollX();
+                bottomLeft.y -= ImGui::GetScrollY();
 
-            leftX = bottomLeft.x;
-            bottomY = bottomLeft.y;
-            rightX = leftX + windowSize.x;
-            topY = bottomY + windowSize.y;
+                leftX = bottomLeft.x;
+                bottomY = bottomLeft.y;
+                rightX = leftX + windowSize.x;
+                topY = bottomY + windowSize.y;
 
-            ImGui::Image((int*) Window::frameBuffer.getTextureID(), windowSize, ImVec2(0, 1), ImVec2(1, 0));
+                ImGui::Image((int*) Window::frameBuffer.getTextureID(), windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
-            MouseListener::mGameViewPortX = bottomLeft.x;
-            MouseListener::mGameViewPortY = bottomLeft.y;
-            MouseListener::mGameViewPortWidth = windowSize.x;
-            MouseListener::mGameViewPortHeight = windowSize.y;
+                MouseListener::mGameViewPortX = bottomLeft.x;
+                MouseListener::mGameViewPortY = bottomLeft.y;
+                MouseListener::mGameViewPortWidth = windowSize.x;
+                MouseListener::mGameViewPortHeight = windowSize.y;
 
-            ImGui::End();
-        };
+                ImGui::End();
+            };
 
-        inline bool getWantCaptureMouse() const {
-            return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
-        };
+            inline bool getWantCaptureMouse() const {
+                return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
+            };
 
-        inline ImVec2 getLargestSize() const {
-            ImVec2 windowSize = ImGui::GetContentRegionAvail();
-            windowSize.x -= ImGui::GetScrollX();
-            windowSize.y -= ImGui::GetScrollY();
+            inline ImVec2 getLargestSize() const {
+                ImVec2 windowSize = ImGui::GetContentRegionAvail();
+                windowSize.x -= ImGui::GetScrollX();
+                windowSize.y -= ImGui::GetScrollY();
 
-            float aspectWidth = windowSize.x;
-            float aspectHeight = aspectWidth/TARGET_ASPECT_RATIO;
+                float aspectWidth = windowSize.x;
+                float aspectHeight = aspectWidth/TARGET_ASPECT_RATIO;
 
-            if (aspectHeight > aspectWidth) {
-                // must switch to pillar box mode
-                aspectHeight = windowSize.y;
-                aspectWidth = aspectHeight/TARGET_ASPECT_RATIO;
-            }
+                if (aspectHeight > aspectWidth) {
+                    // must switch to pillar box mode
+                    aspectHeight = windowSize.y;
+                    aspectWidth = aspectHeight/TARGET_ASPECT_RATIO;
+                }
 
-            return ImVec2(aspectWidth, aspectHeight);
-        };
+                return ImVec2(aspectWidth, aspectHeight);
+            };
 
-        inline ImVec2 getCenteredPos(ImVec2 const &size) const {
-            ImVec2 windowSize = ImGui::GetContentRegionAvail();
-            windowSize.x -= ImGui::GetScrollX();
-            windowSize.y -= ImGui::GetScrollY();
-            return ImVec2((0.5f*(windowSize.x - size.x)) + ImGui::GetCursorPosX(), (0.5f*(windowSize.y - size.y)) + ImGui::GetCursorPosY());
-        };
+            inline ImVec2 getCenteredPos(ImVec2 const &size) const {
+                ImVec2 windowSize = ImGui::GetContentRegionAvail();
+                windowSize.x -= ImGui::GetScrollX();
+                windowSize.y -= ImGui::GetScrollY();
+                return ImVec2((0.5f*(windowSize.x - size.x)) + ImGui::GetCursorPosX(), (0.5f*(windowSize.y - size.y)) + ImGui::GetCursorPosY());
+            };
     };
 
     class PropertiesWindow {
@@ -180,7 +180,8 @@ namespace Dralgeer {
         public:
             GameObject* activeGameObject = nullptr;
 
-            inline PropertiesWindow(PickingTexture const &tex) : pickingTexture(tex) {};
+            inline PropertiesWindow() {};
+            inline void init(PickingTexture const &tex) { pickingTexture.init(tex.width, tex.height); };
 
             inline void update(float dt, Scene* currScene, bool wantCapture) {
                 if (!wantCapture) { return; }

@@ -19,7 +19,8 @@ namespace Dralgeer {
         ImGui::DockSpace(ImGui::GetID("Dockspace"));
     };
 
-    ImGuiLayer::ImGuiLayer(GLFWwindow* window) {
+    ImGuiLayer::ImGuiLayer(GLFWwindow* window, PickingTexture const &pickingTexture) {
+        propertiesWindow.init(pickingTexture);
         this->window = window;
     };
 
@@ -48,6 +49,9 @@ namespace Dralgeer {
         setupDockerSpace();
 
         currScene->imGui();
+        gameViewWindow.imGui();
+        propertiesWindow.update(dt, currScene, gameViewWindow.getWantCaptureMouse());
+        propertiesWindow.imGui();
 
         ImGui::End();
         ImGui::Render();

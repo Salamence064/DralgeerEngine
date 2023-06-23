@@ -48,9 +48,14 @@ namespace Dralgeer {
             unsigned int fboID;
 
         public:
-            inline PickingTexture(int width, int height) { init(width, height); };
+            int width, height;
+
+            inline PickingTexture() {};
 
             inline void init(int width, int height) {
+                this->width = width;
+                this->height = height;
+
                 // generate the framebuffer
                 glGenFramebuffers(1, &fboID);
                 glBindFramebuffer(GL_FRAMEBUFFER, fboID);
