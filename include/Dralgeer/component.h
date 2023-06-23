@@ -4,6 +4,7 @@
 #include <Zeta2D/zmath2D.h>
 #include <utility>
 #include "sprite.h"
+#include "editor.h"
 #include "listeners.h"
 #include "camera.h"
 #include <IMGUI/imgui.h>
@@ -251,7 +252,7 @@ namespace Dralgeer {
                     imGuiSetup = 0;
                 }
 
-                
+                if (DImGui::colorPicker4("Color Picker", color)) { isDirty = 1; }
             };
     };
 
