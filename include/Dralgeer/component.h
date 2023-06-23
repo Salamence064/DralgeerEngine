@@ -6,6 +6,7 @@
 #include "sprite.h"
 #include "listeners.h"
 #include "camera.h"
+#include <IMGUI/imgui.h>
 
 namespace Dralgeer {
     class GameObject;

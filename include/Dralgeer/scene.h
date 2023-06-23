@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "prefabs.h"
 #include "render.h"
 #include "assetpool.h"
 
@@ -64,7 +65,7 @@ namespace Dralgeer {
             // * ======================
 
             virtual void init() = 0;
-            // virtual void imGui() = 0; // todo add when ImGui is properly added
+            virtual void imGui() = 0;
 
 
             // * ====================
@@ -233,7 +234,45 @@ namespace Dralgeer {
                 addGameObject(components);
             };
 
-            // void imGui() override; // todo add when ImGui is properly added
+            void imGui() override {
+                ImGui::Begin("Tiles");
+
+                if (imGuiSetup) {
+                    ImGui::SetWindowPos(ImVec2(0.0f, 0.0f));
+                    ImGui::SetWindowSize(ImVec2(720.0f, 520.0f));
+                    imGuiSetup = 0;
+                }
+
+                // get the window positioning, size, and item spacing
+                ImVec2 windowPos = ImGui::GetWindowPos();
+                ImVec2 windowSize = ImGui::GetWindowSize();
+                ImVec2 itemSpacing = ImGui::GetStyle().ItemSpacing;
+                float windowX2 = windowPos.x + windowSize.x;
+                
+                for (int i = 0; i < sprites.numSprites; ++i) {
+                    // for readability
+                    Sprite sprite = sprites.sprites[i];
+
+                    // multiplying by an int is for scaling purposes
+                    float spriteWidth = sprite.width * 3;
+                    float spriteHeight = sprite.height * 3;
+
+                    ImGui::PushID(i);
+                    if (ImGui::ImageButton((int*) sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
+                        ImVec2(sprite.texCords[2].x, sprite.texCords[0].y), ImVec2(sprite.texCords[0].x, sprite.texCords[2].y)))
+                    {
+                        GameObject go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
+                        // todo attach it to the mouse cursor once we add in the mouse controls component
+                    }
+
+                    ImGui::PopID();
+
+                    ImVec2 lastButtonPos = ImGui::GetItemRectMax();
+                    if (i + 1 < sprites.numSprites && lastButtonPos.x + itemSpacing.x + spriteWidth < windowX2) { ImGui::SameLine(); }
+                }
+
+                ImGui::End();
+            };
     };
 }
 
