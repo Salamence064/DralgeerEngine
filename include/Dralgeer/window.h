@@ -1,18 +1,23 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+// todo make the Window class a namespace as we only need one window from glfw for this
+
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
 // todo go through each class and make sure assignment stuff can't be used for GPU related ones (unless I set it up to call init and stuff)
 
 // todo create the editor library from the existing code-base
 // todo go through and make certain constructors inline
 
-// todo go through and make major changes to the architecture until the errors are gone. Main issue is with included files in a loop
-
 #include <IMGUI/imgui.h>
+#include "scene.h"
 #include "debugdraw.h"
 
 namespace Dralgeer {
+    namespace WindowAttrib {
+        Scene* currScene = nullptr;
+    }
+
     struct WindowData {
         uint16_t width, height;
         std::string title;
@@ -22,6 +27,17 @@ namespace Dralgeer {
         private:
             WindowData data;
             GLFWwindow* window;
+
+            inline void changeScene(SceneType scene) {
+                switch(scene) {
+                    case SceneType::LEVEL_EDITOR_SCENE: {
+                        delete WindowAttrib::currScene;
+                        WindowAttrib::currScene = new LevelEditorScene();
+                        WindowAttrib::currScene->init();
+                        break;
+                    }
+                }
+            };
 
         public:
             Window(uint16_t width, uint16_t height, std::string const &title) : data({width, height, title}) {};
@@ -78,7 +94,7 @@ namespace Dralgeer {
                 glfwSetKeyCallback(window, KeyListener::key_callback);
 
                 // joystick
-                // todo will add
+                glfwSetJoystickCallback(JoystickListener::joystick_callback);
 
                 // enable alpha blending
                 glEnable(GL_BLEND);
@@ -90,6 +106,8 @@ namespace Dralgeer {
                 // initialize imgui
 
                 // initialize scene
+                WindowAttrib::currScene = new LevelEditorScene();
+                WindowAttrib::currScene->init();
             };
 
             void run() {
@@ -126,6 +144,8 @@ namespace Dralgeer {
                 glfwSetErrorCallback(NULL);
                 glfwTerminate();
             };
+
+            ~Window() { delete WindowAttrib::currScene; };
     };
 }
 

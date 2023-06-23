@@ -3,6 +3,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+// Width and height of a grid tile in pixels
+#define GRID_WIDTH 32
+#define GRID_HEIGHT 32
+
 // equivalent of 16:9 aspect ratio
 #define TARGET_ASPECT_RATIO 1.77778f
 

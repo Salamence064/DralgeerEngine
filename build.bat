@@ -147,7 +147,7 @@ if not exist "include/IMGUI/imgui.h" (
 pushd "build"
 
 @REM Compiling with g++
-g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/gameobject.cpp ../src/main.cpp ../imgui/imgui*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
+g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/component.cpp ../src/gameobject.cpp ../src/main.cpp ../imgui/imgui*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
 
 popd
 

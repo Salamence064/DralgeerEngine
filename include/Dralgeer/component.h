@@ -424,7 +424,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            // inline void update(float dt) override; // todo make once we have access to the camera from the current scene in the window
+            inline void update(float dt) override;
     };
 }
 
