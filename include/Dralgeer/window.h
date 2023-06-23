@@ -24,6 +24,9 @@ namespace Dralgeer {
         static FrameBuffer frameBuffer;
         static PickingTexture pickingTexture;
 
+        // static bool initGamepadState = 1;
+        // static GLFWgamepadstate gamepadState;
+
         inline static void changeScene(SceneType scene) {
             switch(scene) {
                 case SceneType::LEVEL_EDITOR_SCENE: {
@@ -110,20 +113,57 @@ namespace Dralgeer {
             DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 500);
             DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
 
+            Shader defaultShader = AssetPool::getShader("assets/shaders/default.glsl");
+            Shader pickingShader = AssetPool::getShader("assets/shader/pickingShader.glsl");
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
-                // ! Render here
-                glClear(GL_COLOR_BUFFER_BIT);
-
-                DebugDraw::beginFrame();
-                DebugDraw::draw();
-
-                glfwSwapBuffers(window); // swaps front and back buffers
-
-                // Poll for and process events
+                // Poll for events
                 glfwPollEvents();
 
+                // render picking texture
+                glDisable(GL_BLEND);
+                pickingTexture.enableWriting();
+
+                glViewport(0, 0, 1920, 1080);
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                Renderer::currentShader = pickingShader;
+                currScene->render();
+
+                pickingTexture.disableWriting();
+                glEnable(GL_BLEND);
+
+                // render the actual game
+                DebugDraw::beginFrame();
+                frameBuffer.bind();
+
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT);
+
+                DebugDraw::draw();
+                Renderer::currentShader = defaultShader;
+                currScene->render();
+
+                frameBuffer.unbind();
+                imGuiLayer.update(dt, currScene);
+
+                // initialize the gamepadState // todo set up later
+                // if (initGamepadState && JoystickListener::jConnected && JoystickListener::jGamepad) {
+                //     gamepadState = 
+                // }
+
+                if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+                    GLFWwindow* backupWindow = glfwGetCurrentContext();
+                    ImGui::UpdatePlatformWindows();
+                    ImGui::RenderPlatformWindowsDefault();
+                    glfwMakeContextCurrent(backupWindow);
+                }
+
+                glfwSwapBuffers(window); // swaps front and back buffers
+                MouseListener::endFrame();
+                
                 // handle the dt value
                 endTime = (float) glfwGetTime();
                 dt += endTime - startTime;
@@ -132,6 +172,7 @@ namespace Dralgeer {
         };
 
         static void destroy() {
+            imGuiLayer.dispose();
             glfwDestroyWindow(window);
             glfwSetErrorCallback(NULL);
             glfwTerminate();
