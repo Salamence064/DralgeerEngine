@@ -10,9 +10,6 @@
 // equivalent of 16:9 aspect ratio
 #define TARGET_ASPECT_RATIO 1.77778f
 
-// flags
-#define NON_PICKABLE_FLAG 0x000001U
-
 // sprite's ImGui color picker
 #define IMGUI_COLOR_PICKER_X 1370
 #define IMGUI_COLOR_PCIKER_Y 35
