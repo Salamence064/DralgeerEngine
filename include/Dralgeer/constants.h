@@ -47,4 +47,7 @@
 #define EDITOR_DRAG_SENSITIVITY 30.0f
 #define EDITOR_SCROLL_SENSITIVITY 0.1f
 
+// editor ImGui stuff
+#define DEFAULT_WIDGET_WIDTH 220.0f
+
 #endif // !CONSTANTS_H

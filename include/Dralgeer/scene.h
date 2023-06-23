@@ -229,6 +229,7 @@ namespace Dralgeer {
                 components.serialize = 0;
 
                 // todo add other components once they are created
+                components.addComponent(new GridLines());
                 components.addComponent(new EditorCamera(camera));
 
                 addGameObject(components);

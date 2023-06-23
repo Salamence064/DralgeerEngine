@@ -35,10 +35,14 @@ namespace Dralgeer {
             int id;
             GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
-            // todo test if this use of virtual functions works
             virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
             virtual inline void update(float dt) = 0; // every component needs to override update.
             virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
+            
+            virtual void imGui() {
+                // todo find a way to emulate the Java thing I have setup using .class in c++
+                // todo  (probs will not be in a similar way)
+            };
     };
 
 
@@ -237,6 +241,17 @@ namespace Dralgeer {
                     gameObject->transform = lastTransform;
                     isDirty = 1;
                 }
+            };
+
+            // Create a color picker for the sprites.
+            void imGui() override {
+                if (imGuiSetup) {
+                    ImGui::SetWindowPos(ImVec2(IMGUI_COLOR_PICKER_X, IMGUI_COLOR_PCIKER_Y));
+                    ImGui::SetWindowSize(ImVec2(IMGUI_COLOR_PICKER_WIDTH, IMGUI_COLOR_PCIKER_HEIGHT));
+                    imGuiSetup = 0;
+                }
+
+                
             };
     };
 
