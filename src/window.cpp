@@ -1,6 +1,8 @@
 #include <Dralgeer/window.h>
 #include <Dralgeer/listeners.h>
 #include <Dralgeer/debugdraw.h>
+#include <Dralgeer/render.h>
+
 
 namespace Dralgeer {
     namespace Window {
@@ -149,6 +151,7 @@ namespace Dralgeer {
         };
 
         static void destroy() {
+            DebugDraw::destroy();
             imGuiLayer.dispose();
             glfwDestroyWindow(window);
             glfwSetErrorCallback(NULL);
