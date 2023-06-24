@@ -1,13 +1,8 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <Zeta2D/zmath2D.h>
-#include <utility>
 #include "sprite.h"
-#include "editor.h"
-#include "listeners.h"
 #include "camera.h"
-#include <IMGUI/imgui.h>
 
 namespace Dralgeer {
     class GameObject;

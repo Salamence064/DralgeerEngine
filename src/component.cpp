@@ -1,5 +1,10 @@
 // ? Contain the definitions for components which need to access information about the current scene here.
 
+#include <Zeta2D/zmath2D.h>
+#include <utility>
+#include <IMGUI/imgui.h>
+#include <Dralgeer/editor.h>
+#include <Dralgeer/listeners.h>
 #include <Dralgeer/window.h>
 
 namespace Dralgeer {
