@@ -4,6 +4,7 @@
 #include <IMGUI/imgui_impl_glfw.h>
 #include <IMGUI/imgui_impl_opengl3.h>
 #include "editor.h"
+#include "framebuffer.h"
 
 namespace Dralgeer {
     class ImGuiLayer {
