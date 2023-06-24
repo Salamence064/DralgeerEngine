@@ -137,125 +137,24 @@ namespace Dralgeer {
 
             // * ==========================================================
 
-            SpriteRenderer() { type = ComponentType::SPRITE_RENDERER; id = idCounter++; }; // todo test if you need to do = SpriteRenderer(); or not for default
-            
-            
-            // * =====================
-            // * Rule of 5 stuff
-            // * =====================
+            // todo test if you need to do = SpriteRenderer(); or not for default
+            SpriteRenderer();
             
             // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
-            SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
-                type = spr.type;
-                id = idCounter++;
-
-                imGuiSetup = 1;
-                isDirty = 1;
-
-                if (spr.sprite.texture) {
-                    sprite.width = spr.sprite.width;
-                    sprite.height = spr.sprite.height;
-                    sprite.texture = new Texture();
-                    sprite.texture->init(spr.sprite.texture->filepath);
-                }
-
-                if (spr.gameObject) {
-                    gameObject = new GameObject();
-                    gameObject->transform = spr.gameObject->transform;
-                    gameObject->name = spr.gameObject->name;
-                }
-            };
-
-            SpriteRenderer(SpriteRenderer &&spr) : color(std::move(spr.color)), lastTransform(std::move(spr.lastTransform)) {
-                type = spr.type;
-                id = idCounter++;
-
-                imGuiSetup = 1;
-                isDirty = 1;
-
-                sprite.width = spr.sprite.width;
-                sprite.height = spr.sprite.height;
-                sprite.texture = spr.sprite.texture;
-                spr.sprite.texture = NULL;
-
-                gameObject = spr.gameObject;
-                spr.gameObject = NULL;
-            };
+            SpriteRenderer(SpriteRenderer const &spr);
+            SpriteRenderer(SpriteRenderer &&spr);
 
             // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
-            SpriteRenderer& operator = (SpriteRenderer const &spr) {
-                if (this != &spr) {
-                    type = spr.type;
-                    color = spr.color;
-                    lastTransform = spr.lastTransform;
-                    imGuiSetup = 1;
-                    isDirty = 1;
+            SpriteRenderer& operator = (SpriteRenderer const &spr);
+            SpriteRenderer& operator = (SpriteRenderer &&spr);
 
-                    sprite.width = spr.sprite.width;
-                    sprite.height = spr.sprite.height;
-                    sprite.texture = new Texture();
-                    sprite.texture->init(spr.sprite.texture->filepath);
+            ~SpriteRenderer();
 
-                    if (gameObject) { delete gameObject; gameObject = nullptr; }
-                    if (spr.gameObject) {
-                        gameObject = new GameObject();
-                        gameObject->transform = spr.gameObject->transform;
-                        gameObject->name = spr.gameObject->name;
-                    }
-                }
-
-                return *this;
-            };
-
-            SpriteRenderer& operator = (SpriteRenderer &&spr) {
-                if (this != &spr) { // ensure it is not self assignment
-                    type = spr.type;
-                    color = std::move(spr.color);
-                    lastTransform = std::move(spr.lastTransform);
-                    imGuiSetup = 1;
-                    isDirty = 1;
-
-                    sprite.width = spr.sprite.width;
-                    sprite.height = spr.sprite.height;
-                    sprite.texture = spr.sprite.texture;
-                    spr.sprite.texture = NULL;
-
-                    gameObject = spr.gameObject;
-                    spr.gameObject = NULL;
-                }
-
-                return *this;
-            };
-
-            ~SpriteRenderer() {
-                if (sprite.texture != nullptr) { delete sprite.texture; }
-                if (gameObject) { delete gameObject; }
-            };
-
-
-            // * ====================
-            // * Normal Functions
-            // * ====================
-
-            inline void start() override { lastTransform = gameObject->transform; };
-
-            inline void update(float dt) override {
-                if (lastTransform != gameObject->transform) {
-                    gameObject->transform = lastTransform;
-                    isDirty = 1;
-                }
-            };
+            inline void start() override;
+            inline void update(float dt) override;
 
             // Create a color picker for the sprites.
-            void imGui() override {
-                if (imGuiSetup) {
-                    ImGui::SetWindowPos(ImVec2(IMGUI_COLOR_PICKER_X, IMGUI_COLOR_PCIKER_Y));
-                    ImGui::SetWindowSize(ImVec2(IMGUI_COLOR_PICKER_WIDTH, IMGUI_COLOR_PCIKER_HEIGHT));
-                    imGuiSetup = 0;
-                }
-
-                if (DImGui::colorPicker4("Color Picker", color)) { isDirty = 1; }
-            };
+            void imGui() override;
     };
 
     class EditorCamera : public Component {
@@ -268,180 +167,34 @@ namespace Dralgeer {
             glm::vec2 clickOrigin;
 
         public:
-            EditorCamera(Camera const &cam) {
-                type = ComponentType::EDITOR_CAMERA;
-                id = idCounter++;
-                camera = cam;
-            };
-
-            // * ===================
-            // * Rule of 5 Stuff
-            // * ===================
+            EditorCamera(Camera const &cam);
 
             // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
-            EditorCamera(EditorCamera const &cam) {
-                id = idCounter++;
-                type = cam.type;
-                camera = cam.camera;
-
-                if (cam.gameObject) {
-                    gameObject = new GameObject();
-                    gameObject->transform = cam.gameObject->transform;
-                    gameObject->name = cam.gameObject->name;
-                }
-            };
-
-            EditorCamera(EditorCamera &&cam) {
-                id = idCounter++;
-                type = cam.type;
-                camera = std::move(cam.camera);
-                gameObject = cam.gameObject;
-                cam.gameObject = NULL;
-            };
+            EditorCamera(EditorCamera const &cam);
+            EditorCamera(EditorCamera &&cam);
 
             // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
-            EditorCamera& operator = (EditorCamera const &cam) {
-                if (this != &cam) {
-                    clickOrigin = {0, 0};
-                    dragDebounce = 0.032f;
-                    lerpTime = 0.0f;
-                    reset = 0;
-                    camera = cam.camera;
+            EditorCamera& operator = (EditorCamera const &cam);
+            EditorCamera& operator = (EditorCamera &&cam);
 
-                    if (gameObject) { delete gameObject; gameObject = nullptr; }
-                    if (cam.gameObject) {
-                        gameObject = new GameObject();
-                        gameObject->transform = cam.gameObject->transform;
-                        gameObject->name = cam.gameObject->name;
-                    }
-                }
+            ~EditorCamera();
 
-                return *this;
-            };
-
-            EditorCamera& operator = (EditorCamera &&cam) {
-                if (this != &cam) {
-                    clickOrigin = {0, 0};
-                    dragDebounce = 0.032f;
-                    lerpTime = 0.0f;
-                    reset = 0;
-
-                    camera = std::move(cam.camera);
-                    gameObject = cam.gameObject;
-                    cam.gameObject = NULL;
-                }
-
-                return *this;
-            };
-
-            ~EditorCamera() { delete gameObject; };
-
-
-            // * ===================
-            // * Normal Functions
-            // * ===================
-
-            inline void update(float dt) override {
-                // todo check if the ImGui layer in the window wants to be updated (will have to add the thing to the window first though)
-
-                if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && dragDebounce > 0.0f) {
-                    clickOrigin = {MouseListener::mWorldX, MouseListener::mWorldY};
-                    dragDebounce -= dt;
-                    return;
-                }
-
-                if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-                    glm::vec2 mousePos(MouseListener::mWorldX, MouseListener::mWorldY);
-                    glm::vec2 delta = mousePos - clickOrigin;
-                    camera.pos -= delta * (dt * EDITOR_DRAG_SENSITIVITY);
-
-                    // interpolate
-                    clickOrigin.x += (mousePos.x - clickOrigin.x) * dt;
-                    clickOrigin.y += (mousePos.y - clickOrigin.y) * dt;
-
-                } else if (dragDebounce <= 0.0f) {
-                    dragDebounce = 0.032f;
-                }
-
-                if (!ZMath::compare(MouseListener::mScrollY, 0.0f)) {
-                    float addValue = powf(std::fabs(MouseListener::mScrollY * EDITOR_SCROLL_SENSITIVITY), 1/camera.zoom);
-                    camera.zoom += addValue * -SIGNOF(MouseListener::mScrollY);
-                }
-
-                if (reset) {
-                    // interpolate
-                    camera.pos.x -= camera.pos.x * dt;
-                    camera.pos.y -= camera.pos.y * dt;
-
-                    camera.zoom += ((1.0f - camera.zoom) * lerpTime);
-                    lerpTime += 0.1f * dt;
-
-                    if (std::fabs(camera.pos.x) <= 5.0f && std::fabs(camera.pos.y) <= 5.0f) {
-                        camera.pos = {0, 0};
-                        camera.zoom = 1.0f;
-                        lerpTime = 0.0f;
-                        reset = 0;
-                    }
-
-                } else if (KeyListener::keyPressed[GLFW_KEY_TAB]) {
-                    reset = 1;
-                }
-            };
+            inline void update(float dt) override;
     };
 
     class GridLines : public Component {
         public:
-            GridLines() { type = ComponentType::GRID_LINES; id = idCounter++; };
-
-            // * ====================
-            // * Rule of 5 Stuff
-            // * ====================
+            GridLines();
 
             // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
-            GridLines(GridLines const &gl) {
-                type = gl.type;
-                id = idCounter++;
-
-                if (gl.gameObject) {
-                    gameObject = new GameObject();
-                    gameObject->transform = gl.gameObject->transform;
-                    gameObject->name = gl.gameObject->name;
-                }
-            };
-
-            GridLines(GridLines &&gl) {
-                type = gl.type;
-                id = idCounter++;
-                gameObject = gl.gameObject;
-                gl.gameObject = NULL;
-            };
+            GridLines(GridLines const &gl);
+            GridLines(GridLines &&gl);
 
             // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
-            GridLines& operator = (GridLines const &gl) {
-                if (this != &gl) {
-                    if (gameObject) { delete gameObject; }
-                    if (gl.gameObject) {
-                        gameObject = new GameObject();
-                        gameObject->transform = gl.gameObject->transform;
-                        gameObject->name = gl.gameObject->name;
-                    }
-                }
+            GridLines& operator = (GridLines const &gl);
+            GridLines& operator = (GridLines &&gl);
 
-                return *this;
-            };
-
-            GridLines& operator = (GridLines &&gl) {
-                gameObject = gl.gameObject;
-                gl.gameObject = NULL;
-                return *this;
-            };
-
-            ~GridLines() { delete gameObject; };
-
-
-            // * ====================
-            // * Normal Functions
-            // * ====================
+            ~GridLines();
 
             inline void update(float dt) override;
     };
