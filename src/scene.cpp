@@ -2,52 +2,10 @@
 #include <IMGUI/imgui.h>
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/assetpool.h>
-#include <Dralgeer/render.h>
 
 namespace Dralgeer {
     // * ================================================
     // * Abstract Scene Class
-
-    inline void Scene::addGO(GameObject const &go) {
-        if (numObjects == capacity) {
-            capacity *= 2;
-            GameObject* temp = new GameObject[capacity];
-
-            for (int i = 0; i < numObjects; ++i) { temp[i] = gameObjects[i]; }
-
-            delete[] gameObjects;
-            gameObjects = temp;
-        }
-
-        gameObjects[numObjects++] = go;
-    };
-
-    inline void Scene::start() {
-        for (int i = 0; i < numObjects; ++i) {
-            gameObjects[i].start();
-            Renderer::add(*((SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER)));
-        }
-
-        running = 1;
-    };
-
-    inline void Scene::addGameObject(GameObject const &go) {
-        addGO(go);
-        
-        if (running) {
-            int n = numObjects - 1;
-            gameObjects[n].start();
-            Renderer::add(*((SpriteRenderer*) gameObjects[n].getComponent(ComponentType::SPRITE_RENDERER)));
-        }
-    };
-
-    inline GameObject* Scene::getGameObject(int id) {
-        for (int i = 0; i < numObjects; ++i) {
-            if (gameObjects[i].id == id) { return &gameObjects[i]; }
-        }
-
-        return nullptr;
-    };
 
     void Scene::update(float dt) {
         camera.adjustProjection();
@@ -62,9 +20,6 @@ namespace Dralgeer {
             }
         }
     };
-
-    inline void Scene::render() { Renderer::render(); };
-    inline void Scene::destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i].destory(); }};
 
     // * ================================================
     // * LevelEditorScene

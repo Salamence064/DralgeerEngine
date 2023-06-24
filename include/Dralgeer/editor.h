@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "framebuffer.h"
+#include "listeners.h"
 
 namespace Dralgeer {
     class GameViewWindow {
@@ -15,7 +16,9 @@ namespace Dralgeer {
 
         public:
             inline void imGui();
-            inline bool getWantCaptureMouse() const;
+            inline bool getWantCaptureMouse() const {
+                return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
+            };
     };
 
     class PropertiesWindow {

@@ -12,9 +12,9 @@ namespace Dralgeer {
         public: // todo google the thing needed to make sure the fbo and texture get deleted after this gets deleted
             FrameBuffer() {};
             void init(int width, int height);
-            inline void bind() const;
-            inline void unbind() const;
-            inline int getTextureID() const;
+            inline void bind() const { glBindFramebuffer(GL_FRAMEBUFFER, fboID); };
+            inline void unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); };
+            inline int getTextureID() const { return tex.texID; };
     };
 
     class PickingTexture {
@@ -25,10 +25,22 @@ namespace Dralgeer {
             int width, height;
 
             inline PickingTexture() {};
-            inline void init(int width, int height);
-            inline int readPixel(int x, int y) const;
-            inline void enableWriting() const;
-            inline void disableWriting() const;
+            void init(int width, int height);
+
+            inline int readPixel(int x, int y) const {
+                glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID);
+                glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+                float pixels[3]; // todo check if this needs to actually be 3 (due to RGB) or if I can just store it to a single value
+                glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
+
+                // todo see if the reading needs to be unbound
+
+                return (int) pixels[0] - 1;
+            };
+
+            inline void enableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboID); };
+            inline void disableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); };
     };  
 }
 

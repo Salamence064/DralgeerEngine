@@ -29,14 +29,10 @@ namespace Dralgeer {
         throw std::runtime_error("[ERROR] Framebuffer is not complete.\n");
     };
 
-    inline void FrameBuffer::bind() const { glBindFramebuffer(GL_FRAMEBUFFER, fboID); };
-    inline void FrameBuffer::unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); };
-    inline int FrameBuffer::getTextureID() const { return tex.texID; };
-
     // * =======================================================
     // * PickingTexture Stuff
 
-    inline void PickingTexture::init(int width, int height) {
+    void PickingTexture::init(int width, int height) {
         this->width = width;
         this->height = height;
 
@@ -77,21 +73,6 @@ namespace Dralgeer {
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     };
-
-    inline int PickingTexture::readPixel(int x, int y) const {
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID);
-        glReadBuffer(GL_COLOR_ATTACHMENT0);
-
-        float pixels[3]; // todo check if this needs to actually be 3 (due to RGB) or if I can just store it to a single value
-        glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
-
-        // todo see if the reading needs to be unbound
-
-        return (int) pixels[0] - 1;
-    };
-
-    inline void PickingTexture::enableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboID); };
-    inline void PickingTexture::disableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); };
 
     // * =======================================================
 }

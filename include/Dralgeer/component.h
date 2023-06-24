@@ -99,14 +99,43 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            inline void* getComponent(ComponentType type);
-            inline void removeComponent(ComponentType type);
-            inline void addComponent(Component* c);
+            inline void* getComponent(ComponentType type) {
+                for (int i = 0; i < numComponents; ++i) {
+                    if (type == components[i]->type) { return components[i]; }
+                }
 
-            inline void start();
-            inline void destory();
-            inline void imGui();
-            inline void update(float dt);
+                return nullptr;
+            };
+
+            inline void removeComponent(ComponentType type) {
+                for (int i = 0; i < numComponents; ++i) {
+                    if (type == components[i]->type) {
+                        delete components[i];
+                        numComponents--;
+                        for (int j = i; j < numComponents; ++j) { components[j] = components[j + 1]; }
+                        return;
+                    }
+                }
+            };
+
+            inline void addComponent(Component* c) {
+                if (numComponents == capacity) {
+                    capacity *= 2;
+
+                    Component** temp = new Component*[capacity];
+                    for (int i = 0; i < numComponents; ++i) { temp[i] = components[i]; }
+                    
+                    delete[] components;
+                    components = temp;
+                }
+
+                components[numComponents++] = c;
+            };
+
+            inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
+            inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
+            inline void imGui() { for (int i = 0; i < numComponents; ++i) { components[i]->imGui(); }};
+            inline void update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
     };
 
 

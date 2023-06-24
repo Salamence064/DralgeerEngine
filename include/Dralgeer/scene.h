@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "component.h"
+#include "render.h"
 
 namespace Dralgeer {
     // todo probably refactor to use a struct that stores a void* and the enum type of the scene instead of this OOP solution
@@ -35,7 +36,19 @@ namespace Dralgeer {
             // * Helper Functions
             // * ====================
 
-            inline void addGO(GameObject const &go);
+            inline void addGO(GameObject const &go) {
+                if (numObjects == capacity) {
+                    capacity *= 2;
+                    GameObject* temp = new GameObject[capacity];
+
+                    for (int i = 0; i < numObjects; ++i) { temp[i] = gameObjects[i]; }
+
+                    delete[] gameObjects;
+                    gameObjects = temp;
+                }
+
+                gameObjects[numObjects++] = go;
+            };
 
         public:
             // * ==============
@@ -58,14 +71,37 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            inline void start();
-            inline void addGameObject(GameObject const &go);
+            inline void start() {
+                for (int i = 0; i < numObjects; ++i) {
+                    gameObjects[i].start();
+                    Renderer::add(*((SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER)));
+                }
+
+                running = 1;
+            };
+
+            inline void addGameObject(GameObject const &go) {
+                addGO(go);
+                
+                if (running) {
+                    int n = numObjects - 1;
+                    gameObjects[n].start();
+                    Renderer::add(*((SpriteRenderer*) gameObjects[n].getComponent(ComponentType::SPRITE_RENDERER)));
+                }
+            };
 
             // Returns nullptr if no game object was found.
-            inline GameObject* getGameObject(int id);
+            inline GameObject* getGameObject(int id) {
+                for (int i = 0; i < numObjects; ++i) {
+                    if (gameObjects[i].id == id) { return &gameObjects[i]; }
+                }
+
+                return nullptr;
+            };
+
             void update(float dt);
-            inline void render();
-            inline void destroy();
+            inline void render() { Renderer::render(); };
+            inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i].destory(); }};
     };
 
     class LevelEditorScene : public Scene {

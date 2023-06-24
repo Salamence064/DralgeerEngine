@@ -9,11 +9,6 @@
 #include <Dralgeer/debugdraw.h>
 
 namespace Dralgeer {
-    // * This needs to be used in one of the components and should be inline for efficiency so it will be defined here.
-    inline bool GameViewWindow::getWantCaptureMouse() const {
-        return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
-    };
-
     // * =====================================================================
     // * SpriteRenderer Stuff
 
@@ -414,49 +409,6 @@ namespace Dralgeer {
         for (int i = 0; i < numComponents; ++i) { delete components[i]; }
         delete[] components;
     };
-
-
-    // * =====================
-    // * Normal Functions
-    // * =====================
-
-    inline void* GameObject::getComponent(ComponentType type) {
-        for (int i = 0; i < numComponents; ++i) {
-            if (type == components[i]->type) { return components[i]; }
-        }
-
-        return nullptr;
-    };
-
-    inline void GameObject::removeComponent(ComponentType type) {
-        for (int i = 0; i < numComponents; ++i) {
-            if (type == components[i]->type) {
-                delete components[i];
-                numComponents--;
-                for (int j = i; j < numComponents; ++j) { components[j] = components[j + 1]; }
-                return;
-            }
-        }
-    };
-
-    inline void GameObject::addComponent(Component* c) {
-        if (numComponents == capacity) {
-            capacity *= 2;
-
-            Component** temp = new Component*[capacity];
-            for (int i = 0; i < numComponents; ++i) { temp[i] = components[i]; }
-            
-            delete[] components;
-            components = temp;
-        }
-
-        components[numComponents++] = c;
-    };
-
-    inline void GameObject::start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
-    inline void GameObject::destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
-    inline void GameObject::imGui() { for (int i = 0; i < numComponents; ++i) { components[i]->imGui(); }};
-    inline void GameObject::update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
 
     // * =====================================================================
 }
