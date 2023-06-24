@@ -18,22 +18,21 @@ namespace Dralgeer {
         };
 
 
-        namespace {
-            static std::vector<Line2D> lines = {}; // not sure if we even want this
-            // probs make a dynamic pointer array
+        // todo make into a dynamic pointer array
+        static std::vector<Line2D> lines = {}; // not sure if we even want this
+        // probs make a dynamic pointer array
 
-            // 6 floats per vertex, 2 vertices per line
-            static float vertexArray[DEBUG_VERTEX_ARR_SIZE];
-            static Shader shader;
-            // todo issue results from the above line -- maybe use some couts and stuff to debug here shortly
-            // todo we can also try dumb stuff like commenting out the annonymous namespaces
+        // 6 floats per vertex, 2 vertices per line
+        static float vertexArray[DEBUG_VERTEX_ARR_SIZE];
+        static Shader shader;
+        // todo issue results from the above line -- maybe use some couts and stuff to debug here shortly
+        // todo we can also try dumb stuff like commenting out the annonymous namespaces
 
-            static unsigned int vaoID, vboID;
-            static bool started = 0;
+        static unsigned int vaoID, vboID;
+        static bool started = 0;
 
-            // ! fuck it, we are using a temporary camera for now -- replace when I finish scene.h
-            Camera camera = {glm::vec2(0.0f)}; // ! could be the cause of some issues
-        }
+        // ! fuck it, we are using a temporary camera for now -- replace when I finish scene.h
+        Camera camera = {glm::vec2(0.0f)}; // ! could be the cause of some issues
 
         inline void start() {
             // initialize the shader
