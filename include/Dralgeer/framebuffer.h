@@ -10,8 +10,8 @@ namespace Dralgeer {
             Texture tex;
 
         public: // todo google the thing needed to make sure the fbo and texture get deleted after this gets deleted
-            // todo if needed make this a default constructor and make an init function
-            FrameBuffer (int width, int height);
+            FrameBuffer() {};
+            void init(int width, int height);
             inline void bind() const;
             inline void unbind() const;
             inline int getTextureID() const;

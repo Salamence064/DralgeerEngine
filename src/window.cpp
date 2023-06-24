@@ -72,7 +72,7 @@ namespace Dralgeer {
             glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
             // frame buffer config
-            frameBuffer = FrameBuffer(1920, 1080);
+            frameBuffer.init(1920, 1080);
             pickingTexture.init(1920, 1080);
             glViewport(0, 0, 1920, 1080);
 

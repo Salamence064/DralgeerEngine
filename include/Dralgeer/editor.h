@@ -1,24 +1,10 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-// todo move to its own .cpp file
-
 #include "scene.h"
-#include <string>
-#include <GLM/glm/glm.hpp>
+#include "framebuffer.h"
 
 namespace Dralgeer {
-    namespace DImGui {
-        // * These functions draw the buttons used to control the values of the attributes of the objects in the editor.
-
-        inline static void drawVec2Control(std::string const &label, glm::vec2 &values,
-                float resetValue = 0.0f, float colWidth = DEFAULT_WIDGET_WIDTH);
-
-        inline static void dragFloat(std::string const &label, float &value);
-        inline static void dragInt(std::string const &label, int &value);
-        inline static bool colorPicker4(std::string const &label, glm::vec4 &color);
-    }
-
     class GameViewWindow {
         private:
             float leftX, rightX, topY, bottomY;

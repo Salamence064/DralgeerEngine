@@ -2,12 +2,18 @@
 
 #include <Zeta2D/zmath2D.h>
 #include <utility>
-#include <IMGUI/imgui.h>
+#include <Dralgeer/dimgui.h>
 #include <Dralgeer/editor.h>
 #include <Dralgeer/listeners.h>
 #include <Dralgeer/window.h>
+#include <Dralgeer/debugdraw.h>
 
 namespace Dralgeer {
+    // * This needs to be used in one of the components and should be inline for efficiency so it will be defined here.
+    inline bool GameViewWindow::getWantCaptureMouse() const {
+        return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
+    };
+
     // * =====================================================================
     // * SpriteRenderer Stuff
 

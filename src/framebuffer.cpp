@@ -4,7 +4,7 @@ namespace Dralgeer {
     // * =======================================================
     // * FrameBuffer Stuff
 
-    FrameBuffer::FrameBuffer(int width, int height) {
+    void FrameBuffer::init(int width, int height) {
         // generate the framebuffer
         glGenFramebuffers(1, &fboID);
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
