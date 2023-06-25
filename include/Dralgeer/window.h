@@ -4,6 +4,8 @@
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
 // todo go through and make certain constructors inline
 
+// todo I never detach Renderer::currentShader
+
 #include "imguilayer.h"
 #include "listeners.h"
 #include "render.h"
@@ -119,31 +121,31 @@ namespace Dralgeer {
                 glfwPollEvents();
 
                 // render picking texture
-                glDisable(GL_BLEND);
-                pickingTexture.enableWriting();
+                // glDisable(GL_BLEND);
+                // pickingTexture.enableWriting();
 
-                glViewport(0, 0, 1920, 1080);
-                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                // glViewport(0, 0, 1920, 1080);
+                // glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                Renderer::currentShader = pickingShader;
-                currScene->render();
+                // Renderer::currentShader = pickingShader;
+                // currScene->render();
 
-                pickingTexture.disableWriting();
-                glEnable(GL_BLEND);
+                // pickingTexture.disableWriting();
+                // glEnable(GL_BLEND);
 
                 // render the actual game
                 DebugDraw::beginFrame();
-                frameBuffer.bind();
+                // frameBuffer.bind();
 
-                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 DebugDraw::draw();
                 Renderer::currentShader = defaultShader;
                 currScene->render();
 
-                frameBuffer.unbind();
+                // frameBuffer.unbind();
                 imGuiLayer.update(dt, currScene);
 
                 // initialize the gamepadState // todo set up later
