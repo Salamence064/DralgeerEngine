@@ -7,8 +7,6 @@
 // todo probably make the Renderer namespace into a class.
 
 namespace Dralgeer {
-    namespace Renderer { Shader currentShader; } // todo probs do something a bit different for the actual thing
-
     class RenderBatch {
         private:
             Camera camera = {glm::vec2(0.0f)}; // ! Temporary until I make scenes -- could cause some issues
@@ -39,14 +37,14 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    
-    namespace Renderer {
-        RenderBatch batches[MAX_RENDER_BATCHES];
-        int numBatches = 0;
+    namespace Renderer { // todo probs make this a class in the end
+        extern Shader currentShader;
+        extern RenderBatch batches[MAX_RENDER_BATCHES];
+        extern int numBatches;
 
         // todo add the GameObject related functions after fleshing out the GameObject class
 
-        void add(SpriteRenderer const &spr) {
+        inline void add(SpriteRenderer const &spr) {
             for (int i = 0; i < numBatches; ++i) {
                 // todo this last line of the conditional might be wrong
                 if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr.gameObject->transform.zIndex &&
@@ -114,13 +112,13 @@ namespace Dralgeer {
 
         // destroy a sprite renderer contained in the renderer
         // returns 1 if it successfully found and destroyed it and 0 otherwise
-        bool destroy(SpriteRenderer* spr) {
+        inline bool destroy(SpriteRenderer* spr) {
             for (int i = 0; i < numBatches; ++i) { if (batches[i].destroyIfExists(spr)) { return 1; }}
             return 0;
         };
 
         // render each batch
-        void render() {
+        inline void render() {
             currentShader.use();
             for (int i = 0; i < numBatches; ++i) { batches[i].render(); }
         };

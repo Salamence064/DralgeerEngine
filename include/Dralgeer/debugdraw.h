@@ -18,19 +18,19 @@ namespace Dralgeer {
         };
 
 
-        static Line2D* lines = new Line2D[8];
-        static int numLines = 0;
-        static int capacity = 8;
+        extern Line2D* lines;
+        extern int numLines;
+        extern int capacity;
 
         // 6 floats per vertex, 2 vertices per line
-        static float vertexArray[DEBUG_VERTEX_ARR_SIZE];
-        static Shader shader;
+        extern float vertexArray[DEBUG_VERTEX_ARR_SIZE];
+        extern Shader shader;
 
-        static unsigned int vaoID, vboID;
-        static bool started = 0;
+        extern unsigned int vaoID, vboID;
+        extern bool started;
 
         // ! fuck it, we are using a temporary camera for now -- replace when I finish scene.h
-        Camera camera = {glm::vec2(0.0f)}; // ! could be the cause of some issues
+        extern Camera camera; // ! could be the cause of some issues
 
         inline void start() {
             // initialize the shader

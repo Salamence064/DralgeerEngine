@@ -39,7 +39,7 @@ namespace Dralgeer {
             }
         };
 
-        static void init(uint16_t width, uint16_t height, std::string const &title) {
+        inline static void init(uint16_t width, uint16_t height, std::string const &title) {
             data = {width, height, title};
 
             // error callback
@@ -106,7 +106,7 @@ namespace Dralgeer {
             currScene->init();
         };
 
-        static void run() {
+        inline static void run() {
             float startTime = (float) glfwGetTime(), endTime;
             float dt = 0.0f;
 
@@ -172,7 +172,7 @@ namespace Dralgeer {
             }
         };
 
-        static void destroy() {
+        inline static void destroy() {
             DebugDraw::destroy();
             imGuiLayer.dispose();
             glfwDestroyWindow(window);

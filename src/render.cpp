@@ -215,4 +215,10 @@ namespace Dralgeer {
     };
 
     // * ===============================================
+
+    namespace Renderer {
+        Shader currentShader;
+        RenderBatch batches[MAX_RENDER_BATCHES];
+        int numBatches = 0;
+    }
 }
