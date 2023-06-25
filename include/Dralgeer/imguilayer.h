@@ -18,6 +18,8 @@ namespace Dralgeer {
             PropertiesWindow propertiesWindow;
             GameViewWindow gameViewWindow;
 
+            // todo must call ImGui_ImplXXXX_NewFrame()
+
             ImGuiLayer() {};
             void init(GLFWwindow* window, PickingTexture const &pickingTexture);
             void update(float dt, Scene* currScene);

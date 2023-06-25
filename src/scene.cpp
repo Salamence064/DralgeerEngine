@@ -25,11 +25,11 @@ namespace Dralgeer {
     // * LevelEditorScene
 
     inline void LevelEditorScene::loadResources() {
-        AssetPool::getShader("assets/shaders/default.glsl");
+        AssetPool::getShader("../../assets/shaders/default.glsl");
 
         SpriteSheet spr;
-        spr.init(AssetPool::getTexture("assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
-        AssetPool::addSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png", spr);
+        spr.init(AssetPool::getTexture("../../assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
+        AssetPool::addSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png", spr);
 
         // todo add gizmos
 
@@ -111,7 +111,7 @@ namespace Dralgeer {
         loadResources();
 
         // load sprite sheet
-        sprites = AssetPool::getSpriteSheet("assets/images/spritesheets/decorationsAndBlocks.png");
+        sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png");
 
         components.name = "LevelEditor";
         components.transform.zIndex = 0;

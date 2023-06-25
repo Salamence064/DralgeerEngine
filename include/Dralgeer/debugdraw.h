@@ -34,7 +34,7 @@ namespace Dralgeer {
 
         inline void start() {
             // initialize the shader
-            shader = AssetPool::getShader("C:/VS/DralgeerEngine/assets/shaders/debugLine2D.glsl");
+            shader = AssetPool::getShader("../../assets/shaders/debugLine2D.glsl");
 
             // generate the VAO
             glGenVertexArrays(1, &vaoID);
