@@ -51,9 +51,6 @@ namespace Dralgeer {
             // todo could add some sort of check here for various OS's
             // configure glfw
             glfwDefaultWindowHints();
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_VISIBLE, 0);
             glfwWindowHint(GLFW_RESIZABLE, 1);
             glfwWindowHint(GLFW_MAXIMIZED, 1);
