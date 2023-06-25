@@ -48,7 +48,6 @@ namespace Dralgeer {
             // initialize glfw
             if (!glfwInit()) { throw std::runtime_error("GLFW failed to initialize."); }
 
-            // todo could add some sort of check here for various OS's
             // configure glfw
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_VISIBLE, 0);

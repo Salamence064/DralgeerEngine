@@ -2,4 +2,5 @@ build/main.exe
 build/vendor/glew32.dll
 build/vendor/glfw3.dll
 build/vendor/libglew32mx.dll
+build/vendor/config.ini
 .vscode/
