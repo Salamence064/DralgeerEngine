@@ -14,7 +14,7 @@ namespace Dralgeer {
             void init(int width, int height);
             inline void bind() const { glBindFramebuffer(GL_FRAMEBUFFER, fboID); };
             inline void unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); };
-            inline int getTextureID() const { return tex.texID; };
+            inline unsigned int getTextureID() const { return tex.texID; };
     };
 
     class PickingTexture {

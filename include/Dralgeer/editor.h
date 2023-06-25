@@ -15,7 +15,7 @@ namespace Dralgeer {
             inline ImVec2 getCenteredPos(ImVec2 const &size) const;
 
         public:
-            inline void imGui();
+            void imGui();
             inline bool getWantCaptureMouse() const {
                 return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
             };
@@ -29,10 +29,10 @@ namespace Dralgeer {
         public:
             GameObject* activeGameObject = nullptr;
 
-            inline PropertiesWindow() {};
-            inline void init(PickingTexture const &tex);
-            inline void update(float dt, Scene* currScene, bool wantCapture);
-            inline void imGui() const;
+            PropertiesWindow() {};
+            inline void init(PickingTexture const &tex) { pickingTexture.init(tex.width, tex.height); };
+            void update(float dt, Scene* currScene, bool wantCapture);
+            void imGui() const;
     };
 }
 

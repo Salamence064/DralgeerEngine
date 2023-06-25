@@ -32,7 +32,7 @@ namespace Dralgeer {
         return ImVec2((0.5f*(windowSize.x - size.x)) + ImGui::GetCursorPosX(), (0.5f*(windowSize.y - size.y)) + ImGui::GetCursorPosY());
     };
 
-    inline void GameViewWindow::imGui() {
+    void GameViewWindow::imGui() {
         ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
         ImVec2 windowSize = getLargestSize();
@@ -48,7 +48,8 @@ namespace Dralgeer {
         rightX = leftX + windowSize.x;
         topY = bottomY + windowSize.y;
 
-        ImGui::Image((int*) Window::frameBuffer.getTextureID(), windowSize, ImVec2(0, 1), ImVec2(1, 0));
+        unsigned int texID = Window::frameBuffer.getTextureID();
+        ImGui::Image(&texID, windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         MouseListener::mGameViewPortX = bottomLeft.x;
         MouseListener::mGameViewPortY = bottomLeft.y;
@@ -61,9 +62,7 @@ namespace Dralgeer {
     // * ======================================================
     // * PropertiesWindow Stuff
 
-    inline void PropertiesWindow::init(PickingTexture const &tex) { pickingTexture.init(tex.width, tex.height); };
-
-    inline void PropertiesWindow::update(float dt, Scene* currScene, bool wantCapture) {
+    void PropertiesWindow::update(float dt, Scene* currScene, bool wantCapture) {
         if (!wantCapture) { return; }
 
         debounce -= dt;
@@ -82,7 +81,7 @@ namespace Dralgeer {
         }
     };
 
-    inline void PropertiesWindow::imGui() const {
+    void PropertiesWindow::imGui() const {
         if (activeGameObject) {
             ImGui::Begin("Properties");
 

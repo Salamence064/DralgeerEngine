@@ -150,7 +150,7 @@ namespace Dralgeer {
             float spriteHeight = sprite.height * 3;
 
             ImGui::PushID(i);
-            if (ImGui::ImageButton((int*) sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
+            if (ImGui::ImageButton(&sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
                 ImVec2(sprite.texCords[2].x, sprite.texCords[0].y), ImVec2(sprite.texCords[0].x, sprite.texCords[2].y)))
             {
                 GameObject go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
