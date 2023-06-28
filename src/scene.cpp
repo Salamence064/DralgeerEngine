@@ -11,10 +11,10 @@ namespace Dralgeer {
         camera.adjustProjection();
         
         for (int i = numObjects - 1; i >= 0; --i) {
-            gameObjects[i].update(dt);
+            gameObjects[i]->update(dt);
 
-            if (gameObjects[i].dead) {
-                Renderer::destroy((SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER));
+            if (gameObjects[i]->dead) {
+                Renderer::destroy((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));
                 for (int j = i; j < numObjects - 1; ++j) { gameObjects[j] = gameObjects[j + 1]; }
                 numObjects--;
             }
@@ -34,7 +34,7 @@ namespace Dralgeer {
         // todo add gizmos
 
         for (int i = 0; i < numObjects; ++i) {
-            SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER);
+            SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
             if (spr && spr->sprite.texture) {
                 Texture* temp = spr->sprite.texture;
                 spr->sprite.texture = new Texture(AssetPool::getTexture(temp->filepath));
@@ -44,8 +44,8 @@ namespace Dralgeer {
     };
 
     LevelEditorScene::LevelEditorScene() {
-        type = SceneType::LEVEL_EDITOR_SCENE;
-        gameObjects = new GameObject[capacity];
+        type = LEVEL_EDITOR_SCENE;
+        gameObjects = new GameObject*[capacity];
     };
 
     LevelEditorScene::LevelEditorScene(LevelEditorScene const &scene) {
@@ -57,7 +57,7 @@ namespace Dralgeer {
         capacity = scene.capacity;
         numObjects = scene.numObjects;
 
-        gameObjects = new GameObject[capacity];
+        gameObjects = new GameObject*[capacity];
         for (int i = 0; i < numObjects; ++i) { gameObjects[i] = scene.gameObjects[i]; }
     };
 
@@ -82,7 +82,7 @@ namespace Dralgeer {
             capacity = scene.capacity;
             numObjects = scene.numObjects;
 
-            gameObjects = new GameObject[capacity];
+            gameObjects = new GameObject*[capacity];
             for (int i = 0; i < numObjects; ++i) { gameObjects[i] = scene.gameObjects[i]; }
         }
 
@@ -120,10 +120,11 @@ namespace Dralgeer {
         components.serialize = 0;
 
         // todo add other components once they are created
+        components.addComponent(new MouseControls());
         components.addComponent(new GridLines());
         components.addComponent(new EditorCamera(camera));
 
-        addGameObject(components);
+        addGameObject(&components);
     };
 
     void LevelEditorScene::imGui() {

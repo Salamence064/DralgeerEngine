@@ -80,15 +80,15 @@ namespace Dralgeer {
             });
 
             // mouse
-            glfwSetCursorPosCallback(window, MouseListener::cursor_position_callback);
+            glfwSetCursorPosCallback(window, MouseListener::CursoPositionCallback);
             glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
-            glfwSetScrollCallback(window, MouseListener::scroll_callback);
+            glfwSetScrollCallback(window, MouseListener::scrollCallback);
 
             // keyboard
-            glfwSetKeyCallback(window, KeyListener::key_callback);
+            glfwSetKeyCallback(window, KeyListener::keyCallback);
 
             // joystick
-            glfwSetJoystickCallback(JoystickListener::joystick_callback);
+            glfwSetJoystickCallback(JoystickListener::joystickCallback);
 
             // enable alpha blending
             glEnable(GL_BLEND);

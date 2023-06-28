@@ -29,11 +29,20 @@ namespace Dralgeer {
         static float mGameViewPortX = 0.0f, mGameViewPortY = 0.0f;
         static float mGameViewPortWidth = 0.0f, mGameViewPortHeight = 0.0f;
 
-        static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+        extern float calcOrthoX();
+        extern float calcOrthoY();
+
+        static void CursoPositionCallback(GLFWwindow* window, double xpos, double ypos) {
             if (mButtonsDown) { mIsDragging = 1; }
 
             mLastX = mX;
             mLastY = mY;
+
+            mLastWorldX = mWorldX;
+            mLastWorldY = mWorldY;
+            mWorldX = calcOrthoX();
+            mWorldY = calcOrthoY();
+
             mX = xpos;
             mY = ypos;
         };
@@ -52,7 +61,7 @@ namespace Dralgeer {
             }
         };
 
-        static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+        static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
             mScrollX = xoffset;
             mScrollY = yoffset;
         };
@@ -65,8 +74,6 @@ namespace Dralgeer {
 
         inline static float getScreenX() { return ((mX - mGameViewPortX)/mGameViewPortWidth) * 1920.0f; };
         inline static float getScreenY() { return 1080.0f - (((mY - mGameViewPortY)/mGameViewPortHeight) * 1080.0f); };
-
-        // todo add in the calculate orthoX and orthoY after the scenes are implemented into window.h (and made accessible)
     }
 
     // * ==================
@@ -76,7 +83,7 @@ namespace Dralgeer {
     namespace KeyListener {
         static bool keyPressed[350] = {0};
 
-        static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
             if (key < 350) {
                 if (action == GLFW_PRESS) { keyPressed[key] = 1; }
                 else if (action == GLFW_RELEASE) { keyPressed[key] = 0; }
@@ -93,7 +100,7 @@ namespace Dralgeer {
         static bool jConnected = glfwJoystickPresent(jId);
         static bool jGamepad = glfwJoystickIsGamepad(jId);
 
-        static void joystick_callback(int jid, int event) {
+        static void joystickCallback(int jid, int event) {
             if (jid != jId) { return; }
 
             // check for connections and disconnections
