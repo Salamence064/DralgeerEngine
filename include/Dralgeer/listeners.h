@@ -17,7 +17,7 @@ namespace Dralgeer {
     // * Mouse Listener
     // * ====================
 
-    namespace MouseListener { // todo add ImGui stuff
+    namespace MouseListener {
         static float mScrollX = 0, mScrollY = 0;
         static float mX = 0, mY = 0, mLastX = 0, mLastY = 0;
         static float mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0;

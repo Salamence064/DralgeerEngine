@@ -34,7 +34,7 @@ namespace Dralgeer {
                 float pixels[3]; // todo check if this needs to actually be 3 (due to RGB) or if I can just store it to a single value
                 glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                // todo see if the reading needs to be unbound
+                // todo see if the framebuffer needs to be unbound
 
                 return (int) pixels[0] - 1;
             };
