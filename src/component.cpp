@@ -335,6 +335,8 @@ namespace Dralgeer {
     // * =====================================================================
     // * MouseControls Stuff
 
+    MouseControls::MouseControls() { type = MOUSE_CONTROLS; id = idCounter++; };
+
     // * ====================
     // * Rule of 5 Stuff
     // * ====================
