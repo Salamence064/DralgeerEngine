@@ -18,7 +18,7 @@ namespace Dralgeer {
             // * Protected Attributes
             // * ======================
 
-            GameObject* gameObjects = nullptr; // todo maybe make a pointer of pointers
+            GameObject** gameObjects = nullptr;
             int capacity = 8; // default capacity of 8 // todo probs will up in the future
             int numObjects = 0;
 
@@ -36,10 +36,10 @@ namespace Dralgeer {
             // * Helper Functions
             // * ====================
 
-            inline void addGO(GameObject const &go) {
+            inline void addGO(GameObject* go) {
                 if (numObjects == capacity) {
                     capacity *= 2;
-                    GameObject* temp = new GameObject[capacity];
+                    GameObject** temp = new GameObject*[capacity];
 
                     for (int i = 0; i < numObjects; ++i) { temp[i] = gameObjects[i]; }
 
@@ -73,27 +73,27 @@ namespace Dralgeer {
 
             inline void start() {
                 for (int i = 0; i < numObjects; ++i) {
-                    gameObjects[i].start();
-                    Renderer::add(*((SpriteRenderer*) gameObjects[i].getComponent(ComponentType::SPRITE_RENDERER)));
+                    gameObjects[i]->start();
+                    Renderer::add(*((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER)));
                 }
 
                 running = 1;
             };
 
-            inline void addGameObject(GameObject const &go) {
+            inline void addGameObject(GameObject* go) {
                 addGO(go);
                 
                 if (running) {
                     int n = numObjects - 1;
-                    gameObjects[n].start();
-                    Renderer::add(*((SpriteRenderer*) gameObjects[n].getComponent(ComponentType::SPRITE_RENDERER)));
+                    gameObjects[n]->start();
+                    Renderer::add(*((SpriteRenderer*) gameObjects[n]->getComponent(SPRITE_RENDERER)));
                 }
             };
 
             // Returns nullptr if no game object was found.
             inline GameObject* getGameObject(int id) {
                 for (int i = 0; i < numObjects; ++i) {
-                    if (gameObjects[i].id == id) { return &gameObjects[i]; }
+                    if (gameObjects[i]->id == id) { return gameObjects[i]; }
                 }
 
                 return nullptr;
@@ -101,7 +101,7 @@ namespace Dralgeer {
 
             void update(float dt);
             inline void render() { Renderer::render(); };
-            inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i].destory(); }};
+            inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i]->destory(); }};
     };
 
     class LevelEditorScene : public Scene {

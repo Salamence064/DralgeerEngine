@@ -92,6 +92,7 @@ namespace Dralgeer {
             sprite.texture = spr.sprite.texture;
             spr.sprite.texture = NULL;
 
+            if (gameObject) { delete gameObject; }
             gameObject = spr.gameObject;
             spr.gameObject = NULL;
         }
@@ -111,7 +112,7 @@ namespace Dralgeer {
 
     inline void SpriteRenderer::start() { lastTransform = gameObject->transform; };
 
-    inline void SpriteRenderer::update(float dt) {
+    void SpriteRenderer::update(float dt) {
         if (lastTransform != gameObject->transform) {
             gameObject->transform = lastTransform;
             isDirty = 1;
@@ -188,6 +189,7 @@ namespace Dralgeer {
             reset = 0;
 
             camera = std::move(cam.camera);
+            if (gameObject) { delete gameObject; }
             gameObject = cam.gameObject;
             cam.gameObject = NULL;
         }
@@ -202,7 +204,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    inline void EditorCamera::update(float dt) {
+    void EditorCamera::update(float dt) {
         if (!Window::imGuiLayer.gameViewWindow.getWantCaptureMouse()) { return; }
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && dragDebounce > 0.0f) {
@@ -291,8 +293,12 @@ namespace Dralgeer {
     };
 
     GridLines& GridLines::operator = (GridLines &&gl) {
-        gameObject = gl.gameObject;
-        gl.gameObject = NULL;
+        if (this != &gl) {
+            if (gameObject) { delete gameObject; }
+            gameObject = gl.gameObject;
+            gl.gameObject = NULL;
+        }
+
         return *this;
     };
 
@@ -303,7 +309,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    inline void GridLines::update(float dt) {
+    void GridLines::update(float dt) {
         Camera cam = Window::currScene->camera; // make the code more readable
 
         int firstX = ((int) (cam.pos.x * cam.zoom) - GRID_WIDTH);
@@ -323,6 +329,72 @@ namespace Dralgeer {
 
             if (i < vertLines) { DebugDraw::addLine2D(glm::vec2(x, firstX), glm::vec2(x, firstY + height), color); }
             if (i < horzLines) { DebugDraw::addLine2D(glm::vec2(firstX, y), glm::vec2(firstX + width, y), color); }
+        }
+    };
+
+    // * =====================================================================
+    // * MouseControls Stuff
+
+    // * ====================
+    // * Rule of 5 Stuff
+    // * ====================
+
+    MouseControls::MouseControls(MouseControls const &mc) {
+        type = mc.type;
+        id = idCounter++;
+
+        if (mc.gameObject) {
+            gameObject = new GameObject();
+            gameObject->transform = mc.gameObject->transform;
+            gameObject->name = mc.gameObject->name;
+        }
+    };
+
+    MouseControls::MouseControls(MouseControls &&mc) {
+        type = mc.type;
+        id = idCounter++;
+        gameObject = mc.gameObject;
+        mc.gameObject = NULL;
+    };
+
+    MouseControls& MouseControls::operator = (MouseControls const &mc) {
+        if (this != &mc) {
+            if (gameObject) { delete gameObject; }
+            if (mc.gameObject) {
+                gameObject = new GameObject();
+                gameObject->transform = mc.gameObject->transform;
+                gameObject->name = mc.gameObject->name;
+            }
+
+            holdingObject = nullptr; // since the object should be added to the scene this should not cause a memory leak
+        }
+
+        return *this;
+    };
+
+    MouseControls& MouseControls::operator = (MouseControls &&mc) {
+        if (this != &mc) {
+            if (gameObject) { delete gameObject; }
+            gameObject = mc.gameObject;
+            mc.gameObject = NULL;
+        }
+
+        return *this;
+    };
+
+    // Note, do not delete holdingObject for the scene should handle that.
+    MouseControls::~MouseControls() { if (gameObject) { delete gameObject; }};
+
+    // * =====================
+    // * Normal Functions
+    // * =====================
+
+    void MouseControls::update(float dt) {
+        if (holdingObject) {
+            holdingObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
+            holdingObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
+
+            if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) { holdingObject = nullptr; }
         }
     };
 
@@ -351,6 +423,7 @@ namespace Dralgeer {
                 case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
                 case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
                 case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                case ComponentType::MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); }
             }
         }
     };
@@ -383,6 +456,7 @@ namespace Dralgeer {
                     case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
                     case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
                     case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
+                    case ComponentType::MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); }
                 }
             }
         }
@@ -395,6 +469,9 @@ namespace Dralgeer {
             name = std::move(go.name);
             transform = std::move(go.transform);
             serialize = go.serialize;
+
+            for (int i = 0; i < numComponents; ++i) { delete components[i]; }
+            delete[] components;
 
             capacity = go.capacity;
             numComponents = go.numComponents;

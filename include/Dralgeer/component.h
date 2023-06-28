@@ -14,7 +14,8 @@ namespace Dralgeer {
     enum ComponentType {
         SPRITE_RENDERER,
         EDITOR_CAMERA,
-        GRID_LINES
+        GRID_LINES,
+        MOUSE_CONTROLS
     };
 
     // todo maybe find a way to do stuff with just a flag inside of this class
@@ -32,7 +33,7 @@ namespace Dralgeer {
             GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
             virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual inline void update(float dt) = 0; // every component needs to override update.
+            virtual void update(float dt) = 0; // every component needs to override update.
             virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
             
             virtual void imGui() {
@@ -175,7 +176,7 @@ namespace Dralgeer {
             ~SpriteRenderer();
 
             inline void start() override;
-            inline void update(float dt) override;
+            void update(float dt) override;
 
             // Create a color picker for the sprites.
             void imGui() override;
@@ -220,7 +221,32 @@ namespace Dralgeer {
 
             ~GridLines();
 
-            inline void update(float dt) override;
+            void update(float dt) override;
+    };
+
+    class MouseControls : public Component {
+        private:
+            GameObject* holdingObject = nullptr;
+
+        public:
+            MouseControls();
+
+            // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
+            MouseControls(MouseControls const &mc);
+            MouseControls(MouseControls &&mc);
+
+            // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
+            MouseControls& operator = (MouseControls const &mc);
+            MouseControls& operator = (MouseControls &&mc);
+
+            ~MouseControls();
+
+            inline void pickupObject(GameObject* go) {
+                holdingObject = go;
+                Window::currScene->addGameObject(go);
+            };
+
+            void update(float dt) override;
     };
 }
 

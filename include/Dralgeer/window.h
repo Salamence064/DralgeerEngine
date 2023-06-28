@@ -1,10 +1,13 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+// todo go through and ensure no memory leaks, especially in move assignment operators
+
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
 // todo go through and make certain constructors inline
 
 // todo I never detach Renderer::currentShader
+// todo it is time to go through some of the todos
 
 #include "imguilayer.h"
 #include "listeners.h"
