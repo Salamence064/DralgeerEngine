@@ -1,13 +1,14 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+// todo it is time to try to get this to compile and run properly
+
 // todo go through and ensure no memory leaks, especially in move assignment operators
 
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
 // todo go through and make certain constructors inline
 
 // todo I never detach Renderer::currentShader
-// todo it is time to go through some of the todos
 
 #include "imguilayer.h"
 #include "listeners.h"
@@ -80,15 +81,15 @@ namespace Dralgeer {
             });
 
             // mouse
-            glfwSetCursorPosCallback(window, MouseListener::CursoPositionCallback);
-            glfwSetMouseButtonCallback(window, MouseListener::mouseButtonCallback);
-            glfwSetScrollCallback(window, MouseListener::scrollCallback);
+            glfwSetCursorPosCallback(window, MouseListener::cursor_position_callback);
+            glfwSetMouseButtonCallback(window, MouseListener::mouse_button_callback);
+            glfwSetScrollCallback(window, MouseListener::scroll_callback);
 
             // keyboard
-            glfwSetKeyCallback(window, KeyListener::keyCallback);
+            glfwSetKeyCallback(window, KeyListener::key_callback);
 
             // joystick
-            glfwSetJoystickCallback(JoystickListener::joystickCallback);
+            glfwSetJoystickCallback(JoystickListener::joystick_callback);
 
             // enable alpha blending
             glEnable(GL_BLEND);
@@ -123,7 +124,7 @@ namespace Dralgeer {
                 // Poll for events
                 glfwPollEvents();
 
-                // render picking texture
+                // render picking texture // todo this portion causes imgui screen tearing
                 // glDisable(GL_BLEND);
                 // pickingTexture.enableWriting();
 

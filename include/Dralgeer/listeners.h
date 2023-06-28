@@ -32,7 +32,7 @@ namespace Dralgeer {
         extern float calcOrthoX();
         extern float calcOrthoY();
 
-        static void CursoPositionCallback(GLFWwindow* window, double xpos, double ypos) {
+        static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
             if (mButtonsDown) { mIsDragging = 1; }
 
             mLastX = mX;
@@ -47,7 +47,7 @@ namespace Dralgeer {
             mY = ypos;
         };
 
-        static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
             if (button < 9) {
                 if (action == GLFW_PRESS) {
                     mButtonsDown++;
@@ -61,7 +61,7 @@ namespace Dralgeer {
             }
         };
 
-        static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+        static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
             mScrollX = xoffset;
             mScrollY = yoffset;
         };
@@ -83,7 +83,7 @@ namespace Dralgeer {
     namespace KeyListener {
         static bool keyPressed[350] = {0};
 
-        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
             if (key < 350) {
                 if (action == GLFW_PRESS) { keyPressed[key] = 1; }
                 else if (action == GLFW_RELEASE) { keyPressed[key] = 0; }
@@ -100,7 +100,7 @@ namespace Dralgeer {
         static bool jConnected = glfwJoystickPresent(jId);
         static bool jGamepad = glfwJoystickIsGamepad(jId);
 
-        static void joystickCallback(int jid, int event) {
+        static void joystick_callback(int jid, int event) {
             if (jid != jId) { return; }
 
             // check for connections and disconnections

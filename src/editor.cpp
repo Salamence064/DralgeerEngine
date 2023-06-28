@@ -1,7 +1,6 @@
 // ? Provide definitions for functions in editor.h
 
 #include <Dralgeer/framebuffer.h>
-#include <Dralgeer/listeners.h>
 #include <Dralgeer/window.h>
 
 namespace Dralgeer {

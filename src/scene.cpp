@@ -108,6 +108,8 @@ namespace Dralgeer {
 
     void LevelEditorScene::init() {
         camera.pos = glm::vec2(0.0f, 0.0f);
+        camera.adjustView();
+        camera.adjustProjection();
         loadResources();
 
         // load sprite sheet
