@@ -1,3 +1,4 @@
+// #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 #include <Dralgeer/scene.h>
 #include <IMGUI/imgui.h>
 #include <Dralgeer/prefabs.h>
@@ -153,6 +154,8 @@ namespace Dralgeer {
             float spriteHeight = sprite.height * 3;
 
             ImGui::PushID(i);
+            // todo potentially use the more recent version of this function
+            // todo the images are not being read properly from this function
             if (ImGui::ImageButton(&sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
                 ImVec2(sprite.texCords[2].x, sprite.texCords[0].y), ImVec2(sprite.texCords[0].x, sprite.texCords[2].y)))
             {

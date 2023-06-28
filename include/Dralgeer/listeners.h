@@ -29,22 +29,20 @@ namespace Dralgeer {
         static float mGameViewPortX = 0.0f, mGameViewPortY = 0.0f;
         static float mGameViewPortWidth = 0.0f, mGameViewPortHeight = 0.0f;
 
-        extern float calcOrthoX();
-        extern float calcOrthoY();
+        extern void updateWorldCoords();
 
         static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
             if (mButtonsDown) { mIsDragging = 1; }
 
             mLastX = mX;
             mLastY = mY;
-
-            mLastWorldX = mWorldX;
-            mLastWorldY = mWorldY;
-            mWorldX = calcOrthoX();
-            mWorldY = calcOrthoY();
-
             mX = xpos;
             mY = ypos;
+
+            // mLastWorldX = mWorldX;
+            // mLastWorldY = mWorldY;
+            // mWorldX = calcOrthoX();
+            // mWorldY = calcOrthoY();
         };
 
         static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {

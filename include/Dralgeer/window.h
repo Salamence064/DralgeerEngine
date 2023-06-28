@@ -150,6 +150,7 @@ namespace Dralgeer {
                 currScene->render();
 
                 // frameBuffer.unbind();
+                MouseListener::updateWorldCoords();
                 imGuiLayer.update(dt, currScene);
 
                 // initialize the gamepadState // todo set up later
