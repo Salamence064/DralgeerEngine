@@ -241,11 +241,7 @@ namespace Dralgeer {
 
             ~MouseControls();
 
-            inline void pickupObject(GameObject* go) {
-                holdingObject = go;
-                Window::currScene->addGameObject(go);
-            };
-
+            void pickupObject(GameObject* go);
             void update(float dt) override;
     };
 }

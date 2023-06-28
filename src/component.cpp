@@ -391,6 +391,11 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
+    void MouseControls::pickupObject(GameObject* go) {
+        holdingObject = go;
+        Window::currScene->addGameObject(go);
+    };
+
     void MouseControls::update(float dt) {
         if (holdingObject) {
             holdingObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
