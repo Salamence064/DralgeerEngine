@@ -4,6 +4,13 @@
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/assetpool.h>
 
+// ! What we've ruled out
+    // texCords are properly assigned
+    // width and height of the sprites are properly assigned
+
+// ! Issue must either be with the ImGui function (don't think it is)
+// !  or with something within the texture class itself (more likely)
+
 namespace Dralgeer {
     // * ================================================
     // * Abstract Scene Class
@@ -30,6 +37,7 @@ namespace Dralgeer {
 
         SpriteSheet* spr = new SpriteSheet();
         spr->init(AssetPool::getTexture("../../assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
+
         AssetPool::addSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png", spr);
 
         // todo add gizmos
@@ -122,7 +130,6 @@ namespace Dralgeer {
         components.transform.scale = {0.0f, 0.0f};
         components.serialize = 0;
 
-        // todo add other components once they are created
         components.addComponent(new MouseControls());
         components.addComponent(new GridLines());
         components.addComponent(new EditorCamera(camera));
@@ -153,9 +160,8 @@ namespace Dralgeer {
             float spriteWidth = sprite.width * 3;
             float spriteHeight = sprite.height * 3;
 
+            // todo the issue is either this ImGui stuff or something to do with the texture class itself in the init function
             ImGui::PushID(i);
-            // todo potentially use the more recent version of this function
-            // todo the images are not being read properly from this function
             if (ImGui::ImageButton(&sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
                 ImVec2(sprite.texCords[2].x, sprite.texCords[0].y), ImVec2(sprite.texCords[0].x, sprite.texCords[2].y)))
             {

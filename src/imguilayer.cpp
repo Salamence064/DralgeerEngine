@@ -63,6 +63,8 @@ namespace Dralgeer {
         // initialize the ImGui attributes
         ImGui_ImplGlfw_InitForOpenGL(window, 1);
         ImGui_ImplOpenGL3_Init(glslVersion);
+
+        ImGui::StyleColorsDark();
     };
 
     void ImGuiLayer::update(float dt, Scene* currScene) {

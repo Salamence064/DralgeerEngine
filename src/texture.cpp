@@ -1,6 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <Dralgeer/texture.h>
 #include <STB/stb_image.h>
+#include <iostream> // ! for debugging
 
 namespace Dralgeer {
     Texture::Texture(int width, int height) : width(width), height(height) {
@@ -17,7 +18,7 @@ namespace Dralgeer {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     };
 
-    void Texture::init(std::string const &filepath) {
+    void Texture::init(std::string const &filepath) { // todo issue may arrise from here
         this->filepath = filepath;
 
         // generate texture on the GPU

@@ -13,8 +13,12 @@ namespace Dralgeer {
             go.transform.scale.x = width;
             go.transform.scale.y = height;
 
-            SpriteRenderer renderer = SpriteRenderer();
-            go.addComponent(&renderer);
+            SpriteRenderer* renderer = new SpriteRenderer();
+            renderer->sprite.width = spr.width;
+            renderer->sprite.height = spr.height;
+            renderer->sprite.texture = new Texture();
+            renderer->sprite.texture->init(spr.texture->filepath);
+            go.addComponent(renderer);
 
             return go;
         };
