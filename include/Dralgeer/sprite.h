@@ -97,21 +97,21 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            void init(Texture const &tex, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
+            // tex should have init called on it prior to this function call
+            void init(Texture* tex, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
                 sprites = new Sprite[numSprites];
                 this->numSprites = numSprites;
 
-                int x = 0, y = tex.height - spriteHeight;
+                int x = 0, y = tex->height - spriteHeight;
                 for (int i = 0; i < numSprites; ++i) {
-                    float top = (y + spriteHeight)/((float) tex.height);
-                    float right = (x + spriteWidth)/((float) tex.width);
-                    float left = x/((float) tex.width);
-                    float bottom = y/((float) tex.height);
+                    float top = (y + spriteHeight)/((float) tex->height);
+                    float right = (x + spriteWidth)/((float) tex->width);
+                    float left = x/((float) tex->width);
+                    float bottom = y/((float) tex->height);
 
                     // add the sprite to the list
                     Sprite sprite;
-                    sprite.texture = new Texture();
-                    sprite.texture->init(tex.filepath);
+                    sprite.texture = tex;
                     sprite.texCords[0] = glm::vec2(right, top); 
                     sprite.texCords[1] = glm::vec2(right, bottom);
                     sprite.texCords[2] = glm::vec2(left, bottom);
@@ -121,7 +121,7 @@ namespace Dralgeer {
                     sprites[i] = sprite;
 
                     x += spriteWidth + spacing;
-                    if (x >= tex.width) { x = 0; y -= spriteHeight + spacing; }
+                    if (x >= tex->width) { x = 0; y -= spriteHeight + spacing; }
                 }
             };
     };

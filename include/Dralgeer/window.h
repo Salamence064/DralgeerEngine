@@ -116,8 +116,8 @@ namespace Dralgeer {
             // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 500);
             // DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
 
-            Shader defaultShader = AssetPool::getShader("../../assets/shaders/default.glsl");
-            Shader pickingShader = AssetPool::getShader("../../assets/shaders/pickingShader.glsl");
+            Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
+            Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
@@ -177,6 +177,7 @@ namespace Dralgeer {
 
         inline static void destroy() {
             DebugDraw::destroy();
+            AssetPool::destroy();
             imGuiLayer.dispose();
             glfwDestroyWindow(window);
             glfwSetErrorCallback(NULL);
