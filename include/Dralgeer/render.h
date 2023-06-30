@@ -9,9 +9,7 @@
 namespace Dralgeer {
     class RenderBatch {
         private:
-            Camera camera = {glm::vec2(0.0f)}; // ! Temporary until I make scenes -- could cause some issues
-
-            SpriteRenderer sprites[MAX_RENDER_BATCH_SIZE];
+            SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE];
             Texture textures[MAX_TEXTURES];
             int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
@@ -33,7 +31,7 @@ namespace Dralgeer {
 
             // * Returns true if the SpriteRenderer is successfully destroyed and false if it doesn't exist.
             bool destroyIfExists(SpriteRenderer* spr);
-            void addSprite(SpriteRenderer const &spr);
+            void addSprite(SpriteRenderer* spr);
             bool hasTexture(Texture* tex) const;
     };
 
@@ -43,12 +41,18 @@ namespace Dralgeer {
         extern int numBatches;
 
         // todo add the GameObject related functions after fleshing out the GameObject class
+        // todo make this stuff pointer related
+        // todo update all of the renderer stuff to include the GameObject stuff
+        // todo issue for not displaying the textures on the buttons is likely caused by something in here
+        // todo also potentially could be from the stbi_load function not loading it properly
 
-        inline void add(SpriteRenderer const &spr) {
+        inline void add(SpriteRenderer* spr) {
+            if (!spr) { return; }
+
             for (int i = 0; i < numBatches; ++i) {
                 // todo this last line of the conditional might be wrong
-                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr.gameObject->transform.zIndex &&
-                        spr.sprite.texture && !batches[i].hasTexture(spr.sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
+                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->gameObject->transform.zIndex &&
+                        spr->sprite.texture && !batches[i].hasTexture(spr->sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
                     
                     batches[i].addSprite(spr);
                     return;
@@ -61,7 +65,7 @@ namespace Dralgeer {
             }
 
             RenderBatch newBatch;
-            newBatch.start(spr.gameObject->transform.zIndex);
+            newBatch.start(spr->gameObject->transform.zIndex);
             newBatch.addSprite(spr);
 
             // determine the spot to put the new render batch in so that batches are sorted based on zIndex
@@ -108,6 +112,11 @@ namespace Dralgeer {
             }
 
             numBatches++;
+        };
+
+        inline void add(GameObject const &go) {
+            SpriteRenderer* spr = (SpriteRenderer*) go.getComponent(SPRITE_RENDERER);
+            if (spr) { add(spr); }
         };
 
         // destroy a sprite renderer contained in the renderer

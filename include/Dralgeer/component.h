@@ -100,7 +100,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            inline void* getComponent(ComponentType type) {
+            inline void* getComponent(ComponentType type) const {
                 for (int i = 0; i < numComponents; ++i) {
                     if (type == components[i]->type) { return components[i]; }
                 }

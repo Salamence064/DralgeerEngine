@@ -61,5 +61,6 @@ namespace Dralgeer {
         }
 
         stbi_image_free(image);
+        glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
     };
 }

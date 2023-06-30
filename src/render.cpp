@@ -1,5 +1,6 @@
 #include <Dralgeer/render.h>
 #include <Zeta2D/zmath2D.h>
+#include <Dralgeer/window.h>
 
 namespace Dralgeer {
     // * ===============================================
@@ -10,9 +11,9 @@ namespace Dralgeer {
 
         // Texture ID
         int texID = 0;
-        if (sprites[index].sprite.texture) {
+        if (sprites[index]->sprite.texture) {
             for (int i = 0; i < numTextures; ++i) {
-                if (textures[i] == *(sprites[index].sprite.texture)) {
+                if (textures[i] == *(sprites[index]->sprite.texture)) {
                     texID = i + 1;
                     break;
                 }
@@ -20,7 +21,7 @@ namespace Dralgeer {
         }
 
         glm::mat4 transformMat(1);
-        Transform t = sprites[index].gameObject->transform;
+        Transform t = sprites[index]->gameObject->transform;
 
         if (!ZMath::compare(t.rotation, 0.0f)) {
             transformMat = glm::translate(transformMat, glm::vec3(t.pos.x, t.pos.y, 0.0f));
@@ -45,20 +46,20 @@ namespace Dralgeer {
             vertices[offset + 1] = currPos.y;
 
             // load color
-            vertices[offset + 2] = sprites[index].color.x;
-            vertices[offset + 3] = sprites[index].color.y;
-            vertices[offset + 4] = sprites[index].color.z;
-            vertices[offset + 5] = sprites[index].color.w;
+            vertices[offset + 2] = sprites[index]->color.x;
+            vertices[offset + 3] = sprites[index]->color.y;
+            vertices[offset + 4] = sprites[index]->color.z;
+            vertices[offset + 5] = sprites[index]->color.w;
 
             // load texture coords
-            vertices[offset + 6] = sprites[index].sprite.texCords[i].x;
-            vertices[offset + 7] = sprites[index].sprite.texCords[i].y;
+            vertices[offset + 6] = sprites[index]->sprite.texCords[i].x;
+            vertices[offset + 7] = sprites[index]->sprite.texCords[i].y;
 
             // load texture IDs
             vertices[offset + 8] = texID;
 
             // load entity IDs
-            vertices[offset + 9] = sprites[index].gameObject->id + 1;
+            vertices[offset + 9] = sprites[index]->gameObject->id + 1;
 
             offset += VERTEX_SIZE;
         }
@@ -128,9 +129,9 @@ namespace Dralgeer {
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {
-            if (sprites[i].isDirty) {
+            if (sprites[i]->isDirty) {
                 loadVertexProperties(i);
-                sprites[i].isDirty = 0;
+                sprites[i]->isDirty = 0;
                 rebuffer = 1;
             }
         }
@@ -141,15 +142,10 @@ namespace Dralgeer {
             glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices); // todo make it a subarray of the vertices most likely
         }
 
-        // ! This is temp code, this will not be here once scenes are made
-        camera.adjustProjection();
-        camera.adjustView();
-        // !==============================================================
-
         // use shader
         Shader shader = Renderer::currentShader;
-        shader.uploadMat4("uProjection", camera.proj);
-        shader.uploadMat4("uView", camera.view);
+        shader.uploadMat4("uProjection", Window::currScene->camera.proj);
+        shader.uploadMat4("uView", Window::currScene->camera.view);
 
         // bind textures
         for (int i = 0; i < numTextures; ++i) {
@@ -176,10 +172,10 @@ namespace Dralgeer {
 
      bool RenderBatch::destroyIfExists(SpriteRenderer* spr) {
         for (int i = 0; i < numSprites; ++i) {
-            if (&sprites[i] == spr) {
+            if (sprites[i] == spr) {
                 for (int j = i; j < numSprites - 1; ++j) {
                     sprites[j] = sprites[j + 1];
-                    sprites[j].isDirty = 1;
+                    sprites[j]->isDirty = 1;
                 }
 
                 numSprites--;
@@ -190,15 +186,15 @@ namespace Dralgeer {
         return 0;
     };
 
-    void RenderBatch::addSprite(SpriteRenderer const &spr) {
+    void RenderBatch::addSprite(SpriteRenderer* spr) {
         if (numSprites < MAX_RENDER_BATCH_SIZE) {
             sprites[numSprites++] = spr;
 
             // add texture if the sprite has a texture and we don't already have that texture
             // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
-            if (spr.sprite.texture && numTextures < MAX_TEXTURES) {
-                for (int i = 0; i < numTextures; ++i) { if (textures[i] == (*spr.sprite.texture)) { goto ADDED; }}
-                textures[numTextures++] = (*spr.sprite.texture);
+            if (spr->sprite.texture && numTextures < MAX_TEXTURES) {
+                for (int i = 0; i < numTextures; ++i) { if (textures[i] == (*spr->sprite.texture)) { goto ADDED; }}
+                textures[numTextures++] = (*spr->sprite.texture);
             }
 
             ADDED:
