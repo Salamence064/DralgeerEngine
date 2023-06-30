@@ -26,6 +26,23 @@ namespace Dralgeer {
 
             RenderBatch() {};
 
+            // * ===================
+            // * Rule of 5 Stuff
+            // * ===================
+
+            // ? These are all designed to throw errors with the exception of the destructor.
+            // ? RenderBatches should NOT be reassigned or constructed from another.
+
+            RenderBatch(RenderBatch const &batch);
+            RenderBatch(RenderBatch &&batch);
+            RenderBatch& operator = (RenderBatch const &batch);
+            RenderBatch& operator = (RenderBatch &&batch);
+            ~RenderBatch();
+
+            // * ===================
+            // * Normal Functions
+            // * ===================
+
             void start(int zIndex);
             void render();
 
