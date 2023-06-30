@@ -46,7 +46,7 @@ namespace Dralgeer {
             SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
             if (spr && spr->sprite.texture) {
                 Texture* temp = spr->sprite.texture;
-                spr->sprite.texture = new Texture(*(AssetPool::getTexture(temp->filepath)));
+                spr->sprite.texture = new Texture(*(AssetPool::getTexture(temp->filepath))); // todo may not need to dereference and just pass it to the thing directly
                 delete temp;
             }
         }

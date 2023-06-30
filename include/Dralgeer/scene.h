@@ -74,7 +74,7 @@ namespace Dralgeer {
             inline void start() {
                 for (int i = 0; i < numObjects; ++i) {
                     gameObjects[i]->start();
-                    Renderer::add(*((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER)));
+                    Renderer::add((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));
                 }
 
                 running = 1;
@@ -86,7 +86,7 @@ namespace Dralgeer {
                 if (running) {
                     int n = numObjects - 1;
                     gameObjects[n]->start();
-                    Renderer::add(*((SpriteRenderer*) gameObjects[n]->getComponent(SPRITE_RENDERER)));
+                    Renderer::add((SpriteRenderer*) gameObjects[n]->getComponent(SPRITE_RENDERER));
                 }
             };
 

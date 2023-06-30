@@ -10,6 +10,7 @@ namespace Dralgeer {
     RenderBatch::RenderBatch(RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
     RenderBatch& RenderBatch::operator = (RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
     RenderBatch& RenderBatch::operator = (RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
+    RenderBatch::~RenderBatch() { for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }};
 
     inline void RenderBatch::loadVertexProperties(int index) {
         int offset = index * 4 * VERTEX_SIZE;
