@@ -43,6 +43,22 @@ namespace Dralgeer {
 
         // todo add gizmos
 
+        // todo for testing purposes
+        SpriteRenderer* testSpr = new SpriteRenderer();
+        testSpr->sprite.texture = new Texture();
+        testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
+        testSpr->sprite.width = testSpr->sprite.texture->width;
+        testSpr->sprite.height = testSpr->sprite.texture->height;
+        testSpr->gameObject = new GameObject();
+        testSpr->gameObject->transform.pos = {20.0f, 20.0f};
+        testSpr->gameObject->name = "ThisIsATest";
+        testSpr->gameObject->transform.scale = {20.0f, 20.0f};
+        testSpr->gameObject->transform.zIndex = 1;
+        testSpr->start();
+
+        Renderer::add(testSpr);
+        // todo ================================================================
+
         // todo issue might be that none of the sprites have gameObjects with transforms that store the positions it should be renderered at
         for (int i = 0; i < numObjects; ++i) {
             SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
@@ -117,24 +133,6 @@ namespace Dralgeer {
     };
 
     LevelEditorScene::~LevelEditorScene() { delete[] gameObjects; };
-
-    void LevelEditorScene::test() {
-        // todo for testing purposes
-        // todo this code is causing a crash
-        SpriteRenderer* testSpr = new SpriteRenderer();
-        testSpr->sprite.texture = new Texture();
-        testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
-        testSpr->sprite.width = testSpr->sprite.texture->width;
-        testSpr->sprite.height = testSpr->sprite.texture->height;
-        testSpr->gameObject = new GameObject();
-        testSpr->gameObject->transform.pos = {20.0f, 20.0f};
-        testSpr->gameObject->name = "ThisIsATest";
-        testSpr->gameObject->transform.scale = {100.0f, 100.0f};
-        testSpr->gameObject->transform.zIndex = 1;
-        testSpr->start();
-
-        Renderer::add(testSpr);
-    };
 
     void LevelEditorScene::init() {
         camera.pos = glm::vec2(0.0f, 0.0f);

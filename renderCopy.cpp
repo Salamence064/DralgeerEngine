@@ -93,7 +93,7 @@ namespace Dralgeer {
         // allocate space for the vertices
         glGenBuffers(1, &vboID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, MAX_RENDER_VERTICES_LIST_SIZE * sizeof(float), vertices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
         // create the indices buffer
         unsigned int eboID = 0;
@@ -125,9 +125,6 @@ namespace Dralgeer {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 
         // todo used to have VERTEX_SIZE_BYTES for the stride but idt that's correct
-        
-        // todo update in the future to not need to use a stride
-        // todo this will allow for a faster entity component system
 
         // enable the buffer attribute pointers
         glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, 0, 0, 0);
@@ -145,7 +142,8 @@ namespace Dralgeer {
         glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, 0, 0, (GLvoid*) ENTITY_ID_OFFSET);
         glEnableVertexAttribArray(4);
 
-        // unbind the VAO
+        // unbind the VBO and VAO
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
         // free the memory
@@ -163,9 +161,10 @@ namespace Dralgeer {
             }
         }
 
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
-            glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices); // todo make it a subarray of the vertices most likely
         }
 
@@ -188,10 +187,11 @@ namespace Dralgeer {
 
         glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0); // ! not sure if this is right -- probs isn't tbh
 
-        // unbind everything // todo just as a note the GL_ARRAY_BUFFER does not get unbound
+        // unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0); // todo not sure if the GL_ARRAY_BUFFER unbindings are necessary
 
         for (int i = 0; i < numTextures; ++i) { textures[i]->unbind(); }
         shader.detach();
@@ -223,9 +223,6 @@ namespace Dralgeer {
             if (spr->sprite.texture && numTextures < MAX_TEXTURES) {
                 for (int i = 0; i < numTextures; ++i) { if (textures[i] == spr->sprite.texture) { goto ADDED; }}
                 textures[numTextures++] = spr->sprite.texture;
-
-            } else if (numTextures < MAX_TEXTURES) { // todo will remove the logging stuff but this is useful for debugging
-                std::cout << "[INFO] Maximum number of textures reached.";
             }
 
             ADDED:

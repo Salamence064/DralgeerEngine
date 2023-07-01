@@ -174,17 +174,9 @@ namespace Dralgeer {
             // ? Note: OpenGL expects matrices in column major order.
 
             inline void uploadMat4(char const* name, glm::mat4 const &mat) {
-                std::cout << "It is time\n";
                 int loc = glGetUniformLocation(shaderID, name);
-                std::cout << "To construct\n";
                 use(); // make sure it is in use
-                std::cout << "A plan\n";
-
-                std::cout << "Please fucking work: " << mat[0].x << "\n";
-
-                std::cout << "of the ages\n";
                 glUniformMatrix4fv(loc, 1, 0, &mat[0][0]); // todo glm says to do 1, but the actual size is 16
-                std::cout << "Change is coming\n";
             };
             
             inline void uploadMat3(char const* name, glm::mat3 const &mat) {

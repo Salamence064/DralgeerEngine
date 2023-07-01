@@ -65,8 +65,7 @@ namespace Dralgeer {
 
             virtual void init() = 0;
             virtual void imGui() = 0;
-            virtual void test() = 0; // ! purely for debugging
-
+            
 
             // * ====================
             // * Normal Functions
@@ -132,8 +131,6 @@ namespace Dralgeer {
             // * ====================
             // * Normal Functions
             // * ====================
-
-            void test() override;
 
             void init() override;
             void imGui() override;
