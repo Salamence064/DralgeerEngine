@@ -10,6 +10,8 @@ namespace Dralgeer {
     RenderBatch::RenderBatch(RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
     RenderBatch& RenderBatch::operator = (RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
     RenderBatch& RenderBatch::operator = (RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
+    
+    // Do not have to delete the textures as the sprites should take care of that for us.
     RenderBatch::~RenderBatch() { for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }};
 
     inline void RenderBatch::loadVertexProperties(int index) {
@@ -19,7 +21,7 @@ namespace Dralgeer {
         int texID = 0;
         if (sprites[index]->sprite.texture) {
             for (int i = 0; i < numTextures; ++i) {
-                if (textures[i] == *(sprites[index]->sprite.texture)) {
+                if (textures[i] == sprites[index]->sprite.texture) {
                     texID = i + 1;
                     break;
                 }
@@ -164,7 +166,7 @@ namespace Dralgeer {
         // bind textures
         for (int i = 0; i < numTextures; ++i) {
             glActiveTexture(GL_TEXTURE0 + i + 1);
-            textures[i].bind();
+            textures[i]->bind();
         }
 
         shader.uploadIntArr("uTextures", texSlots, 16);
@@ -180,7 +182,7 @@ namespace Dralgeer {
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
 
-        for (int i = 0; i < numTextures; ++i) { textures[i].unbind(); }
+        for (int i = 0; i < numTextures; ++i) { textures[i]->unbind(); }
         shader.detach();
     };
 
@@ -207,8 +209,8 @@ namespace Dralgeer {
             // add texture if the sprite has a texture and we don't already have that texture
             // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
             if (spr->sprite.texture && numTextures < MAX_TEXTURES) {
-                for (int i = 0; i < numTextures; ++i) { if (textures[i] == (*spr->sprite.texture)) { goto ADDED; }}
-                textures[numTextures++] = (*spr->sprite.texture);
+                for (int i = 0; i < numTextures; ++i) { if (textures[i] == spr->sprite.texture) { goto ADDED; }}
+                textures[numTextures++] = spr->sprite.texture;
             }
 
             ADDED:
@@ -220,7 +222,7 @@ namespace Dralgeer {
 
     bool RenderBatch::hasTexture(Texture* tex) const {
         if (!tex) { return 0; }
-        for (int i = 0; i < numTextures; ++i) { if (textures[i] == (*tex)) { return 1; }}
+        for (int i = 0; i < numTextures; ++i) { if (textures[i] == tex) { return 1; }}
         return 0;
     };
 

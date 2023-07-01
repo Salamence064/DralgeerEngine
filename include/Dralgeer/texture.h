@@ -243,8 +243,6 @@ namespace Dralgeer {
             Texture(int width, int height);
 
             void init(std::string const &filepath);
-            inline bool operator == (Texture const &tex) const { return tex.width == width && tex.height == height && tex.texID == texID && tex.filepath == filepath; };
-
             inline void bind() const { glBindTexture(GL_TEXTURE_2D, texID); };
             inline void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); };
 
