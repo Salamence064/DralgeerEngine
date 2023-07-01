@@ -44,7 +44,7 @@ namespace Dralgeer {
             // * ===================
 
             void start(int zIndex);
-            void render();
+            void render(Camera const &cam);
 
             // * Returns true if the SpriteRenderer is successfully destroyed and false if it doesn't exist.
             bool destroyIfExists(SpriteRenderer* spr);
@@ -150,9 +150,9 @@ namespace Dralgeer {
         };
 
         // render each batch
-        inline void render() {
+        inline void render(Camera const &cam) {
             currentShader.use();
-            for (int i = 0; i < numBatches; ++i) { batches[i].render(); }
+            for (int i = 0; i < numBatches; ++i) { batches[i].render(cam); }
         };
     }
 }

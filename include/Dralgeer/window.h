@@ -106,6 +106,7 @@ namespace Dralgeer {
             // initialize scene
             currScene = new LevelEditorScene();
             currScene->init();
+            currScene->test();
         };
 
         inline static void run() {

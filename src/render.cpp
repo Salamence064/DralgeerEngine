@@ -2,6 +2,9 @@
 #include <Zeta2D/zmath2D.h>
 #include <Dralgeer/window.h>
 
+// ! for debugging
+#include <GLM/glm/gtc/type_ptr.hpp>
+
 namespace Dralgeer {
     // * ===============================================
     // * RenderBatch Stuff
@@ -12,7 +15,14 @@ namespace Dralgeer {
     RenderBatch& RenderBatch::operator = (RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
     
     // Do not have to delete the textures as the sprites should take care of that for us.
-    RenderBatch::~RenderBatch() { for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }};
+    RenderBatch::~RenderBatch() {
+        for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }
+
+        // ensure everything is unbound
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    };
 
     inline void RenderBatch::loadVertexProperties(int index) {
         int offset = index * 4 * VERTEX_SIZE;
@@ -140,7 +150,7 @@ namespace Dralgeer {
         delete indices;
     };
 
-    void RenderBatch::render() {
+    void RenderBatch::render(Camera const &cam) {
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {
@@ -151,25 +161,31 @@ namespace Dralgeer {
             }
         }
 
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
-            glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices); // todo make it a subarray of the vertices most likely
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
         // use shader
         Shader shader = Renderer::currentShader;
-        shader.uploadMat4("uProjection", Window::currScene->camera.proj);
-        shader.uploadMat4("uView", Window::currScene->camera.view);
+        std::cout << "Greetings\n";
+        std::cout << "WHAT THE FUCKKKK: " << cam.proj[0].x << "\n";
+        shader.uploadMat4("uProjection", cam.proj);
+        std::cout << "hi\n";
+        shader.uploadMat4("uView", cam.view);
+        std::cout << "hello once again\n";
 
         // bind textures
-        for (int i = 0; i < numTextures; ++i) {
-            glActiveTexture(GL_TEXTURE0 + i + 1);
-            textures[i]->bind();
-        }
+        // for (int i = 0; i < numTextures; ++i) {
+        //     glActiveTexture(GL_TEXTURE0 + i + 1);
+        //     textures[i]->bind();
+        // }
 
         shader.uploadIntArr("uTextures", texSlots, 16);
+
+        std::cout << "Shader is cool\n";
 
         glBindVertexArray(vaoID);
         glEnableVertexAttribArray(0);
@@ -181,9 +197,12 @@ namespace Dralgeer {
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0); // todo not sure if the GL_ARRAY_BUFFER unbindings are necessary
 
-        for (int i = 0; i < numTextures; ++i) { textures[i]->unbind(); }
+        // for (int i = 0; i < numTextures; ++i) { textures[i]->unbind(); }
         shader.detach();
+
+        std::cout << "Reached end of Renderer::Render()\n";
     };
 
      bool RenderBatch::destroyIfExists(SpriteRenderer* spr) {
@@ -204,7 +223,8 @@ namespace Dralgeer {
 
     void RenderBatch::addSprite(SpriteRenderer* spr) {
         if (numSprites < MAX_RENDER_BATCH_SIZE) {
-            sprites[numSprites++] = spr;
+            sprites[numSprites] = spr;
+            sprites[numSprites]->isDirty = 0;
 
             // add texture if the sprite has a texture and we don't already have that texture
             // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
@@ -216,7 +236,7 @@ namespace Dralgeer {
             ADDED:
 
             // add properties to local vertices array
-            loadVertexProperties(numSprites - 1);
+            loadVertexProperties(numSprites++);
         }
     };
 

@@ -4,6 +4,7 @@
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/assetpool.h>
 
+
 // ! What we've ruled out
     // texCords are properly assigned
     // width and height of the sprites are properly assigned
@@ -52,22 +53,6 @@ namespace Dralgeer {
                 delete temp; // ! this is probably right
             }
         }
-
-        // todo for testing purposes
-        // todo this code is causing a crash
-        SpriteRenderer* testSpr = new SpriteRenderer();
-        testSpr->sprite.texture = new Texture();
-        testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
-        testSpr->sprite.width = testSpr->sprite.texture->width;
-        testSpr->sprite.height = testSpr->sprite.texture->height;
-        testSpr->gameObject = new GameObject();
-        testSpr->gameObject->transform.pos = {20.0f, 20.0f};
-        testSpr->gameObject->name = "ThisIsATest";
-        testSpr->gameObject->transform.scale = {100.0f, 100.0f};
-        testSpr->gameObject->transform.zIndex = 1;
-        testSpr->start();
-
-        Renderer::add(testSpr);
     };
 
     LevelEditorScene::LevelEditorScene() {
@@ -133,10 +118,29 @@ namespace Dralgeer {
 
     LevelEditorScene::~LevelEditorScene() { delete[] gameObjects; };
 
+    void LevelEditorScene::test() {
+        // todo for testing purposes
+        // todo this code is causing a crash
+        SpriteRenderer* testSpr = new SpriteRenderer();
+        testSpr->sprite.texture = new Texture();
+        testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
+        testSpr->sprite.width = testSpr->sprite.texture->width;
+        testSpr->sprite.height = testSpr->sprite.texture->height;
+        testSpr->gameObject = new GameObject();
+        testSpr->gameObject->transform.pos = {20.0f, 20.0f};
+        testSpr->gameObject->name = "ThisIsATest";
+        testSpr->gameObject->transform.scale = {100.0f, 100.0f};
+        testSpr->gameObject->transform.zIndex = 1;
+        testSpr->start();
+
+        Renderer::add(testSpr);
+    };
+
     void LevelEditorScene::init() {
         camera.pos = glm::vec2(0.0f, 0.0f);
-        camera.adjustView();
         camera.adjustProjection();
+        camera.adjustView();
+
         loadResources();
 
         // load sprite sheet

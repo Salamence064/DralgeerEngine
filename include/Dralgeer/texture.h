@@ -11,6 +11,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GLM/glm/glm.hpp>
+#include <GLM/glm/gtc/type_ptr.hpp>
 
 namespace Dralgeer {
     class Shader {
@@ -173,12 +174,17 @@ namespace Dralgeer {
             // ? Note: OpenGL expects matrices in column major order.
 
             inline void uploadMat4(char const* name, glm::mat4 const &mat) {
+                std::cout << "It is time\n";
                 int loc = glGetUniformLocation(shaderID, name);
+                std::cout << "To construct\n";
                 use(); // make sure it is in use
+                std::cout << "A plan\n";
 
-                float buffer[16];
-                for (int i = 0; i < 4; ++i) { for (int j = 0; j < 4; ++j) { buffer[4*i + j] = mat[j][i]; }}
-                glUniformMatrix4fv(loc, 16, 0, buffer);
+                std::cout << "Please fucking work: " << mat[0].x << "\n";
+
+                std::cout << "of the ages\n";
+                glUniformMatrix4fv(loc, 1, 0, &mat[0][0]); // todo glm says to do 1, but the actual size is 16
+                std::cout << "Change is coming\n";
             };
             
             inline void uploadMat3(char const* name, glm::mat3 const &mat) {
@@ -187,7 +193,7 @@ namespace Dralgeer {
 
                 float buffer[9];
                 for (int i = 0; i < 3; ++i) { for (int j = 0; j < 3; ++j) { buffer[3*i + j] = mat[j][i]; }}
-                glUniformMatrix3fv(loc, 9, 0, buffer);
+                glUniformMatrix3fv(loc, 1, 0, &mat[0][0]);
             };
 
             inline void uploadVec4(char const* name, glm::vec4 const &vec) {

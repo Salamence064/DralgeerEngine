@@ -65,6 +65,7 @@ namespace Dralgeer {
 
             virtual void init() = 0;
             virtual void imGui() = 0;
+            virtual void test() = 0; // ! purely for debugging
 
 
             // * ====================
@@ -100,7 +101,7 @@ namespace Dralgeer {
             };
 
             void update(float dt);
-            inline void render() { Renderer::render(); };
+            inline void render() { Renderer::render(camera); };
             inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i]->destory(); }};
     };
 
@@ -131,6 +132,8 @@ namespace Dralgeer {
             // * ====================
             // * Normal Functions
             // * ====================
+
+            void test() override;
 
             void init() override;
             void imGui() override;
