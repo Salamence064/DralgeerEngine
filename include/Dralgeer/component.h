@@ -175,7 +175,7 @@ namespace Dralgeer {
 
             ~SpriteRenderer();
 
-            inline void start() override;
+            inline void start() override { lastTransform = gameObject->transform; };
             void update(float dt) override;
 
             // Create a color picker for the sprites.

@@ -81,9 +81,11 @@ namespace Dralgeer {
                 return;
             }
 
-            RenderBatch newBatch;
-            newBatch.start(spr->gameObject->transform.zIndex);
-            newBatch.addSprite(spr);
+            if (!numBatches) {
+                batches[numBatches].start(spr->gameObject->transform.zIndex);
+                batches[numBatches++].addSprite(spr);
+                return;
+            }
 
             // determine the spot to put the new render batch in so that batches are sorted based on zIndex
             // this uses a modified binary search
@@ -91,31 +93,33 @@ namespace Dralgeer {
             int index = numBatches/2;
 
             for(;;) {
-                if (newBatch.zIndex < batches[index].zIndex) { // shift to look through lower half
+                if (spr->gameObject->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
                     max = index - 1;
 
                     if (min == max) { // check if we have determined where to place the RenderBatch
                         int j;                    
-                        if (newBatch.zIndex < batches[min].zIndex) { j = min; }
+                        if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
                         else { j = min + 1; }
 
                         for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-                        batches[j] = newBatch;
+                        batches[j].start(spr->gameObject->transform.zIndex);
+                        batches[j].addSprite(spr);
                         break;
                     }
 
                     index = (max + min)/2;
 
-                } else if (newBatch.zIndex > batches[index].zIndex) { // shift to look through upper half
+                } else if (spr->gameObject->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
                     min = index + 1;
 
                     if (min == max) { // check if we have determined where to place the RenderBatch
                         int j;                    
-                        if (newBatch.zIndex < batches[min].zIndex) { j = min; }
+                        if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
                         else { j = min + 1; }
 
                         for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-                        batches[j] = newBatch;
+                        batches[j].start(spr->gameObject->transform.zIndex);
+                        batches[j].addSprite(spr);
                         break;
                     }
 
@@ -123,7 +127,9 @@ namespace Dralgeer {
 
                 } else { // add it to the index + 1 spot as they are the same zIndex
                     for (int i = numBatches; i > index + 1; --i) { batches[i] = batches[i - 1]; }
-                    batches[index + 1] = newBatch;
+                    index++;
+                    batches[index].start(spr->gameObject->transform.zIndex);
+                    batches[index].addSprite(spr);
                     break;
                 }
             }

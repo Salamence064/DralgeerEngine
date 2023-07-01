@@ -42,14 +42,32 @@ namespace Dralgeer {
 
         // todo add gizmos
 
+        // todo issue might be that none of the sprites have gameObjects with transforms that store the positions it should be renderered at
         for (int i = 0; i < numObjects; ++i) {
             SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
             if (spr && spr->sprite.texture) {
                 Texture* temp = spr->sprite.texture;
-                spr->sprite.texture = new Texture(*(AssetPool::getTexture(temp->filepath))); // todo may not need to dereference and just pass it to the thing directly
-                delete temp;
+                // todo if this doesn't work try playing around with making it a new Texture from dereferenced or just assigning it directly
+                spr->sprite.texture = AssetPool::getTexture(temp->filepath);
+                delete temp; // ! this is probably right
             }
         }
+
+        // todo for testing purposes
+        // todo this code is causing a crash
+        SpriteRenderer* testSpr = new SpriteRenderer();
+        testSpr->sprite.texture = new Texture();
+        testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
+        testSpr->sprite.width = testSpr->sprite.texture->width;
+        testSpr->sprite.height = testSpr->sprite.texture->height;
+        testSpr->gameObject = new GameObject();
+        testSpr->gameObject->transform.pos = {20.0f, 20.0f};
+        testSpr->gameObject->name = "ThisIsATest";
+        testSpr->gameObject->transform.scale = {100.0f, 100.0f};
+        testSpr->gameObject->transform.zIndex = 1;
+        testSpr->start();
+
+        Renderer::add(testSpr);
     };
 
     LevelEditorScene::LevelEditorScene() {
@@ -122,6 +140,7 @@ namespace Dralgeer {
         loadResources();
 
         // load sprite sheet
+        // todo could try making the sprites thing a pointer just to see
         sprites = *(AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png"));
 
         components.name = "LevelEditor";

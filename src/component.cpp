@@ -109,9 +109,7 @@ namespace Dralgeer {
     // * ====================
     // * Normal Functions
     // * ====================
-
-    inline void SpriteRenderer::start() { lastTransform = gameObject->transform; };
-
+    
     void SpriteRenderer::update(float dt) {
         if (lastTransform != gameObject->transform) {
             gameObject->transform = lastTransform;
@@ -321,7 +319,7 @@ namespace Dralgeer {
         int horzLines = ((int) (cam.projSize.y * cam.zoom)/GRID_HEIGHT) + 2;
 
         int maxLines = MAX(vertLines, horzLines);
-        glm::vec3 color(0.2f, 0.2f, 0.2f);
+        glm::vec3 color(0.9f, 0.9f, 0.9f);
 
         for (int i = 0; i < maxLines; ++i) {
             int x = firstX + i*GRID_WIDTH;

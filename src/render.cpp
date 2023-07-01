@@ -81,7 +81,7 @@ namespace Dralgeer {
         // allocate space for the vertices
         glGenBuffers(1, &vboID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, MAX_RENDER_VERTICES_LIST_SIZE, vertices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
         // create the indices buffer
         unsigned int eboID = 0;
@@ -90,8 +90,8 @@ namespace Dralgeer {
         // * --------- Generate the indices ---------
 
         int offset = 0;
-        const int size = 6 * MAX_RENDER_BATCH_SIZE;
-        int indices[size];
+        int size = 6 * numSprites;
+        int* indices = new int[size];
         for (int index = 0; index < size; index += 6) {
             // triangle 1
             indices[index] = offset + 3;
@@ -110,25 +110,32 @@ namespace Dralgeer {
 
         // upload the indices buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW); // ! might need to pass the subarray (most likely do)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 
-        // todo if an error arises it's likely due to the pointer casting stuff
+        // todo used to have VERTEX_SIZE_BYTES for the stride but idt that's correct
 
         // enable the buffer attribute pointers
-        glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, 0, VERTEX_SIZE_BYTES, 0);
+        glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, 0, 0, 0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (int*) COLOR_OFFSET);
+        glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, 0, 0, (GLvoid*) COLOR_OFFSET);
         glEnableVertexAttribArray(1);
 
-        glVertexAttribPointer(2, TEX_CORDS_SIZE, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (int*) TEX_CORDS_OFFSET);
+        glVertexAttribPointer(2, TEX_CORDS_SIZE, GL_FLOAT, 0, 0, (GLvoid*) TEX_CORDS_OFFSET);
         glEnableVertexAttribArray(2);
 
-        glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (int*) TEX_ID_OFFSET);
+        glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, 0, 0, (GLvoid*) TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
 
-        glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (int*) ENTITY_ID_OFFSET);
+        glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, 0, 0, (GLvoid*) ENTITY_ID_OFFSET);
         glEnableVertexAttribArray(4);
+
+        // unbind the VBO and VAO
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+        // free the memory
+        delete indices;
     };
 
     void RenderBatch::render() {
@@ -146,6 +153,7 @@ namespace Dralgeer {
         if (rebuffer) {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices); // todo make it a subarray of the vertices most likely
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
         // use shader
