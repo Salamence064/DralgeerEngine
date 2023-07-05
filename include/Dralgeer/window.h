@@ -93,7 +93,7 @@ namespace Dralgeer {
 
             // enable alpha blending
             glEnable(GL_BLEND);
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             // frame buffer config
             frameBuffer.init(1920, 1080);
@@ -117,7 +117,7 @@ namespace Dralgeer {
             // DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
-            Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
+            // Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {

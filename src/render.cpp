@@ -62,25 +62,41 @@ namespace Dralgeer {
             // load position
             vertices[offset] = currPos.x;
             vertices[offset + 1] = currPos.y;
+            vertices[offset + 2] = zIndex;
 
             // load color
-            vertices[offset + 2] = sprites[index]->color.x;
-            vertices[offset + 3] = sprites[index]->color.y;
-            vertices[offset + 4] = sprites[index]->color.z;
-            vertices[offset + 5] = sprites[index]->color.w;
+            vertices[offset + 3] = sprites[index]->color.x;
+            vertices[offset + 4] = sprites[index]->color.y;
+            vertices[offset + 5] = sprites[index]->color.z;
+            vertices[offset + 6] = sprites[index]->color.w;
 
             // load texture coords
-            vertices[offset + 6] = sprites[index]->sprite.texCords[i].x;
-            vertices[offset + 7] = sprites[index]->sprite.texCords[i].y;
+            vertices[offset + 7] = sprites[index]->sprite.texCords[i].x;
+            vertices[offset + 8] = sprites[index]->sprite.texCords[i].y;
 
             // load texture IDs
-            vertices[offset + 8] = texID;
+            vertices[offset + 9] = texID;
 
             // load entity IDs
-            vertices[offset + 9] = sprites[index]->gameObject->id + 1;
+            // vertices[offset + 9] = sprites[index]->gameObject->id + 1;
 
             offset += VERTEX_SIZE;
         }
+    };
+
+    inline void RenderBatch::loadElementIndices(unsigned int indices[], int index) {
+        int iOffset = 6 * index;
+        int offset = 4 * index;
+
+        // triangle 1
+        indices[iOffset] = offset;
+        indices[iOffset + 1] = offset + 1;
+        indices[iOffset + 2] = offset + 2;
+        
+        // triangle 2
+        indices[iOffset + 3] = offset + 2;
+        indices[iOffset + 4] = offset + 3;
+        indices[iOffset + 5] = offset; 
     };
 
     void RenderBatch::start(int zIndex) {
@@ -90,66 +106,46 @@ namespace Dralgeer {
         glGenVertexArrays(1, &vaoID);
         glBindVertexArray(vaoID);
 
+        // Generate the vertices
+        for (int i = 0; i < VERTEX_SIZE * numSprites; ++i) { loadVertexProperties(i); }
+
         // allocate space for the vertices
         glGenBuffers(1, &vboID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, MAX_RENDER_VERTICES_LIST_SIZE * sizeof(float), vertices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-        // create the indices buffer
-        unsigned int eboID = 0;
-        glGenBuffers(1, &eboID);
-        
         // * --------- Generate the indices ---------
 
-        int offset = 0;
-        int size = 6 * numSprites;
-        int* indices = new int[size];
-        for (int index = 0; index < size; index += 6) {
-            // triangle 1
-            indices[index] = offset + 3;
-            indices[index + 1] = offset + 2;
-            indices[index + 2] = offset;
+        int offset = 0, size = 6 * numSprites;
+        for (int i = 0; i < size; i += 6) {
+            indices[i] = offset;
+            indices[i + 1] = offset + 1;
+            indices[i + 2] = offset + 2;
 
-            // triangle 2
-            indices[index + 3] = offset;
-            indices[index + 4] = offset + 2;
-            indices[index + 5] = offset + 1;
+            indices[i + 3] = offset + 2;
+            indices[i + 4] = offset + 3;
+            indices[i + 5] = offset;
 
             offset += 4;
         }
 
         // * ----------------------------------------
 
-        // upload the indices buffer
+        unsigned int eboID;
+        glGenBuffers(1, &eboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 
-        // todo used to have VERTEX_SIZE_BYTES for the stride but idt that's correct
-        
-        // todo update in the future to not need to use a stride
-        // todo this will allow for a faster entity component system
+        // todo add in glVertexAttribPointer for the gameObjectID after the rest of this stuff works
 
-        // enable the buffer attribute pointers
-        glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, 0, 0, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
+        glVertexAttribPointer(1, 4, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) COLOR_OFFSET);
+        glVertexAttribPointer(2, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_COORDS_OFFSET);
+        glVertexAttribPointer(3, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
         glEnableVertexAttribArray(0);
-
-        glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, 0, 0, (GLvoid*) COLOR_OFFSET);
         glEnableVertexAttribArray(1);
-
-        glVertexAttribPointer(2, TEX_CORDS_SIZE, GL_FLOAT, 0, 0, (GLvoid*) TEX_CORDS_OFFSET);
         glEnableVertexAttribArray(2);
-
-        glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, 0, 0, (GLvoid*) TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
-
-        glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, 0, 0, (GLvoid*) ENTITY_ID_OFFSET);
-        glEnableVertexAttribArray(4);
-
-        // unbind the VAO
-        glBindVertexArray(0);
-
-        // free the memory
-        delete indices;
     };
 
     void RenderBatch::render(Camera const &cam) {
@@ -166,7 +162,7 @@ namespace Dralgeer {
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices); // todo make it a subarray of the vertices most likely
+            glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices);
         }
 
         // use shader
@@ -186,9 +182,9 @@ namespace Dralgeer {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
 
-        glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0); // ! not sure if this is right -- probs isn't tbh
+        glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
 
-        // unbind everything // todo just as a note the GL_ARRAY_BUFFER does not get unbound
+        // unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
@@ -231,7 +227,9 @@ namespace Dralgeer {
             ADDED:
 
             // add properties to local vertices array
-            loadVertexProperties(numSprites++);
+            loadVertexProperties(numSprites);
+            loadElementIndices(indices, numSprites);
+            ++numSprites;
         }
     };
 
