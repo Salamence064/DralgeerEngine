@@ -29,15 +29,15 @@
     in vec2 fTextCords;
     in float fTexId;
 
-    out vec4 color;
+    out vec4 FragColor;
 
     void main() {
         if (fTexId > 0) {
             int id  = int (fTexId);
-            color = fColor * texture(uTextures[id], fTextCords);
+            FragColor = fColor * texture(uTextures[id], fTextCords);
 
         } else {
-            color = fColor;
+            FragColor = fColor;
         }
     }
 

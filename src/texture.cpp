@@ -36,7 +36,7 @@ namespace Dralgeer {
 
         // * load the image
         int width, height, channels;
-        stbi_set_flip_vertically_on_load(1);
+        // stbi_set_flip_vertically_on_load(1);
         unsigned char* image = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 
         if (image) {
@@ -46,9 +46,11 @@ namespace Dralgeer {
             // upload image to the GPU
             if (channels == 3) { // RGB
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+                glGenerateMipmap(GL_TEXTURE_2D);
 
             } else if (channels == 4) { // RGBA
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+                glGenerateMipmap(GL_TEXTURE_2D);
 
             } else {
                 stbi_image_free(image);
@@ -61,6 +63,5 @@ namespace Dralgeer {
         }
 
         stbi_image_free(image);
-        glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
     };
 }
