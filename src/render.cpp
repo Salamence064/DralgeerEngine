@@ -159,14 +159,19 @@ namespace Dralgeer {
             }
         }
 
+        // todo it doesn't quite work yet :sob:
+
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices);
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 6*numSprites, indices); // todo this is likely part of the issue
         }
 
         // use shader
         Shader shader = Renderer::currentShader;
+        shader.use();
+
         shader.uploadMat4("uProjection", cam.proj);
         shader.uploadMat4("uView", cam.view);
 
