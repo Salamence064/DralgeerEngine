@@ -84,7 +84,7 @@ namespace Dralgeer {
         }
     };
 
-    inline void RenderBatch::loadElementIndices(unsigned int indices[], int index) {
+    inline void RenderBatch::loadElementIndices(int index) {
         int iOffset = 6 * index;
         int offset = 4 * index;
 
@@ -112,7 +112,7 @@ namespace Dralgeer {
         // allocate space for the vertices
         glGenBuffers(1, &vboID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
         // * --------- Generate the indices ---------
 
@@ -134,7 +134,7 @@ namespace Dralgeer {
         unsigned int eboID;
         glGenBuffers(1, &eboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
 
         // todo add in glVertexAttribPointer for the gameObjectID after the rest of this stuff works
 
@@ -149,6 +149,8 @@ namespace Dralgeer {
     };
 
     void RenderBatch::render(Camera const &cam) {
+        // todo now set up some default thing it draws and work the camera into it
+
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {
@@ -159,14 +161,17 @@ namespace Dralgeer {
             }
         }
 
-        // todo it doesn't quite work yet :sob:
-
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, MAX_RENDER_VERTICES_LIST_SIZE, vertices);
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 6*numSprites, indices); // todo this is likely part of the issue
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(indices), indices);
         }
+
+        // bind everything
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
         // use shader
         Shader shader = Renderer::currentShader;
@@ -177,25 +182,20 @@ namespace Dralgeer {
 
         // bind textures
         for (int i = 0; i < numTextures; ++i) {
-            glActiveTexture(GL_TEXTURE0 + i + 1);
+            glActiveTexture(GL_TEXTURE0 + i);
             textures[i]->bind();
         }
 
-        shader.uploadIntArr("uTextures", texSlots, 16);
-
-        glBindVertexArray(vaoID);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
+        shader.uploadIntArr("uTexture", texSlots, 16);
 
         glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
+
+        shader.detach();
 
         // unbind everything
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
-
-        for (int i = 0; i < numTextures; ++i) { textures[i]->unbind(); }
-        shader.detach();
     };
 
      bool RenderBatch::destroyIfExists(SpriteRenderer* spr) {
@@ -217,7 +217,7 @@ namespace Dralgeer {
     void RenderBatch::addSprite(SpriteRenderer* spr) {
         if (numSprites < MAX_RENDER_BATCH_SIZE) {
             sprites[numSprites] = spr;
-            sprites[numSprites]->isDirty = 0;
+            sprites[numSprites]->isDirty = 1;
 
             // add texture if the sprite has a texture and we don't already have that texture
             // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
@@ -233,7 +233,7 @@ namespace Dralgeer {
 
             // add properties to local vertices array
             loadVertexProperties(numSprites);
-            loadElementIndices(indices, numSprites);
+            loadElementIndices(numSprites);
             ++numSprites;
         }
     };

@@ -19,7 +19,7 @@ namespace Dralgeer {
             // * Helper to just make the code easier to read and debug.
             // * Will probs be moved directly into the code in the end.
             inline void loadVertexProperties(int index);
-            inline void loadElementIndices(unsigned int indices[], int index);
+            inline void loadElementIndices(int index);
 
         public:
             int zIndex; // zIndex of the RenderBatch

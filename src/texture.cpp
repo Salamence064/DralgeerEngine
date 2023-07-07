@@ -18,7 +18,7 @@ namespace Dralgeer {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     };
 
-    void Texture::init(std::string const &filepath) { // todo issue may arrise from here
+    void Texture::init(std::string const &filepath) { // todo the issue likely has to do with how I bind it in the renderer
         this->filepath = filepath;
 
         // generate texture on the GPU
@@ -35,14 +35,10 @@ namespace Dralgeer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         // * load the image
-        int width, height, channels;
-        // stbi_set_flip_vertically_on_load(1);
+        int channels;
         unsigned char* image = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 
         if (image) {
-            this->width = width;
-            this->height = height;
-
             // upload image to the GPU
             if (channels == 3) { // RGB
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
