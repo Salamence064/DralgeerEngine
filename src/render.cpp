@@ -89,23 +89,23 @@ namespace Dralgeer {
         }
     };
 
-    inline void RenderBatch::loadElementIndices(int index) {
-        int iOffset = 6 * index;
-        int offset = 4 * index;
+    // inline void RenderBatch::loadElementIndices(int index) {
+    //     int iOffset = 6 * index;
+    //     int offset = 4 * index;
 
-        // triangle 1
-        indices[iOffset] = offset;
-        indices[iOffset + 1] = offset + 1;
-        indices[iOffset + 2] = offset + 2;
+    //     // triangle 1
+    //     indices[iOffset] = offset;
+    //     indices[iOffset + 1] = offset + 1;
+    //     indices[iOffset + 2] = offset + 2;
         
-        // triangle 2
-        indices[iOffset + 3] = offset + 2;
-        indices[iOffset + 4] = offset + 3;
-        indices[iOffset + 5] = offset;
+    //     // triangle 2
+    //     indices[iOffset + 3] = offset + 2;
+    //     indices[iOffset + 4] = offset + 3;
+    //     indices[iOffset + 5] = offset;
 
-        // std::cout << "\nIndices:\n" << indices[0] << ", " << indices[1] << ", " << indices[2] << "\n";
-        // std::cout << indices[3] << ", " << indices[4] << ", " << indices[5] << "\n\n";
-    };
+    //     // std::cout << "\nIndices:\n" << indices[0] << ", " << indices[1] << ", " << indices[2] << "\n";
+    //     // std::cout << indices[3] << ", " << indices[4] << ", " << indices[5] << "\n\n";
+    // };
 
     void RenderBatch::start(int zIndex) {
         this->zIndex = zIndex;
@@ -121,10 +121,28 @@ namespace Dralgeer {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
+        // * ------ Generate the Indices ------
+
+        unsigned int indices[MAX_RENDER_INDICES_LIST_SIZE];
+        int offset = 0;
+        for (int i = 0; i < MAX_RENDER_INDICES_LIST_SIZE; i += 6) {
+            indices[i] = offset;
+            indices[i + 1] = offset + 1;
+            indices[i + 2] = offset + 2;
+            
+            indices[i + 3] = offset + 2;
+            indices[i + 4] = offset + 3;
+            indices[i + 5] = offset;
+
+            offset += 4;
+        }
+
+        // * ----------------------------------
+
         unsigned int eboID;
         glGenBuffers(1, &eboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         // todo add in glVertexAttribPointer for the gameObjectID after the rest of this stuff works
 
@@ -148,27 +166,23 @@ namespace Dralgeer {
     void RenderBatch::render(Camera const &cam) {
         // todo it feels like the issue occurs with the rebuffering
 
+        // bind everything
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {
             if (sprites[i]->isDirty) {
                 loadVertexProperties(i);
-                loadElementIndices(i);
                 sprites[i]->isDirty = 0;
                 rebuffer = 1;
             }
         }
 
         // rebuffer data if any of the sprites are dirty
-        if (rebuffer) {
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(indices), indices);
-        }
-
-        // bind everything
-        glBindVertexArray(vaoID);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
+        if (rebuffer) { glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); }
 
         // use shader
         Renderer::currentShader.use();
@@ -192,7 +206,7 @@ namespace Dralgeer {
 
         Renderer::currentShader.uploadIntArr("uTexture", texSlots, 16);
 
-        glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6/**numSprites*/, GL_UNSIGNED_INT, 0);
 
         Renderer::currentShader.detach();
 

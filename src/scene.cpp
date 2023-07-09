@@ -4,14 +4,6 @@
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/assetpool.h>
 
-
-// ! What we've ruled out
-    // texCords are properly assigned
-    // width and height of the sprites are properly assigned
-
-// ! Issue must either be with the ImGui function (don't think it is)
-// !  or with something within the texture class itself (more likely)
-
 namespace Dralgeer {
     // * ================================================
     // * Abstract Scene Class
