@@ -34,8 +34,6 @@ namespace Dralgeer {
     // * LevelEditorScene
 
     inline void LevelEditorScene::loadResources() {
-        AssetPool::getShader("../../assets/shaders/default.glsl");
-
         SpriteSheet* spr = new SpriteSheet();
         spr->init(AssetPool::getTexture("../../assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
 
@@ -44,19 +42,20 @@ namespace Dralgeer {
         // todo add gizmos
 
         // todo for testing purposes
-        // SpriteRenderer* testSpr = new SpriteRenderer();
-        // testSpr->sprite.texture = new Texture();
-        // testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
-        // testSpr->sprite.width = testSpr->sprite.texture->width;
-        // testSpr->sprite.height = testSpr->sprite.texture->height;
-        // testSpr->gameObject = new GameObject();
-        // testSpr->gameObject->transform.pos = {20.0f, 20.0f};
-        // testSpr->gameObject->name = "ThisIsATest";
-        // testSpr->gameObject->transform.scale = {20.0f, 20.0f};
-        // testSpr->gameObject->transform.zIndex = 1;
-        // testSpr->start();
+        SpriteRenderer* testSpr = new SpriteRenderer();
+        testSpr->sprite.texture = new Texture();
+        testSpr->sprite.texture->init("../../assets/images/wall.jpg");
+        testSpr->sprite.width = testSpr->sprite.texture->width;
+        testSpr->sprite.height = testSpr->sprite.texture->height;
+        testSpr->color = {0.8824f, 0.0039f, 0.0039f, 1.0f};
+        testSpr->gameObject = new GameObject();
+        testSpr->gameObject->transform.pos = {100.0f, 100.0f};
+        testSpr->gameObject->name = "ThisIsATest";
+        testSpr->gameObject->transform.scale = {300.0f, 300.0f};
+        testSpr->gameObject->transform.zIndex = 1;
+        testSpr->start();
 
-        // Renderer::add(testSpr);
+        Renderer::add(testSpr);
         // todo ================================================================
 
         // todo issue might be that none of the sprites have gameObjects with transforms that store the positions it should be renderered at
@@ -143,6 +142,7 @@ namespace Dralgeer {
 
         // load sprite sheet
         // todo could try making the sprites thing a pointer just to see
+        // todo sprites in the spritesheet never get added to the renderer (don't think that's the issue but could be worth trying)
         sprites = *(AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png"));
 
         components.name = "LevelEditor";

@@ -32,7 +32,7 @@
     out vec4 FragColor;
 
     void main() {
-        if (fTexId > 0) {
+        if (fTexId >= 0) {
             int id  = int (fTexId);
             FragColor = fColor * texture(uTexture[id], fTextCords);
 

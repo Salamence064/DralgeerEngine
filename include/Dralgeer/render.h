@@ -9,6 +9,22 @@
 namespace Dralgeer {
     class RenderBatch {
         private:
+            // ! debugging
+            float test[40] = {
+                // first texture
+                // positions            colors                                tex coords       texID
+                500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
+                500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
+                200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
+                200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
+            };
+
+            int testI[6] = {
+                0, 1, 2,
+                2, 3, 0
+            };
+            // ! ------------------------------------------------
+
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE];
             unsigned int indices[MAX_RENDER_INDICES_LIST_SIZE];
@@ -25,6 +41,9 @@ namespace Dralgeer {
             int zIndex; // zIndex of the RenderBatch
             int numSprites = 0;
             int numTextures = 0;
+
+            // ! for debugging
+            bool firstTime = 1;
 
             RenderBatch() {};
 
@@ -66,87 +85,89 @@ namespace Dralgeer {
         // todo also potentially could be from the stbi_load function not loading it properly
 
         inline void add(SpriteRenderer* spr) {
-            // if (!spr) { return; }
+            // todo test to make sure this part of it works
 
-            // for (int i = 0; i < numBatches; ++i) {
-            //     // todo this last line of the conditional might be wrong
-            //     if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->gameObject->transform.zIndex &&
-            //             spr->sprite.texture && !batches[i].hasTexture(spr->sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
+            if (!spr) { return; }
+
+            for (int i = 0; i < numBatches; ++i) {
+                // todo this last line of the conditional might be wrong
+                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->gameObject->transform.zIndex &&
+                        spr->sprite.texture && !batches[i].hasTexture(spr->sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
                     
-            //         batches[i].addSprite(spr);
-            //         return;
-            //     }
-            // }
+                    batches[i].addSprite(spr);
+                    return;
+                }
+            }
 
-            // if (numBatches >= MAX_RENDER_BATCHES) { // cannot exceed the max number of render batches
-            //     std::cout << "[INFO] SpriteRenderer could not be added as the max number of RenderBatches has been reached.\n";
-            //     return;
-            // }
+            if (numBatches >= MAX_RENDER_BATCHES) { // cannot exceed the max number of render batches
+                std::cout << "[INFO] SpriteRenderer could not be added as the max number of RenderBatches has been reached.\n";
+                return;
+            }
 
-            // if (!numBatches) {
-            //     batches[numBatches].start(spr->gameObject->transform.zIndex);
-            //     batches[numBatches++].addSprite(spr);
-            //     return;
-            // }
+            if (!numBatches) {
+                batches[numBatches].start(spr->gameObject->transform.zIndex);
+                batches[numBatches].addSprite(spr);
+                numBatches++; // todo add back to the previous statement after we get this working
+                return;
+            }
 
-            // // determine the spot to put the new render batch in so that batches are sorted based on zIndex
-            // // this uses a modified binary search
-            // int min = 0, max = numBatches;
-            // int index = numBatches/2;
+            // determine the spot to put the new render batch in so that batches are sorted based on zIndex
+            // this uses a modified binary search
+            int min = 0, max = numBatches;
+            int index = numBatches/2;
 
-            // for(;;) {
-            //     if (spr->gameObject->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
-            //         max = index - 1;
+            for(;;) {
+                if (spr->gameObject->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
+                    max = index - 1;
 
-            //         if (min == max) { // check if we have determined where to place the RenderBatch
-            //             int j;                    
-            //             if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
-            //             else { j = min + 1; }
+                    if (min == max) { // check if we have determined where to place the RenderBatch
+                        int j;                    
+                        if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
+                        else { j = min + 1; }
 
-            //             for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-            //             batches[j].start(spr->gameObject->transform.zIndex);
-            //             batches[j].addSprite(spr);
-            //             break;
-            //         }
+                        for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
+                        batches[j].start(spr->gameObject->transform.zIndex);
+                        batches[j].addSprite(spr);
+                        break;
+                    }
 
-            //         index = (max + min)/2;
+                    index = (max + min)/2;
 
-            //     } else if (spr->gameObject->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
-            //         min = index + 1;
+                } else if (spr->gameObject->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
+                    min = index + 1;
 
-            //         if (min == max) { // check if we have determined where to place the RenderBatch
-            //             int j;                    
-            //             if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
-            //             else { j = min + 1; }
+                    if (min == max) { // check if we have determined where to place the RenderBatch
+                        int j;                    
+                        if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
+                        else { j = min + 1; }
 
-            //             for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-            //             batches[j].start(spr->gameObject->transform.zIndex);
-            //             batches[j].addSprite(spr);
-            //             break;
-            //         }
+                        for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
+                        batches[j].start(spr->gameObject->transform.zIndex);
+                        batches[j].addSprite(spr);
+                        break;
+                    }
 
-            //         index = (max + min)/2;
+                    index = (max + min)/2;
 
-            //     } else { // add it to the index + 1 spot as they are the same zIndex
-            //         for (int i = numBatches; i > index + 1; --i) { batches[i] = batches[i - 1]; }
-            //         index++;
-            //         batches[index].start(spr->gameObject->transform.zIndex);
-            //         batches[index].addSprite(spr);
-            //         break;
-            //     }
-            // }
+                } else { // add it to the index + 1 spot as they are the same zIndex
+                    for (int i = numBatches; i > index + 1; --i) { batches[i] = batches[i - 1]; }
+                    index++;
+                    batches[index].start(spr->gameObject->transform.zIndex);
+                    batches[index].addSprite(spr);
+                    break;
+                }
+            }
 
-            // numBatches++;
+            numBatches++;
         };
 
-        // ! for testing
-        inline void start() {
-            batches[0].start(0);
-        };
+        // inline void start() {
+        //     batches[0].start(0);
+        // };
 
         inline void add(GameObject const &go) {
-            // SpriteRenderer* spr = (SpriteRenderer*) go.getComponent(SPRITE_RENDERER);
-            // if (spr) { add(spr); }
+            SpriteRenderer* spr = (SpriteRenderer*) go.getComponent(SPRITE_RENDERER);
+            if (spr) { add(spr); }
         };
 
         // destroy a sprite renderer contained in the renderer
