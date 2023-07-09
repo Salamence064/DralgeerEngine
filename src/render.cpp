@@ -2,9 +2,6 @@
 #include <Zeta2D/zmath2D.h>
 #include <Dralgeer/window.h>
 
-// ! for debugging
-#include <GLM/glm/gtc/type_ptr.hpp>
-
 namespace Dralgeer {
     // * ===============================================
     // * RenderBatch Stuff
@@ -107,34 +104,48 @@ namespace Dralgeer {
         glBindVertexArray(vaoID);
 
         // Generate the vertices
-        for (int i = 0; i < VERTEX_SIZE * numSprites; ++i) { loadVertexProperties(i); }
+        // for (int i = 0; i < VERTEX_SIZE * numSprites; ++i) { loadVertexProperties(i); }
+
+        float test[40] = {
+            // first texture
+            // positions            colors                                tex coords       texID
+            500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
+            500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
+            200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
+            200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
+        };
+
+        int testI[6] = {
+            0, 1, 2,
+            2, 3, 0
+        };
 
         // allocate space for the vertices
         glGenBuffers(1, &vboID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(test), test, GL_DYNAMIC_DRAW);
 
         // * --------- Generate the indices ---------
 
-        int offset = 0, size = 6 * numSprites;
-        for (int i = 0; i < size; i += 6) {
-            indices[i] = offset;
-            indices[i + 1] = offset + 1;
-            indices[i + 2] = offset + 2;
+        // int offset = 0, size = 6 * numSprites;
+        // for (int i = 0; i < size; i += 6) {
+        //     indices[i] = offset;
+        //     indices[i + 1] = offset + 1;
+        //     indices[i + 2] = offset + 2;
 
-            indices[i + 3] = offset + 2;
-            indices[i + 4] = offset + 3;
-            indices[i + 5] = offset;
+        //     indices[i + 3] = offset + 2;
+        //     indices[i + 4] = offset + 3;
+        //     indices[i + 5] = offset;
 
-            offset += 4;
-        }
+        //     offset += 4;
+        // }
 
         // * ----------------------------------------
 
         unsigned int eboID;
         glGenBuffers(1, &eboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(testI), testI, GL_DYNAMIC_DRAW);
 
         // todo add in glVertexAttribPointer for the gameObjectID after the rest of this stuff works
 
@@ -146,6 +157,9 @@ namespace Dralgeer {
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         glEnableVertexAttribArray(3);
+
+        textures[0] = new Texture();
+        textures[0]->init("../../assets/images/blendImage1.png");
     };
 
     void RenderBatch::render(Camera const &cam) {
@@ -153,20 +167,20 @@ namespace Dralgeer {
 
         bool rebuffer = 0;
 
-        for (int i = 0; i < numSprites; ++i) {
-            if (sprites[i]->isDirty) {
-                loadVertexProperties(i);
-                sprites[i]->isDirty = 0;
-                rebuffer = 1;
-            }
-        }
+        // for (int i = 0; i < numSprites; ++i) {
+        //     if (sprites[i]->isDirty) {
+        //         loadVertexProperties(i);
+        //         sprites[i]->isDirty = 0;
+        //         rebuffer = 1;
+        //     }
+        // }
 
         // rebuffer data if any of the sprites are dirty
-        if (rebuffer) {
-            glBindBuffer(GL_ARRAY_BUFFER, vboID);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(indices), indices);
-        }
+        // if (rebuffer) {
+        //     glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        //     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        //     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(indices), indices);
+        // }
 
         // bind everything
         glBindVertexArray(vaoID);
@@ -174,11 +188,9 @@ namespace Dralgeer {
         glEnableVertexAttribArray(1);
 
         // use shader
-        Shader shader = Renderer::currentShader;
-        shader.use();
-
-        shader.uploadMat4("uProjection", cam.proj);
-        shader.uploadMat4("uView", cam.view);
+        Renderer::currentShader.use();
+        Renderer::currentShader.uploadMat4("uProjection", cam.proj);
+        Renderer::currentShader.uploadMat4("uView", cam.view);
 
         // bind textures
         for (int i = 0; i < numTextures; ++i) {
@@ -186,11 +198,11 @@ namespace Dralgeer {
             textures[i]->bind();
         }
 
-        shader.uploadIntArr("uTexture", texSlots, 16);
+        Renderer::currentShader.uploadIntArr("uTexture", texSlots, 16);
 
-        glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        shader.detach();
+        Renderer::currentShader.detach();
 
         // unbind everything
         glDisableVertexAttribArray(0);
@@ -215,27 +227,27 @@ namespace Dralgeer {
     };
 
     void RenderBatch::addSprite(SpriteRenderer* spr) {
-        if (numSprites < MAX_RENDER_BATCH_SIZE) {
-            sprites[numSprites] = spr;
-            sprites[numSprites]->isDirty = 1;
+        // if (numSprites < MAX_RENDER_BATCH_SIZE) {
+        //     sprites[numSprites] = spr;
+        //     sprites[numSprites]->isDirty = 1;
 
-            // add texture if the sprite has a texture and we don't already have that texture
-            // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
-            if (spr->sprite.texture && numTextures < MAX_TEXTURES) {
-                for (int i = 0; i < numTextures; ++i) { if (textures[i] == spr->sprite.texture) { goto ADDED; }}
-                textures[numTextures++] = spr->sprite.texture;
+        //     // add texture if the sprite has a texture and we don't already have that texture
+        //     // ensure it is within the max number of textures, too (tbh I think the setup I have for the textures is wrong)
+        //     if (spr->sprite.texture && numTextures < MAX_TEXTURES) {
+        //         for (int i = 0; i < numTextures; ++i) { if (textures[i] == spr->sprite.texture) { goto ADDED; }}
+        //         textures[numTextures++] = spr->sprite.texture;
 
-            } else if (numTextures < MAX_TEXTURES) { // todo will remove the logging stuff but this is useful for debugging
-                std::cout << "[INFO] Maximum number of textures reached.";
-            }
+        //     } else if (numTextures < MAX_TEXTURES) { // todo will remove the logging stuff but this is useful for debugging
+        //         std::cout << "[INFO] Maximum number of textures reached.";
+        //     }
 
-            ADDED:
+        //     ADDED:
 
-            // add properties to local vertices array
-            loadVertexProperties(numSprites);
-            loadElementIndices(numSprites);
-            ++numSprites;
-        }
+        //     // add properties to local vertices array
+        //     loadVertexProperties(numSprites);
+        //     loadElementIndices(numSprites);
+        //     ++numSprites;
+        // }
     };
 
     bool RenderBatch::hasTexture(Texture* tex) const {
@@ -248,7 +260,7 @@ namespace Dralgeer {
 
     namespace Renderer {
         Shader currentShader;
-        RenderBatch batches[MAX_RENDER_BATCHES];
-        int numBatches = 0;
+        RenderBatch batches[MAX_RENDER_BATCHES] = {RenderBatch()}; // ! for debugging
+        int numBatches = 1; // ! for debugging
     }
 }

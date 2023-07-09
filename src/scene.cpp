@@ -44,19 +44,19 @@ namespace Dralgeer {
         // todo add gizmos
 
         // todo for testing purposes
-        SpriteRenderer* testSpr = new SpriteRenderer();
-        testSpr->sprite.texture = new Texture();
-        testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
-        testSpr->sprite.width = testSpr->sprite.texture->width;
-        testSpr->sprite.height = testSpr->sprite.texture->height;
-        testSpr->gameObject = new GameObject();
-        testSpr->gameObject->transform.pos = {20.0f, 20.0f};
-        testSpr->gameObject->name = "ThisIsATest";
-        testSpr->gameObject->transform.scale = {20.0f, 20.0f};
-        testSpr->gameObject->transform.zIndex = 1;
-        testSpr->start();
+        // SpriteRenderer* testSpr = new SpriteRenderer();
+        // testSpr->sprite.texture = new Texture();
+        // testSpr->sprite.texture->init("../../assets/images/blendImage1.png");
+        // testSpr->sprite.width = testSpr->sprite.texture->width;
+        // testSpr->sprite.height = testSpr->sprite.texture->height;
+        // testSpr->gameObject = new GameObject();
+        // testSpr->gameObject->transform.pos = {20.0f, 20.0f};
+        // testSpr->gameObject->name = "ThisIsATest";
+        // testSpr->gameObject->transform.scale = {20.0f, 20.0f};
+        // testSpr->gameObject->transform.zIndex = 1;
+        // testSpr->start();
 
-        Renderer::add(testSpr);
+        // Renderer::add(testSpr);
         // todo ================================================================
 
         // todo issue might be that none of the sprites have gameObjects with transforms that store the positions it should be renderered at

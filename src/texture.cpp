@@ -24,7 +24,6 @@ namespace Dralgeer {
         // generate texture on the GPU
         glGenTextures(1, &texID);
         glBindTexture(GL_TEXTURE_2D, texID);
-
         // * set texture parameters
         // repeat the image in both directions
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
