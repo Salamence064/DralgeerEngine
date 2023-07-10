@@ -24,6 +24,10 @@ namespace Dralgeer {
             return shader;
         };
 
+        inline static void addTexture(std::string const &filepath, Texture* text) {
+            if (textures.find(filepath) == textures.end()) { textures.insert({filepath, text}); }
+        };
+
         inline static Texture* getTexture(std::string const &filepath) {
             if (textures.find(filepath) != textures.end()) { return textures[filepath]; }
 
@@ -47,9 +51,9 @@ namespace Dralgeer {
         };
 
         inline static void destroy() {
-            for (auto const &i : shaders) { delete i.second; }
-            for (auto const &i : textures) { delete i.second; }
-            for (auto const &i : spriteSheets) { delete i.second; }
+            for (auto const &i : shaders) { if (i.second) { delete i.second; }}
+            for (auto const &i : textures) { if (i.second) { delete i.second; }}
+            for (auto const &i : spriteSheets) { if (i.second) { delete i.second; }}
         };
     }
 }

@@ -73,12 +73,7 @@ namespace Dralgeer {
 
         for (int i = 0; i < numObjects; ++i) {
             SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
-            if (spr && spr->sprite.texture) {
-                Texture* temp = spr->sprite.texture;
-                // todo if this doesn't work try playing around with making it a new Texture from dereferenced or just assigning it directly
-                spr->sprite.texture = AssetPool::getTexture(temp->filepath);
-                delete temp; // ! this is probably right
-            }
+            if (spr && spr->sprite.texture) { AssetPool::addTexture(spr->sprite.texture->filepath, spr->sprite.texture); }
         }
     };
 
@@ -154,7 +149,6 @@ namespace Dralgeer {
 
         // load sprite sheet
         // todo could try making the sprites thing a pointer just to see
-        // todo sprites in the spritesheet never get added to the renderer (don't think that's the issue but could be worth trying)
         sprites = *(AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png"));
 
         components.name = "LevelEditor";
