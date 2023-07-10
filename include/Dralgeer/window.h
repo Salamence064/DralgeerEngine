@@ -121,8 +121,6 @@ namespace Dralgeer {
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             // Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
-            // Renderer::start();
-
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
                 // Poll for events

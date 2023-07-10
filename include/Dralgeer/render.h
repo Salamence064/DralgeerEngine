@@ -9,17 +9,6 @@
 namespace Dralgeer {
     class RenderBatch {
         private:
-            // ! debugging
-            float test[40];
-            //     // first texture
-            //     // positions            colors                                tex coords       texID
-            //     500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
-            //     500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
-            //     200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
-            //     200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
-            // };
-            // ! ------------------------------------------------
-
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE];
             Texture* textures[MAX_TEXTURES];
@@ -35,9 +24,6 @@ namespace Dralgeer {
             int zIndex; // zIndex of the RenderBatch
             int numSprites = 0;
             int numTextures = 0;
-
-            // ! for debugging
-            bool firstTime = 1;
 
             RenderBatch() {};
 
@@ -69,18 +55,10 @@ namespace Dralgeer {
 
     namespace Renderer { // todo probs make this a class in the end
         extern Shader currentShader;
-        extern RenderBatch batches[MAX_RENDER_BATCHES]; // ! for debugging
-        extern int numBatches; // ! for debugging
-
-        // todo add the GameObject related functions after fleshing out the GameObject class
-        // todo make this stuff pointer related
-        // todo update all of the renderer stuff to include the GameObject stuff
-        // todo issue for not displaying the textures on the buttons is likely caused by something in here
-        // todo also potentially could be from the stbi_load function not loading it properly
+        extern RenderBatch batches[MAX_RENDER_BATCHES];
+        extern int numBatches;
 
         inline void add(SpriteRenderer* spr) {
-            // todo test to make sure this part of it works
-
             if (!spr) { return; }
 
             for (int i = 0; i < numBatches; ++i) {
@@ -100,8 +78,7 @@ namespace Dralgeer {
 
             if (!numBatches) {
                 batches[numBatches].start(spr->gameObject->transform.zIndex);
-                batches[numBatches].addSprite(spr);
-                numBatches++; // todo add back to the previous statement after we get this working
+                batches[numBatches++].addSprite(spr);
                 return;
             }
 
@@ -154,10 +131,6 @@ namespace Dralgeer {
 
             numBatches++;
         };
-
-        // inline void start() {
-        //     batches[0].start(0);
-        // };
 
         inline void add(GameObject const &go) {
             SpriteRenderer* spr = (SpriteRenderer*) go.getComponent(SPRITE_RENDERER);

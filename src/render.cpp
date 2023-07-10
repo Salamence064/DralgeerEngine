@@ -2,6 +2,8 @@
 #include <Zeta2D/zmath2D.h>
 #include <Dralgeer/window.h>
 
+// todo change the match batch size to 1000 again and buffer sub data multiple times in smaller chunks
+
 namespace Dralgeer {
     // * ===============================================
     // * RenderBatch Stuff
@@ -59,58 +61,30 @@ namespace Dralgeer {
             else if (i == 3) { yAdd = 1.0f; }
 
             glm::vec4 currPos(t.pos.x + (xAdd * t.scale.x), t.pos.y + (yAdd * t.scale.y), 0.0f, 1.0f);
-            if (!ZMath::compare(t.rotation, 0.0f)) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); } // ! this line looks wrong (will not affect what I'm currently debugging though)
+            if (!ZMath::compare(t.rotation, 0.0f)) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); }
 
             // load position
-            // std::cout << "CurrPos: " << currPos.x << ", " << currPos.y << ", " << 0.0f << "\n";
-
             vertices[offset] = currPos.x;
             vertices[offset + 1] = currPos.y;
-            vertices[offset + 2] = 0.0f;
-
-            // std::cout << "Color: " << sprites[index]->color.x << ", " << sprites[index]->color.y << ", " << sprites[index]->color.z << ", " << sprites[index]->color.w << "\n";
 
             // load color
-            vertices[offset + 3] = sprites[index]->color.x;
-            vertices[offset + 4] = sprites[index]->color.y;
-            vertices[offset + 5] = sprites[index]->color.z;
-            vertices[offset + 6] = sprites[index]->color.w;
-
-            // std::cout << "TexCoords: " << sprites[index]->sprite.texCords[i].x << ", " << sprites[index]->sprite.texCords[i].y << "\n";
+            vertices[offset + 2] = sprites[index]->color.x;
+            vertices[offset + 3] = sprites[index]->color.y;
+            vertices[offset + 4] = sprites[index]->color.z;
+            vertices[offset + 5] = sprites[index]->color.w;
 
             // load texture coords
-            vertices[offset + 7] = sprites[index]->sprite.texCords[i].x;
-            vertices[offset + 8] = sprites[index]->sprite.texCords[i].y;
-
-            // std::cout << "TexID: " << texID << "\n";
-
+            vertices[offset + 6] = sprites[index]->sprite.texCords[i].x;
+            vertices[offset + 7] = sprites[index]->sprite.texCords[i].y;
             // load texture IDs
-            vertices[offset + 9] = texID;
+            vertices[offset + 8] = texID;
 
             // load entity IDs
-            // vertices[offset + 9] = sprites[index]->gameObject->id + 1;
+            vertices[offset + 9] = sprites[index]->gameObject->id;
 
             offset += VERTEX_SIZE;
         }
     };
-
-    // inline void RenderBatch::loadElementIndices(int index) {
-    //     int iOffset = 6 * index;
-    //     int offset = 4 * index;
-
-    //     // triangle 1
-    //     indices[iOffset] = offset;
-    //     indices[iOffset + 1] = offset + 1;
-    //     indices[iOffset + 2] = offset + 2;
-        
-    //     // triangle 2
-    //     indices[iOffset + 3] = offset + 2;
-    //     indices[iOffset + 4] = offset + 3;
-    //     indices[iOffset + 5] = offset;
-
-    //     // std::cout << "\nIndices:\n" << indices[0] << ", " << indices[1] << ", " << indices[2] << "\n";
-    //     // std::cout << indices[3] << ", " << indices[4] << ", " << indices[5] << "\n\n";
-    // };
 
     void RenderBatch::start(int zIndex) {
         this->zIndex = zIndex;
@@ -119,15 +93,10 @@ namespace Dralgeer {
         glGenVertexArrays(1, &vaoID);
         glBindVertexArray(vaoID);
 
-        // todo test to see if I can get it to work in the helloworld textures program with 0 initial elements
-
         // allocate space for the vertices
         glGenBuffers(1, &vboID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-
-        // todo issue has to be from the vbo.
-        // todo try having an empty vbo with set values and then adding them in with the add function
 
         // * ------ Generate the Indices ------
 
@@ -151,35 +120,26 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        // todo add in glVertexAttribPointer for the gameObjectID after the rest of this stuff works
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
         glVertexAttribPointer(1, 4, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) COLOR_OFFSET);
         glVertexAttribPointer(2, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_COORDS_OFFSET);
         glVertexAttribPointer(3, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
+        glVertexAttribPointer(4, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) ENTITY_ID_OFFSET);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         glEnableVertexAttribArray(3);
-
-        // textures[0] = new Texture();
-        // textures[0]->init("../../assets/images/wall.jpg");
-
-        // numSprites = 1;
-        // sprites[0] = new SpriteRenderer();
-        // sprites[0]->isDirty = 1;
+        glEnableVertexAttribArray(4);
     };
 
     void RenderBatch::render(Camera const &cam) {
         bool rebuffer = 0;
-        int offset;
 
         for (int i = 0; i < numSprites; ++i) {
             if (sprites[i]->isDirty) {
                 loadVertexProperties(i);
                 sprites[i]->isDirty = 0;
                 rebuffer = 1;
-                offset = VERTEX_SIZE_BYTES*i;
             }
         }
 
@@ -187,67 +147,12 @@ namespace Dralgeer {
         if (rebuffer) {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
+            // std::cout << GL_BUFFER_SIZE << "\n";
             // std::cout << sizeof(vertices) << "\n";
-            // std::cout << "\nTexture: " << textures[0]->filepath << "\n";
-            // std::cout << "\nVertices:\nTop Right: Pos: " << vertices[0] << ", " << vertices[1] << ", " << vertices[2] << " Color: ";
-            // std::cout << vertices[3] << ", " << vertices[4] << ", " << vertices[5] << ", " << vertices[6] << " TexCoords: ";
-            // std::cout << vertices[7] << ", " << vertices[8] << " TexID: " << vertices[9] << "\nBottom Right: Pos: " << vertices[10] << ", ";
-            // std::cout << vertices[11] << ", " << vertices[12] << " Color: " << vertices[13] << ", " << vertices[14] << ", " << vertices[15] << ", " << vertices[16] << " TexCoords: " << vertices[17] << ", " << vertices[18] << " TexID: " << vertices[19] << "\n";
-            // std::cout << "Bottom Left: Pos: " << vertices[20] << ", " << vertices[21] << ", " << vertices[22] << " Color: " << vertices[23] << ", " << vertices[24] << ", " << vertices[25] << ", " << vertices[26] << " TexCoords: " << vertices[27] << ", " << vertices[28] << " TexID: " << vertices[29] << "\n";
-            // std::cout << "Top Left: Pos: " << vertices[30] << ", " << vertices[31] << ", " << vertices[32] << " Color: " << vertices[33] << ", " << vertices[34] << ", " << vertices[35] << ", " << vertices[36] << " TexCoords: " << vertices[37] << ", " << vertices[38] << " TexID: " << vertices[39] << "\n\n";
-            
-            // first texture
-            // positions            colors                                tex coords       texID
-            // 500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
-            // 500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
-            // 200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
-            // 200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
 
-            // test[0] = 500.0f;
-            // test[1] = 500.0f;
-            // test[2] = 0.0f;
-            // test[3] = 0.8824f;
-            // test[4] = 0.0039f;
-            // test[5] = 0.0039f;
-            // test[6] = 1.0f;
-            // test[7] = 1.0f;
-            // test[8] = 1.0f;
-            // test[9] = 0;
-
-            // test[10] = 500.0f;
-            // test[11] = 200.0f;
-            // test[12] = 0.0f;
-            // test[13] = 0.8824f;
-            // test[14] = 0.0039f;
-            // test[15] = 0.0039f;
-            // test[16] = 1.0f;
-            // test[17] = 1.0f;
-            // test[18] = 0.0f;
-            // test[19] = 0;
-
-            // test[20] = 200.0f;
-            // test[21] = 200.0f;
-            // test[22] = 0.0f;
-            // test[23] = 0.8824f;
-            // test[24] = 0.0039f;
-            // test[25] = 0.0039f;
-            // test[26] = 1.0f;
-            // test[27] = 0.0f;
-            // test[28] = 0.0f;
-            // test[29] = 0;
-
-            // test[30] = 200.0f;
-            // test[31] = 500.0f;
-            // test[32] = 0.0f;
-            // test[33] = 0.8824f;
-            // test[34] = 0.0039f;
-            // test[35] = 0.0039f;
-            // test[36] = 1.0f;
-            // test[37] = 0.0f;
-            // test[38] = 1.0f;
-            // test[39] = 0;
-
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes an invalid value error (error 0x0501)
+            // todo maybe could use an offset + an equation to determine the size for slightly greater efficiency
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes invalid value error (erro 0x0501)
+            // ! unsure why but it more or less works for now so will fix after debugging more pressing things
 
             GLenum err;
             while((err = glGetError()) != GL_NO_ERROR) {
@@ -266,15 +171,6 @@ namespace Dralgeer {
         Renderer::currentShader.use();
         Renderer::currentShader.uploadMat4("uProjection", cam.proj);
         Renderer::currentShader.uploadMat4("uView", cam.view);
-
-        // if (firstTime) {
-        //     std::cout << "\nCam.proj:\n";
-        //     std::cout << cam.proj[0].x << ", " << cam.proj[0].y << ", " <<cam.proj[0].z << ", " << cam.proj[0].w << "\n";
-        //     std::cout << cam.proj[1].x << ", " << cam.proj[1].y << ", " <<cam.proj[1].z << ", " << cam.proj[1].w << "\n";
-        //     std::cout << cam.proj[2].x << ", " << cam.proj[2].y << ", " <<cam.proj[2].z << ", " << cam.proj[2].w << "\n";
-        //     std::cout << cam.proj[3].x << ", " << cam.proj[3].y << ", " <<cam.proj[3].z << ", " << cam.proj[3].w << "\n";
-        //     firstTime = 0;
-        // }
 
         // bind textures
         for (int i = 0; i < numTextures; ++i) {
@@ -326,21 +222,7 @@ namespace Dralgeer {
             }
 
             ADDED:
-
             numSprites++;
-
-            // add properties to local vertices array
-            // loadVertexProperties(numSprites);
-            // loadElementIndices(numSprites++);
-
-            // std::cout << "\nNumSprites: " << numSprites << "\n\n";
-            // std::cout << "Vertices:\nTop Right: Pos: " << vertices[0] << ", " << vertices[1] << ", " << vertices[2] << " Color: ";
-            // std::cout << vertices[3] << ", " << vertices[4] << ", " << vertices[5] << ", " << vertices[6] << " TexCoords: ";
-            // std::cout << vertices[7] << ", " << vertices[8] << " TexID: " << vertices[9] << "\nBottom Right: Pos: " << vertices[10] << ", ";
-            // std::cout << vertices[11] << ", " << vertices[12] << " Color: " << vertices[13] << ", " << vertices[14] << ", " << vertices[15] << ", " << vertices[16] << " TexCoords: " << vertices[17] << ", " << vertices[18] << " TexID: " << vertices[19] << "\n";
-            // std::cout << "Bottom Left: Pos: " << vertices[20] << ", " << vertices[21] << ", " << vertices[22] << " Color: " << vertices[23] << ", " << vertices[24] << ", " << vertices[25] << ", " << vertices[26] << " TexCoords: " << vertices[27] << ", " << vertices[28] << " TexID: " << vertices[29] << "\n";
-            // std::cout << "Top Left: Pos: " << vertices[30] << ", " << vertices[31] << ", " << vertices[32] << " Color: " << vertices[33] << ", " << vertices[34] << ", " << vertices[35] << ", " << vertices[36] << " TexCoords: " << vertices[37] << ", " << vertices[38] << " TexID: " << vertices[39] << "\n\n";
-            // std::cout << "Indices:\n" << indices[0] << ", " << indices[1] << ", " << indices[2] << "\n" << indices[3] << ", " << indices[4] << ", " << indices[5] << "\n";
         }
     };
 

@@ -21,15 +21,17 @@
 #define DEBUG_VERTEX_ARR_SIZE 6000
 
 // renderer
+// todo probably up the max batch size to 1000 and buffer the data in segments
 #define MAX_RENDER_BATCHES 2500
-#define MAX_RENDER_BATCH_SIZE 1000
-#define MAX_RENDER_VERTICES_LIST_SIZE 40000
-#define MAX_RENDER_INDICES_LIST_SIZE 6000
+#define MAX_RENDER_BATCH_SIZE 200
+#define MAX_RENDER_VERTICES_LIST_SIZE 8000
+#define MAX_RENDER_INDICES_LIST_SIZE 1200
 #define MAX_TEXTURES 16
 
-#define COLOR_OFFSET (3 * sizeof(float))
-#define TEX_COORDS_OFFSET (7 * sizeof(float))
-#define TEX_ID_OFFSET (9 * sizeof(float))
+#define COLOR_OFFSET (2 * sizeof(float))
+#define TEX_COORDS_OFFSET (6 * sizeof(float))
+#define TEX_ID_OFFSET (8 * sizeof(float))
+#define ENTITY_ID_OFFSET (9 * sizeof(float))
 
 #define VERTEX_SIZE 10
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
