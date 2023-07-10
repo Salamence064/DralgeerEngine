@@ -35,6 +35,7 @@ namespace Dralgeer {
 
         // * load the image
         int channels;
+        stbi_set_flip_vertically_on_load(1);
         unsigned char* image = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 
         if (image) {

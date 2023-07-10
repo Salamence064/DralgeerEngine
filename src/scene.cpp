@@ -49,25 +49,25 @@ namespace Dralgeer {
 
         // Renderer::add(testSpr);
 
-        for (int i = 0; i < spr->numSprites; ++i) {
-            SpriteRenderer* testSpr = new SpriteRenderer();
-            testSpr->sprite.texture = spr->sprites[i].texture;
-            testSpr->sprite.height = spr->sprites[i].height;
-            testSpr->sprite.width = spr->sprites[i].width;
-            testSpr->sprite.texCoords[0] = spr->sprites[i].texCoords[0];
-            testSpr->sprite.texCoords[1] = spr->sprites[i].texCoords[1];
-            testSpr->sprite.texCoords[2] = spr->sprites[i].texCoords[2];
-            testSpr->sprite.texCoords[3] = spr->sprites[i].texCoords[3];
-            testSpr->color = {1.0f, 1.0f, 1.0f, 1.0f};
-            testSpr->gameObject = new GameObject();
-            testSpr->gameObject->name = "Test";
-            testSpr->gameObject->transform.pos = {16*i - 16*(i%16), 16*(i%16)};
-            testSpr->gameObject->transform.scale = {16.0f, 16.0f};
-            testSpr->gameObject->transform.zIndex = 0;
-            testSpr->start();
+        // for (int i = 0; i < spr->numSprites; ++i) {
+        //     SpriteRenderer* testSpr = new SpriteRenderer();
+        //     testSpr->sprite.texture = spr->sprites[i].texture;
+        //     testSpr->sprite.height = spr->sprites[i].height;
+        //     testSpr->sprite.width = spr->sprites[i].width;
+        //     testSpr->sprite.texCoords[0] = spr->sprites[i].texCoords[0];
+        //     testSpr->sprite.texCoords[1] = spr->sprites[i].texCoords[1];
+        //     testSpr->sprite.texCoords[2] = spr->sprites[i].texCoords[2];
+        //     testSpr->sprite.texCoords[3] = spr->sprites[i].texCoords[3];
+        //     testSpr->color = {1.0f, 1.0f, 1.0f, 1.0f};
+        //     testSpr->gameObject = new GameObject();
+        //     testSpr->gameObject->name = "Test";
+        //     testSpr->gameObject->transform.pos = {16*i - 16*(i%16), 16*(i%16)};
+        //     testSpr->gameObject->transform.scale = {16.0f, 16.0f};
+        //     testSpr->gameObject->transform.zIndex = 0;
+        //     testSpr->start();
 
-            Renderer::add(testSpr);
-        }
+        //     Renderer::add(testSpr);
+        // }
 
         // todo ================================================================
 
