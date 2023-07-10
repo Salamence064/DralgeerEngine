@@ -15,7 +15,12 @@ namespace Dralgeer {
     RenderBatch::~RenderBatch() {
         for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }
 
-        // ensure everything is unbound
+        // delete the vao. vbo, and ebo
+        glDeleteVertexArrays(1, &vaoID);
+        glDeleteBuffers(1, &vboID);
+        glDeleteBuffers(1, &eboID);
+
+        // unbind everything
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -121,6 +126,9 @@ namespace Dralgeer {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
+        // todo issue has to be from the vbo.
+        // todo try having an empty vbo with set values and then adding them in with the add function
+
         // * ------ Generate the Indices ------
 
         unsigned int indices[MAX_RENDER_INDICES_LIST_SIZE];
@@ -139,7 +147,6 @@ namespace Dralgeer {
 
         // * ----------------------------------
 
-        unsigned int eboID;
         glGenBuffers(1, &eboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -164,25 +171,96 @@ namespace Dralgeer {
     };
 
     void RenderBatch::render(Camera const &cam) {
-        // todo it feels like the issue occurs with the rebuffering
-
-        // bind everything
-        glBindVertexArray(vaoID);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-
         bool rebuffer = 0;
+        int offset;
 
         for (int i = 0; i < numSprites; ++i) {
             if (sprites[i]->isDirty) {
                 loadVertexProperties(i);
                 sprites[i]->isDirty = 0;
                 rebuffer = 1;
+                offset = VERTEX_SIZE_BYTES*i;
             }
         }
 
         // rebuffer data if any of the sprites are dirty
-        if (rebuffer) { glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); }
+        if (rebuffer) {
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+
+            // std::cout << sizeof(vertices) << "\n";
+            // std::cout << "\nTexture: " << textures[0]->filepath << "\n";
+            // std::cout << "\nVertices:\nTop Right: Pos: " << vertices[0] << ", " << vertices[1] << ", " << vertices[2] << " Color: ";
+            // std::cout << vertices[3] << ", " << vertices[4] << ", " << vertices[5] << ", " << vertices[6] << " TexCoords: ";
+            // std::cout << vertices[7] << ", " << vertices[8] << " TexID: " << vertices[9] << "\nBottom Right: Pos: " << vertices[10] << ", ";
+            // std::cout << vertices[11] << ", " << vertices[12] << " Color: " << vertices[13] << ", " << vertices[14] << ", " << vertices[15] << ", " << vertices[16] << " TexCoords: " << vertices[17] << ", " << vertices[18] << " TexID: " << vertices[19] << "\n";
+            // std::cout << "Bottom Left: Pos: " << vertices[20] << ", " << vertices[21] << ", " << vertices[22] << " Color: " << vertices[23] << ", " << vertices[24] << ", " << vertices[25] << ", " << vertices[26] << " TexCoords: " << vertices[27] << ", " << vertices[28] << " TexID: " << vertices[29] << "\n";
+            // std::cout << "Top Left: Pos: " << vertices[30] << ", " << vertices[31] << ", " << vertices[32] << " Color: " << vertices[33] << ", " << vertices[34] << ", " << vertices[35] << ", " << vertices[36] << " TexCoords: " << vertices[37] << ", " << vertices[38] << " TexID: " << vertices[39] << "\n\n";
+            
+            // first texture
+            // positions            colors                                tex coords       texID
+            // 500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
+            // 500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
+            // 200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
+            // 200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
+
+            // test[0] = 500.0f;
+            // test[1] = 500.0f;
+            // test[2] = 0.0f;
+            // test[3] = 0.8824f;
+            // test[4] = 0.0039f;
+            // test[5] = 0.0039f;
+            // test[6] = 1.0f;
+            // test[7] = 1.0f;
+            // test[8] = 1.0f;
+            // test[9] = 0;
+
+            // test[10] = 500.0f;
+            // test[11] = 200.0f;
+            // test[12] = 0.0f;
+            // test[13] = 0.8824f;
+            // test[14] = 0.0039f;
+            // test[15] = 0.0039f;
+            // test[16] = 1.0f;
+            // test[17] = 1.0f;
+            // test[18] = 0.0f;
+            // test[19] = 0;
+
+            // test[20] = 200.0f;
+            // test[21] = 200.0f;
+            // test[22] = 0.0f;
+            // test[23] = 0.8824f;
+            // test[24] = 0.0039f;
+            // test[25] = 0.0039f;
+            // test[26] = 1.0f;
+            // test[27] = 0.0f;
+            // test[28] = 0.0f;
+            // test[29] = 0;
+
+            // test[30] = 200.0f;
+            // test[31] = 500.0f;
+            // test[32] = 0.0f;
+            // test[33] = 0.8824f;
+            // test[34] = 0.0039f;
+            // test[35] = 0.0039f;
+            // test[36] = 1.0f;
+            // test[37] = 0.0f;
+            // test[38] = 1.0f;
+            // test[39] = 0;
+
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes an invalid value error (error 0x0501)
+
+            GLenum err;
+            while((err = glGetError()) != GL_NO_ERROR) {
+                std::cout << "[Error] " << err << "\n";
+            }
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        // bind everything
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
         // use shader
         Renderer::currentShader.use();
@@ -206,7 +284,7 @@ namespace Dralgeer {
 
         Renderer::currentShader.uploadIntArr("uTexture", texSlots, 16);
 
-        glDrawElements(GL_TRIANGLES, 6/**numSprites*/, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
 
         Renderer::currentShader.detach();
 

@@ -10,6 +10,8 @@
 
 // todo I never detach Renderer::currentShader
 
+// todo delete vao and buffers for the other things that use them too in the destructor
+
 #include "imguilayer.h"
 #include "listeners.h"
 #include "render.h"

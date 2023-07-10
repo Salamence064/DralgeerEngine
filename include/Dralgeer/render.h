@@ -10,21 +10,21 @@ namespace Dralgeer {
     class RenderBatch {
         private:
             // ! debugging
-            float test[40] = {
-                // first texture
-                // positions            colors                                tex coords       texID
-                500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
-                500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
-                200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
-                200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
-            };
+            float test[40];
+            //     // first texture
+            //     // positions            colors                                tex coords       texID
+            //     500.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 1.0f,      0, // top right
+            //     500.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      1.0f, 0.0f,      0, // bottom right
+            //     200.0f, 200.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 0.0f,      0, // bottom left
+            //     200.0f, 500.0f, 0.0f,   0.8824f, 0.0039f, 0.0039f, 1.0f,      0.0f, 1.0f,      0  // top left
+            // };
             // ! ------------------------------------------------
 
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE];
             Texture* textures[MAX_TEXTURES];
             int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-            unsigned int vaoID, vboID;
+            unsigned int vaoID, vboID, eboID;
 
             // * Helper to just make the code easier to read and debug.
             // * Will probs be moved directly into the code in the end.
