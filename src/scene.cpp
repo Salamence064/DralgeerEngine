@@ -34,23 +34,43 @@ namespace Dralgeer {
         // todo add gizmos
 
         // todo for testing purposes
-        SpriteRenderer* testSpr = new SpriteRenderer();
-        testSpr->sprite.texture = new Texture();
-        testSpr->sprite.texture->init("../../assets/images/wall.jpg");
-        testSpr->sprite.width = testSpr->sprite.texture->width;
-        testSpr->sprite.height = testSpr->sprite.texture->height;
-        testSpr->color = {0.8824f, 0.0039f, 0.0039f, 1.0f};
-        testSpr->gameObject = new GameObject();
-        testSpr->gameObject->transform.pos = {100.0f, 100.0f};
-        testSpr->gameObject->name = "ThisIsATest";
-        testSpr->gameObject->transform.scale = {300.0f, 300.0f};
-        testSpr->gameObject->transform.zIndex = 1;
-        testSpr->start();
+        // SpriteRenderer* testSpr = new SpriteRenderer();
+        // testSpr->sprite.texture = new Texture();
+        // testSpr->sprite.texture->init("../../assets/images/wall.jpg");
+        // testSpr->sprite.width = testSpr->sprite.texture->width;
+        // testSpr->sprite.height = testSpr->sprite.texture->height;
+        // testSpr->color = {0.8824f, 0.0039f, 0.0039f, 1.0f};
+        // testSpr->gameObject = new GameObject();
+        // testSpr->gameObject->transform.pos = {100.0f, 100.0f};
+        // testSpr->gameObject->name = "ThisIsATest";
+        // testSpr->gameObject->transform.scale = {300.0f, 300.0f};
+        // testSpr->gameObject->transform.zIndex = 1;
+        // testSpr->start();
 
-        Renderer::add(testSpr);
+        // Renderer::add(testSpr);
+
+        for (int i = 0; i < spr->numSprites; ++i) {
+            SpriteRenderer* testSpr = new SpriteRenderer();
+            testSpr->sprite.texture = spr->sprites[i].texture;
+            testSpr->sprite.height = spr->sprites[i].height;
+            testSpr->sprite.width = spr->sprites[i].width;
+            testSpr->sprite.texCoords[0] = spr->sprites[i].texCoords[0];
+            testSpr->sprite.texCoords[1] = spr->sprites[i].texCoords[1];
+            testSpr->sprite.texCoords[2] = spr->sprites[i].texCoords[2];
+            testSpr->sprite.texCoords[3] = spr->sprites[i].texCoords[3];
+            testSpr->color = {1.0f, 1.0f, 1.0f, 1.0f};
+            testSpr->gameObject = new GameObject();
+            testSpr->gameObject->name = "Test";
+            testSpr->gameObject->transform.pos = {16*i - 16*(i%16), 16*(i%16)};
+            testSpr->gameObject->transform.scale = {16.0f, 16.0f};
+            testSpr->gameObject->transform.zIndex = 0;
+            testSpr->start();
+
+            Renderer::add(testSpr);
+        }
+
         // todo ================================================================
 
-        // todo issue might be that none of the sprites have gameObjects with transforms that store the positions it should be renderered at
         for (int i = 0; i < numObjects; ++i) {
             SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
             if (spr && spr->sprite.texture) {
@@ -173,10 +193,10 @@ namespace Dralgeer {
             float spriteWidth = sprite.width * 3;
             float spriteHeight = sprite.height * 3;
 
-            // todo the issue is either this ImGui stuff or something to do with the texture class itself in the init function
+            // todo try displaying the sprites with the working renderer I have already to narrow down the issue
             ImGui::PushID(i);
             if (ImGui::ImageButton(&sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
-                ImVec2(sprite.texCords[2].x, sprite.texCords[0].y), ImVec2(sprite.texCords[0].x, sprite.texCords[2].y)))
+                ImVec2(sprite.texCoords[2].x, sprite.texCoords[0].y), ImVec2(sprite.texCoords[0].x, sprite.texCoords[2].y)))
             {
                 GameObject go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 // todo attach it to the mouse cursor once we add in the mouse controls component

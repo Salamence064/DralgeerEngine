@@ -6,7 +6,7 @@
 #include "component.h"
 
 namespace Dralgeer {
-    namespace AssetPool { // todo probs set these things up as pointers instead
+    namespace AssetPool {
         namespace {
             static std::unordered_map<std::string, Shader*> shaders;
             static std::unordered_map<std::string, Texture*> textures;

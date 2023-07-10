@@ -5,12 +5,10 @@
 #include "texture.h"
 
 namespace Dralgeer {
-    // todo having this sprite struct almost seems unnecessary.
-    // ! consider removing it and moving all the fields into the SpriteRenderer directly
     struct Sprite {
         float width, height;
         Texture* texture = nullptr;
-        glm::vec2 texCords[4] = {glm::vec2(1, 1), glm::vec2(1, 0), glm::vec2(0, 0), glm::vec2(0, 1)}; // these should not be changed
+        glm::vec2 texCoords[4] = {glm::vec2(1, 1), glm::vec2(1, 0), glm::vec2(0, 0), glm::vec2(0, 1)}; // these should not be changed
     };
 
     class SpriteSheet {
@@ -97,6 +95,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
+            // todo look through this function and the AssetPool functions
             // tex should have init called on it prior to this function call
             void init(Texture* tex, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
                 sprites = new Sprite[numSprites];
@@ -112,10 +111,10 @@ namespace Dralgeer {
                     // add the sprite to the list
                     Sprite sprite;
                     sprite.texture = tex;
-                    sprite.texCords[0] = glm::vec2(right, top); 
-                    sprite.texCords[1] = glm::vec2(right, bottom);
-                    sprite.texCords[2] = glm::vec2(left, bottom);
-                    sprite.texCords[3] = glm::vec2(left, top);
+                    sprite.texCoords[0] = glm::vec2(right, top); 
+                    sprite.texCoords[1] = glm::vec2(right, bottom);
+                    sprite.texCoords[2] = glm::vec2(left, bottom);
+                    sprite.texCoords[3] = glm::vec2(left, top);
                     sprite.width = spriteWidth;
                     sprite.height = spriteHeight;
                     sprites[i] = sprite;

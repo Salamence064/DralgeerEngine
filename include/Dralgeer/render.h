@@ -62,10 +62,7 @@ namespace Dralgeer {
             if (!spr) { return; }
 
             for (int i = 0; i < numBatches; ++i) {
-                // todo this last line of the conditional might be wrong
-                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->gameObject->transform.zIndex &&
-                        spr->sprite.texture && !batches[i].hasTexture(spr->sprite.texture) && batches[i].numTextures < MAX_TEXTURES) { 
-                    
+                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->gameObject->transform.zIndex) { 
                     batches[i].addSprite(spr);
                     return;
                 }
@@ -87,7 +84,9 @@ namespace Dralgeer {
             int min = 0, max = numBatches;
             int index = numBatches/2;
 
-            for(;;) {
+            // todo OR WE COULD make the equals operator functional and just not delete anything and inform users to not use the
+            // todo  assignment operator for RenderBatches (in fact, the users shouldn't be using RenderBatches in their code in the first place)
+            for(;;) { // todo solution is either the vbo thing or we could make it using a dynamic array
                 if (spr->gameObject->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
                     max = index - 1;
 

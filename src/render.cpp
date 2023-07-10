@@ -11,11 +11,13 @@ namespace Dralgeer {
     RenderBatch::RenderBatch(RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
     RenderBatch::RenderBatch(RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
     RenderBatch& RenderBatch::operator = (RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
+
     RenderBatch& RenderBatch::operator = (RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
     
     // Do not have to delete the textures as the sprites should take care of that for us.
     RenderBatch::~RenderBatch() {
         for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }
+        for (int i = 0; i < numTextures; ++i) { delete textures[i]; }
 
         // delete the vao. vbo, and ebo
         glDeleteVertexArrays(1, &vaoID);
@@ -66,6 +68,7 @@ namespace Dralgeer {
             // load position
             vertices[offset] = currPos.x;
             vertices[offset + 1] = currPos.y;
+            // todo try passing the zIndex for the z position and checking if we can do that instead of a list of renderbatches
 
             // load color
             vertices[offset + 2] = sprites[index]->color.x;
@@ -74,8 +77,8 @@ namespace Dralgeer {
             vertices[offset + 5] = sprites[index]->color.w;
 
             // load texture coords
-            vertices[offset + 6] = sprites[index]->sprite.texCords[i].x;
-            vertices[offset + 7] = sprites[index]->sprite.texCords[i].y;
+            vertices[offset + 6] = sprites[index]->sprite.texCoords[i].x;
+            vertices[offset + 7] = sprites[index]->sprite.texCoords[i].y;
             // load texture IDs
             vertices[offset + 8] = texID;
 
