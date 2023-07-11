@@ -1,4 +1,4 @@
-// #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 #include <Dralgeer/scene.h>
 #include <IMGUI/imgui.h>
 #include <Dralgeer/prefabs.h>
@@ -149,7 +149,7 @@ namespace Dralgeer {
 
         // load sprite sheet
         // todo could try making the sprites thing a pointer just to see
-        sprites = *(AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png"));
+        sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png");
 
         components.name = "LevelEditor";
         components.transform.zIndex = 0;
@@ -163,6 +163,11 @@ namespace Dralgeer {
 
         addGameObject(&components);
     };
+
+
+    // disable pointer cast warnings for this function as it will warn of a void* cast unnecessarily
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 
     void LevelEditorScene::imGui() {
         ImGui::Begin("Tiles");
@@ -179,17 +184,16 @@ namespace Dralgeer {
         ImVec2 itemSpacing = ImGui::GetStyle().ItemSpacing;
         float windowX2 = windowPos.x + windowSize.x;
         
-        for (int i = 0; i < sprites.numSprites; ++i) {
+        for (int i = 0; i < sprites->numSprites; ++i) {
             // for readability
-            Sprite sprite = sprites.sprites[i];
+            Sprite sprite = sprites->sprites[i];
 
             // multiplying by an int is for scaling purposes
             float spriteWidth = sprite.width * 3;
             float spriteHeight = sprite.height * 3;
-
-            // todo try displaying the sprites with the working renderer I have already to narrow down the issue
+            
             ImGui::PushID(i);
-            if (ImGui::ImageButton(&sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
+            if (ImGui::ImageButton("SpriteSelection", (void*) sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
                 ImVec2(sprite.texCoords[2].x, sprite.texCoords[0].y), ImVec2(sprite.texCoords[0].x, sprite.texCoords[2].y)))
             {
                 GameObject go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
@@ -199,11 +203,13 @@ namespace Dralgeer {
             ImGui::PopID();
 
             ImVec2 lastButtonPos = ImGui::GetItemRectMax();
-            if (i + 1 < sprites.numSprites && lastButtonPos.x + itemSpacing.x + spriteWidth < windowX2) { ImGui::SameLine(); }
+            if (i + 1 < sprites->numSprites && lastButtonPos.x + itemSpacing.x + spriteWidth < windowX2) { ImGui::SameLine(); }
         }
 
         ImGui::End();
     };
+
+    #pragma GCC diagnostic pop
 
     // * ================================================
 }
