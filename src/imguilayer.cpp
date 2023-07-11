@@ -21,6 +21,7 @@ namespace Dralgeer {
     };
 
     void ImGuiLayer::init(GLFWwindow* window, PickingTexture const &pickingTexture) {
+        // todo will need to update code elsewhere to conform to GLES 2.0
         #if defined(IMGUI_IMPL_OPENGL_ES2)
             // GL ES 2.0 + GLSL 100
             const char* glslVersion = "#version 100";

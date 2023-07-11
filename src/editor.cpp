@@ -31,6 +31,10 @@ namespace Dralgeer {
         return ImVec2((0.5f*(windowSize.x - size.x)) + ImGui::GetCursorPosX(), (0.5f*(windowSize.y - size.y)) + ImGui::GetCursorPosY());
     };
 
+    // disable pointer cast warnings for this function as it will warn of a void* cast unnecessarily
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
+
     void GameViewWindow::imGui() {
         ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
@@ -48,7 +52,7 @@ namespace Dralgeer {
         topY = bottomY + windowSize.y;
 
         unsigned int texID = Window::frameBuffer.getTextureID();
-        ImGui::Image(&texID, windowSize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*) texID, windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         MouseListener::mGameViewPortX = bottomLeft.x;
         MouseListener::mGameViewPortY = bottomLeft.y;
@@ -57,6 +61,9 @@ namespace Dralgeer {
 
         ImGui::End();
     };
+
+    #pragma GCC diagnostic pop
+
 
     // * ======================================================
     // * PropertiesWindow Stuff

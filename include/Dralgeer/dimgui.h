@@ -20,16 +20,16 @@ namespace Dralgeer {
             ImGui::Text(label.c_str());
             ImGui::NextColumn();
 
-            ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 
             float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
             ImVec2 buttonSize(lineHeight + 3.0f, lineHeight);
             float widthEach = (ImGui::CalcItemWidth() * 0.5f) - buttonSize.x;
 
             ImGui::PushItemWidth(widthEach);
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0.88235f, 0.00392f, 0.00392f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, ImVec4(0.88235f, 0.30392f, 0.30392f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, ImVec4(0.88235f, 0.00392f, 0.00392f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.88235f, 0.00392f, 0.00392f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.88235f, 0.30392f, 0.30392f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.88235f, 0.00392f, 0.00392f, 1.0f));
             if (ImGui::Button("X", buttonSize)) { values.x = resetValue; }
 
             ImGui::PopStyleColor(3);
@@ -41,9 +41,9 @@ namespace Dralgeer {
             ImGui::SameLine();
 
             ImGui::PushItemWidth(widthEach);
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, ImVec4(0.2f, 0.2f, 1.0f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 1.0f, 1.0f));
-            ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 1.0f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 1.0f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 1.0f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 1.0f, 1.0f));
             if (ImGui::Button("Y", buttonSize)) { values.y = resetValue; }
 
             ImGui::PopStyleColor(3);
