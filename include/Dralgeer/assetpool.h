@@ -47,7 +47,7 @@ namespace Dralgeer {
             if (spriteSheets.find(filepath) != spriteSheets.end()) { return spriteSheets[filepath]; };
             // todo remove the error thrown in the future in favor of a log message + returning nullptr
             throw std::runtime_error("[ERROR] SpriteSheet '" + filepath + "' could not be retrieved.");
-            // return SpriteSheet();
+            // return nullptr;
         };
 
         inline static void destroy() {

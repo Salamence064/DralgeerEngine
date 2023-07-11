@@ -92,14 +92,30 @@ namespace Dralgeer {
         numObjects = scene.numObjects;
 
         gameObjects = new GameObject*[capacity];
-        for (int i = 0; i < numObjects; ++i) { gameObjects[i] = scene.gameObjects[i]; }
+        for (int i = 0; i < numObjects; ++i) { gameObjects[i] = new GameObject(*(scene.gameObjects[i])); }
+
+        if (scene.sprites && scene.sprites->sprites) {
+            sprites = new SpriteSheet();
+            sprites->numSprites = scene.sprites->numSprites;
+            
+            for (int i = 0; i < sprites->numSprites; ++i) {
+                sprites->sprites[i].width = scene.sprites->sprites[i].width;
+                sprites->sprites[i].height = scene.sprites->sprites[i].height;
+                sprites->sprites[i].texture = scene.sprites->sprites[i].texture; // copying the texture pointer is fine
+                sprites->sprites[i].texCoords[0] = scene.sprites->sprites[i].texCoords[0];
+                sprites->sprites[i].texCoords[1] = scene.sprites->sprites[i].texCoords[1];
+                sprites->sprites[i].texCoords[2] = scene.sprites->sprites[i].texCoords[2];
+                sprites->sprites[i].texCoords[3] = scene.sprites->sprites[i].texCoords[3];
+            }
+        }
     };
 
     LevelEditorScene::LevelEditorScene(LevelEditorScene &&scene) {
         type = scene.type;
         camera = std::move(scene.camera);
-        sprites = std::move(scene.sprites);
         components = std::move(scene.components);
+        sprites = scene.sprites;
+        scene.sprites = NULL;
 
         capacity = scene.capacity;
         numObjects = scene.numObjects;
@@ -113,11 +129,37 @@ namespace Dralgeer {
             sprites = scene.sprites;
             components = scene.components;
 
+            // -----------------------------------------------------------
+
+            if (gameObjects) {
+                for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
+                delete[] gameObjects;
+            }
+
             capacity = scene.capacity;
             numObjects = scene.numObjects;
 
             gameObjects = new GameObject*[capacity];
-            for (int i = 0; i < numObjects; ++i) { gameObjects[i] = scene.gameObjects[i]; }
+            for (int i = 0; i < numObjects; ++i) { gameObjects[i] = new GameObject(*(scene.gameObjects[i])); }
+
+            // -----------------------------------------------------------
+
+            if (sprites) { delete sprites; }
+
+            if (scene.sprites && scene.sprites->sprites) {
+                sprites = new SpriteSheet();
+                sprites->numSprites = scene.sprites->numSprites;
+                
+                for (int i = 0; i < sprites->numSprites; ++i) {
+                    sprites->sprites[i].width = scene.sprites->sprites[i].width;
+                    sprites->sprites[i].height = scene.sprites->sprites[i].height;
+                    sprites->sprites[i].texture = scene.sprites->sprites[i].texture; // copying the texture pointer is fine
+                    sprites->sprites[i].texCoords[0] = scene.sprites->sprites[i].texCoords[0];
+                    sprites->sprites[i].texCoords[1] = scene.sprites->sprites[i].texCoords[1];
+                    sprites->sprites[i].texCoords[2] = scene.sprites->sprites[i].texCoords[2];
+                    sprites->sprites[i].texCoords[3] = scene.sprites->sprites[i].texCoords[3];
+                }
+            }
         }
 
         return *this;
@@ -126,8 +168,9 @@ namespace Dralgeer {
     LevelEditorScene& LevelEditorScene::operator = (LevelEditorScene &&scene) {
         if (this != &scene) {
             camera = std::move(scene.camera);
-            sprites = std::move(scene.sprites);
             components = std::move(scene.components);
+            sprites = scene.sprites;
+            scene.sprites = NULL;
 
             capacity = scene.capacity;
             numObjects = scene.numObjects;
@@ -138,7 +181,10 @@ namespace Dralgeer {
         return *this;
     };
 
-    LevelEditorScene::~LevelEditorScene() { delete[] gameObjects; };
+    LevelEditorScene::~LevelEditorScene() {
+        for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
+        delete[] gameObjects;
+    };
 
     void LevelEditorScene::init() {
         camera.pos = glm::vec2(0.0f, 0.0f);
@@ -148,7 +194,6 @@ namespace Dralgeer {
         loadResources();
 
         // load sprite sheet
-        // todo could try making the sprites thing a pointer just to see
         sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png");
 
         components.name = "LevelEditor";

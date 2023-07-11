@@ -12,6 +12,9 @@
 
 // todo delete vao and buffers for the other things that use them too in the destructor
 
+// todo go through and do not delete textures when they're inside of a container, only do so in the AssetPool afterwards and ensure
+// todo  everything adds textures to the AssetPool
+
 #include "imguilayer.h"
 #include "listeners.h"
 #include "render.h"

@@ -106,7 +106,7 @@ namespace Dralgeer {
 
     class LevelEditorScene : public Scene {
         private:
-            SpriteSheet* sprites;
+            SpriteSheet* sprites = nullptr;
             GameObject components;
             bool imGuiSetup = 1; // ! DO NOT serialize
 
