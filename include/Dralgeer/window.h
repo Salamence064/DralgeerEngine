@@ -118,8 +118,8 @@ namespace Dralgeer {
             float dt = 0.0f;
 
             DebugDraw::start();
-            // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 500);
-            // DebugDraw::addLine2D(glm::vec2(200, 200), glm::vec2(340, 340), glm::vec3(1, 0, 0), 500);
+            DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 100);
+            DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 100);
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             // Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
@@ -150,7 +150,7 @@ namespace Dralgeer {
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                DebugDraw::draw();
+                DebugDraw::draw(currScene->camera);
                 Renderer::currentShader = defaultShader;
                 currScene->render();
 

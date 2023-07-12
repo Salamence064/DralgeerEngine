@@ -6,12 +6,10 @@ namespace Dralgeer {
         int numLines = 0;
         int capacity = 8;
 
-        float vertexArray[DEBUG_VERTEX_ARR_SIZE];
+        float vertices[DEBUG_VERTEX_ARR_SIZE];
         Shader shader;
 
         unsigned int vaoID, vboID;
         bool started = 0;
-
-        Camera camera = {glm::vec2(0.0f)};
     }
 }
