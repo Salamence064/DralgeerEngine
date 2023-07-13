@@ -26,30 +26,28 @@ namespace Dralgeer {
         extern unsigned int vaoID, vboID;
         extern bool started;
 
-        inline void loadVertexProperties(int index) { // todo print out stuff (like numLines) to figure out why one is displaying but not the other
+        inline void loadVertexProperties(int index) {
             int offset = index * 2 * DEBUG_VERTEX_SIZE;
 
             // * Starting vertex
             // load position
             vertices[offset] = lines[index].start.x;
             vertices[offset + 1] = lines[index].start.y;
-            vertices[offset + 2] = 0.0f; // ! not sure why we do this. Probably change after I get it to work
 
             // load color
-            vertices[offset + 3] = lines[index].color.x;
-            vertices[offset + 4] = lines[index].color.y;
-            vertices[offset + 5] = lines[index].color.z;
+            vertices[offset + 2] = lines[index].color.x;
+            vertices[offset + 3] = lines[index].color.y;
+            vertices[offset + 4] = lines[index].color.z;
 
             // * Ending vertex
             // load position
-            vertices[offset + 6] = lines[index].end.x;
-            vertices[offset + 7] = lines[index].end.y;
-            vertices[offset + 8] = 0.0f; // ! not sure why we do this. Probably change after I get it to work
+            vertices[offset + 5] = lines[index].end.x;
+            vertices[offset + 6] = lines[index].end.y;
 
             // load color
-            vertices[offset + 9] = lines[index].color.x;
-            vertices[offset + 10] = lines[index].color.y;
-            vertices[offset + 11] = lines[index].color.z;
+            vertices[offset + 7] = lines[index].color.x;
+            vertices[offset + 8] = lines[index].color.y;
+            vertices[offset + 9] = lines[index].color.z;
         };
 
         inline void start() {
@@ -66,7 +64,7 @@ namespace Dralgeer {
             glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
             // enable the vertex array attributes
-            glVertexAttribPointer(0, 3, GL_FLOAT, 0, DEBUG_VERTEX_SIZE_BYTES, (void*) 0);
+            glVertexAttribPointer(0, 2, GL_FLOAT, 0, DEBUG_VERTEX_SIZE_BYTES, (void*) 0);
             glVertexAttribPointer(1, 3, GL_FLOAT, 0, DEBUG_VERTEX_SIZE_BYTES, (void*) DEBUG_COLOR_OFFSET);
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);

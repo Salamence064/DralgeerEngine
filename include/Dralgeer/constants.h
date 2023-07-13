@@ -19,9 +19,9 @@
 // debug draw
 #define MAX_DEBUG_LINES 500
 #define DEBUG_VERTEX_ARR_SIZE 6000
-#define DEBUG_VERTEX_SIZE 6
+#define DEBUG_VERTEX_SIZE 5
 #define DEBUG_VERTEX_SIZE_BYTES (DEBUG_VERTEX_SIZE * sizeof(float))
-#define DEBUG_COLOR_OFFSET (3 * sizeof(float))
+#define DEBUG_COLOR_OFFSET (2 * sizeof(float))
 
 // renderer
 // todo probably up the max batch size to 1000 and buffer the data in segments
