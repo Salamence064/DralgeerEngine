@@ -23,7 +23,8 @@ namespace Dralgeer {
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 glBindRenderbuffer(GL_RENDERBUFFER, 0);
             };
-            
+
+            ~FrameBuffer() { glDeleteFramebuffers(1, &fboID); };
     };
 
     class PickingTexture {

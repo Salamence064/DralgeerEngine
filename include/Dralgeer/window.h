@@ -15,6 +15,15 @@
 // todo go through and do not delete textures when they're inside of a container, only do so in the AssetPool afterwards and ensure
 // todo  everything adds textures to the AssetPool
 
+// ===================================================================
+// List of what to fix
+// - Framebuffer causes screen tearing
+// - ImGui docking space
+// - Get GridLines to draw in the gameview window
+// - Pick up the Sprite selected from the ImGui menu
+// - Place down the sprite on the gameview window (and only there)
+// ===================================================================
+
 #include "imguilayer.h"
 #include "listeners.h"
 #include "render.h"
@@ -122,41 +131,43 @@ namespace Dralgeer {
             // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
-            // Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
+            Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
                 // Poll for events
                 glfwPollEvents();
 
-                // todo setting the picking shader as the active shader causes ImGui to screen tear
                 // render picking texture
                 glDisable(GL_BLEND);
-                // pickingTexture.enableWriting();
+                pickingTexture.enableWriting();
 
                 glViewport(0, 0, 1920, 1080);
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                // Renderer::currentShader = pickingShader;
-                Renderer::currentShader = defaultShader;
+                Renderer::currentShader = pickingShader;
                 currScene->render();
 
-                // pickingTexture.disableWriting();
+                pickingTexture.disableWriting();
                 glEnable(GL_BLEND);
 
                 // render the actual game
                 DebugDraw::beginFrame();
-                frameBuffer.bind();
+                // todo DebugDraw does not draw successfully when the framebuffer here in windows.h is active
+                // todo the framebuffer, when bound, also causes screen tearing for ImGui
+                // todo this means there's either an issue with my framebuffer or how I am writing to it after it's active
+                // todo it seems like the two layers are not properly getting merged together
+                // frameBuffer.bind();
 
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 DebugDraw::draw(currScene->camera);
-                // Renderer::currentShader = defaultShader;
+                Renderer::currentShader = defaultShader;
                 currScene->render();
 
-                frameBuffer.unbind();
+                // frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
                 currScene->update(dt);
                 imGuiLayer.update(dt, currScene);
