@@ -71,10 +71,6 @@ namespace Dralgeer {
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
-            // todo figure out what these do
-            glEnable(0);
-            glEnable(1);
-
             glLineWidth(2.0f);
             started = 1;
         };
@@ -124,7 +120,7 @@ namespace Dralgeer {
             shader.uploadMat4("uView", cam.view);
 
             // draw the batch
-            glDrawArrays(GL_LINES, 0, numLines);
+            glDrawArrays(GL_LINES, 0, 2*numLines);
 
             // disable the location
             glDisableVertexAttribArray(0);
