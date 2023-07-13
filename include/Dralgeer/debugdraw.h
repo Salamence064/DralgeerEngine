@@ -103,7 +103,13 @@ namespace Dralgeer {
 
             if (rebuffer) {
                 glBindBuffer(GL_ARRAY_BUFFER, vboID);
-                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes invalid value error (error 0x0501)
+
+                // GLenum err;
+                // while((err = glGetError()) != GL_NO_ERROR) {
+                //     std::cout << "[Error] " << err << "\n";
+                // }
+
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
             }
 

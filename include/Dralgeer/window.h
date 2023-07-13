@@ -118,8 +118,8 @@ namespace Dralgeer {
             float dt = 0.0f;
 
             DebugDraw::start();
-            DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
-            DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
+            // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
+            // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             // Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
@@ -156,6 +156,7 @@ namespace Dralgeer {
 
                 // frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
+                currScene->update(dt);
                 imGuiLayer.update(dt, currScene);
 
                 // initialize the gamepadState // todo set up later

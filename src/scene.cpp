@@ -10,9 +10,9 @@ namespace Dralgeer {
 
     void Scene::update(float dt) {
         camera.adjustProjection();
-        
+
         for (int i = numObjects - 1; i >= 0; --i) {
-            gameObjects[i]->update(dt);
+            gameObjects[i]->update(dt, camera);
 
             if (gameObjects[i]->dead) {
                 Renderer::destroy((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));

@@ -21,6 +21,9 @@ namespace Dralgeer {
     // todo maybe find a way to do stuff with just a flag inside of this class
         // ! This would probably be ideal seeing as we have to store it like that already
         // ! The only hurdle left would be storing the unique data for the different subclasses as inside functions we can use a switch
+    
+    // todo when I implement the enum + void* system instead, I can remove the Camera const &cam from many update function signatures
+    
     // * Implement rule of 5 for anything that extends this.
     class Component {
         protected:
@@ -33,7 +36,7 @@ namespace Dralgeer {
             GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
             virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual void update(float dt) = 0; // every component needs to override update.
+            virtual void update(float dt, Camera const &cam) = 0; // every component needs to override update.
             virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
             
             virtual void imGui() {
@@ -136,7 +139,7 @@ namespace Dralgeer {
             inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
             inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
             inline void imGui() { for (int i = 0; i < numComponents; ++i) { components[i]->imGui(); }};
-            inline void update(float dt) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt); }};
+            inline void update(float dt, Camera const &cam) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt, cam); }};
     };
 
 
@@ -176,7 +179,7 @@ namespace Dralgeer {
             ~SpriteRenderer();
 
             inline void start() override { lastTransform = gameObject->transform; };
-            void update(float dt) override;
+            void update(float dt, Camera const &cam) override;
 
             // Create a color picker for the sprites.
             void imGui() override;
@@ -204,7 +207,7 @@ namespace Dralgeer {
 
             ~EditorCamera();
 
-            inline void update(float dt) override;
+            inline void update(float dt, Camera const &cam) override;
     };
 
     class GridLines : public Component {
@@ -221,7 +224,7 @@ namespace Dralgeer {
 
             ~GridLines();
 
-            void update(float dt) override;
+            void update(float dt, Camera const &cam) override;
     };
 
     class MouseControls : public Component {
@@ -242,7 +245,7 @@ namespace Dralgeer {
             ~MouseControls();
 
             void pickupObject(GameObject* go);
-            void update(float dt) override;
+            void update(float dt, Camera const &cam) override;
     };
 }
 

@@ -154,7 +154,7 @@ namespace Dralgeer {
             // std::cout << sizeof(vertices) << "\n";
 
             // todo maybe could use an offset + an equation to determine the size for slightly greater efficiency
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes invalid value error (erro 0x0501)
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes invalid value error (error 0x0501)
             // ! unsure why but it more or less works for now so will fix after debugging more pressing things
 
             GLenum err;

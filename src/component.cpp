@@ -8,7 +8,7 @@
 #include <Dralgeer/window.h>
 #include <Dralgeer/debugdraw.h>
 
-namespace Dralgeer {
+namespace Dralgeer {    
     // * =====================================================================
     // * SpriteRenderer Stuff
 
@@ -110,7 +110,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * ====================
     
-    void SpriteRenderer::update(float dt) {
+    void SpriteRenderer::update(float dt, Camera const &cam) {
         if (lastTransform != gameObject->transform) {
             gameObject->transform = lastTransform;
             isDirty = 1;
@@ -202,7 +202,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    void EditorCamera::update(float dt) {
+    void EditorCamera::update(float dt, Camera const &cam) {
         if (!Window::imGuiLayer.gameViewWindow.getWantCaptureMouse()) { return; }
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && dragDebounce > 0.0f) {
@@ -307,9 +307,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    void GridLines::update(float dt) {
-        Camera cam = Window::currScene->camera; // make the code more readable
-
+    void GridLines::update(float dt, Camera const &cam) {
         int firstX = ((int) (cam.pos.x * cam.zoom) - GRID_WIDTH);
         int firstY = ((int) (cam.pos.y * cam.zoom) - GRID_HEIGHT);
         int width = ((int) (cam.projSize.x * cam.zoom)) + 2 * GRID_WIDTH;
@@ -394,7 +392,7 @@ namespace Dralgeer {
         Window::currScene->addGameObject(go);
     };
 
-    void MouseControls::update(float dt) {
+    void MouseControls::update(float dt, Camera const &cam) {
         if (holdingObject) {
             holdingObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             holdingObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
