@@ -129,32 +129,34 @@ namespace Dralgeer {
                 // Poll for events
                 glfwPollEvents();
 
-                // render picking texture // todo this portion causes imgui screen tearing
-                // glDisable(GL_BLEND);
+                // todo setting the picking shader as the active shader causes ImGui to screen tear
+                // render picking texture
+                glDisable(GL_BLEND);
                 // pickingTexture.enableWriting();
 
-                // glViewport(0, 0, 1920, 1080);
-                // glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-                // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glViewport(0, 0, 1920, 1080);
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Renderer::currentShader = pickingShader;
-                // currScene->render();
+                Renderer::currentShader = defaultShader;
+                currScene->render();
 
                 // pickingTexture.disableWriting();
-                // glEnable(GL_BLEND);
+                glEnable(GL_BLEND);
 
                 // render the actual game
                 DebugDraw::beginFrame();
-                // frameBuffer.bind();
+                frameBuffer.bind();
 
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 DebugDraw::draw(currScene->camera);
-                Renderer::currentShader = defaultShader;
+                // Renderer::currentShader = defaultShader;
                 currScene->render();
 
-                // frameBuffer.unbind();
+                frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
                 currScene->update(dt);
                 imGuiLayer.update(dt, currScene);
