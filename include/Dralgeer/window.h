@@ -17,12 +17,15 @@
 
 // ===================================================================
 // List of what to fix
-// - Framebuffer causes screen tearing
-// - ImGui docking space
-// - Get GridLines to draw in the gameview window
+// // - Framebuffer causes screen tearing
+// // - ImGui docking space
+// - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
 // - Pick up the Sprite selected from the ImGui menu
 // - Place down the sprite on the gameview window (and only there)
 // ===================================================================
+
+// what the framebuffer does is allow me to draw to the null texture on it
+// I can then place this framebuffer texture on the ImGui for the GameviewWindow, displaying the scene in the gameview window instead
 
 #include "imguilayer.h"
 #include "listeners.h"
@@ -31,7 +34,7 @@
 
 namespace Dralgeer {
     struct WindowData {
-        uint16_t width, height;
+        int width, height;
         std::string title;
     };
 
@@ -177,7 +180,7 @@ namespace Dralgeer {
 
                 // frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
-                imGuiLayer.update(dt, currScene);
+                imGuiLayer.update(dt, currScene, data.width, data.height);
 
                 // initialize the gamepadState // todo set up later
                 // if (initGamepadState && JoystickListener::jConnected && JoystickListener::jGamepad) {

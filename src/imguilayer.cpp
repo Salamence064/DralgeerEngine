@@ -3,13 +3,14 @@
 #include <Dralgeer/imguilayer.h>
 
 namespace Dralgeer {
-    inline void ImGuiLayer::setupDockerSpace() const {
+    // todo change the background color of the docking space to a darker grey
+    inline void ImGuiLayer::setupDockerSpace(int width, int height) const {
         uint32_t windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                 ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
         ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(Window::data.width, Window::data.height - 93.0f), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(width, height - 93.0f), ImGuiCond_Always);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
@@ -68,12 +69,12 @@ namespace Dralgeer {
         ImGui::StyleColorsDark();
     };
 
-    void ImGuiLayer::update(float dt, Scene* currScene) {
+    void ImGuiLayer::update(float dt, Scene* currScene, int windowWidth, int windowHeight) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        setupDockerSpace();
+        setupDockerSpace(windowWidth, windowHeight);
 
         currScene->imGui();
         gameViewWindow.imGui();

@@ -12,7 +12,7 @@ namespace Dralgeer {
             GLFWwindow* window; // We do not need to implement rule of 5 as this will be the same one in Window.
 
             // todo factor in the top of the window and the task bar without hardcoding it in
-            inline void setupDockerSpace() const;
+            inline void setupDockerSpace(int width, int height) const;
 
         public:
             PropertiesWindow propertiesWindow;
@@ -20,7 +20,7 @@ namespace Dralgeer {
 
             ImGuiLayer() {};
             void init(GLFWwindow* window, PickingTexture const &pickingTexture);
-            void update(float dt, Scene* currScene);
+            void update(float dt, Scene* currScene, int windowWidth, int windowHeight);
             void dispose() const;
     };
 }
