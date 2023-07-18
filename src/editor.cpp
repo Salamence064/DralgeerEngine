@@ -51,6 +51,7 @@ namespace Dralgeer {
         rightX = leftX + windowSize.x;
         topY = bottomY + windowSize.y;
 
+        // todo when the framebuffer properly works, this will allow for the scene to be displayed on the gameview window
         unsigned int texID = Window::frameBuffer.getTextureID();
         ImGui::Image((void*) texID, windowSize, ImVec2(0, 1), ImVec2(1, 0));
 

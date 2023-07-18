@@ -138,9 +138,14 @@ namespace Dralgeer {
                 // Poll for events
                 glfwPollEvents();
 
+                // todo the framebuffer in picking texture gets overridden by the normal framebuffer
+                // todo move the framebuffer back to the normal draw instances, but make sure it will show up on the gameview window thing
+
                 // render picking texture
                 glDisable(GL_BLEND);
                 pickingTexture.enableWriting();
+
+                frameBuffer.bind();
 
                 glViewport(0, 0, 1920, 1080);
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -148,6 +153,8 @@ namespace Dralgeer {
 
                 Renderer::currentShader = pickingShader;
                 currScene->render();
+
+                frameBuffer.unbind();
 
                 pickingTexture.disableWriting();
                 glEnable(GL_BLEND);
@@ -165,11 +172,11 @@ namespace Dralgeer {
 
                 DebugDraw::draw(currScene->camera);
                 Renderer::currentShader = defaultShader;
+                currScene->update(dt);
                 currScene->render();
 
                 // frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
-                currScene->update(dt);
                 imGuiLayer.update(dt, currScene);
 
                 // initialize the gamepadState // todo set up later
