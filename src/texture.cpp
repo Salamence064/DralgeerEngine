@@ -16,6 +16,7 @@ namespace Dralgeer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     };
 
     void Texture::init(std::string const &filepath) { // todo the issue likely has to do with how I bind it in the renderer

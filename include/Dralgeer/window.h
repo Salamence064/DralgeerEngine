@@ -191,6 +191,12 @@ namespace Dralgeer {
                 endTime = (float) glfwGetTime();
                 dt += endTime - startTime;
                 startTime = endTime;
+
+                // * Check for errors to make it easier to debug (there were none)
+                // GLenum err;
+                // while((err = glGetError()) != GL_NO_ERROR) {
+                //     std::cout << "[Error] " << err << "\n";
+                // }
             }
         };
 

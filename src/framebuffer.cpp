@@ -14,15 +14,16 @@ namespace Dralgeer {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex.texID, 0);
 
         // create the render buffer to store depth data
+        unsigned int rboID;
         glGenRenderbuffers(1, &rboID);
         glBindRenderbuffer(GL_RENDERBUFFER, rboID);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID);
 
         // ensure the framebuffer is complete
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) { return; }
-
-        throw std::runtime_error("[ERROR] Framebuffer is not complete.\n");
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) { throw std::runtime_error("[ERROR] Framebuffer is not complete.\n"); }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     };
 
     // * =======================================================
