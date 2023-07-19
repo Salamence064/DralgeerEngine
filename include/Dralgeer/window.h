@@ -138,6 +138,10 @@ namespace Dralgeer {
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
+                // todo framebuffer still leads to ImGui screen tearing
+                // todo fix after getting it to render to the game viewport
+                // todo will have to decrease the size of the dockspace to see if it still screen tears or not
+
                 // Poll for events
                 glfwPollEvents();
 
@@ -148,7 +152,7 @@ namespace Dralgeer {
                 glDisable(GL_BLEND);
                 pickingTexture.enableWriting();
 
-                frameBuffer.bind();
+                // frameBuffer.bind();
 
                 glViewport(0, 0, 1920, 1080);
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -157,28 +161,27 @@ namespace Dralgeer {
                 Renderer::currentShader = pickingShader;
                 currScene->render();
 
-                frameBuffer.unbind();
+                // frameBuffer.unbind();
 
                 pickingTexture.disableWriting();
                 glEnable(GL_BLEND);
 
                 // render the actual game
+                // todo the framebuffer drawing issue is likely due to some sort of issue when it comes to rendering to it
                 DebugDraw::beginFrame();
-                // todo DebugDraw does not draw successfully when the framebuffer here in windows.h is active
-                // todo the framebuffer, when bound, also causes screen tearing for ImGui
-                // todo this means there's either an issue with my framebuffer or how I am writing to it after it's active
-                // todo it seems like the two layers are not properly getting merged together
-                // frameBuffer.bind();
+                frameBuffer.bind();
 
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-                glClear(GL_COLOR_BUFFER_BIT);
+                glClear(GL_COLOR_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+                glEnable(GL_DEPTH_TEST);
 
                 DebugDraw::draw(currScene->camera);
                 Renderer::currentShader = defaultShader;
                 currScene->update(dt);
                 currScene->render();
 
-                // frameBuffer.unbind();
+                glDisable(GL_DEPTH_TEST);
+                frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
                 imGuiLayer.update(dt, currScene, data.width, data.height);
 
