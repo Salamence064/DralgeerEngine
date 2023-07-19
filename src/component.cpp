@@ -317,7 +317,8 @@ namespace Dralgeer {
         int horzLines = ((int) (cam.projSize.y * cam.zoom)/GRID_HEIGHT) + 2;
 
         int maxLines = MAX(vertLines, horzLines);
-        glm::vec3 color(0.15f, 0.15f, 0.5f);
+        glm::vec3 color(0.0f, 0.0f, 0.0f); // ! black color just for testing
+        // glm::vec3 color(0.8549f, 0.4392f, 0.8392f); // violet color (ideal color)
 
         for (int i = 0; i < maxLines; ++i) {
             int x = firstX + i*GRID_WIDTH;

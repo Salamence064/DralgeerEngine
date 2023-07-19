@@ -134,13 +134,11 @@ namespace Dralgeer {
 
             DebugDraw::start();
 
-            // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
-            // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
+            DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
+            DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
-
-            std::cout << "Framebuffer texID: " << frameBuffer.getTextureID() << "\n";
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
@@ -156,7 +154,7 @@ namespace Dralgeer {
                 pickingTexture.enableWriting();
 
                 glViewport(0, 0, 1920, 1080);
-                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 Renderer::currentShader = pickingShader;
@@ -170,7 +168,7 @@ namespace Dralgeer {
                 DebugDraw::beginFrame();
                 frameBuffer.bind();
 
-                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // ideal color = (0.125f, 0.125f, 0.125f, 1.0f), white is just to test
                 glClear(GL_COLOR_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
                 glEnable(GL_DEPTH_TEST);
 
