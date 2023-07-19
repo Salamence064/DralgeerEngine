@@ -149,20 +149,9 @@ namespace Dralgeer {
 
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
-            glBindBuffer(GL_ARRAY_BUFFER, vboID);
-
-            // std::cout << GL_BUFFER_SIZE << "\n";
-            // std::cout << sizeof(vertices) << "\n";
-
             // todo maybe could use an offset + an equation to determine the size for slightly greater efficiency
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes invalid value error (error 0x0501)
-            // ! unsure why but it more or less works for now so will fix after debugging more pressing things
-
-            GLenum err;
-            while((err = glGetError()) != GL_NO_ERROR) {
-                std::cout << "[Error] " << err << "\n";
-            }
-
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
