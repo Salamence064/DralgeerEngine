@@ -15,6 +15,8 @@
 // todo go through and do not delete textures when they're inside of a container, only do so in the AssetPool afterwards and ensure
 // todo  everything adds textures to the AssetPool
 
+// todo go through all the stuff that uses the Windows namespace outside of windows.h and refactor it to be based around parameters passed to a function
+
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -113,7 +115,7 @@ namespace Dralgeer {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             // frame buffer config
-            glEnable(GL_TEXTURE_2D); // ! this is probs redundant. Remove after getting stuff to work
+            // glEnable(GL_TEXTURE_2D); // ! this is probs redundant. Remove after getting stuff to work
             frameBuffer.init(1920, 1080);
             pickingTexture.init(1920, 1080);
             glViewport(0, 0, 1920, 1080);
@@ -138,25 +140,20 @@ namespace Dralgeer {
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
+            std::cout << "Framebuffer texID: " << frameBuffer.getTextureID() << "\n";
+
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
                 // todo framebuffer still leads to ImGui screen tearing
                 // todo fix after getting it to render to the game viewport
                 // todo will have to decrease the size of the dockspace to see if it still screen tears or not
 
-                
-
                 // Poll for events
                 glfwPollEvents();
-
-                // todo the framebuffer in picking texture gets overridden by the normal framebuffer
-                // todo move the framebuffer back to the normal draw instances, but make sure it will show up on the gameview window thing
 
                 // render picking texture
                 glDisable(GL_BLEND);
                 pickingTexture.enableWriting();
-
-                // frameBuffer.bind();
 
                 glViewport(0, 0, 1920, 1080);
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -165,17 +162,15 @@ namespace Dralgeer {
                 Renderer::currentShader = pickingShader;
                 currScene->render();
 
-                // frameBuffer.unbind();
-
                 pickingTexture.disableWriting();
                 glEnable(GL_BLEND);
 
                 // render the actual game
-                // todo the framebuffer drawing issue is likely due to some sort of issue when it comes to rendering to it
+                // todo nothing that's drawn to the framebuffer actually displays
                 DebugDraw::beginFrame();
                 frameBuffer.bind();
 
-                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
                 glEnable(GL_DEPTH_TEST);
 
@@ -187,7 +182,7 @@ namespace Dralgeer {
                 glDisable(GL_DEPTH_TEST);
                 frameBuffer.unbind();
                 MouseListener::updateWorldCoords();
-                imGuiLayer.update(dt, currScene, data.width, data.height);
+                imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height);
 
                 // initialize the gamepadState // todo set up later
                 // if (initGamepadState && JoystickListener::jConnected && JoystickListener::jGamepad) {
@@ -209,7 +204,8 @@ namespace Dralgeer {
                 dt += endTime - startTime;
                 startTime = endTime;
 
-                // * Check for errors to make it easier to debug (there were none)
+                // * Check for errors to make it easier to debug
+                // ! this will be removed in the final build
                 // GLenum err;
                 // while((err = glGetError()) != GL_NO_ERROR) {
                 //     std::cout << "[Error] " << err << "\n";

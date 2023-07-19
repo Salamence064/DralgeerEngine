@@ -15,7 +15,7 @@ namespace Dralgeer {
             inline ImVec2 getCenteredPos(ImVec2 const &size) const;
 
         public:
-            void imGui();
+            void imGui(unsigned int frameBufferTexID);
             inline bool getWantCaptureMouse() const {
                 return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
             };
