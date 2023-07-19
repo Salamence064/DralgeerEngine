@@ -113,6 +113,7 @@ namespace Dralgeer {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             // frame buffer config
+            glEnable(GL_TEXTURE_2D); // ! this is probs redundant. Remove after getting stuff to work
             frameBuffer.init(1920, 1080);
             pickingTexture.init(1920, 1080);
             glViewport(0, 0, 1920, 1080);
@@ -130,6 +131,7 @@ namespace Dralgeer {
             float dt = 0.0f;
 
             DebugDraw::start();
+
             // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
             // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
@@ -141,6 +143,8 @@ namespace Dralgeer {
                 // todo framebuffer still leads to ImGui screen tearing
                 // todo fix after getting it to render to the game viewport
                 // todo will have to decrease the size of the dockspace to see if it still screen tears or not
+
+                
 
                 // Poll for events
                 glfwPollEvents();

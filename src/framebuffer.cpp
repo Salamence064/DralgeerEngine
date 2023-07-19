@@ -10,9 +10,9 @@ namespace Dralgeer {
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
 
         // create the texture to render the data to and attach it to our frame buffer
-        tex = Texture(width, height);
+        tex.init(width, height);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex.texID, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        tex.unbind();
 
         // create the render buffer to store depth data
         unsigned int rboID;

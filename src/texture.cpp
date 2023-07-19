@@ -4,20 +4,6 @@
 #include <iostream> // ! for debugging
 
 namespace Dralgeer {
-    Texture::Texture(int width, int height) : width(width), height(height) {
-        filepath = "generated";
-
-        // generate texture on the GPU
-        glGenTextures(1, &texID);
-        glBindTexture(GL_TEXTURE_2D, texID);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-        // define the type of interpolation when stretching or shrinking the image (linear)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    };
-
     void Texture::init(std::string const &filepath) { // todo the issue likely has to do with how I bind it in the renderer
         this->filepath = filepath;
 
@@ -59,5 +45,21 @@ namespace Dralgeer {
         }
 
         stbi_image_free(image);
+    };
+
+    void Texture::init(int width, int height) {
+        this->width = width;
+        this->height = height;
+        filepath = "generated";
+
+        // generate texture on the GPU
+        glGenTextures(1, &texID);
+        glBindTexture(GL_TEXTURE_2D, texID);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+        // define the type of interpolation when stretching or shrinking the image (linear)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     };
 }

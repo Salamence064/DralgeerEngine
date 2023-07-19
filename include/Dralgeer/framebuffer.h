@@ -16,12 +16,12 @@ namespace Dralgeer {
 
             inline void bind() const {
                 glBindFramebuffer(GL_FRAMEBUFFER, fboID);
-                glBindTexture(GL_TEXTURE_2D, tex.texID);
+                tex.bind();
             };
 
             inline void unbind() const {
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                glBindTexture(GL_TEXTURE_2D, 0);
+                tex.unbind();
             };
 
             ~FrameBuffer() { glDeleteFramebuffers(1, &fboID); };

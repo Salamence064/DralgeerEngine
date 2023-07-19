@@ -237,10 +237,8 @@ namespace Dralgeer {
 
             Texture() {};
 
-            // ! may not need this and could have a second init function instead
-            Texture(int width, int height);
-
             void init(std::string const &filepath);
+            void init(int width, int height);
             inline void bind() const { glBindTexture(GL_TEXTURE_2D, texID); };
             inline void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); };
 
