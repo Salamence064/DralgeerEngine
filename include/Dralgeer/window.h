@@ -140,6 +140,8 @@ namespace Dralgeer {
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
+            // todo instead of setting Renderer::currShader, get rid of that field and pass in the currShader as a function variable
+
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
                 // todo framebuffer still leads to ImGui screen tearing
@@ -165,6 +167,9 @@ namespace Dralgeer {
 
                 // render the actual game
                 // todo nothing that's drawn to the framebuffer actually displays
+                // todo in other words, the VAO and VBO stuff for the framebuffer doesnt work
+                // todo  but the glClearColor does
+                // todo look into stencils and how to draw textures to a framebuffer
                 DebugDraw::beginFrame();
                 frameBuffer.bind();
 

@@ -3,7 +3,6 @@
 #include <Dralgeer/imguilayer.h>
 
 namespace Dralgeer {
-    // todo change the background color of the docking space to a darker grey
     inline void ImGuiLayer::setupDockerSpace(int width, int height) const {
         uint32_t windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |

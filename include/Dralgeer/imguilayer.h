@@ -10,8 +10,6 @@ namespace Dralgeer {
     class ImGuiLayer {
         private:
             GLFWwindow* window; // We do not need to implement rule of 5 as this will be the same one in Window.
-
-            // todo factor in the top of the window and the task bar without hardcoding it in
             inline void setupDockerSpace(int width, int height) const;
 
         public:

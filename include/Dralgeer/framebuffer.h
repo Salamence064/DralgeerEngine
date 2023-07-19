@@ -6,7 +6,7 @@
 namespace Dralgeer {
     class FrameBuffer {
         private:
-            unsigned int fboID;
+            unsigned int fboID, rboID;
             Texture tex;
 
         public: // todo google the thing needed to make sure the fbo and texture get deleted after this gets deleted
@@ -24,7 +24,10 @@ namespace Dralgeer {
                 tex.unbind();
             };
 
-            ~FrameBuffer() { glDeleteFramebuffers(1, &fboID); };
+            ~FrameBuffer() {
+                glDeleteRenderbuffers(1, &rboID);
+                glDeleteFramebuffers(1, &fboID);
+            };
     };
 
     class PickingTexture {

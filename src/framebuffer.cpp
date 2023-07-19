@@ -15,11 +15,10 @@ namespace Dralgeer {
         tex.unbind();
 
         // create the render buffer to store depth data
-        unsigned int rboID;
         glGenRenderbuffers(1, &rboID);
         glBindRenderbuffer(GL_RENDERBUFFER, rboID);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboID);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
         // ensure the framebuffer is complete
