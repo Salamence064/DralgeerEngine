@@ -169,14 +169,10 @@ namespace Dralgeer {
                 glEnable(GL_BLEND);
 
                 // render the actual game
-                // todo nothing that's drawn to the framebuffer actually displays
-                // todo in other words, the VAO and VBO stuff for the framebuffer doesnt work
-                // todo  but the glClearColor does
-                // todo look into stencils and how to draw textures to a framebuffer
                 DebugDraw::beginFrame();
                 frameBuffer.bind();
 
-                glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // ideal color = (0.125f, 0.125f, 0.125f, 1.0f), white is just to test
+                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glEnable(GL_DEPTH_TEST);
 
