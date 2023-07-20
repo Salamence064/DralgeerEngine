@@ -187,7 +187,7 @@ namespace Dralgeer {
 
                 glDisable(GL_DEPTH_TEST);
                 frameBuffer.unbind();
-                MouseListener::updateWorldCoords();
+                MouseListener::updateWorldCoords(currScene->camera);
                 imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height);
 
                 // initialize the gamepadState // todo set up later

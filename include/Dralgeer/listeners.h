@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <Dralgeer/camera.h>
 
 namespace Dralgeer {
     // * ===================
@@ -29,7 +30,13 @@ namespace Dralgeer {
         static float mGameViewPortX = 0.0f, mGameViewPortY = 0.0f;
         static float mGameViewPortWidth = 0.0f, mGameViewPortHeight = 0.0f;
 
-        extern void updateWorldCoords();
+        static void updateWorldCoords(Camera const &cam) {
+            mLastWorldX = mWorldX;
+            mLastWorldY = mWorldY;
+
+            mWorldX = ((cam.invView * cam.invProj) * glm::vec4(((mX - mGameViewPortX)/mGameViewPortWidth) * 2.0f - 1.0f, 0.0f, 0.0f, 1.0f)).x;
+            mWorldY = ((cam.invView * cam.invProj) * glm::vec4(0.0f, -(((mY - mGameViewPortY)/mGameViewPortHeight) * 2.0f - 1.0f), 0.0f, 1.0f)).y;
+        };
 
         static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
             if (mButtonsDown) { mIsDragging = 1; }
