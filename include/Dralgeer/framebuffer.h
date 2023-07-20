@@ -1,5 +1,4 @@
-#ifndef FRAME_BUFFER_H
-#define FRAME_BUFFER_H
+#pragma once
 
 #include "texture.h"
 
@@ -56,5 +55,3 @@ namespace Dralgeer {
             inline void disableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); };
     };  
 }
-
-#endif // !FRAME_BUFFER_H

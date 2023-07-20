@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -245,5 +244,3 @@ namespace Dralgeer {
             ~Texture() { glDeleteTextures(1, &texID); };
     };
 }
-
-#endif // ! TEXTURE_H

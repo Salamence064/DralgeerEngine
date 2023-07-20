@@ -21,6 +21,7 @@
 // todo there are likely leaks in this engine
 
 // todo at some point determine better values for the starting positions for the ImGui stuff
+// todo at some point organize the .h files into some directories
 
 // ===================================================================
 // List of what to fix

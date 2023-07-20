@@ -1,5 +1,4 @@
-#ifndef DEBUG_DRAW_H
-#define DEBUG_DRAW_H
+#pragma once
 
 #include "assetpool.h"
 #include "camera.h"
@@ -158,5 +157,3 @@ namespace Dralgeer {
         // TODO: add constants for common colors
     }
 }
-
-#endif // !DEBUG_DRAW_H

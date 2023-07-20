@@ -1,5 +1,4 @@
-#ifndef DIMGUI_H
-#define DIMGUI_H
+#pragma once
 
 #include "constants.h"
 #include <string>
@@ -110,5 +109,3 @@ namespace Dralgeer {
         };
     }
 }
-
-#endif // !DIMGUI_H

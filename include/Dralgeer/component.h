@@ -1,5 +1,4 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#pragma once
 
 #include "sprite.h"
 #include "camera.h"
@@ -248,5 +247,3 @@ namespace Dralgeer {
             void update(float dt, Camera const &cam) override;
     };
 }
-
-#endif // !COMPONENT_H

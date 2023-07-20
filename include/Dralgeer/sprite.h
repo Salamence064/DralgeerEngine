@@ -1,5 +1,4 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#pragma once
 
 #include "constants.h"
 #include "texture.h"
@@ -125,5 +124,3 @@ namespace Dralgeer {
             };
     };
 }
-
-#endif // !SPRITE_H

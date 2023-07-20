@@ -1,5 +1,4 @@
-#ifndef RENDER_H
-#define RENDER_H
+#pragma once
 
 #include "component.h"
 
@@ -150,5 +149,3 @@ namespace Dralgeer {
         };
     }
 }
-
-#endif // !RENDER_H

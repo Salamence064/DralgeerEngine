@@ -1,5 +1,4 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include "component.h"
 #include "render.h"
@@ -136,5 +135,3 @@ namespace Dralgeer {
             void imGui() override;
     };
 }
-
-#endif // !SCENE_H
