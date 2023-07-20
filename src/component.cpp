@@ -203,6 +203,9 @@ namespace Dralgeer {
     // * =====================
 
     void EditorCamera::update(float dt, Camera const &cam) {
+        // todo this is probably not gonna work
+        // todo it's getting close to the point where I will refactor it to use void* instead of the abstract class
+        // todo and pass in a bool for the getWantCaptureMouse
         if (!Window::imGuiLayer.gameViewWindow.getWantCaptureMouse()) { return; }
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && dragDebounce > 0.0f) {
@@ -390,7 +393,8 @@ namespace Dralgeer {
 
     void MouseControls::pickupObject(GameObject* go) {
         holdingObject = go;
-        Window::currScene->addGameObject(go);
+        Window::currScene->addGameObject(go); // todo be very careful with this thing, too
+        // todo, also, this should be inside of a scene, so we could probs just add it normally in the scene instead of adding it through here
     };
 
     void MouseControls::update(float dt, Camera const &cam) {

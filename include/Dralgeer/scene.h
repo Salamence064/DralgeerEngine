@@ -99,7 +99,7 @@ namespace Dralgeer {
             };
 
             void update(float dt);
-            inline void render() { Renderer::render(camera); };
+            inline void render(Shader const &currShader) { Renderer::render(currShader, camera); };
             inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i]->destory(); }};
     };
 

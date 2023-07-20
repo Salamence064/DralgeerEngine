@@ -136,7 +136,7 @@ namespace Dralgeer {
         glEnableVertexAttribArray(4);
     };
 
-    void RenderBatch::render(Camera const &cam) {
+    void RenderBatch::render(Shader const &currShader, Camera const &cam) {
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {
@@ -161,9 +161,9 @@ namespace Dralgeer {
         glEnableVertexAttribArray(1);
 
         // use shader
-        Renderer::currentShader.use();
-        Renderer::currentShader.uploadMat4("uProjection", cam.proj);
-        Renderer::currentShader.uploadMat4("uView", cam.view);
+        currShader.use();
+        currShader.uploadMat4("uProjection", cam.proj);
+        currShader.uploadMat4("uView", cam.view);
 
         // bind textures
         for (int i = 0; i < numTextures; ++i) {
@@ -171,11 +171,11 @@ namespace Dralgeer {
             textures[i]->bind();
         }
 
-        Renderer::currentShader.uploadIntArr("uTexture", texSlots, 16);
+        currShader.uploadIntArr("uTexture", texSlots, 16);
 
         glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
 
-        Renderer::currentShader.detach();
+        currShader.detach();
 
         // unbind everything
         glDisableVertexAttribArray(0);
@@ -228,7 +228,6 @@ namespace Dralgeer {
     // * ===============================================
 
     namespace Renderer {
-        Shader currentShader;
         RenderBatch batches[MAX_RENDER_BATCHES];
         int numBatches = 0;
     }

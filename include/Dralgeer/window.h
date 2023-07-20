@@ -1,9 +1,5 @@
 #pragma once
 
-// todo make sure everything is pragma once instead of ifndef guards
-
-// todo it is time to try to get this to compile and run properly
-
 // todo go through and ensure no memory leaks, especially in move assignment operators
 
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
@@ -17,6 +13,7 @@
 // todo  everything adds textures to the AssetPool
 
 // todo go through all the stuff that uses the Windows namespace outside of windows.h and refactor it to be based around parameters passed to a function
+// todo this one has been done but only with ideas through todos
 
 // todo there are likely leaks in this engine
 
@@ -161,8 +158,7 @@ namespace Dralgeer {
                 glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                Renderer::currentShader = pickingShader;
-                currScene->render();
+                currScene->render(pickingShader);
 
                 pickingTexture.disableWriting();
                 glEnable(GL_BLEND);
@@ -176,9 +172,8 @@ namespace Dralgeer {
                 glEnable(GL_DEPTH_TEST);
 
                 DebugDraw::draw(currScene->camera);
-                Renderer::currentShader = defaultShader;
                 currScene->update(dt);
-                currScene->render();
+                currScene->render(defaultShader);
 
                 glDisable(GL_DEPTH_TEST);
                 frameBuffer.unbind();

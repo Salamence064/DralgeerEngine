@@ -21,7 +21,6 @@ namespace Dralgeer {
             std::string filepath;
 
             int shaderID;
-            bool inUse = 0;
 
         public:
             Shader() {};
@@ -156,71 +155,62 @@ namespace Dralgeer {
                 }
             };
 
-            inline void use() {
-                if (!inUse) {
-                    // bind the shader program
-                    glUseProgram(shaderID);
-                    inUse = 1;
-                }
-            };
+            // * Do not call if already in use.
+            inline void use() const { glUseProgram(shaderID); };
 
-            inline void detach() {
-                glUseProgram(0);
-                inUse = 0;
-            };
+            inline void detach() const { glUseProgram(0); };
 
 
             // ? Note: OpenGL expects matrices in column major order.
 
-            inline void uploadMat4(char const* name, glm::mat4 const &mat) {
+            // * Only call if already in use.
+            inline void uploadMat4(char const* name, glm::mat4 const &mat) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // make sure it is in use
                 glUniformMatrix4fv(loc, 1, 0, &mat[0][0]); // todo glm says to do 1, but the actual size is 16
             };
             
-            inline void uploadMat3(char const* name, glm::mat3 const &mat) {
+            // * Only call if already in use.
+            inline void uploadMat3(char const* name, glm::mat3 const &mat) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
-
                 float buffer[9];
                 for (int i = 0; i < 3; ++i) { for (int j = 0; j < 3; ++j) { buffer[3*i + j] = mat[j][i]; }}
                 glUniformMatrix3fv(loc, 1, 0, &mat[0][0]);
             };
 
-            inline void uploadVec4(char const* name, glm::vec4 const &vec) {
+            // * Only call if already in use.
+            inline void uploadVec4(char const* name, glm::vec4 const &vec) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
                 glUniform4f(loc, vec.x, vec.y, vec.z, vec.w);
             };
 
-            inline void uploadVec3(char const* name, glm::vec3 const &vec) {
+            // * Only call if already in use.
+            inline void uploadVec3(char const* name, glm::vec3 const &vec) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
                 glUniform3f(loc, vec.x, vec.y, vec.z);
             };
 
-            inline void uploadVec2(char const* name, glm::vec2 const &vec) {
+            // * Only call if already in use.
+            inline void uploadVec2(char const* name, glm::vec2 const &vec) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
                 glUniform2f(loc, vec.x, vec.y);
             };
 
-            inline void uploadFloat(char const* name, float n) {
+            // * Only call if already in use.
+            inline void uploadFloat(char const* name, float n) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
                 glUniform1f(loc, n);
             };
 
             // * To upload a texture, use this with the proper slot put as the parameter n.
-            inline void uploadInt(char const* name, int n) {
+            // * Only call if already in use.
+            inline void uploadInt(char const* name, int n) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
                 glUniform1i(loc, n);
             };
 
-            inline void uploadIntArr(char const* name, int nums[], int size) {
+            // * Only call if already in use.
+            inline void uploadIntArr(char const* name, int nums[], int size) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                use(); // ensure it is in use
                 glUniform1iv(loc, size, nums);
             };
 
