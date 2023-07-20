@@ -38,11 +38,6 @@ namespace Dralgeer {
             mLastY = mY;
             mX = xpos;
             mY = ypos;
-
-            // mLastWorldX = mWorldX;
-            // mLastWorldY = mWorldY;
-            // mWorldX = calcOrthoX();
-            // mWorldY = calcOrthoY();
         };
 
         static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
