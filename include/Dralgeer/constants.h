@@ -1,7 +1,6 @@
 // ? Include the constants for the dralgeer engine.
 
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 // Width and height of a grid tile in pixels
 #define GRID_WIDTH 32
@@ -45,5 +44,3 @@
 
 // editor ImGui stuff
 #define DEFAULT_WIDGET_WIDTH 220.0f
-
-#endif // !CONSTANTS_H

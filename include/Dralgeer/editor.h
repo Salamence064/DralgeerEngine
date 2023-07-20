@@ -1,5 +1,4 @@
-#ifndef EDITOR_H
-#define EDITOR_H
+#pragma once
 
 #include "scene.h"
 #include "framebuffer.h"
@@ -9,6 +8,7 @@ namespace Dralgeer {
     class GameViewWindow {
         private:
             float leftX, rightX, topY, bottomY;
+            bool imGuiSetup = 1;
             // bool isPlaying = 0; // todo add in when I add in events
 
             inline ImVec2 getLargestSize() const;
@@ -35,5 +35,3 @@ namespace Dralgeer {
             void imGui() const;
     };
 }
-
-#endif // !EDITOR_H

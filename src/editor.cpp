@@ -38,6 +38,12 @@ namespace Dralgeer {
     void GameViewWindow::imGui(unsigned int frameBufferTexID) {
         ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
+        if (imGuiSetup) {
+            ImGui::SetWindowPos(ImVec2(800.0f, 500.0f));
+            ImGui::SetWindowSize(ImVec2(720.0f, 520.0f));
+            imGuiSetup = 0;
+        }
+
         ImVec2 windowSize = getLargestSize();
         ImVec2 windowPos = getCenteredPos(windowSize);
         ImGui::SetCursorPos(windowPos);

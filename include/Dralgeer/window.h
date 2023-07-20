@@ -1,5 +1,6 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
+
+// todo make sure everything is pragma once instead of ifndef guards
 
 // todo it is time to try to get this to compile and run properly
 
@@ -17,14 +18,15 @@
 
 // todo go through all the stuff that uses the Windows namespace outside of windows.h and refactor it to be based around parameters passed to a function
 
-// todo there seems to be some sort of leak with my engine -- likely related to the screen tearing
-// todo this will need to be heavily optimized, too. It lags cleaning up after each close out
+// todo there are likely leaks in this engine
+
+// todo at some point determine better values for the starting positions for the ImGui stuff
 
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
 // // - ImGui docking space
-// - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
+// // - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
 // - Pick up the Sprite selected from the ImGui menu
 // - Place down the sprite on the gameview window (and only there)
 // ===================================================================
@@ -137,8 +139,8 @@ namespace Dralgeer {
 
             DebugDraw::start();
 
-            DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
-            DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
+            // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
+            // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
@@ -147,10 +149,6 @@ namespace Dralgeer {
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
-                // todo framebuffer still leads to ImGui screen tearing
-                // todo fix after getting it to render to the game viewport
-                // todo will have to decrease the size of the dockspace to see if it still screen tears or not
-
                 // Poll for events
                 glfwPollEvents();
 
@@ -183,6 +181,11 @@ namespace Dralgeer {
 
                 glDisable(GL_DEPTH_TEST);
                 frameBuffer.unbind();
+
+                // clear the main screen's background
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                glClear(GL_COLOR_BUFFER_BIT);
+
                 MouseListener::updateWorldCoords(currScene->camera);
                 imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height);
 
@@ -226,5 +229,3 @@ namespace Dralgeer {
         };
     }
 }
-
-#endif // ! WINDOW_H

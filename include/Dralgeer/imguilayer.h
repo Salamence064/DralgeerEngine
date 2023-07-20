@@ -1,5 +1,4 @@
-#ifndef IMGUI_LAYER_H
-#define IMGUI_LAYER_H
+#pragma once
 
 #include <IMGUI/imgui_impl_glfw.h>
 #include <IMGUI/imgui_impl_opengl3.h>
@@ -22,5 +21,3 @@ namespace Dralgeer {
             void dispose() const;
     };
 }
-
-#endif // !IMGUI_LAYER_H
