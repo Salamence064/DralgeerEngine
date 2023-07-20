@@ -29,7 +29,7 @@ namespace Dralgeer {
     // * =======================================================
     // * PickingTexture Stuff
 
-    void PickingTexture::init(int width, int height) { // todo check which ones need to be deleted afterwards
+    void PickingTexture::init(int width, int height) {
         this->width = width;
         this->height = height;
 
@@ -38,7 +38,6 @@ namespace Dralgeer {
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
 
         // create the texture to render the data to and attach it to our frame buffer
-        unsigned int pTexID = 0;
         glGenTextures(1, &pTexID);
         glBindTexture(GL_TEXTURE_2D, pTexID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -49,7 +48,6 @@ namespace Dralgeer {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pTexID, 0);
 
         // create the texture object for the depth buffer
-        unsigned int depthTexID = 0;
         glEnable(GL_DEPTH_TEST);
         glGenTextures(1, &depthTexID);
         glBindTexture(GL_TEXTURE_2D, depthTexID);

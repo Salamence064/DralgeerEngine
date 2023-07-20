@@ -31,7 +31,7 @@ namespace Dralgeer {
 
     class PickingTexture {
         private:
-            unsigned int fboID;
+            unsigned int fboID, pTexID, depthTexID;
 
         public:
             int width, height;
@@ -53,5 +53,11 @@ namespace Dralgeer {
 
             inline void enableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboID); };
             inline void disableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); };
+
+            inline ~PickingTexture() {
+                glDeleteFramebuffers(1, &fboID);
+                glDeleteTextures(1, &pTexID);
+                glDeleteTextures(1, &depthTexID);
+            };
     };  
 }

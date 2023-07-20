@@ -227,10 +227,9 @@ namespace Dralgeer {
     };
 
     class MouseControls : public Component {
-        private:
-            GameObject* holdingObject = nullptr;
-
         public:
+            GameObject* heldObject = nullptr; // only set this equal to an object getting picked up
+
             MouseControls();
 
             // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
@@ -243,7 +242,6 @@ namespace Dralgeer {
 
             ~MouseControls();
 
-            void pickupObject(GameObject* go);
             void update(float dt, Camera const &cam) override;
     };
 }

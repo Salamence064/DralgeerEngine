@@ -368,7 +368,7 @@ namespace Dralgeer {
                 gameObject->name = mc.gameObject->name;
             }
 
-            holdingObject = nullptr; // since the object should be added to the scene this should not cause a memory leak
+            heldObject = nullptr; // since the object should be added to the scene this should not cause a memory leak
         }
 
         return *this;
@@ -384,25 +384,19 @@ namespace Dralgeer {
         return *this;
     };
 
-    // Note, do not delete holdingObject for the scene should handle that.
+    // Note, do not delete heldObject for the scene should handle that.
     MouseControls::~MouseControls() { if (gameObject) { delete gameObject; }};
 
     // * =====================
     // * Normal Functions
     // * =====================
 
-    void MouseControls::pickupObject(GameObject* go) {
-        holdingObject = go;
-        Window::currScene->addGameObject(go); // todo be very careful with this thing, too
-        // todo, also, this should be inside of a scene, so we could probs just add it normally in the scene instead of adding it through here
-    };
-
     void MouseControls::update(float dt, Camera const &cam) {
-        if (holdingObject) {
-            holdingObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
-            holdingObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
+        if (heldObject) {
+            heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
+            heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 
-            if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) { holdingObject = nullptr; }
+            if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) { heldObject = nullptr; }
         }
     };
 
