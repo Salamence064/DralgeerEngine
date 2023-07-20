@@ -4,7 +4,7 @@
 
 // todo change the match batch size to 1000 again and buffer sub data multiple times in smaller chunks
 
-// todo we can do the z-index stuff based around a depth buffer
+// todo do the z-index based on a z-coordinate passed using the VBO and just make it progressively more positive as the z-index increases
 
 namespace Dralgeer {
     // * ===============================================

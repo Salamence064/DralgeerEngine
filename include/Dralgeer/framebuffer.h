@@ -9,7 +9,7 @@ namespace Dralgeer {
             unsigned int fboID, rboID;
             Texture tex;
 
-        public: // todo google the thing needed to make sure the fbo and texture get deleted after this gets deleted
+        public:
             FrameBuffer() {};
             void init(int width, int height);
             inline unsigned int getTextureID() const { return tex.texID; };

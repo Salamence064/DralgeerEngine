@@ -8,6 +8,8 @@ namespace Dralgeer {
 
         // todo add in an updateWorldCoords function to the MouseListener that can be used outside of the callbacks
 
+        // todo update to just take a camera as a parameter instead of doing this
+
         void updateWorldCoords() {
             if (!Window::currScene) { return; } // ensure there is an active scene for this to update
 

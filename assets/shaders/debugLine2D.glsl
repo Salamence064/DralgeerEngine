@@ -12,7 +12,7 @@ void main()
 {
     fColor = aColor;
 
-    gl_Position = uProjection * uView * vec4(aPos, 0.0f, 1.0f);
+    gl_Position = uProjection * uView * vec4(aPos, -10.0f, 1.0f);
 }
 
 #type fragment

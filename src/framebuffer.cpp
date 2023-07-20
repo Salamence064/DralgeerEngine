@@ -29,7 +29,7 @@ namespace Dralgeer {
     // * =======================================================
     // * PickingTexture Stuff
 
-    void PickingTexture::init(int width, int height) {
+    void PickingTexture::init(int width, int height) { // todo check which ones need to be deleted afterwards
         this->width = width;
         this->height = height;
 

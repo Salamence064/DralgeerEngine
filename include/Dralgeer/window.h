@@ -17,6 +17,9 @@
 
 // todo go through all the stuff that uses the Windows namespace outside of windows.h and refactor it to be based around parameters passed to a function
 
+// todo there seems to be some sort of leak with my engine -- likely related to the screen tearing
+// todo this will need to be heavily optimized, too. It lags cleaning up after each close out
+
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -174,7 +177,7 @@ namespace Dralgeer {
                 frameBuffer.bind();
 
                 glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // ideal color = (0.125f, 0.125f, 0.125f, 1.0f), white is just to test
-                glClear(GL_COLOR_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glEnable(GL_DEPTH_TEST);
 
                 DebugDraw::draw(currScene->camera);
