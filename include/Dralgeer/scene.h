@@ -98,7 +98,7 @@ namespace Dralgeer {
                 return nullptr;
             };
 
-            void update(float dt);
+            void update(float dt, bool wantCapture);
             inline void render(Shader const &currShader) { Renderer::render(currShader, camera); };
             inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i]->destory(); }};
     };

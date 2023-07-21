@@ -110,7 +110,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * ====================
     
-    void SpriteRenderer::update(float dt, Camera const &cam) {
+    void SpriteRenderer::update(float dt, Camera const &cam, bool wantCapture) {
         if (lastTransform != gameObject->transform) {
             gameObject->transform = lastTransform;
             isDirty = 1;
@@ -202,11 +202,11 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    void EditorCamera::update(float dt, Camera const &cam) {
+    void EditorCamera::update(float dt, Camera const &cam, bool wantCapture) {
         // todo this is probably not gonna work
         // todo it's getting close to the point where I will refactor it to use void* instead of the abstract class
         // todo and pass in a bool for the getWantCaptureMouse
-        if (!Window::imGuiLayer.gameViewWindow.getWantCaptureMouse()) { return; }
+        if (!wantCapture) { return; }
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && dragDebounce > 0.0f) {
             clickOrigin = {MouseListener::mWorldX, MouseListener::mWorldY};
@@ -310,7 +310,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    void GridLines::update(float dt, Camera const &cam) {
+    void GridLines::update(float dt, Camera const &cam, bool wantCapture) {
         int firstX = ((int) (cam.pos.x * cam.zoom) - GRID_WIDTH);
         int firstY = ((int) (cam.pos.y * cam.zoom) - GRID_HEIGHT);
         int width = ((int) (cam.projSize.x * cam.zoom)) + 2 * GRID_WIDTH;
@@ -391,12 +391,26 @@ namespace Dralgeer {
     // * Normal Functions
     // * =====================
 
-    void MouseControls::update(float dt, Camera const &cam) {
-        if (heldObject) {
+    void MouseControls::update(float dt, Camera const &cam, bool wantCapture) {
+        std::cout << "Hello there\n";
+
+        // todo held object never gets updated
+
+        if (heldObject && wantCapture) { // todo probably check for getWantCapture, too (actually maybe not)
+            std::cout << "hii\n";
+            if (!objAdded) { if (Window::currScene) { std::cout << "Epic stuff\n"; } }
+
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) { heldObject = nullptr; }
+
+            // todo in here do the Window::currScene thing
+            // todo do some testing to make sure it won't be nullptr or have some annoying errors
+
+            // what we can do is add the held object to the scene once it gets into getWantCapture (if it isn't added yet)
+            // and then we just change its pos each time (probs have an added bool field)
+            // and we can improve this later on
         }
     };
 

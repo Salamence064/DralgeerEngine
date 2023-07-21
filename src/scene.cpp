@@ -8,11 +8,11 @@ namespace Dralgeer {
     // * ================================================
     // * Abstract Scene Class
 
-    void Scene::update(float dt) {
+    void Scene::update(float dt, bool wantCapture) {
         camera.adjustProjection();
 
         for (int i = numObjects - 1; i >= 0; --i) {
-            gameObjects[i]->update(dt, camera);
+            gameObjects[i]->update(dt, camera, wantCapture);
 
             if (gameObjects[i]->dead) {
                 Renderer::destroy((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));
@@ -242,7 +242,7 @@ namespace Dralgeer {
                 ImVec2(sprite.texCoords[2].x, sprite.texCoords[0].y), ImVec2(sprite.texCoords[0].x, sprite.texCoords[2].y)))
             {
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
-                addGameObject(go); // todo trace where this is going in the morning
+                addGameObject(go); // todo maybe don't add it to the renderer (or scene) until after it's placed
                 ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
             }
 

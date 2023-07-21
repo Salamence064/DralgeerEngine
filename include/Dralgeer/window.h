@@ -20,7 +20,7 @@
 // todo at some point determine better values for the starting positions for the ImGui stuff
 // todo at some point organize the .h files into some directories
 
-// todo make sure that each texture is added to the assetpool (we could also try to do the same for shaders and sprites, too)
+// todo make sure that each texture is added to the assetpool (we could also try to do the same for shaders and sprites, too, but not as useful)
 
 // ===================================================================
 // List of what to fix
@@ -145,8 +145,6 @@ namespace Dralgeer {
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
-            // todo instead of setting Renderer::currShader, get rid of that field and pass in the currShader as a function variable
-
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
                 // Poll for events
@@ -174,7 +172,7 @@ namespace Dralgeer {
                 glEnable(GL_DEPTH_TEST);
 
                 DebugDraw::draw(currScene->camera);
-                currScene->update(dt);
+                currScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
                 currScene->render(defaultShader);
 
                 glDisable(GL_DEPTH_TEST);

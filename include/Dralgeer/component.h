@@ -35,7 +35,7 @@ namespace Dralgeer {
             GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
             virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual void update(float dt, Camera const &cam) = 0; // every component needs to override update.
+            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
             virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
             
             virtual void imGui() {
@@ -138,7 +138,7 @@ namespace Dralgeer {
             inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
             inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
             inline void imGui() { for (int i = 0; i < numComponents; ++i) { components[i]->imGui(); }};
-            inline void update(float dt, Camera const &cam) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt, cam); }};
+            inline void update(float dt, Camera const &cam, bool wantCapture) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt, cam, wantCapture); }};
     };
 
 
@@ -178,7 +178,7 @@ namespace Dralgeer {
             ~SpriteRenderer();
 
             inline void start() override { lastTransform = gameObject->transform; };
-            void update(float dt, Camera const &cam) override;
+            void update(float dt, Camera const &cam, bool wantCapture) override;
 
             // Create a color picker for the sprites.
             void imGui() override;
@@ -206,7 +206,7 @@ namespace Dralgeer {
 
             ~EditorCamera();
 
-            inline void update(float dt, Camera const &cam) override;
+            inline void update(float dt, Camera const &cam, bool wantCapture) override;
     };
 
     class GridLines : public Component {
@@ -223,10 +223,13 @@ namespace Dralgeer {
 
             ~GridLines();
 
-            void update(float dt, Camera const &cam) override;
+            void update(float dt, Camera const &cam, bool wantCapture) override;
     };
 
     class MouseControls : public Component {
+        private:
+            bool objAdded = 0; // has the heldObject been added to the scene
+
         public:
             GameObject* heldObject = nullptr; // only set this equal to an object getting picked up
 
@@ -242,6 +245,6 @@ namespace Dralgeer {
 
             ~MouseControls();
 
-            void update(float dt, Camera const &cam) override;
+            void update(float dt, Camera const &cam, bool wantCapture) override;
     };
 }
