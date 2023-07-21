@@ -19,8 +19,16 @@ namespace Dralgeer {
             SpriteRenderer* renderer = new SpriteRenderer();
             renderer->sprite.width = spr.width;
             renderer->sprite.height = spr.height;
+            renderer->color = {1.0f, 1.0f, 1.0f, 1.0f};
             renderer->sprite.texture = new Texture();
             renderer->sprite.texture->init(spr.texture->filepath);
+            renderer->gameObject = new GameObject();
+            renderer->gameObject->transform.pos.x = 0.0f;
+            renderer->gameObject->transform.pos.y = 0.0f;
+            renderer->gameObject->transform.scale.x = width;
+            renderer->gameObject->transform.scale.y = height;
+            renderer->gameObject->transform.zIndex = 1;
+
             go->addComponent(renderer);
 
             return go;

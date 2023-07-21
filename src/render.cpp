@@ -31,7 +31,7 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     };
 
-    inline void RenderBatch::loadVertexProperties(int index) {
+    inline void RenderBatch::loadVertexProperties(int index) { // todo for some reason, this is not being ran when the button is clicked and the sprite is added to the scene
         int offset = index * 4 * VERTEX_SIZE;
 
         // Texture ID
@@ -85,6 +85,9 @@ namespace Dralgeer {
 
             // load entity IDs
             vertices[offset + 9] = sprites[index]->gameObject->id;
+
+            std::cout << currPos.x << ", " << currPos.y << "\n" << sprites[index]->color.x << ", " << sprites[index]->color.y << ", " << sprites[index]->color.z << ", " << sprites[index]->color.w << "\n";
+            std::cout << sprites[index]->sprite.texCoords[i].x << ", " << sprites[index]->sprite.texCoords[i].y << "\n" << texID << "\n" << sprites[index]->gameObject->id << "\n\n";
 
             offset += VERTEX_SIZE;
         }

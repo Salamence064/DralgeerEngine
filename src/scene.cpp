@@ -228,7 +228,7 @@ namespace Dralgeer {
         ImVec2 windowSize = ImGui::GetWindowSize();
         ImVec2 itemSpacing = ImGui::GetStyle().ItemSpacing;
         float windowX2 = windowPos.x + windowSize.x;
-        
+
         for (int i = 0; i < sprites->numSprites; ++i) {
             // for readability
             Sprite sprite = sprites->sprites[i];
@@ -242,8 +242,7 @@ namespace Dralgeer {
                 ImVec2(sprite.texCoords[2].x, sprite.texCoords[0].y), ImVec2(sprite.texCoords[0].x, sprite.texCoords[2].y)))
             {
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
-                addGameObject(go); // todo this causes a crash after using the Prefabs::generateSpriteObject to make the game object
-                // todo it's still crashing. We'll have to do std::cout statements to figure out where exactly it crashes at
+                addGameObject(go); // todo trace where this is going in the morning
                 ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
             }
 
