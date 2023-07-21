@@ -86,9 +86,6 @@ namespace Dralgeer {
             // load entity IDs
             vertices[offset + 9] = sprites[index]->gameObject->id;
 
-            std::cout << currPos.x << ", " << currPos.y << "\n" << sprites[index]->color.x << ", " << sprites[index]->color.y << ", " << sprites[index]->color.z << ", " << sprites[index]->color.w << "\n";
-            std::cout << sprites[index]->sprite.texCoords[i].x << ", " << sprites[index]->sprite.texCoords[i].y << "\n" << texID << "\n" << sprites[index]->gameObject->id << "\n\n";
-
             offset += VERTEX_SIZE;
         }
     };
