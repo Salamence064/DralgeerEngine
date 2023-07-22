@@ -227,9 +227,6 @@ namespace Dralgeer {
     };
 
     class MouseControls : public Component {
-        private:
-            bool objAdded = 0; // has the heldObject been added to the scene
-
         public:
             GameObject* heldObject = nullptr; // only set this equal to an object getting picked up
 

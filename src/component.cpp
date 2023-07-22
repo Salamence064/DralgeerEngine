@@ -392,25 +392,11 @@ namespace Dralgeer {
     // * =====================
 
     void MouseControls::update(float dt, Camera const &cam, bool wantCapture) {
-        std::cout << "Hello there\n";
-
-        // todo held object never gets updated
-
-        if (heldObject && wantCapture) { // todo probably check for getWantCapture, too (actually maybe not)
-            std::cout << "hii\n";
-            if (!objAdded) { if (Window::currScene) { std::cout << "Epic stuff\n"; } }
-
+        if (heldObject) {
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) { heldObject = nullptr; }
-
-            // todo in here do the Window::currScene thing
-            // todo do some testing to make sure it won't be nullptr or have some annoying errors
-
-            // what we can do is add the held object to the scene once it gets into getWantCapture (if it isn't added yet)
-            // and then we just change its pos each time (probs have an added bool field)
-            // and we can improve this later on
         }
     };
 
