@@ -20,6 +20,7 @@ namespace Dralgeer {
             renderer->sprite.texture = spr.texture; // because of how the asset pool will work
 
             renderer->gameObject = new GameObject();
+            renderer->gameObject->transform.pos.x = -64.0f;
             renderer->gameObject->transform.scale.x = width;
             renderer->gameObject->transform.scale.y = height;
 
