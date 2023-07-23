@@ -64,10 +64,6 @@ namespace Dralgeer {
         MouseListener::mGameViewPortWidth = windowSize.x;
         MouseListener::mGameViewPortHeight = windowSize.y;
 
-        // std::cout << "yuh: " << bottomLeft.x << ", " << bottomLeft.y << "\n";
-
-        // std::cout << "Fake: " << windowSize.x << ", " << windowSize.y << "\n";
-
         ImGui::End();
     };
 
