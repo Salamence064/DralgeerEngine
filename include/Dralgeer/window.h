@@ -27,8 +27,10 @@
 // // - Framebuffer causes screen tearing
 // // - ImGui docking space
 // // - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
-// - Pick up the Sprite selected from the ImGui menu
-// - Place down the sprite on the gameview window (and only there)
+// // - Pick up the Sprite selected from the ImGui menu
+// // - Place down the sprite on the gameview window (and only there)
+// - Memory leak(s) and artifacts from placing sprites
+// - Add a drag click feature
 // ===================================================================
 
 // what the framebuffer does is allow me to draw to the null texture on it

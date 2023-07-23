@@ -240,7 +240,10 @@ namespace Dralgeer {
             ImGui::PushID(i);
             if (ImGui::ImageButton("SpriteSelection", (void*) sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
                 ImVec2(sprite.texCoords[2].x, sprite.texCoords[0].y), ImVec2(sprite.texCoords[0].x, sprite.texCoords[2].y)))
-            {
+            { // todo I think if you click a new one before placing the previous, it causes a memory leak
+            // todo to fix this, check if there's a held object when adding an object and if so, remove it and delete it from the scene and renderer
+                
+                // todo also remove any blocks that are stacked on top of each other. This can be done when the held object is placed and before its lastTransform is set
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 addGameObject(go);
                 ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
