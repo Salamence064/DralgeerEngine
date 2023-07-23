@@ -244,7 +244,7 @@ namespace Dralgeer {
                 // todo remove any blocks that are stacked on top of each other. This can be done when the held object is placed and before its lastTransform is set
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 addGameObject(go);
-                ((MouseControls*) go->getComponent(MOUSE_CONTROLS))->heldObject = go;
+                ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
             }
 
             ImGui::PopID();
