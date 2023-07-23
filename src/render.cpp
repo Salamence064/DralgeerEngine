@@ -87,8 +87,6 @@ namespace Dralgeer {
             vertices[offset + 9] = sprites[index]->gameObject->id;
 
             offset += VERTEX_SIZE;
-
-            std::cout << "Hello\n";
         }
     };
 

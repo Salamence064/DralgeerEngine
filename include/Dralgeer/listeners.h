@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <Dralgeer/camera.h>
+#include <GLFW/glfw3.h>
 
 namespace Dralgeer {
     // * ===================
@@ -21,22 +22,14 @@ namespace Dralgeer {
     namespace MouseListener {
         static float mScrollX = 0, mScrollY = 0;
         static float mX = 0, mY = 0, mLastX = 0, mLastY = 0;
-        static float mWorldX = 0, mWorldY = 0, mLastWorldX = 0, mLastWorldY = 0;
+        extern float mWorldX, mWorldY, mLastWorldX, mLastWorldY;
 
         static uint8_t mButtonsDown = 0;
         static bool mIsDragging = 0;
         static bool mButtonPressed[9] = {0};
 
-        static float mGameViewPortX = 0.0f, mGameViewPortY = 0.0f;
-        static float mGameViewPortWidth = 0.0f, mGameViewPortHeight = 0.0f;
-
-        static void updateWorldCoords(Camera const &cam) {
-            mLastWorldX = mWorldX;
-            mLastWorldY = mWorldY;
-
-            mWorldX = ((cam.invView * cam.invProj) * glm::vec4(((mX - mGameViewPortX)/mGameViewPortWidth) * 2.0f - 1.0f, 0.0f, 0.0f, 1.0f)).x;
-            mWorldY = ((cam.invView * cam.invProj) * glm::vec4(0.0f, -(((mY - mGameViewPortY)/mGameViewPortHeight) * 2.0f - 1.0f), 0.0f, 1.0f)).y;
-        };
+        extern float mGameViewPortX, mGameViewPortY;
+        extern float mGameViewPortWidth, mGameViewPortHeight;
 
         static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
             if (mButtonsDown) { mIsDragging = 1; }
@@ -66,7 +59,7 @@ namespace Dralgeer {
             mScrollY = yoffset;
         };
 
-        inline static void endFrame() {
+        inline static void endFrame() { // todo not so sure if the lastX updates are necessary here
             mScrollX = 0; mScrollY = 0;
             mLastX = mX; mLastY = mY;
             mLastWorldX = mWorldX; mLastWorldY = mWorldY;
@@ -74,6 +67,15 @@ namespace Dralgeer {
 
         inline static float getScreenX() { return ((mX - mGameViewPortX)/mGameViewPortWidth) * 1920.0f; };
         inline static float getScreenY() { return 1080.0f - (((mY - mGameViewPortY)/mGameViewPortHeight) * 1080.0f); };
+
+        inline void updateWorldCoords(Camera const &cam) {
+            mLastWorldX = mWorldX;
+            mLastWorldY = mWorldY;
+
+            glm::mat4 prod = cam.invView * cam.invProj;
+            mWorldX = (prod * glm::vec4(((mX - mGameViewPortX)/mGameViewPortWidth) * 2.0f - 1.0f, 0.0f, 0.0f, 1.0f)).x;
+            mWorldY = (prod * glm::vec4(0.0f, -(((mY - mGameViewPortY)/mGameViewPortHeight) * 2.0f - 1.0f), 0.0f, 1.0f)).y;
+        };
     }
 
     // * ==================

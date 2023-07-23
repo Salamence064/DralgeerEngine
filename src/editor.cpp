@@ -57,13 +57,16 @@ namespace Dralgeer {
         rightX = leftX + windowSize.x;
         topY = bottomY + windowSize.y;
 
-        // todo when the framebuffer properly works, this will allow for the scene to be displayed on the gameview window
         ImGui::Image((void*) frameBufferTexID, windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         MouseListener::mGameViewPortX = bottomLeft.x;
         MouseListener::mGameViewPortY = bottomLeft.y;
         MouseListener::mGameViewPortWidth = windowSize.x;
         MouseListener::mGameViewPortHeight = windowSize.y;
+
+        // std::cout << "yuh: " << bottomLeft.x << ", " << bottomLeft.y << "\n";
+
+        // std::cout << "Fake: " << windowSize.x << ", " << windowSize.y << "\n";
 
         ImGui::End();
     };
