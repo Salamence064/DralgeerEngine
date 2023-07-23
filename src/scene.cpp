@@ -244,13 +244,6 @@ namespace Dralgeer {
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 addGameObject(go);
                 ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
-                // todo for next time: focus on not displaying the gameobject at 0, 0 instantly and not really going anywhere with it afterwards
-                // todo also, consider setting the sprite thingy to being dirty in MouseControls
-                // todo try to make sure its position is being updated properly until there isn't a held object again
-
-                // todo what I'm probably gonna need to do is make a separate framebuffer (probably use the picking texture thing)
-                // todo then just render the sprite to the framebuffer and move the framebuffer's position around the screen until its placed
-                // todo then the normal scene can add the sprite to itself and set its position to be where it should
             }
 
             ImGui::PopID();

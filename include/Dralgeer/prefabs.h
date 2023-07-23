@@ -21,10 +21,13 @@ namespace Dralgeer {
 
             renderer->gameObject = new GameObject();
             renderer->gameObject->transform.pos.x = -64.0f;
+            renderer->gameObject->transform.pos.y = -64.0f;
             renderer->gameObject->transform.scale.x = width;
             renderer->gameObject->transform.scale.y = height;
+            renderer->gameObject->transform.zIndex = 0;
 
             go->addComponent(renderer);
+            go->start();
 
             return go;
         };

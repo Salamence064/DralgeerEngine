@@ -111,7 +111,7 @@ namespace Dralgeer {
     // * ====================
     
     void SpriteRenderer::update(float dt, Camera const &cam, bool wantCapture) {
-        if (gameObject && lastTransform != gameObject->transform) {
+        if (gameObject && lastTransform != gameObject->transform) { // todo I have no idea what this is doing but it doesn't work without it
             gameObject->transform = lastTransform;
             isDirty = 1;
         }
@@ -397,8 +397,11 @@ namespace Dralgeer {
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 
             ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform.pos = heldObject->transform.pos;
-
-            if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) { heldObject = nullptr; }
+            
+            if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
+                ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
+                heldObject = nullptr;
+            }
         }
     };
 

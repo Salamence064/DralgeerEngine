@@ -137,6 +137,9 @@ namespace Dralgeer {
     };
 
     void RenderBatch::render(Shader const &currShader, Camera const &cam) {
+        // std::cout << "NumSprites: " << numSprites << "\n";
+        // if (numSprites) { std::cout << "Sprite: " << sprites[numSprites - 1]->id << "\n"; }
+
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {

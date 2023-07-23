@@ -26,7 +26,7 @@ namespace Dralgeer {
 
         static uint8_t mButtonsDown = 0;
         static bool mIsDragging = 0;
-        static bool mButtonPressed[9] = {0};
+        extern bool mButtonPressed[9];
 
         extern float mGameViewPortX, mGameViewPortY;
         extern float mGameViewPortWidth, mGameViewPortHeight;
