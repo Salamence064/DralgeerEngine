@@ -254,6 +254,20 @@ namespace Dralgeer {
         }
 
         ImGui::End();
+
+        // ! cursed location to check for drag clicking
+
+        // handle click and drag
+        MouseControls* mc = (MouseControls*) components.getComponent(MOUSE_CONTROLS);
+        if (mc->addObject) {
+            GameObject* go = new GameObject(*(mc->heldObject));
+            SpriteRenderer* spr = (SpriteRenderer*) go->getComponent(SPRITE_RENDERER);
+            spr->lastTransform.pos = mc->heldObject->transform.pos;
+            spr->lastTransform.scale = mc->heldObject->transform.scale;
+            spr->lastTransform.zIndex = mc->heldObject->transform.zIndex;
+            addGameObject(go);
+            mc->addObject = 0;
+        }
     };
 
     #pragma GCC diagnostic pop

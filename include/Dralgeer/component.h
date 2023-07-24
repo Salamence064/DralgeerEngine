@@ -227,8 +227,15 @@ namespace Dralgeer {
     };
 
     class MouseControls : public Component {
+        private:
+            bool pressedLastFrame = 0;
+            glm::vec2* placedTiles = new glm::vec2[16];
+            int pCapacity = 16;
+            int pCount = 0;
+
         public:
             GameObject* heldObject = nullptr; // only set this equal to an object getting picked up
+            bool addObject = 0;
 
             MouseControls();
 

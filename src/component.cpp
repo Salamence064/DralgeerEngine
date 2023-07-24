@@ -25,12 +25,13 @@ namespace Dralgeer {
         imGuiSetup = 1;
         isDirty = 1;
 
-        if (spr.sprite.texture) {
-            sprite.width = spr.sprite.width;
-            sprite.height = spr.sprite.height;
-            sprite.texture = new Texture();
-            sprite.texture->init(spr.sprite.texture->filepath);
-        }
+        sprite.width = spr.sprite.width;
+        sprite.height = spr.sprite.height;
+        sprite.texCoords[0] = spr.sprite.texCoords[0];
+        sprite.texCoords[1] = spr.sprite.texCoords[1];
+        sprite.texCoords[2] = spr.sprite.texCoords[2];
+        sprite.texCoords[3] = spr.sprite.texCoords[3];
+        sprite.texture = spr.sprite.texture;
 
         if (spr.gameObject) {
             gameObject = new GameObject();
@@ -49,6 +50,10 @@ namespace Dralgeer {
         sprite.width = spr.sprite.width;
         sprite.height = spr.sprite.height;
         sprite.texture = spr.sprite.texture;
+        sprite.texCoords[0] = spr.sprite.texCoords[0];
+        sprite.texCoords[1] = spr.sprite.texCoords[1];
+        sprite.texCoords[2] = spr.sprite.texCoords[2];
+        sprite.texCoords[3] = spr.sprite.texCoords[3];
         spr.sprite.texture = NULL;
 
         gameObject = spr.gameObject;
@@ -65,8 +70,11 @@ namespace Dralgeer {
 
             sprite.width = spr.sprite.width;
             sprite.height = spr.sprite.height;
-            sprite.texture = new Texture();
-            sprite.texture->init(spr.sprite.texture->filepath);
+            sprite.texture = spr.sprite.texture;
+            sprite.texCoords[0] = spr.sprite.texCoords[0];
+            sprite.texCoords[1] = spr.sprite.texCoords[1];
+            sprite.texCoords[2] = spr.sprite.texCoords[2];
+            sprite.texCoords[3] = spr.sprite.texCoords[3];
 
             if (gameObject) { delete gameObject; gameObject = nullptr; }
             if (spr.gameObject) {
@@ -90,6 +98,10 @@ namespace Dralgeer {
             sprite.width = spr.sprite.width;
             sprite.height = spr.sprite.height;
             sprite.texture = spr.sprite.texture;
+            sprite.texCoords[0] = spr.sprite.texCoords[0];
+            sprite.texCoords[1] = spr.sprite.texCoords[1];
+            sprite.texCoords[2] = spr.sprite.texCoords[2];
+            sprite.texCoords[3] = spr.sprite.texCoords[3];
             spr.sprite.texture = NULL;
 
             if (gameObject) { delete gameObject; }
@@ -398,9 +410,52 @@ namespace Dralgeer {
 
             ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform.pos = heldObject->transform.pos;
             
+            // todo this currently adds an artifact sprite on the final placement
+            // todo I will figure out how to eliminate this later
+
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
+                // handle click and drag
+
+                // todo need to add new objects to the scene but only if there isn't already an object on that space
+                // todo maybe use a dynamic array to store the positions
+
+                pressedLastFrame = 1;
+
+                // ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
+                // heldObject = nullptr;
+
+                for (int i = 0; i < pCount; ++i) {
+                    if (ZMath::compare(placedTiles[i].x, heldObject->transform.pos.x) &&
+                        ZMath::compare(placedTiles[i].y, heldObject->transform.pos.y))
+                    {
+                        return;
+                    }
+                }
+
+                if (pCount >= pCapacity) {
+                    pCapacity *= 2;
+                    glm::vec2* temp = new glm::vec2[pCapacity];
+
+                    for (int i = 0; i < pCount; ++i) { temp[i] = placedTiles[i]; }
+
+                    delete[] placedTiles;
+                    placedTiles = temp;
+                }
+
+                placedTiles[pCount++] = heldObject->transform.pos;
+                addObject = 1;
+
+            } else if (pressedLastFrame && !MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
                 ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
                 heldObject = nullptr;
+
+                // reset click and drag info
+                delete[] placedTiles;
+                pCapacity = 16;
+                pCount = 0;
+                placedTiles = new glm::vec2[pCapacity];
+                addObject = 0;
+                pressedLastFrame = 0;
             }
         }
     };

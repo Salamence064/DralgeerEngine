@@ -22,6 +22,9 @@
 
 // todo make sure that each texture is added to the assetpool (we could also try to do the same for shaders and sprites, too, but not as useful)
 
+// todo artifacts occur when placing sprites on top of each other (actually placing them on top of each other could be useful)
+// todo later will add a feature to filter out specific sprite types from being placed on top but others can be placed on top
+
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -29,8 +32,8 @@
 // // - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
 // // - Pick up the Sprite selected from the ImGui menu
 // // - Place down the sprite on the gameview window (and only there)
-// - Memory leak(s) and artifacts from placing sprites
 // - Add a drag click feature
+// - Remove the abstract classes in favor of void* + enum values
 // ===================================================================
 
 // what the framebuffer does is allow me to draw to the null texture on it
