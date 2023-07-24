@@ -29,8 +29,11 @@ namespace Dralgeer {
 
                     // initialize each sprite
                     for (int i = 0; i < numSprites; ++i) {
-                        sprites[i].texture = new Texture();
-                        sprites[i].texture->init(spr.sprites[i].texture->filepath);
+                        sprites[i].texture = spr.sprites[i].texture;
+                        sprites[i].texCoords[0] = spr.sprites[i].texCoords[0];
+                        sprites[i].texCoords[1] = spr.sprites[i].texCoords[1];
+                        sprites[i].texCoords[2] = spr.sprites[i].texCoords[2];
+                        sprites[i].texCoords[3] = spr.sprites[i].texCoords[3];
                         sprites[i].width = spr.sprites[i].width;
                         sprites[i].height = spr.sprites[i].height;
                     }
@@ -63,8 +66,11 @@ namespace Dralgeer {
 
                 // initialize each sprite
                 for (int i = 0; i < numSprites; ++i) {
-                    sprites[i].texture = new Texture();
-                    sprites[i].texture->init(spr.sprites[i].texture->filepath);
+                    sprites[i].texture = spr.sprites[i].texture;
+                    sprites[i].texCoords[0] = spr.sprites[i].texCoords[0];
+                    sprites[i].texCoords[1] = spr.sprites[i].texCoords[1];
+                    sprites[i].texCoords[2] = spr.sprites[i].texCoords[2];
+                    sprites[i].texCoords[3] = spr.sprites[i].texCoords[3];
                     sprites[i].width = spr.sprites[i].width;
                     sprites[i].height = spr.sprites[i].height;
                 }
@@ -94,7 +100,6 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            // todo look through this function and the AssetPool functions
             // tex should have init called on it prior to this function call
             void init(Texture* tex, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
                 sprites = new Sprite[numSprites];

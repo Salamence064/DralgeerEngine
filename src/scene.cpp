@@ -267,6 +267,10 @@ namespace Dralgeer {
             spr->lastTransform.zIndex = mc->heldObject->transform.zIndex;
             addGameObject(go);
             mc->addObject = 0;
+
+            // todo texture gets added multiple times at some point when creating the new objects
+            // todo find when that is and fix it
+            // todo do this in the morning
         }
     };
 
