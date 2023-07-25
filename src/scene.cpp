@@ -255,22 +255,18 @@ namespace Dralgeer {
 
         ImGui::End();
 
-        // ! cursed location to check for drag clicking
-
-        // handle click and drag
+        // handle click and drag (maybe should move where in the code this occurs)
         MouseControls* mc = (MouseControls*) components.getComponent(MOUSE_CONTROLS);
         if (mc->addObject) {
-            GameObject* go = new GameObject(*(mc->heldObject));
+            Sprite sprite = ((SpriteRenderer*) (mc->heldObject->getComponent(SPRITE_RENDERER)))->sprite;
+
+            GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
             SpriteRenderer* spr = (SpriteRenderer*) go->getComponent(SPRITE_RENDERER);
-            spr->lastTransform.pos = mc->heldObject->transform.pos;
-            spr->lastTransform.scale = mc->heldObject->transform.scale;
-            spr->lastTransform.zIndex = mc->heldObject->transform.zIndex;
+            spr->gameObject->transform.pos = mc->heldObject->transform.pos;
+            spr->lastTransform.pos = spr->gameObject->transform.pos;
+
             addGameObject(go);
             mc->addObject = 0;
-
-            // todo texture gets added multiple times at some point when creating the new objects
-            // todo find when that is and fix it
-            // todo do this in the morning
         }
     };
 

@@ -83,9 +83,9 @@ namespace Dralgeer {
                 addGO(go);
                 
                 if (running) {
-                    int n = numObjects - 1;
-                    gameObjects[n]->start();
-                    Renderer::add((SpriteRenderer*) gameObjects[n]->getComponent(SPRITE_RENDERER));
+                    go->start();
+                    // std::cout << "Beautiful Women: " << ((SpriteRenderer*) go->getComponent(SPRITE_RENDERER))->sprite.texture << "\n";
+                    Renderer::add((SpriteRenderer*) go->getComponent(SPRITE_RENDERER));
                 }
             };
 

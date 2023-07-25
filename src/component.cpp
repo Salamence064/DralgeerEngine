@@ -33,6 +33,8 @@ namespace Dralgeer {
         sprite.texCoords[3] = spr.sprite.texCoords[3];
         sprite.texture = spr.sprite.texture;
 
+        // std::cout << "og: " << spr.sprite.texture << ", new: " << sprite.texture << "\n";
+
         if (spr.gameObject) {
             gameObject = new GameObject();
             gameObject->transform = spr.gameObject->transform;
@@ -410,8 +412,9 @@ namespace Dralgeer {
 
             ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform.pos = heldObject->transform.pos;
             
-            // todo this currently adds an artifact sprite on the final placement
+            // todo this currently adds an artifact sprite on the final placement (i.e. double places)
             // todo I will figure out how to eliminate this later
+            // todo can place sprites over each other without overriding -- fix this (to override) in the future
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
                 // handle click and drag

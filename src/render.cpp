@@ -212,8 +212,8 @@ namespace Dralgeer {
                 for (int i = 0; i < numTextures; ++i) { if (textures[i] == spr->sprite.texture) { goto ADDED; }}
                 textures[numTextures++] = spr->sprite.texture;
 
-            } else if (numTextures < MAX_TEXTURES) { // todo will remove the logging stuff but this is useful for debugging
-                std::cout << "[INFO] Maximum number of textures reached.";
+            } else if (numTextures >= MAX_TEXTURES) { // todo will remove the logging stuff but this is useful for debugging
+                std::cout << "[INFO] Maximum number of textures reached.\n";
             }
 
             ADDED:
