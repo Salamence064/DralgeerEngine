@@ -33,8 +33,6 @@ namespace Dralgeer {
         sprite.texCoords[3] = spr.sprite.texCoords[3];
         sprite.texture = spr.sprite.texture;
 
-        // std::cout << "og: " << spr.sprite.texture << ", new: " << sprite.texture << "\n";
-
         if (spr.gameObject) {
             gameObject = new GameObject();
             gameObject->transform = spr.gameObject->transform;
@@ -418,14 +416,7 @@ namespace Dralgeer {
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
                 // handle click and drag
-
-                // todo need to add new objects to the scene but only if there isn't already an object on that space
-                // todo maybe use a dynamic array to store the positions
-
                 pressedLastFrame = 1;
-
-                // ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
-                // heldObject = nullptr;
 
                 for (int i = 0; i < pCount; ++i) {
                     if (ZMath::compare(placedTiles[i].x, heldObject->transform.pos.x) &&

@@ -25,6 +25,8 @@
 // todo artifacts occur when placing sprites on top of each other (actually placing them on top of each other could be useful)
 // todo later will add a feature to filter out specific sprite types from being placed on top but others can be placed on top
 
+// todo Remove the abstract classes in favor of void* + enum values
+
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -32,8 +34,8 @@
 // // - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
 // // - Pick up the Sprite selected from the ImGui menu
 // // - Place down the sprite on the gameview window (and only there)
-// - Add a drag click feature
-// - Remove the abstract classes in favor of void* + enum values
+// // - Add a drag click feature
+// - PickingTexture stuff for the properties window
 // ===================================================================
 
 // what the framebuffer does is allow me to draw to the null texture on it

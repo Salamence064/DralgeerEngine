@@ -84,7 +84,6 @@ namespace Dralgeer {
                 
                 if (running) {
                     go->start();
-                    // std::cout << "Beautiful Women: " << ((SpriteRenderer*) go->getComponent(SPRITE_RENDERER))->sprite.texture << "\n";
                     Renderer::add((SpriteRenderer*) go->getComponent(SPRITE_RENDERER));
                 }
             };
