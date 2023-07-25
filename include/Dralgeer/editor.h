@@ -17,9 +17,6 @@ namespace Dralgeer {
         public:
             void imGui(unsigned int frameBufferTexID);
             inline bool getWantCaptureMouse() const {
-                std::cout << "MousePos: " << MouseListener::mX << ", " << MouseListener::mY << "\n";
-                std::cout << "Game Viewport positions: " << leftX << ", " << bottomY << "; " << rightX << ", " << topY << "\n";
-
                 return MouseListener::mX >= leftX && MouseListener::mX <= rightX && MouseListener::mY >= bottomY && MouseListener::mY <= topY;
             };
     };
