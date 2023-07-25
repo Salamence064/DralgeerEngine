@@ -40,13 +40,12 @@ namespace Dralgeer {
             void init(int width, int height);
 
             inline int readPixel(int x, int y) const {
-                glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID);
                 glReadBuffer(GL_COLOR_ATTACHMENT0);
 
                 float pixels[3]; // todo check if this needs to actually be 3 (due to RGB) or if I can just store it to a single value
                 glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                // todo see if the framebuffer needs to be unbound
+                std::cout << "Rias\n";
 
                 return (int) pixels[0] - 1;
             };

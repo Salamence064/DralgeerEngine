@@ -60,7 +60,7 @@ namespace Dralgeer {
 
         static ImGuiLayer imGuiLayer;
         static FrameBuffer frameBuffer;
-        static PickingTexture pickingTexture;
+        static PickingTexture* pickingTexture;
 
         // static bool initGamepadState = 1;
         // static GLFWgamepadstate gamepadState;
@@ -128,7 +128,8 @@ namespace Dralgeer {
 
             // frame buffer config
             frameBuffer.init(1920, 1080);
-            pickingTexture.init(1920, 1080);
+            pickingTexture = new PickingTexture();
+            pickingTexture->init(1920, 1080);
             glViewport(0, 0, 1920, 1080);
 
             // initialize imgui
@@ -159,15 +160,15 @@ namespace Dralgeer {
 
                 // render picking texture
                 glDisable(GL_BLEND);
-                pickingTexture.enableWriting();
+                pickingTexture->enableWriting();
 
                 glViewport(0, 0, 1920, 1080);
-                glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 currScene->render(pickingShader);
 
-                pickingTexture.disableWriting();
+                pickingTexture->disableWriting();
                 glEnable(GL_BLEND);
 
                 // render the actual game

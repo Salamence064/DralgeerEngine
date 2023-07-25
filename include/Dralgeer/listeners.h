@@ -20,12 +20,12 @@ namespace Dralgeer {
     // * ====================
 
     namespace MouseListener {
-        static float mScrollX = 0, mScrollY = 0;
-        static float mX = 0, mY = 0, mLastX = 0, mLastY = 0;
+        extern float mScrollX, mScrollY;
+        extern float mX, mY, mLastX, mLastY;
         extern float mWorldX, mWorldY, mLastWorldX, mLastWorldY;
 
-        static uint8_t mButtonsDown = 0;
-        static bool mIsDragging = 0;
+        extern int mButtonsDown;
+        extern bool mIsDragging;
         extern bool mButtonPressed[9];
 
         extern float mGameViewPortX, mGameViewPortY;
@@ -83,7 +83,7 @@ namespace Dralgeer {
     // * ==================
 
     namespace KeyListener {
-        static bool keyPressed[350] = {0};
+        extern bool keyPressed[350];
 
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
             if (key < 350) {
@@ -98,9 +98,9 @@ namespace Dralgeer {
     // * =====================
 
     namespace JoystickListener {
-        static int jId = GLFW_JOYSTICK_1;
-        static bool jConnected = glfwJoystickPresent(jId);
-        static bool jGamepad = glfwJoystickIsGamepad(jId);
+        extern int jId;
+        extern bool jConnected;
+        extern bool jGamepad;
 
         static void joystick_callback(int jid, int event) {
             if (jid != jId) { return; }

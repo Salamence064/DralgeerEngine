@@ -82,7 +82,7 @@ namespace Dralgeer {
             int x = (int) MouseListener::mX;
             int y = (int) MouseListener::mY;
 
-            int id = pickingTexture.readPixel(x, y);
+            int id = pickingTexture->readPixel(x, y);
             GameObject* go = currScene->getGameObject(id);
 
             if (go && go->pickable) { activeGameObject = go; }

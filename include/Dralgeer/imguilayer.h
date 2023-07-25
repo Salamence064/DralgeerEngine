@@ -16,7 +16,7 @@ namespace Dralgeer {
             GameViewWindow gameViewWindow;
 
             ImGuiLayer() {};
-            void init(GLFWwindow* window, PickingTexture const &pickingTexture);
+            void init(GLFWwindow* window, PickingTexture* pickingTexture);
             void update(float dt, Scene* currScene, unsigned int frameBufferTexID, int windowWidth, int windowHeight);
             void dispose() const;
     };
