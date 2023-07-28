@@ -36,10 +36,18 @@
 // // - Place down the sprite on the gameview window (and only there)
 // // - Add a drag click feature
 // - PickingTexture stuff for the properties window
+// - port over gizmos
+// - setup physics (update Zeta2D, too)
+// - setup serialization
+// - port over the ImGui stuff to fully furnish the properties window
+// - port over the event system
+// - make the stuff void* with an enum
+// - fix the rule of 5 operators for the classes I have them for
+// - add pointer operators for equality and constructors
+// - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
+// - make a scene selector in the level editor scene
+// - go through the rest of the 2D engine series and see what final things I need to add
 // ===================================================================
-
-// what the framebuffer does is allow me to draw to the null texture on it
-// I can then place this framebuffer texture on the ImGui for the GameviewWindow, displaying the scene in the gameview window instead
 
 #include "imguilayer.h"
 #include "listeners.h"

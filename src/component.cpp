@@ -8,11 +8,15 @@
 #include <Dralgeer/window.h>
 #include <Dralgeer/debugdraw.h>
 
-namespace Dralgeer {    
+namespace Dralgeer {
+    // * =====================================================================
+    // * ID Counters
+    namespace IDCounter { int componentID = 0, gameObjectID = 0; }
+
     // * =====================================================================
     // * SpriteRenderer Stuff
 
-    SpriteRenderer::SpriteRenderer() { type = ComponentType::SPRITE_RENDERER; id = idCounter++; };
+    SpriteRenderer::SpriteRenderer() { type = ComponentType::SPRITE_RENDERER; id = IDCounter::componentID++; };
 
     // * ====================
     // * Rule of 5 Stuff
@@ -20,7 +24,7 @@ namespace Dralgeer {
 
     SpriteRenderer::SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
         type = spr.type;
-        id = idCounter++;
+        id = IDCounter::componentID++;
 
         imGuiSetup = 1;
         isDirty = 1;
@@ -42,7 +46,7 @@ namespace Dralgeer {
 
     SpriteRenderer::SpriteRenderer(SpriteRenderer &&spr) : color(std::move(spr.color)), lastTransform(std::move(spr.lastTransform)) {
         type = spr.type;
-        id = idCounter++;
+        id = IDCounter::componentID++;
 
         imGuiSetup = 1;
         isDirty = 1;
@@ -144,7 +148,7 @@ namespace Dralgeer {
 
     EditorCamera::EditorCamera(Camera const &cam) {
         type = ComponentType::EDITOR_CAMERA;
-        id = idCounter++;
+        id = IDCounter::componentID++;
         camera = cam;
     };
 
@@ -153,7 +157,7 @@ namespace Dralgeer {
     // * ====================
 
     EditorCamera::EditorCamera(EditorCamera const &cam) {
-        id = idCounter++;
+        id = IDCounter::componentID++;
         type = cam.type;
         camera = cam.camera;
 
@@ -165,7 +169,7 @@ namespace Dralgeer {
     };
 
     EditorCamera::EditorCamera(EditorCamera &&cam) {
-        id = idCounter++;
+        id = IDCounter::componentID++;
         type = cam.type;
         camera = std::move(cam.camera);
         gameObject = cam.gameObject;
@@ -268,7 +272,7 @@ namespace Dralgeer {
     // * =====================================================================
     // * GridLines Stuff
 
-    GridLines::GridLines() { type = ComponentType::GRID_LINES; id = idCounter++; };
+    GridLines::GridLines() { type = ComponentType::GRID_LINES; id = IDCounter::componentID++; };
 
     // * ====================
     // * Rule of 5 Stuff
@@ -276,7 +280,7 @@ namespace Dralgeer {
 
     GridLines::GridLines(GridLines const &gl) {
         type = gl.type;
-        id = idCounter++;
+        id = IDCounter::componentID++;
 
         if (gl.gameObject) {
             gameObject = new GameObject();
@@ -287,7 +291,7 @@ namespace Dralgeer {
 
     GridLines::GridLines(GridLines &&gl) {
         type = gl.type;
-        id = idCounter++;
+        id = IDCounter::componentID++;
         gameObject = gl.gameObject;
         gl.gameObject = NULL;
     };
@@ -347,7 +351,7 @@ namespace Dralgeer {
     // * =====================================================================
     // * MouseControls Stuff
 
-    MouseControls::MouseControls() { type = MOUSE_CONTROLS; id = idCounter++; };
+    MouseControls::MouseControls() { type = MOUSE_CONTROLS; id = IDCounter::componentID++; };
 
     // * ====================
     // * Rule of 5 Stuff
@@ -355,7 +359,7 @@ namespace Dralgeer {
 
     MouseControls::MouseControls(MouseControls const &mc) {
         type = mc.type;
-        id = idCounter++;
+        id = IDCounter::componentID++;
 
         if (mc.gameObject) {
             gameObject = new GameObject();
@@ -366,7 +370,7 @@ namespace Dralgeer {
 
     MouseControls::MouseControls(MouseControls &&mc) {
         type = mc.type;
-        id = idCounter++;
+        id = IDCounter::componentID++;
         gameObject = mc.gameObject;
         mc.gameObject = NULL;
     };
@@ -463,11 +467,11 @@ namespace Dralgeer {
 
     GameObject::GameObject() {
         components = new Component*[8];
-        id = idCounter++;
+        id = IDCounter::gameObjectID++;
     };
 
     GameObject::GameObject(GameObject const &go) : name(go.name), serialize(go.serialize), transform(go.transform) {
-        id = idCounter++;
+        id = IDCounter::gameObjectID++;
         dead = 0;
 
         capacity = go.capacity;
@@ -485,7 +489,7 @@ namespace Dralgeer {
     };
 
     GameObject::GameObject(GameObject &&go) : name(std::move(go.name)), serialize(go.serialize), transform(std::move(go.transform)) {
-        id = idCounter++;
+        id = IDCounter::gameObjectID++;
         dead = 0;
 
         capacity = go.capacity;

@@ -23,11 +23,10 @@ namespace Dralgeer {
     
     // todo when I implement the enum + void* system instead, I can remove the Camera const &cam from many update function signatures
     
+    namespace IDCounter { extern int componentID, gameObjectID; }
+
     // * Implement rule of 5 for anything that extends this.
     class Component {
-        protected:
-            int idCounter = 0;
-
         public:
             ComponentType type;
 
@@ -60,9 +59,10 @@ namespace Dralgeer {
         inline bool operator != (Transform const &t) const { return pos != t.pos || scale != t.scale || zIndex != t.zIndex || rotation != t.rotation; };
     };
 
+
+
     class GameObject {
         private:
-            int idCounter = 0; // used to track the game object's ID
             Component** components = nullptr;
             int capacity = 8; // start with 8 slots for components // todo probs up this later
             int numComponents = 0;

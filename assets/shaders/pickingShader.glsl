@@ -41,7 +41,6 @@ void main() {
     if (fTexId > 0) {
         int id  = int (fTexId);
         FragColor = fColor * texture(uTextures[id], fTextCords);
-
     }
 
     if (texColor.a  < 0.5) { discard; }

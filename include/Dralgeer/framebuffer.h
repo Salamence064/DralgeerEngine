@@ -1,6 +1,7 @@
 #pragma once
 
 #include "texture.h"
+#include "listeners.h"
 
 namespace Dralgeer {
     class FrameBuffer {
@@ -40,18 +41,25 @@ namespace Dralgeer {
             void init(int width, int height);
 
             inline int readPixel(int x, int y) const {
+                glBindFramebuffer(GL_FRAMEBUFFER, fboID);
                 glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-                float pixels[3]; // todo check if this needs to actually be 3 (due to RGB) or if I can just store it to a single value
+                float pixels[3];
                 glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                std::cout << "Rias\n";
+                // todo watch through the cherno videos and maybe look through some guide to figure this out
 
-                return (int) pixels[0] - 1;
+                // std::cout << "Rias: " << pixels[0] << " mouseDown? " << MouseListener::mButtonPressed[0] << "\n";
+
+                // todo the ids of the objects are not getting read properly
+
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+                return (int) pixels[0];
             };
 
-            inline void enableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboID); };
-            inline void disableWriting() const { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); };
+            inline void enableWriting() const { glBindFramebuffer(GL_FRAMEBUFFER, fboID); };
+            inline void disableWriting() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); };
 
             inline ~PickingTexture() {
                 glDeleteFramebuffers(1, &fboID);
