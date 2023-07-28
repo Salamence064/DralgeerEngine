@@ -41,21 +41,23 @@ namespace Dralgeer {
             void init(int width, int height);
 
             inline int readPixel(int x, int y) const {
+                // todo
+                // first: refactor the renderer to store gameobjects with SpriteRenderers
+                // // second: don't store a gameobject inside of a component and refactor the program based around that (maybe)
+                // third: ensure the proper id is getting passed from the renderer to the pickingShader
+
                 glBindFramebuffer(GL_FRAMEBUFFER, fboID);
                 glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-                float pixels[3];
-                glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
+                // todo this doesn't properly read the entityID for all of the sprites
+                // todo look through tutorials probably and see how it's supposed to be done
+                int pixel;
+                glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel);
 
-                // todo watch through the cherno videos and maybe look through some guide to figure this out
-
-                // std::cout << "Rias: " << pixels[0] << " mouseDown? " << MouseListener::mButtonPressed[0] << "\n";
-
-                // todo the ids of the objects are not getting read properly
+                std::cout << pixel << "\n";
 
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-                return (int) pixels[0];
+                return pixel;
             };
 
             inline void enableWriting() const { glBindFramebuffer(GL_FRAMEBUFFER, fboID); };

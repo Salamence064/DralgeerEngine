@@ -467,11 +467,11 @@ namespace Dralgeer {
 
     GameObject::GameObject() {
         components = new Component*[8];
-        id = IDCounter::gameObjectID++;
+        id = ++IDCounter::gameObjectID;
     };
 
     GameObject::GameObject(GameObject const &go) : name(go.name), serialize(go.serialize), transform(go.transform) {
-        id = IDCounter::gameObjectID++;
+        id = ++IDCounter::gameObjectID;
         dead = 0;
 
         capacity = go.capacity;
@@ -489,7 +489,7 @@ namespace Dralgeer {
     };
 
     GameObject::GameObject(GameObject &&go) : name(std::move(go.name)), serialize(go.serialize), transform(std::move(go.transform)) {
-        id = IDCounter::gameObjectID++;
+        id = ++IDCounter::gameObjectID;
         dead = 0;
 
         capacity = go.capacity;
