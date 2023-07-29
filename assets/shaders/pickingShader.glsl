@@ -33,18 +33,18 @@ in vec2 fTextCords;
 in float fTexId;
 in float fEntityId;
 
-out vec4 FragColor;
+out vec3 FragColor;
 
 void main() {
     vec4 texColor = vec4(1, 1, 1, 1);
 
-    if (fTexId > 0) {
+    if (fTexId >= 0) {
         int id  = int (fTexId);
-        FragColor = fColor * texture(uTextures[id], fTextCords);
+        texColor = fColor * texture(uTextures[id], fTextCords);
     }
 
-    if (texColor.a  < 0.5) { discard; }
-    FragColor = vec4(fEntityId, fEntityId, fEntityId, fEntityId);
+    if (texColor.a < 0.5) { discard; }
+    FragColor = vec3(fEntityId, fEntityId, fEntityId);
 }
 
 /* Personal guide to shader techniques:

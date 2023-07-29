@@ -187,9 +187,11 @@ namespace Dralgeer {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glEnable(GL_DEPTH_TEST);
 
+                // todo put this segment in the dt loop when I set it up -------------------
                 DebugDraw::draw(currScene->camera);
                 currScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
                 currScene->render(defaultShader);
+                // -------------------------------------------------------------------------
 
                 glDisable(GL_DEPTH_TEST);
                 frameBuffer.unbind();

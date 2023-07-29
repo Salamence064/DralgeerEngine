@@ -40,6 +40,10 @@ namespace Dralgeer {
             inline PickingTexture() {};
             void init(int width, int height);
 
+            // todo the goal of this coding session will be:
+            // get readPixel to correctly read the pixel
+            // could potentially look into what's being passed to the shader through the vbo and see if the attribute for it is getting enabled
+
             inline int readPixel(int x, int y) const {
                 // todo
                 // first: refactor the renderer to store gameobjects with SpriteRenderers
@@ -51,13 +55,13 @@ namespace Dralgeer {
 
                 // todo this doesn't properly read the entityID for all of the sprites
                 // todo look through tutorials probably and see how it's supposed to be done
-                int pixel;
-                glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel);
+                float pixels[3];
+                glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                std::cout << pixel << "\n";
+                std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
 
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                return pixel;
+                return pixels[0];
             };
 
             inline void enableWriting() const { glBindFramebuffer(GL_FRAMEBUFFER, fboID); };

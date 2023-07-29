@@ -241,6 +241,10 @@ namespace Dralgeer {
             if (ImGui::ImageButton("SpriteSelection", (void*) sprite.texture->texID, ImVec2(spriteWidth, spriteHeight),
                 ImVec2(sprite.texCoords[2].x, sprite.texCoords[0].y), ImVec2(sprite.texCoords[0].x, sprite.texCoords[2].y)))
             {
+                // todo the moving object rebuffers too frequently (even when no movement has been made)
+                // todo additionally, it seems like the original object gets rebuffered a random amount of times after it gets placed
+                // todo a side-effect of the stacking bug is that it will have another object that gets buffered in (I suppose that's obvious)
+
                 // todo remove any blocks that are stacked on top of each other. This can be done when the held object is placed and before its lastTransform is set
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 addGameObject(go);
