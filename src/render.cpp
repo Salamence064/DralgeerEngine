@@ -89,7 +89,7 @@ namespace Dralgeer {
             // std::cout << "Alpha value: " << sprites[index]->color.w << "\n";
             // std::cout << "EntityID: " << sprites[index]->gameObject->id << "\n";
 
-            std::cout << "x, y: " << vertices[offset] << ", " << vertices[offset + 1] << "\n";
+            // std::cout << "x, y: " << vertices[offset] << ", " << vertices[offset + 1] << "\n";
 
             offset += VERTEX_SIZE;
         }

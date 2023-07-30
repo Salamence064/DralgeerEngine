@@ -37,6 +37,8 @@ namespace Dralgeer {
         public:
             int width, height;
 
+            bool test = 1;
+
             inline PickingTexture() {};
             void init(int width, int height);
 
@@ -45,6 +47,8 @@ namespace Dralgeer {
             // could potentially look into what's being passed to the shader through the vbo and see if the attribute for it is getting enabled
 
             inline int readPixel(int x, int y) const {
+                if (test) { return 0; }
+
                 // todo
                 // first: refactor the renderer to store gameobjects with SpriteRenderers
                 // // second: don't store a gameobject inside of a component and refactor the program based around that (maybe)

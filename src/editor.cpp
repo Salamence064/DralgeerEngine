@@ -79,8 +79,8 @@ namespace Dralgeer {
         debounce -= dt;
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && debounce < 0.0f) {
-            int x = (int) MouseListener::mWorldX;
-            int y = (int) MouseListener::mWorldY;
+            int x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
+            int y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 
             int id = pickingTexture->readPixel(x, y);
             GameObject* go = currScene->getGameObject(id);

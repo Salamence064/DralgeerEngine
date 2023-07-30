@@ -77,6 +77,8 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
 
             // remove dead lines
             for (int i = numLines - 1; i >= 0; i--) {
+                if (lines[i].lifetime < 0) { continue; } // if the user entered a negative value, make the line last forever
+
                 if (--lines[i].lifetime < 0) {
                     numLines--;
                     for (int j = i; j < numLines; ++j) {
@@ -136,7 +138,8 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
 
         inline void destroy() { delete lines; };
 
-        inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.882f, 0.004f, 0.004f), int lifetime = 1) {
+        // * Note: Make the lifetime negative to indicate it should never be removed
+        inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.882f, 0.004f, 0.004f), int lifetime = -1) {
             if (numLines >= MAX_DEBUG_LINES) { return; }
 
             if (numLines == capacity) {

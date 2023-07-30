@@ -48,6 +48,8 @@ namespace Dralgeer {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pTexID, 0);
 
         // create the texture object for the depth buffer
+        // todo issue might have something to do with this
+        // todo worth trying to set up a render buffer instead of this
         glEnable(GL_DEPTH_TEST);
         glGenTextures(1, &depthTexID);
         glBindTexture(GL_TEXTURE_2D, depthTexID);
