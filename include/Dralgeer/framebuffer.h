@@ -56,8 +56,8 @@ namespace Dralgeer {
 
                 // todo seems to only ever read some of it while mouse is held down
 
-                // std::cout << "[DEBUG] x, y: " << x << ", " << y << "\n";
-                std::cout << "[DEBUG] Mouse x, y: " << MouseListener::mWorldX << ", " << MouseListener::mWorldY << "\n"; 
+                std::cout << "[DEBUG] x, y: " << x << ", " << y << "\n";
+                // std::cout << "[DEBUG] Mouse x, y: " << MouseListener::mWorldX << ", " << MouseListener::mWorldY << "\n";
 
                 glBindFramebuffer(GL_FRAMEBUFFER, fboID);
                 glReadBuffer(GL_COLOR_ATTACHMENT0);

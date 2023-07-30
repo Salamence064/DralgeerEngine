@@ -409,6 +409,8 @@ namespace Dralgeer {
 
     void MouseControls::update(float dt, Camera const &cam, bool wantCapture) {
         if (heldObject) {
+            // todo the precision when placing sucks -- fix it by changing the values for this a little
+
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 

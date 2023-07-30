@@ -175,27 +175,6 @@ namespace Dralgeer {
                 // Poll for events
                 glfwPollEvents();
 
-                // render picking texture
-                glDisable(GL_BLEND);
-                pickingTexture->enableWriting();
-
-                glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
-                glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                // todo possibly thr mouse pos isnt being obtained properly
-
-                // todo we need to create an imgui offset for the tab bar to calc the pos precisely
-                // todo use imguicursorpos to achieve this
-
-                // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
-                // todo and not clearing the color outputs 0, 0, 0
-
-                currScene->render(pickingShader);
-
-                pickingTexture->disableWriting();
-                glEnable(GL_BLEND);
-
                 // render the actual game
                 DebugDraw::beginFrame();
                 frameBuffer.bind();
@@ -217,11 +196,37 @@ namespace Dralgeer {
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
+                // render picking texture
+                glDisable(GL_BLEND);
+                pickingTexture->enableWriting();
+
+                glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
+                glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                // todo possibly thr mouse pos isnt being obtained properly
+
+                // todo we need to create an imgui offset for the tab bar to calc the pos precisely
+                // todo use imguicursorpos to achieve this
+
+                // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
+                // todo and not clearing the color outputs 0, 0, 0
+
+
+                // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
+                // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
+
+                currScene->render(pickingShader);
+
+                pickingTexture->disableWriting();
+                glEnable(GL_BLEND);
+
+                // MouseListener and ImGui updates
                 MouseListener::updateWorldCoords(currScene->camera);
                 imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height);
 
                 // ! for debugging ------------------
-                if (KeyListener::keyPressed[GLFW_KEY_W]) { pickingTexture->test = !pickingTexture->test; }
+                if (KeyListener::keyPressed[GLFW_KEY_W]) { pickingTexture->test = 0; }
                 // ! --------------------------------
 
                 // initialize the gamepadState // todo set up later
