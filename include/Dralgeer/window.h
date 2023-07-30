@@ -27,6 +27,8 @@
 
 // todo Remove the abstract classes in favor of void* + enum values
 
+// todo create a header that stores macros for debug, info, warning, and error messages
+
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -158,6 +160,13 @@ namespace Dralgeer {
             // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
             // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
+            DebugDraw::addLine2D(glm::vec2(256, 352), glm::vec2(256, 384), glm::vec3(0.5, 1, 0), 10000);
+            DebugDraw::addLine2D(glm::vec2(256, 352), glm::vec2(288, 352), glm::vec3(0.5, 1, 0), 10000);
+            DebugDraw::addLine2D(glm::vec2(288, 352), glm::vec2(288, 384), glm::vec3(0.5, 1, 0), 10000);
+            DebugDraw::addLine2D(glm::vec2(256, 384), glm::vec2(288, 384), glm::vec3(0.5, 1, 0), 10000);
+
+            DebugDraw::addLine2D(glm::vec2(736, 416), glm::vec2(736, 438), glm::vec3(0.5f, 1, 0.0f), 100000);
+
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
 
@@ -171,8 +180,16 @@ namespace Dralgeer {
                 pickingTexture->enableWriting();
 
                 glViewport(0, 0, 1920, 1080);
-                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // todo this is what the mouse picking gives as the numbers
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                // todo possibly thr mouse pos isnt being obtained properly
+
+                // todo we need to create an imgui offset for the tab bar to calc the pos precisely
+                // todo use imguicursorpos to achieve this
+
+                // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
+                // todo and not clearing the color outputs 0, 0, 0
 
                 currScene->render(pickingShader);
 

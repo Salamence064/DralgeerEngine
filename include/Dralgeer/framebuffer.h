@@ -1,7 +1,7 @@
 #pragma once
 
 #include "texture.h"
-#include "listeners.h"
+#include "listeners.h" // todo i think this is just for debugging
 
 namespace Dralgeer {
     class FrameBuffer {
@@ -49,6 +49,11 @@ namespace Dralgeer {
                 // first: refactor the renderer to store gameobjects with SpriteRenderers
                 // // second: don't store a gameobject inside of a component and refactor the program based around that (maybe)
                 // third: ensure the proper id is getting passed from the renderer to the pickingShader
+
+                // todo seems to only ever read some of it while mouse is held down
+
+                // std::cout << "[DEBUG] x, y: " << x << ", " << y << "\n";
+                std::cout << "[DEBUG] Mouse x, y: " << MouseListener::mWorldX << ", " << MouseListener::mWorldY << "\n"; 
 
                 glBindFramebuffer(GL_FRAMEBUFFER, fboID);
                 glReadBuffer(GL_COLOR_ATTACHMENT0);

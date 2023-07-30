@@ -3,7 +3,7 @@
 #include "assetpool.h"
 #include "camera.h"
 
-namespace Dralgeer {
+namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
     namespace DebugDraw {
         struct Line2D {
             glm::vec2 start;

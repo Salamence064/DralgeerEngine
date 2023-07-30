@@ -57,7 +57,8 @@ namespace Dralgeer {
 
         // disable the reading
         glReadBuffer(GL_NONE);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0);
+        glDrawBuffer(GL_COLOR_ATTACHMENT0); // todo im unsure if the color attachment I'm drawing to could be causing the issue
+        // todo I think I will have to watch the videos
 
         // ensure the frame buffer is complete
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
