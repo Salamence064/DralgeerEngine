@@ -57,6 +57,9 @@ namespace Dralgeer {
         // add vertices with the appropriate properties
         // this loop is slightly inefficient compared to just writing out all 4 cases by hand, but I really don't wanna do that
         float xAdd = 1.0f, yAdd = 1.0f;
+        std::cout << "---------------------------------------\n";
+        std::cout << sprites[index]->gameObject->id << ":\n";
+
         for (int i = 0; i < 4; ++i) {
             // account for each vertex
             if (i == 1) { yAdd = 0.0f; }
@@ -65,6 +68,8 @@ namespace Dralgeer {
 
             glm::vec4 currPos(t.pos.x + (xAdd * t.scale.x), t.pos.y + (yAdd * t.scale.y), 0.0f, 1.0f);
             if (!ZMath::compare(t.rotation, 0.0f)) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); }
+
+            std::cout << currPos.x << ", " << currPos.y << "\n";
 
             // load position
             vertices[offset] = currPos.x;
@@ -93,6 +98,8 @@ namespace Dralgeer {
 
             offset += VERTEX_SIZE;
         }
+
+        std::cout << "---------------------------------------\n\n";
     };
 
     void RenderBatch::start(int zIndex) {

@@ -421,42 +421,45 @@ namespace Dralgeer {
             // todo can place sprites over each other without overriding -- fix this (to override) in the future
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-                // handle click and drag
-                pressedLastFrame = 1;
-
-                for (int i = 0; i < pCount; ++i) {
-                    if (ZMath::compare(placedTiles[i].x, heldObject->transform.pos.x) &&
-                        ZMath::compare(placedTiles[i].y, heldObject->transform.pos.y))
-                    {
-                        return;
-                    }
-                }
-
-                if (pCount >= pCapacity) {
-                    pCapacity *= 2;
-                    glm::vec2* temp = new glm::vec2[pCapacity];
-
-                    for (int i = 0; i < pCount; ++i) { temp[i] = placedTiles[i]; }
-
-                    delete[] placedTiles;
-                    placedTiles = temp;
-                }
-
-                placedTiles[pCount++] = heldObject->transform.pos;
-                addObject = 1;
-
-            } else if (pressedLastFrame && !MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
                 ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
                 heldObject = nullptr;
 
-                // reset click and drag info
-                delete[] placedTiles;
-                pCapacity = 16;
-                pCount = 0;
-                placedTiles = new glm::vec2[pCapacity];
-                addObject = 0;
-                pressedLastFrame = 0;
+                // handle click and drag
+                // pressedLastFrame = 1;
+
+                // for (int i = 0; i < pCount; ++i) {
+                //     if (ZMath::compare(placedTiles[i].x, heldObject->transform.pos.x) &&
+                //         ZMath::compare(placedTiles[i].y, heldObject->transform.pos.y))
+                //     {
+                //         return;
+                //     }
+                // }
+
+                // if (pCount >= pCapacity) {
+                //     pCapacity *= 2;
+                //     glm::vec2* temp = new glm::vec2[pCapacity];
+
+                //     for (int i = 0; i < pCount; ++i) { temp[i] = placedTiles[i]; }
+
+                //     delete[] placedTiles;
+                //     placedTiles = temp;
+                // }
+
+                // placedTiles[pCount++] = heldObject->transform.pos;
+                // addObject = 1;
             }
+            // } else if (pressedLastFrame && !MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
+            //     ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
+            //     heldObject = nullptr;
+
+            //     // reset click and drag info
+            //     delete[] placedTiles;
+            //     pCapacity = 16;
+            //     pCount = 0;
+            //     placedTiles = new glm::vec2[pCapacity];
+            //     addObject = 0;
+            //     pressedLastFrame = 0;
+            // }
         }
     };
 

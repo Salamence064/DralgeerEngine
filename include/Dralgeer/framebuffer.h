@@ -58,6 +58,10 @@ namespace Dralgeer {
 
                 // todo seems to only ever read some of it while mouse is held down
 
+                // todo I wonder if part of the issue is caused by the artifacts caused from drag clicking
+                // todo try temporarily removing drag clicking and see if that is in fact the issue
+                // todo I think I will do this when I come back to it
+
                 std::cout << "[DEBUG] x, y: " << x << ", " << y << "\n";
                 // std::cout << "[DEBUG] Mouse x, y: " << MouseListener::mWorldX << ", " << MouseListener::mWorldY << "\n";
 
