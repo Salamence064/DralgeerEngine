@@ -82,8 +82,8 @@ namespace Dralgeer {
             // todo try isolating stuff about the coordinate system
             // todo maybe attach the picking texture's framebuffer to a separate ImGui window to see what's actually happening
 
-            int x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
-            int y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
+            int x = (int) MouseListener::mWorldX;
+            int y = (int) MouseListener::mWorldY;
 
             int id = pickingTexture->readPixel(x, y);
             GameObject* go = currScene->getGameObject(id);

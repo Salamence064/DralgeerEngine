@@ -160,10 +160,10 @@ namespace Dralgeer {
             // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
             // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
-            DebugDraw::addLine2D(glm::vec2(256, 352), glm::vec2(256, 384), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(256, 352), glm::vec2(288, 352), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(288, 352), glm::vec2(288, 384), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(256, 384), glm::vec2(288, 384), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(0, 32), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(32, 0), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
 
             DebugDraw::addLine2D(glm::vec2(736, 416), glm::vec2(736, 438), glm::vec3(0.5f, 1, 0.0f));
 
@@ -229,7 +229,24 @@ namespace Dralgeer {
                 imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID);
 
                 // ! for debugging ------------------
-                if (KeyListener::keyPressed[GLFW_KEY_W]) { pickingTexture->test = 0; }
+                if (KeyListener::keyPressed[GLFW_KEY_W]) {
+                    pickingTexture->test = 0;
+                    pickingTexture->enableWriting();
+                    glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+                    float pixels[3];
+                    glReadPixels(48, 48, 1, 1, GL_RGB, GL_FLOAT, pixels);
+
+                    std::cout << "Rias Gremory: ";
+                    std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+                    
+                    // glReadPixels(48, 48, 1, 1, GL_RGB, GL_FLOAT, pixels);
+
+                    // std::cout << "Bondage: ";
+                    // std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+
+                    pickingTexture->disableWriting();
+                }
                 // ! --------------------------------
 
                 // initialize the gamepadState // todo set up later
