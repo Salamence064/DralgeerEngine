@@ -79,6 +79,9 @@ namespace Dralgeer {
         debounce -= dt;
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && debounce < 0.0f) {
+            // todo try isolating stuff about the coordinate system
+            // todo maybe attach the picking texture's framebuffer to a separate ImGui window to see what's actually happening
+
             int x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             int y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
 

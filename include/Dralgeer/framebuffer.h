@@ -32,9 +32,11 @@ namespace Dralgeer {
 
     class PickingTexture {
         private:
-            unsigned int fboID, pTexID, depthTexID;
+            unsigned int fboID, depthTexID;
 
         public:
+            unsigned int pTexID;
+
             int width, height;
 
             bool test = 1;

@@ -58,7 +58,7 @@ namespace Dralgeer {
         glDisable(GL_DEPTH_TEST);
 
         // disable the reading
-        glReadBuffer(GL_NONE);
+        // glReadBuffer(GL_NONE);
         glDrawBuffer(GL_COLOR_ATTACHMENT0); // todo im unsure if the color attachment I'm drawing to could be causing the issue
         // todo I think I will have to watch the videos
 

@@ -68,7 +68,7 @@ namespace Dralgeer {
         ImGui::StyleColorsDark();
     };
 
-    void ImGuiLayer::update(float dt, Scene* currScene, unsigned int frameBufferTexID, int windowWidth, int windowHeight) {
+    void ImGuiLayer::update(float dt, Scene* currScene, unsigned int frameBufferTexID, int windowWidth, int windowHeight, GameViewWindow* window, unsigned int texID2) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -77,6 +77,7 @@ namespace Dralgeer {
 
         currScene->imGui();
         gameViewWindow.imGui(frameBufferTexID);
+        window->imGui(texID2);
         propertiesWindow.update(dt, currScene, gameViewWindow.getWantCaptureMouse());
         propertiesWindow.imGui();
 
