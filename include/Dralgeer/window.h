@@ -165,6 +165,11 @@ namespace Dralgeer {
             DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
             DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
 
+            DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(32, 64), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(64, 32), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(64, 32), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
+            DebugDraw::addLine2D(glm::vec2(32, 64), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
+
             DebugDraw::addLine2D(glm::vec2(736, 416), glm::vec2(736, 438), glm::vec3(0.5f, 1, 0.0f));
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
@@ -219,6 +224,9 @@ namespace Dralgeer {
                 // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
                 // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
 
+
+                // todo part of the issue is when glReadPixels is reading the pixels it reads an entire quad as one of the sprites in it
+
                 currScene->render(pickingShader);
 
                 pickingTexture->disableWriting();
@@ -235,15 +243,10 @@ namespace Dralgeer {
                     glReadBuffer(GL_COLOR_ATTACHMENT0);
 
                     float pixels[3];
-                    glReadPixels(48, 48, 1, 1, GL_RGB, GL_FLOAT, pixels);
+                    glReadPixels(0, 0, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
                     std::cout << "Rias Gremory: ";
                     std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
-                    
-                    // glReadPixels(48, 48, 1, 1, GL_RGB, GL_FLOAT, pixels);
-
-                    // std::cout << "Bondage: ";
-                    // std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
 
                     pickingTexture->disableWriting();
                 }
