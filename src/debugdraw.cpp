@@ -10,6 +10,6 @@ namespace Dralgeer {
         Shader shader;
 
         unsigned int vaoID, vboID;
-        bool started = 0;
+        bool started = 0, rebuffer = 0;
     }
 }

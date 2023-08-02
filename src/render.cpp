@@ -6,6 +6,8 @@
 
 // todo do the z-index based on a z-coordinate passed using the VBO and just make it progressively more positive as the z-index increases
 
+// todo maybe just make a rebuffer field bool to make it so we don't have to do the for loop check every frame
+
 namespace Dralgeer {
     // * ===============================================
     // * RenderBatch Stuff

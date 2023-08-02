@@ -10,7 +10,6 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
             glm::vec2 end;
             glm::vec3 color;
             int lifetime;
-            bool isDirty = 1;
         };
 
 
@@ -23,7 +22,7 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
         extern Shader shader;
 
         extern unsigned int vaoID, vboID;
-        extern bool started;
+        extern bool started, rebuffer;
 
         inline void loadVertexProperties(int index) {
             int offset = index * 2 * DEBUG_VERTEX_SIZE;
@@ -83,7 +82,7 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
                     numLines--;
                     for (int j = i; j < numLines; ++j) {
                         lines[j] = lines[j + 1];
-                        lines[j].isDirty = 1;
+                        rebuffer = 1;
                     }
                 }
             }
@@ -92,26 +91,11 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
         inline void draw(Camera const &cam) {
             if (!numLines) { return; }
 
-            bool rebuffer = 0;
-
-            for (int i = 0; i < numLines; ++i) {
-                if (lines[i].isDirty) {
-                    loadVertexProperties(i);
-                    lines[i].isDirty = 0;
-                    rebuffer = 1;
-                }
-            }
-
             if (rebuffer) {
                 glBindBuffer(GL_ARRAY_BUFFER, vboID);
-                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // todo causes invalid value error (error 0x0501)
-
-                // GLenum err;
-                // while((err = glGetError()) != GL_NO_ERROR) {
-                //     std::cout << "[Error] " << err << "\n";
-                // }
-
+                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
+                rebuffer = 0;
             }
 
             // bind the VAO
@@ -139,8 +123,8 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
         inline void destroy() { delete lines; };
 
         // * Note: Make the lifetime negative to indicate it should never be removed
-        inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.882f, 0.004f, 0.004f), int lifetime = -1) {
-            if (numLines >= MAX_DEBUG_LINES) { return; }
+        inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.8824f, 0.0039f, 0.0039f), int lifetime = -1) {
+            if (numLines >= MAX_DEBUG_LINES) { return; std::cout << "???\n"; }
 
             if (numLines == capacity) {
                 capacity *= 2;
@@ -152,7 +136,12 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
                 lines = temp;
             }
 
+            // todo for some reason adding lines inside component.cpp doesnt work
+            // todo like wtf is this shit. I am getting annoyed with all these damn bugs
+
+            rebuffer = 1;
             lines[numLines++] = {start, end, color, lifetime};
+            loadVertexProperties(numLines - 1);
         };
 
         // TODO: add addBox2D funcs

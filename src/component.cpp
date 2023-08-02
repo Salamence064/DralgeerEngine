@@ -343,8 +343,8 @@ namespace Dralgeer {
             int x = firstX + i*GRID_WIDTH;
             int y = firstY + i*GRID_HEIGHT;
 
-            if (i < vertLines) { DebugDraw::addLine2D(glm::vec2(x, firstX), glm::vec2(x, firstY + height), color); }
-            if (i < horzLines) { DebugDraw::addLine2D(glm::vec2(firstX, y), glm::vec2(firstX + width, y), color); }
+            if (i < vertLines) { DebugDraw::addLine2D(glm::vec2(x, firstX), glm::vec2(x, firstY + height), color, 1); }
+            if (i < horzLines) { DebugDraw::addLine2D(glm::vec2(firstX, y), glm::vec2(firstX + width, y), color, 1); }
         }
     };
 
@@ -422,6 +422,28 @@ namespace Dralgeer {
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
                 ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
+
+                // ! debugging code -----------------------------
+
+                std::cout << "Hello\n";
+
+                Transform t = ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform;
+
+                std::cout << t.pos.x << ", " << t.pos.y << "\n";
+                std::cout << t.scale.x << ", " << t.scale.y << "\n";
+
+                DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x + t.scale.x, t.pos.y), glm::vec3(0.5, 1, 0));
+                DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x, t.pos.y + t.scale.y));
+                DebugDraw::addLine2D(glm::vec2(t.pos.x, t.pos.y + t.scale.y), t.pos + t.scale);
+                DebugDraw::addLine2D(glm::vec2(t.pos.x + t.scale.x, t.pos.y), t.pos + t.scale);
+
+                DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(0, 32), glm::vec3(0.5, 1, 0));
+                DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(32, 0), glm::vec3(0.5, 1, 0));
+                DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
+                DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
+
+                // ! --------------------------------------------
+
                 heldObject = nullptr;
 
                 // handle click and drag

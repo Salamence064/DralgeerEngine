@@ -160,15 +160,15 @@ namespace Dralgeer {
             // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
             // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
 
-            DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(0, 32), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(32, 0), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(0, 32), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(32, 0), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
 
-            DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(32, 64), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(64, 32), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(64, 32), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
-            DebugDraw::addLine2D(glm::vec2(32, 64), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(32, 64), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(64, 32), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(64, 32), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
+            // DebugDraw::addLine2D(glm::vec2(32, 64), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
 
             DebugDraw::addLine2D(glm::vec2(736, 416), glm::vec2(736, 438), glm::vec3(0.5f, 1, 0.0f));
 
@@ -183,7 +183,35 @@ namespace Dralgeer {
                 // Poll for events
                 glfwPollEvents();
 
-                // render the actual game
+                // render picking texture
+                glDisable(GL_BLEND);
+                pickingTexture->enableWriting();
+
+                glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
+                glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                // todo possibly the mouse pos isnt being obtained properly
+
+                // todo we need to create an imgui offset for the tab bar to calc the pos precisely
+                // todo use imguicursorpos to achieve this
+
+                // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
+                // todo and not clearing the color outputs 0, 0, 0
+
+
+                // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
+                // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
+
+
+                // todo part of the issue is when glReadPixels is reading the pixels it reads an entire quad as one of the sprites in it
+
+                currScene->render(pickingShader);
+
+                pickingTexture->disableWriting();
+                glEnable(GL_BLEND);
+
+                // render the visual for the scene
                 DebugDraw::beginFrame();
                 frameBuffer.bind();
 
@@ -204,46 +232,20 @@ namespace Dralgeer {
                 glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                // render picking texture
-                glDisable(GL_BLEND);
-                pickingTexture->enableWriting();
-
-                glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
-                glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                // todo possibly thr mouse pos isnt being obtained properly
-
-                // todo we need to create an imgui offset for the tab bar to calc the pos precisely
-                // todo use imguicursorpos to achieve this
-
-                // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
-                // todo and not clearing the color outputs 0, 0, 0
-
-
-                // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
-                // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
-
-
-                // todo part of the issue is when glReadPixels is reading the pixels it reads an entire quad as one of the sprites in it
-
-                currScene->render(pickingShader);
-
-                pickingTexture->disableWriting();
-                glEnable(GL_BLEND);
-
                 // MouseListener and ImGui updates
                 MouseListener::updateWorldCoords(currScene->camera);
                 imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID);
 
                 // ! for debugging ------------------
                 if (KeyListener::keyPressed[GLFW_KEY_W]) {
+                    // todo same quad issue. Really confused what is causing it
+
                     pickingTexture->test = 0;
                     pickingTexture->enableWriting();
                     glReadBuffer(GL_COLOR_ATTACHMENT0);
 
                     float pixels[3];
-                    glReadPixels(0, 0, 1, 1, GL_RGB, GL_FLOAT, pixels);
+                    glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
                     std::cout << "Rias Gremory: ";
                     std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
@@ -274,10 +276,10 @@ namespace Dralgeer {
 
                 // * Check for errors to make it easier to debug
                 // ! this will be removed in the final build
-                // GLenum err;
-                // while((err = glGetError()) != GL_NO_ERROR) {
-                //     std::cout << "[Error] " << err << "\n";
-                // }
+                GLenum err;
+                while((err = glGetError()) != GL_NO_ERROR) {
+                    std::cout << "[Error] " << err << "\n";
+                }
             }
 
             delete debugWindow;
