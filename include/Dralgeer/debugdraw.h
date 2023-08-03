@@ -124,7 +124,7 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
 
         // * Note: Make the lifetime negative to indicate it should never be removed
         inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.8824f, 0.0039f, 0.0039f), int lifetime = -1) {
-            if (numLines >= MAX_DEBUG_LINES) { return; std::cout << "???\n"; }
+            if (numLines >= MAX_DEBUG_LINES) { return; }
 
             if (numLines == capacity) {
                 capacity *= 2;

@@ -425,22 +425,16 @@ namespace Dralgeer {
 
                 // ! debugging code -----------------------------
 
-                std::cout << "Hello\n";
+                // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-                Transform t = ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform;
+                // Transform t = ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform;
 
-                std::cout << t.pos.x << ", " << t.pos.y << "\n";
-                std::cout << t.scale.x << ", " << t.scale.y << "\n";
+                // DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x + t.scale.x, t.pos.y), glm::vec3(0.5, 1, 0));
+                // DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x, t.pos.y + t.scale.y));
+                // DebugDraw::addLine2D(glm::vec2(t.pos.x, t.pos.y + t.scale.y), t.pos + t.scale);
+                // DebugDraw::addLine2D(glm::vec2(t.pos.x + t.scale.x, t.pos.y), t.pos + t.scale);
 
-                DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x + t.scale.x, t.pos.y), glm::vec3(0.5, 1, 0));
-                DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x, t.pos.y + t.scale.y));
-                DebugDraw::addLine2D(glm::vec2(t.pos.x, t.pos.y + t.scale.y), t.pos + t.scale);
-                DebugDraw::addLine2D(glm::vec2(t.pos.x + t.scale.x, t.pos.y), t.pos + t.scale);
-
-                DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(0, 32), glm::vec3(0.5, 1, 0));
-                DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(32, 0), glm::vec3(0.5, 1, 0));
-                DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
-                DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
+                // glBindFramebuffer(GL_FRAMEBUFFER, realFbo);
 
                 // ! --------------------------------------------
 

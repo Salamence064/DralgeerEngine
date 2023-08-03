@@ -56,6 +56,7 @@ namespace Dralgeer {
 
             SceneType type;
             Camera camera;
+            GameObject components; // ! debugging
 
 
             // * ======================
@@ -105,7 +106,7 @@ namespace Dralgeer {
     class LevelEditorScene : public Scene {
         private:
             SpriteSheet* sprites = nullptr;
-            GameObject components;
+            // GameObject components;
             bool imGuiSetup = 1; // ! DO NOT serialize
 
         protected:

@@ -6,10 +6,12 @@
 namespace Dralgeer {
     class FrameBuffer {
         private:
-            unsigned int fboID, rboID;
+            unsigned int rboID;
             Texture tex;
 
         public:
+            unsigned int fboID; // ! debugging
+
             FrameBuffer() {};
             void init(int width, int height);
             inline unsigned int getTextureID() const { return tex.texID; };
@@ -32,10 +34,10 @@ namespace Dralgeer {
 
     class PickingTexture {
         private:
-            unsigned int fboID, depthTexID;
+            unsigned int depthTexID;
 
         public:
-            unsigned int pTexID;
+            unsigned int pTexID, fboID; // ! debugging
 
             int width, height;
 

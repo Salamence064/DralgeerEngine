@@ -234,6 +234,9 @@ namespace Dralgeer {
             int pCount = 0;
 
         public:
+            unsigned int fbo; // ! for debugging purposes
+            unsigned int realFbo; // ! for debugging purposes
+
             GameObject* heldObject = nullptr; // only set this equal to an object getting picked up
             bool addObject = 0;
 
