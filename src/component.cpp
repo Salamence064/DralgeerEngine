@@ -412,7 +412,7 @@ namespace Dralgeer {
             // todo the precision when placing sucks -- fix it by changing the values for this a little
 
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
-            heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT - GRID_HEIGHT;
+            heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT;
 
             ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform.pos = heldObject->transform.pos;
             
@@ -438,6 +438,7 @@ namespace Dralgeer {
 
                 // ! --------------------------------------------
 
+                // std::cout << t.scale.x << ", " << t.scale.y << "\n";
                 heldObject = nullptr;
 
                 // handle click and drag

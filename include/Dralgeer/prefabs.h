@@ -13,6 +13,7 @@ namespace Dralgeer {
             SpriteRenderer* renderer = new SpriteRenderer();
             renderer->sprite.width = spr.width;
             renderer->sprite.height = spr.height;
+
             renderer->sprite.texCoords[0] = spr.texCoords[0];
             renderer->sprite.texCoords[1] = spr.texCoords[1];
             renderer->sprite.texCoords[2] = spr.texCoords[2];

@@ -185,8 +185,9 @@ namespace Dralgeer {
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
-                // Poll for events
+                // Poll for events and update
                 glfwPollEvents();
+                currScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
 
                 // render picking texture
                 glDisable(GL_BLEND);
@@ -226,7 +227,6 @@ namespace Dralgeer {
 
                 // todo put this segment in the dt loop when I set it up -------------------
                 DebugDraw::draw(currScene->camera);
-                currScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
                 currScene->render(defaultShader);
                 // -------------------------------------------------------------------------
 
@@ -239,7 +239,7 @@ namespace Dralgeer {
 
                 // MouseListener and ImGui updates
                 MouseListener::updateWorldCoords(currScene->camera);
-                imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID);
+                imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID, pickingTexture->fboID);
 
                 // ! for debugging ------------------
                 if (KeyListener::keyPressed[GLFW_KEY_W]) {
@@ -281,10 +281,10 @@ namespace Dralgeer {
 
                 // * Check for errors to make it easier to debug
                 // ! this will be removed in the final build
-                GLenum err;
-                while((err = glGetError()) != GL_NO_ERROR) {
-                    std::cout << "[Error] " << err << "\n";
-                }
+                // GLenum err;
+                // while((err = glGetError()) != GL_NO_ERROR) {
+                //     std::cout << "[Error] " << err << "\n";
+                // }
             }
 
             delete debugWindow;

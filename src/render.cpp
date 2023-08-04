@@ -166,6 +166,14 @@ namespace Dralgeer {
         if (rebuffer) {
             // todo maybe could use an offset + an equation to determine the size for slightly greater efficiency
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
+
+            // ! they get added with proper dimensions to the array
+            std::cout << "\nvertices\n";
+            for (int i = 0; i < numSprites * 40; i += 10) {
+                std::cout << vertices[i] << ", " << vertices[i + 1] << "\n";
+                if (!((i + 10)%40)) { std::cout << "---------------------\n"; }
+            }
+
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
@@ -199,8 +207,6 @@ namespace Dralgeer {
     };
 
      bool RenderBatch::destroyIfExists(SpriteRenderer* spr) {
-        std::cout << "hello\n";
-
         for (int i = 0; i < numSprites; ++i) {
             if (sprites[i] == spr) {
                 for (int j = i; j < numSprites - 1; ++j) {

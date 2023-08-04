@@ -11,8 +11,21 @@ namespace Dralgeer {
     void Scene::update(float dt, bool wantCapture) {
         camera.adjustProjection();
 
+        // std::cout << "\n========================================\n";
+        // std::cout << "[GameObjects]\n";
+
         for (int i = numObjects - 1; i >= 0; --i) {
             gameObjects[i]->update(dt, camera, wantCapture);
+
+            // SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
+
+            // if (spr) {
+            //     std::cout << "\nGameObject: " <<  gameObjects[i]->name << " " << spr->gameObject->id << "\n";
+            //     std::cout << "\tPos: " << spr->gameObject->transform.pos.x << ", " << spr->gameObject->transform.pos.y << "\n";
+            //     std::cout << "\tScale: " << spr->gameObject->transform.scale.x << ", " << spr->gameObject->transform.scale.y << "\n";
+            //     std::cout << "\tFilepath: " << spr->sprite.texture->filepath << "\n";
+            //     std::cout << "\tzIndex: " << spr->gameObject->transform.zIndex << "\n";
+            // }
 
             if (gameObjects[i]->dead) {
                 Renderer::destroy((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));
@@ -20,6 +33,8 @@ namespace Dralgeer {
                 numObjects--;
             }
         }
+
+        // std::cout << "\n========================================\n";
     };
 
     // * ================================================
@@ -248,6 +263,10 @@ namespace Dralgeer {
                 // todo remove any blocks that are stacked on top of each other. This can be done when the held object is placed and before its lastTransform is set
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 addGameObject(go);
+
+                // SpriteRenderer* s = (SpriteRenderer*) go->getComponent(SPRITE_RENDERER);
+                // std::cout << s->gameObject->transform.scale.x << ", " << s->gameObject->transform.scale.y << "\n";
+
                 ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
             }
 
