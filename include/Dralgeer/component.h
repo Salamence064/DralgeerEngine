@@ -2,6 +2,7 @@
 
 #include "sprite.h"
 #include "camera.h"
+#include "listeners.h"
 
 namespace Dralgeer {
     class GameObject;
@@ -263,7 +264,7 @@ namespace Dralgeer {
 
     class Gizmo : public Component { // todo add rule of 5 later
         private:
-            GizmoType gizmoType;
+            GizmoType gizmoType; // todo for the type, set it to activeType and then store the gizmoSystem stuff in here, too
 
             glm::vec4 xColor = glm::vec4(0.8824f, 0.3039f, 0.3039f, 1.0f);
             glm::vec4 xHoverColor = glm::vec4(0.8824f, 0.0039f, 0.0039f, 1.0f);
