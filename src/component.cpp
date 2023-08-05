@@ -481,6 +481,63 @@ namespace Dralgeer {
     };
 
     // * =====================================================================
+    // * Gizmo Stuff
+
+    // * ====================
+    // * Rule of 5 Stuff
+    // * ====================
+
+    
+
+    // * =====================
+    // * Normal Functions
+    // * =====================
+
+    void Gizmo::update(float dt, Camera const &cam, bool wantCapture) {
+        if (!inUse) { return; }
+
+        if (activeObject) {
+            switch (gizmoType) {
+                case SCALE_GIZMO: { // todo can probs remove the !yActive part of the check
+                    if (xActive && !yActive) { activeObject->transform.scale.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
+                    else if (yActive) { activeObject->transform.scale.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }
+                    break;
+                }
+
+                case TRANSLATE_GIZMO: {
+                    if (xActive && !yActive) { activeObject->transform.pos.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
+                    else if (yActive) { activeObject->transform.pos.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }
+                    break;
+                }
+            }
+        }
+
+        // todo retrieve the active gameObject from the properties window
+
+        if (!activeObject) { setInactive(); return; }
+        setActive();
+
+        bool xHot = xHoverState();
+        bool yHot = yHoverState();
+
+        if ((xHot || xActive) && MouseListener::mIsDragging && MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
+            xActive = 1;
+            yActive = 0;
+
+        } else if ((yHot || yActive) && MouseListener::mIsDragging && MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
+            xActive = 0;
+            yActive = 1;
+
+        } else {
+            xActive = 0;
+            yActive = 0;
+        }
+
+        xObject->transform.pos += xOffset;
+        yObject->transform.pos += yOffset;
+    };
+
+    // * =====================================================================
     // * GameObject Stuff
 
     // * ====================

@@ -14,7 +14,13 @@ namespace Dralgeer {
         SPRITE_RENDERER,
         EDITOR_CAMERA,
         GRID_LINES,
-        MOUSE_CONTROLS
+        MOUSE_CONTROLS,
+        GIZMO
+    };
+
+    enum GizmoType {
+        SCALE_GIZMO,
+        TRANSLATE_GIZMO
     };
 
     // todo maybe find a way to do stuff with just a flag inside of this class
@@ -253,5 +259,115 @@ namespace Dralgeer {
             ~MouseControls();
 
             void update(float dt, Camera const &cam, bool wantCapture) override;
+    };
+
+    class Gizmo : public Component { // todo add rule of 5 later
+        private:
+            GizmoType gizmoType;
+
+            glm::vec4 xColor = glm::vec4(0.8824f, 0.3039f, 0.3039f, 1.0f);
+            glm::vec4 xHoverColor = glm::vec4(0.8824f, 0.0039f, 0.0039f, 1.0f);
+            glm::vec4 yColor = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
+            glm::vec4 yHoverColor = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+            GameObject* xObject; // ! Do NOT serialize
+            GameObject* yObject; // ! Do NOT serialize
+            GameObject* activeObject = nullptr; // ! Do NOT serialize
+            SpriteRenderer xSprite, ySprite; // ! Do NOT serialize
+
+            glm::vec2 xOffset = glm::vec2(64, -5), yOffset = glm::vec2(16, 61);
+            int gizmoWidth = 16, gizmoHeight = 48;
+
+            bool xActive = 0, yActive = 0;
+
+            // todo somehow add in the properties window to be manipulated (probably as a pointer parameter)
+
+
+            // * ====================
+            // * Helper Functions
+            // * ====================
+
+            inline void setActive() {
+                xSprite.color = xColor;
+                ySprite.color = yColor;
+            };
+
+            // Is the mouse hovered over the gizmo's xObject?
+            inline bool xHoverState() {
+                if (MouseListener::mWorldX <= xObject->transform.pos.x &&
+                    MouseListener::mWorldX >= xObject->transform.pos.x - gizmoHeight &&
+                    MouseListener::mWorldY >= yObject->transform.pos.y &&
+                    MouseListener::mWorldY <= yObject->transform.pos.y + gizmoWidth)
+                {
+                    xSprite.color = xHoverColor;
+                    return 1;
+                }
+
+                xSprite.color = xColor;
+                return 0;
+            };
+
+            // Is the mouse hovered over the gizmo's yObject?
+            inline bool yHoverState() {
+                if (MouseListener::mWorldX <= yObject->transform.pos.x &&
+                    MouseListener::mWorldX >= yObject->transform.pos.x - gizmoWidth &&
+                    MouseListener::mWorldY <= yObject->transform.pos.y &&
+                    MouseListener::mWorldY >= yObject->transform.pos.y - gizmoHeight)
+                {
+                    ySprite.color = yHoverColor;
+                    return 1;
+                }
+
+                ySprite.color = yColor;
+                return 0;
+            };
+
+        public:
+            bool inUse = 0; // Remember to call setInactive after setting this to 0.
+
+            // * ====================
+            // * Helper Function
+            // * ====================
+
+            inline void setInactive() {
+                gameObject = nullptr; // ! seems useless (probs remove)
+                xSprite.color = glm::vec4(0.0f);
+                ySprite.color = glm::vec4(0.0f);
+            };
+
+
+            // * ====================
+            // * Constructors
+            // * ====================
+
+            Gizmo(GizmoType type);
+
+            // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
+            Gizmo(Gizmo const &gizmo);
+            Gizmo(Gizmo &&gizmo);
+
+            // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
+            Gizmo& operator = (Gizmo const &gizmo);
+            Gizmo& operator = (Gizmo &&gizmo);
+
+            ~Gizmo();
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
+
+            inline void start() override {
+                xObject->transform.rotation = 90.0f;
+                yObject->transform.rotation = 180.0f;
+                xObject->transform.zIndex = 1000;
+                yObject->transform.zIndex = 1000;
+
+                xObject->serialize = 0;
+                yObject->serialize = 0;
+            };
+
+            void update(float dt, Camera const &cam, bool wantCapture) override;
+
     };
 }

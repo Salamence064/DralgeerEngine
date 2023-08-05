@@ -49,6 +49,7 @@
 // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
 // - make a scene selector in the level editor scene
 // - go through the rest of the 2D engine series and see what final things I need to add
+// - organize the headers
 // ===================================================================
 
 #include "imguilayer.h"
