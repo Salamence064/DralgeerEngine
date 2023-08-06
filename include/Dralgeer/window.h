@@ -38,7 +38,7 @@
 // // - Place down the sprite on the gameview window (and only there)
 // // - Add a drag click feature
 // - PickingTexture stuff for the properties window
-// - port over gizmos
+// // - port over gizmos
 // - setup physics (update Zeta2D, too)
 // - setup serialization
 // - port over the ImGui stuff to fully furnish the properties window

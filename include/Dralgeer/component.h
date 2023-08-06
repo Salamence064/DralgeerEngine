@@ -272,6 +272,9 @@ namespace Dralgeer {
             glm::vec4 yColor = glm::vec4(0.3f, 0.3f, 1.0f, 1.0f);
             glm::vec4 yHoverColor = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
+            // todo maybe have a system similar to the the gizmo system one
+            // todo focus on getting a nice system for it later
+
             GameObject* xObject; // ! Do NOT serialize
             GameObject* yObject; // ! Do NOT serialize
             GameObject* activeObject = nullptr; // ! Do NOT serialize
