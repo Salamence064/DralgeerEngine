@@ -9,10 +9,9 @@ namespace Dralgeer {
         USER_EVENT
     };
 
-
     namespace EventSystem {
-        // todo figure out a way to send the notifications to various parts of the code without making an observer class and having everything extend that
-
-        inline void notify(EventType event);
+        // todo in the future have this go through different observers and update that.
+        // todo the observers will be custom objects placed down when the user places a custom event
+        extern void notify(EventType event);
     }
 }

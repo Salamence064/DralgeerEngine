@@ -42,7 +42,7 @@
 // - setup physics (update Zeta2D, too)
 // - setup serialization
 // - port over the ImGui stuff to fully furnish the properties window
-// - port over the event system
+// // - port over the event system
 // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
 // - add pointer operators for equality and constructors
@@ -52,6 +52,7 @@
 // - organize the headers
 // ===================================================================
 
+#include "event.h"
 #include "imguilayer.h"
 #include "listeners.h"
 #include "render.h"
@@ -299,6 +300,10 @@ namespace Dralgeer {
             glfwSetErrorCallback(NULL);
             glfwTerminate();
             delete currScene;
+        };
+
+        inline static void onNotify(EventType event) {
+            
         };
     }
 }
