@@ -77,12 +77,16 @@ namespace Dralgeer {
         // static bool initGamepadState = 1;
         // static GLFWgamepadstate gamepadState;
 
+        static bool runtimePlaying = 0; // Is the scene being played?
+
         inline static void changeScene(SceneType scene) {
             switch(scene) {
                 case SceneType::LEVEL_EDITOR_SCENE: {
                     delete currScene;
                     currScene = new LevelEditorScene();
+                    // currScebe->load();
                     currScene->init();
+                    currScene->start();
                     break;
                 }
             }
@@ -303,7 +307,30 @@ namespace Dralgeer {
         };
 
         inline static void onNotify(EventType event) {
-            
+            switch(event) { // todo add the save stuff when adding serialization
+                case START_PLAY: {
+                    runtimePlaying = 1;
+                    // currScene->save();
+                    changeScene(LEVEL_EDITOR_SCENE); // ! I dont think this is necessary
+                    break;
+                }
+
+                case STOP_PLAY: {
+                    runtimePlaying = 0;
+                    changeScene(LEVEL_EDITOR_SCENE);
+                    break;
+                }
+
+                case LOAD_LEVEL: {
+                    changeScene(LEVEL_EDITOR_SCENE);
+                    break;
+                }
+
+                case SAVE_LEVEL: {
+                    // currScene->save();
+                    break;
+                }
+            }
         };
     }
 }
