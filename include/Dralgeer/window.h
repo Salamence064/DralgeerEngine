@@ -64,7 +64,7 @@ namespace Dralgeer {
     };
 
     // Model a window
-    namespace Window {
+    namespace Window { // todo because this shit is static it can't be accessed by outside .cpp files -- maybe change the currScene one if I find it to be necessary
         static WindowData data;
         static GLFWwindow* window;
         static Scene* currScene = nullptr;

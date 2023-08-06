@@ -5,8 +5,8 @@
 #include <Dralgeer/dimgui.h>
 #include <Dralgeer/editor.h>
 #include <Dralgeer/listeners.h>
-#include <Dralgeer/window.h>
 #include <Dralgeer/debugdraw.h>
+#include <Dralgeer/prefabs.h>
 
 namespace Dralgeer {
     // * =====================================================================
@@ -487,17 +487,38 @@ namespace Dralgeer {
     // * Rule of 5 Stuff
     // * ====================
 
-    
+    Gizmo::Gizmo() {
+        type = GIZMO;
+        id = IDCounter::componentID++;
+    };
 
     // * =====================
     // * Normal Functions
     // * =====================
 
+    void Gizmo::init(SpriteSheet* spr) {
+        gizmoSprites = spr;
+
+        // todo figure out how to effectively retrieve the proper gameObjects (probs just make separate objects for the scale and translate gizmos)
+        xObject = Prefabs::generateSpriteObject(spr, gizmoWidth, gizmoHeight);
+        yObject = Prefabs::generateSpriteObject(spr, 16, 48);
+        xSprite = (SpriteRenderer*) xObject->getComponent(SPRITE_RENDERER);
+        ySprite = (SpriteRenderer*) yObject->getComponent(SPRITE_RENDERER);
+
+        xObject->pickable = 0;
+        yObject->pickable = 0;
+
+        activeGizmo = TRANSLATE_GIZMO;
+
+        // todo need to add the objects to the current scene 
+        // todo also need to handle the propertiesWindow thing
+    };
+
     void Gizmo::update(float dt, Camera const &cam, bool wantCapture) {
         if (!inUse) { return; }
 
         if (activeObject) {
-            switch (gizmoType) {
+            switch (activeGizmo) {
                 case SCALE_GIZMO: { // todo can probs remove the !yActive part of the check
                     if (xActive && !yActive) { activeObject->transform.scale.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
                     else if (yActive) { activeObject->transform.scale.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }

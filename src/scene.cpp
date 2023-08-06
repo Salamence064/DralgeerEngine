@@ -43,8 +43,11 @@ namespace Dralgeer {
     inline void LevelEditorScene::loadResources() {
         SpriteSheet* spr = new SpriteSheet();
         spr->init(AssetPool::getTexture("../../assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
-
         AssetPool::addSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png", spr);
+
+        SpriteSheet* gizmoSpr = new SpriteSheet();
+        spr->init(AssetPool::getTexture("../../assets/images/gizmos.png"), 24, 48, 3, 0);
+        AssetPool::addSpriteSheet("../../assets/images/gizmos.png", gizmoSpr);
 
         // todo add gizmos
 
@@ -209,7 +212,7 @@ namespace Dralgeer {
         loadResources();
 
         // load sprite sheet
-        sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png");
+        sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png"); // ! doesnt seem to be used later
 
         components.name = "LevelEditor";
         components.transform.zIndex = 0;
@@ -220,6 +223,10 @@ namespace Dralgeer {
         components.addComponent(new MouseControls());
         components.addComponent(new GridLines());
         components.addComponent(new EditorCamera(camera));
+
+        Gizmo* gizmo = new Gizmo;
+        gizmo->init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
+        components.addComponent(gizmo);
 
         addGameObject(&components);
     };

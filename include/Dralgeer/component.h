@@ -264,7 +264,8 @@ namespace Dralgeer {
 
     class Gizmo : public Component { // todo add rule of 5 later
         private:
-            GizmoType gizmoType; // todo for the type, set it to activeType and then store the gizmoSystem stuff in here, too
+            SpriteSheet* gizmoSprites; // ! Do NOT serialize
+            GizmoType activeGizmo; // ! Do NOT serialize
 
             glm::vec4 xColor = glm::vec4(0.8824f, 0.3039f, 0.3039f, 1.0f);
             glm::vec4 xHoverColor = glm::vec4(0.8824f, 0.0039f, 0.0039f, 1.0f);
@@ -274,7 +275,8 @@ namespace Dralgeer {
             GameObject* xObject; // ! Do NOT serialize
             GameObject* yObject; // ! Do NOT serialize
             GameObject* activeObject = nullptr; // ! Do NOT serialize
-            SpriteRenderer xSprite, ySprite; // ! Do NOT serialize
+            SpriteRenderer* xSprite; // ! Do NOT serialize
+            SpriteRenderer* ySprite; // ! Do NOT serialize
 
             glm::vec2 xOffset = glm::vec2(64, -5), yOffset = glm::vec2(16, 61);
             int gizmoWidth = 16, gizmoHeight = 48;
@@ -289,8 +291,8 @@ namespace Dralgeer {
             // * ====================
 
             inline void setActive() {
-                xSprite.color = xColor;
-                ySprite.color = yColor;
+                xSprite->color = xColor;
+                ySprite->color = yColor;
             };
 
             // Is the mouse hovered over the gizmo's xObject?
@@ -300,11 +302,11 @@ namespace Dralgeer {
                     MouseListener::mWorldY >= yObject->transform.pos.y &&
                     MouseListener::mWorldY <= yObject->transform.pos.y + gizmoWidth)
                 {
-                    xSprite.color = xHoverColor;
+                    xSprite->color = xHoverColor;
                     return 1;
                 }
 
-                xSprite.color = xColor;
+                xSprite->color = xColor;
                 return 0;
             };
 
@@ -315,11 +317,11 @@ namespace Dralgeer {
                     MouseListener::mWorldY <= yObject->transform.pos.y &&
                     MouseListener::mWorldY >= yObject->transform.pos.y - gizmoHeight)
                 {
-                    ySprite.color = yHoverColor;
+                    ySprite->color = yHoverColor;
                     return 1;
                 }
 
-                ySprite.color = yColor;
+                ySprite->color = yColor;
                 return 0;
             };
 
@@ -332,8 +334,8 @@ namespace Dralgeer {
 
             inline void setInactive() {
                 gameObject = nullptr; // ! seems useless (probs remove)
-                xSprite.color = glm::vec4(0.0f);
-                ySprite.color = glm::vec4(0.0f);
+                xSprite->color = glm::vec4(0.0f);
+                ySprite->color = glm::vec4(0.0f);
             };
 
 
@@ -341,7 +343,7 @@ namespace Dralgeer {
             // * Constructors
             // * ====================
 
-            Gizmo(GizmoType type);
+            Gizmo();
 
             // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
             Gizmo(Gizmo const &gizmo);
@@ -357,6 +359,8 @@ namespace Dralgeer {
             // * ====================
             // * Normal Functions
             // * ====================
+
+            void init(SpriteSheet* spr);
 
             inline void start() override {
                 xObject->transform.rotation = 90.0f;
