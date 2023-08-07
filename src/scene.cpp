@@ -3,6 +3,7 @@
 #include <IMGUI/imgui.h>
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/assetpool.h>
+#include <Dralgeer/gizmo.h>
 
 namespace Dralgeer {
     // * ================================================
@@ -223,10 +224,7 @@ namespace Dralgeer {
         components.addComponent(new MouseControls());
         components.addComponent(new GridLines());
         components.addComponent(new EditorCamera(camera));
-
-        Gizmo* gizmo = new Gizmo;
-        gizmo->init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
-        components.addComponent(gizmo);
+        components.addComponent(new GizmoSystem(AssetPool::getSpriteSheet("../../assets/images/gizmos.png")));
 
         addGameObject(&components);
     };
