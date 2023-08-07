@@ -4,6 +4,12 @@
 
 namespace Dralgeer {
     namespace Prefabs {
+        inline static GameObject* generateGameObject(std::string const &name) { // todo there might be more I should add to this
+            GameObject* go = new GameObject();
+            go->name = name;
+            return go;
+        };
+
         static GameObject* generateSpriteObject(Sprite const &spr, float width, float height) {
             GameObject* go = new GameObject();
             go->name = "SpriteObjectGen";

@@ -481,89 +481,13 @@ namespace Dralgeer {
     };
 
     // * =====================================================================
-    // * Gizmo Stuff
-
-    // * ====================
-    // * Rule of 5 Stuff
-    // * ====================
-
-    Gizmo::Gizmo() {
-        type = GIZMO;
-        id = IDCounter::componentID++;
-    };
-
-    // * =====================
-    // * Normal Functions
-    // * =====================
-
-    void Gizmo::init(SpriteSheet* spr) {
-        gizmoSprites = spr;
-
-        // todo figure out how to effectively retrieve the proper gameObjects (probs just make separate objects for the scale and translate gizmos)
-        xObject = Prefabs::generateSpriteObject(spr, gizmoWidth, gizmoHeight);
-        yObject = Prefabs::generateSpriteObject(spr, 16, 48);
-        xSprite = (SpriteRenderer*) xObject->getComponent(SPRITE_RENDERER);
-        ySprite = (SpriteRenderer*) yObject->getComponent(SPRITE_RENDERER);
-
-        xObject->pickable = 0;
-        yObject->pickable = 0;
-
-        activeGizmo = TRANSLATE_GIZMO;
-
-        // todo need to add the objects to the current scene 
-        // todo also need to handle the propertiesWindow thing
-    };
-
-    void Gizmo::update(float dt, Camera const &cam, bool wantCapture) {
-        if (!inUse) { return; }
-
-        if (activeObject) {
-            switch (activeGizmo) {
-                case SCALE_GIZMO: { // todo can probs remove the !yActive part of the check
-                    if (xActive && !yActive) { activeObject->transform.scale.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
-                    else if (yActive) { activeObject->transform.scale.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }
-                    break;
-                }
-
-                case TRANSLATE_GIZMO: {
-                    if (xActive && !yActive) { activeObject->transform.pos.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
-                    else if (yActive) { activeObject->transform.pos.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }
-                    break;
-                }
-            }
-        }
-
-        // todo retrieve the active gameObject from the properties window
-
-        if (!activeObject) { setInactive(); return; }
-        setActive();
-
-        bool xHot = xHoverState();
-        bool yHot = yHoverState();
-
-        if ((xHot || xActive) && MouseListener::mIsDragging && MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-            xActive = 1;
-            yActive = 0;
-
-        } else if ((yHot || yActive) && MouseListener::mIsDragging && MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-            xActive = 0;
-            yActive = 1;
-
-        } else {
-            xActive = 0;
-            yActive = 0;
-        }
-
-        xObject->transform.pos += xOffset;
-        yObject->transform.pos += yOffset;
-    };
-
-    // * =====================================================================
     // * GameObject Stuff
 
     // * ====================
     // * Rule of 5 Stuff
     // * ====================
+
+    // todo add stuff relating to the gizmos in the gameObject functions
 
     GameObject::GameObject() {
         components = new Component*[8];
@@ -580,10 +504,10 @@ namespace Dralgeer {
 
         for (int i = 0; i < numComponents; ++i) {
             switch (go.components[i]->type) {
-                case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
-                case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
-                case ComponentType::MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); }
+                case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); break; }
+                case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
+                case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
+                case ComponentType::MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
             }
         }
     };
