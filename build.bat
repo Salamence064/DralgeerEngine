@@ -32,6 +32,12 @@ dir /b /s /a "glew/" | findstr . > nul || (
     GOTO FAILED
 )
 
+@REM check if imgui folder is empty
+dir /b /s /a "imgui/" | findstr . > nul || (
+    echo "imgui folder is empty"
+    GOTO FAILED
+)
+
 if exist "build/vendor/glfw3.dll" (
     GOTO skip_GLFW_build
 )
@@ -156,10 +162,53 @@ if not exist "include/IMGUI/imgui.h" (
     popd
 )
 
+if exist "build/vendor/imgui.dll" (
+     GOTO SKIP_IMGUI_BUILD
+)
+
+
+@REM --------- Start of ImGui Build ------------
+
+echo "Building DearImGui"
+pushd "imgui/"
+
+if not exist "build" (
+    echo "Creating 'build' directory"
+    mkdir "build/"
+)
+
+if not exist "lib" (
+    echo "Creating 'lib' directory"
+    mkdir "lib/"
+)
+
+@REM create the object and library files
+pushd "build/"
+
+    g++ -O2 -w -I../../include -c ../*.cpp
+    g++ -shared -Wl,-soname,../libimgui.dll -Wl,--out-implib,../lib/libimgui.a -o ../lib/imgui.dll *.o -L../../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32 -lUser32 -lkernel32
+
+popd @REM "build/"
+
+@REM copy the library files to the appropriate locations
+pushd "lib/"
+
+    copy "imgui.dll" "../../build/vendor/"
+    copy "libimgui.a" "../../lib/"
+
+popd @REM "lib/"
+
+popd @REM "imgui/"
+
+@REM --------- End of ImGui Build ------------
+
+
+:SKIP_IMGUI_BUILD
+
 pushd "build"
 
 @REM Compiling with g++
-g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/*.cpp ../imgui/imgui*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -lOpengl32 -lGdi32
+g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -l:libimgui.a -lOpengl32 -lGdi32
 
 popd
 

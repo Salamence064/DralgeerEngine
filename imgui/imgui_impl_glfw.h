@@ -21,6 +21,7 @@
 
 #pragma once
 #include "imgui.h"      // IMGUI_IMPL_API
+#include <GLFW/glfw3.h>
 
 struct GLFWwindow;
 struct GLFWmonitor;
