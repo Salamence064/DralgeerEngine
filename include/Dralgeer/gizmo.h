@@ -6,9 +6,14 @@
 // todo we could forwardly declare the properties window class and then include the editor header in the .cpp file
 
 namespace Dralgeer {
+    enum GizmoType {
+        TRANSLATE_GIZMO = 0,
+        SCALE_GIZMO
+    };
+
     // todo probably end up doing the editor update system (maybe)
 
-    class Gizmo : public Component { // todo add rule of 5 later
+    class Gizmo { // todo add rule of 5 later
         private:
             GizmoType gizmoType; // ! Do NOT serialize
 
@@ -19,11 +24,11 @@ namespace Dralgeer {
 
             // todo focus on getting a nice system for it later
 
-            GameObject* xObject; // ! Do NOT serialize
-            GameObject* yObject; // ! Do NOT serialize
+            GameObject* xObject = nullptr; // ! Do NOT serialize
+            GameObject* yObject = nullptr; // ! Do NOT serialize
             GameObject* activeObject = nullptr; // ! Do NOT serialize
-            SpriteRenderer* xSprite; // ! Do NOT serialize
-            SpriteRenderer* ySprite; // ! Do NOT serialize
+            SpriteRenderer* xSprite = nullptr; // ! Do NOT serialize
+            SpriteRenderer* ySprite = nullptr; // ! Do NOT serialize
 
             glm::vec2 xOffset = glm::vec2(64, -5), yOffset = glm::vec2(16, 61);
             int gizmoWidth = 16, gizmoHeight = 48;
@@ -80,7 +85,6 @@ namespace Dralgeer {
             // * ====================
 
             inline void setInactive() {
-                gameObject = nullptr; // ! seems useless (probs remove)
                 xSprite->color = glm::vec4(0.0f);
                 ySprite->color = glm::vec4(0.0f);
             };
@@ -90,8 +94,8 @@ namespace Dralgeer {
             // * Constructors
             // * ====================
 
-            // todo current gizmo system sucks and will be improved later -- for now it's just to have something
-            Gizmo(Sprite spr, GizmoType gType, ComponentType cType);
+            // todo current gizmo system is not ideal but fairly good. Will improve later
+            Gizmo() {};
 
             // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
             Gizmo(Gizmo const &gizmo);
@@ -108,21 +112,23 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            inline void start() override {
+            void init(Sprite spr, GizmoType gType);
+
+            inline void start() {
                 xObject->transform.rotation = 90.0f;
                 yObject->transform.rotation = 180.0f;
                 xObject->transform.zIndex = 1000;
                 yObject->transform.zIndex = 1000;
             };
 
-            void update(float dt, Camera const &cam, bool wantCapture) override;
+            void update();
     };
 
     class GizmoSystem : public Component { // todo find a better replacement later on -- probs could do so with an enum + switch system (primary problem is storing the unique objects)
         private: // todo add rule of 5 shit later
             SpriteSheet* gizmoSprites; // ! Do NOT serialize
             GizmoType activeGizmo; // ! Do NOT serialize
-            GameObject* gizmo; // ! Do NOT serialize
+            Gizmo gizmos[2]; // ! Do NOT serialize
 
         public:
             GizmoSystem(SpriteSheet* spr) {
@@ -132,14 +138,12 @@ namespace Dralgeer {
             };
 
             inline void start() override {
-                gizmo = Prefabs::generateGameObject("Gizmos");
-
-                gizmo->addComponent(new Gizmo(gizmoSprites->sprites[1], TRANSLATE_GIZMO, TRANSLATE_GIZMO_COMPONENT));
-                gizmo->addComponent(new Gizmo(gizmoSprites->sprites[2], SCALE_GIZMO, SCALE_GIZMO_COMPONENT));
-                gizmo->serialize = 0;
+                gizmos[TRANSLATE_GIZMO].init(gizmoSprites->sprites[1], TRANSLATE_GIZMO);
+                gizmos[TRANSLATE_GIZMO].start();
+                gizmos[SCALE_GIZMO].init(gizmoSprites->sprites[2], SCALE_GIZMO);
+                gizmos[SCALE_GIZMO].start();
 
                 activeGizmo = TRANSLATE_GIZMO;
-                gizmo->start();
             };
 
             void update(float dt, Camera const &cam, bool wantCapture) override;            

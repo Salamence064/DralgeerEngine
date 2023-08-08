@@ -16,14 +16,7 @@ namespace Dralgeer {
         EDITOR_CAMERA,
         GRID_LINES,
         MOUSE_CONTROLS,
-        TRANSLATE_GIZMO_COMPONENT,
-        SCALE_GIZMO_COMPONENT,
         GIZMO_SYSTEM
-    };
-
-    enum GizmoType {
-        SCALE_GIZMO,
-        TRANSLATE_GIZMO
     };
 
     // todo maybe find a way to do stuff with just a flag inside of this class

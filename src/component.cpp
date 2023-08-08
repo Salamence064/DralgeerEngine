@@ -7,7 +7,6 @@
 #include <Dralgeer/listeners.h>
 #include <Dralgeer/debugdraw.h>
 #include <Dralgeer/prefabs.h>
-#include <Dralgeer/gizmo.h>
 
 namespace Dralgeer {
     // * =====================================================================
@@ -510,8 +509,6 @@ namespace Dralgeer {
                 case EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
                 case GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
                 case MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
-                case TRANSLATE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
-                case SCALE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
             }
         }
     };
@@ -545,8 +542,6 @@ namespace Dralgeer {
                     case EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
                     case GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
                     case MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
-                    case TRANSLATE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
-                    case SCALE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
                 }
             }
         }

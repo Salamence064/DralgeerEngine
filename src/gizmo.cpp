@@ -2,22 +2,18 @@
 #include <Dralgeer/prefabs.h>
 
 namespace Dralgeer {
+    // ! To expand the number of gizmos handled by this editor to more than just two, we can simply use a for loop that excludes the one active gizmo
+
     void GizmoSystem::update(float dt, Camera const &cam, bool wantCapture) {
-        if (activeGizmo == TRANSLATE_GIZMO) {
-            ((Gizmo*) gizmo->getComponent(TRANSLATE_GIZMO_COMPONENT))->inUse = 1;
-            Gizmo* scale = (Gizmo*) gizmo->getComponent(SCALE_GIZMO_COMPONENT);
-            scale->inUse = 0;
-            scale->setInactive();
+        gizmos[activeGizmo].inUse = 1;
+        gizmos[!activeGizmo].inUse = 0;
+        gizmos[!activeGizmo].setInactive();
 
-        } else if (activeGizmo == SCALE_GIZMO) {
-            ((Gizmo*) gizmo->getComponent(SCALE_GIZMO_COMPONENT))->inUse = 1;
-            Gizmo* scale = (Gizmo*) gizmo->getComponent(TRANSLATE_GIZMO_COMPONENT);
-            scale->inUse = 0;
-            scale->setInactive();
-        }
+        // update the gizmos
+        gizmos[TRANSLATE_GIZMO].update();
+        gizmos[SCALE_GIZMO].update();
 
-        gizmo->update(dt, cam, wantCapture); // update the gizmos
-
+        // check for setting new gizmos active
         if (KeyListener::keyPressed[GLFW_KEY_E]) { activeGizmo = TRANSLATE_GIZMO; }
         else if (KeyListener::keyPressed[GLFW_KEY_R]) { activeGizmo = SCALE_GIZMO; }
     };
@@ -28,12 +24,13 @@ namespace Dralgeer {
     // * Rule of 5 Stuff
     // * ====================
 
-    Gizmo::Gizmo(Sprite spr, GizmoType gType, ComponentType cType) {
-        // component stuff
-        type = cType;
-        id = IDCounter::componentID++;
+    Gizmo::Gizmo(Gizmo const &gizmo) {}; // ! temp just to get it to compile
 
-        // gizmo stuff
+    // * =====================
+    // * Normal Functions
+    // * =====================
+
+    void Gizmo::init(Sprite spr, GizmoType gType) {
         gizmoType = gType;
 
         xObject = Prefabs::generateSpriteObject(spr, gizmoWidth, gizmoHeight);
@@ -47,13 +44,7 @@ namespace Dralgeer {
         yObject->serialize = 0;
     };
 
-    Gizmo::Gizmo(Gizmo const &gizmo) {}; // ! temp just to get it to compile
-
-    // * =====================
-    // * Normal Functions
-    // * =====================
-
-    void Gizmo::update(float dt, Camera const &cam, bool wantCapture) {
+    void Gizmo::update() {
         if (!inUse) { return; }
 
         if (activeObject) {
