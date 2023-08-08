@@ -2,8 +2,45 @@
 #include <Dralgeer/prefabs.h>
 
 namespace Dralgeer {
-    // ! To expand the number of gizmos handled by this editor to more than just two, we can simply use a for loop that excludes the one active gizmo
+    GizmoSystem::GizmoSystem(GizmoSystem const &gs) {
+        gizmoSprites = gs.gizmoSprites; // This is okay as the AssetPool is the one that does the job of storing and deleting these
+        activeGizmo = gs.activeGizmo;
+        gizmos[0] = gs.gizmos[0];
+        gizmos[1] = gs.gizmos[1];
+    };
 
+    GizmoSystem::GizmoSystem(GizmoSystem && gs) {
+        activeGizmo = gs.activeGizmo;
+        gizmos[0] = std::move(gs.gizmos[0]);
+        gizmos[1] = std::move(gs.gizmos[1]);
+        gizmoSprites = gs.gizmoSprites;
+        gs.gizmoSprites = nullptr;
+    };
+
+    GizmoSystem& GizmoSystem::operator = (GizmoSystem const &gs) {
+        gizmoSprites = gs.gizmoSprites; // This is okay as the AssetPool is the one that does the job of storing and deleting these
+        activeGizmo = gs.activeGizmo;
+        gizmos[0] = gs.gizmos[0];
+        gizmos[1] = gs.gizmos[1];
+
+        return *this;
+    };
+
+    GizmoSystem& GizmoSystem::operator = (GizmoSystem &&gs) {
+        if (this != &gs) {
+            activeGizmo = gs.activeGizmo;
+            gizmos[0] = std::move(gs.gizmos[0]);
+            gizmos[1] = std::move(gs.gizmos[1]);
+            gizmoSprites = gs.gizmoSprites;
+            gs.gizmoSprites = nullptr;
+        }
+
+        return *this;
+    };
+
+    // Note: We do not need to have a destructor as the AssetPool's destructor will clean up the SpriteSheet
+
+    // ! To expand the number of gizmos handled by this editor to more than just two, we can simply use a for loop that excludes the one active gizmo
     void GizmoSystem::update(float dt, Camera const &cam, bool wantCapture) {
         gizmos[activeGizmo].inUse = 1;
         gizmos[!activeGizmo].inUse = 0;
