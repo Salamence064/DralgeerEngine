@@ -7,6 +7,7 @@
 #include <Dralgeer/listeners.h>
 #include <Dralgeer/debugdraw.h>
 #include <Dralgeer/prefabs.h>
+#include <Dralgeer/gizmo.h>
 
 namespace Dralgeer {
     // * =====================================================================
@@ -487,7 +488,8 @@ namespace Dralgeer {
     // * Rule of 5 Stuff
     // * ====================
 
-    // todo add stuff relating to the gizmos in the gameObject functions
+    // todo fix the current gameobject systems. They kinda suck
+    // todo well, specifically the rule of 5 operators do
 
     GameObject::GameObject() {
         components = new Component*[8];
@@ -504,10 +506,12 @@ namespace Dralgeer {
 
         for (int i = 0; i < numComponents; ++i) {
             switch (go.components[i]->type) {
-                case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); break; }
-                case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
-                case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
-                case ComponentType::MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
+                case SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); break; }
+                case EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
+                case GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
+                case MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
+                case TRANSLATE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
+                case SCALE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
             }
         }
     };
@@ -537,10 +541,12 @@ namespace Dralgeer {
 
             for (int i = 0; i < numComponents; ++i) {
                 switch (go.components[i]->type) {
-                    case ComponentType::SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); }
-                    case ComponentType::EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); }
-                    case ComponentType::GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); }
-                    case ComponentType::MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); }
+                    case SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); break; }
+                    case EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
+                    case GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
+                    case MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
+                    case TRANSLATE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
+                    case SCALE_GIZMO_COMPONENT: { components[i] = new Gizmo(*((Gizmo*) go.components[i])); break; }
                 }
             }
         }
