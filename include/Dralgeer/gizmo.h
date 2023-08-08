@@ -24,6 +24,8 @@ namespace Dralgeer {
 
             // todo focus on getting a nice system for it later
 
+            // ! unsure if these should just be handled by a mixture of the scene and renderer, but since atm this doesnt communicate with either, we will take care of it here for now
+            // Note: activeObject is guarenteed to be contained in the scene. Therefore, we do not need to bother with memory management for it.
             GameObject* xObject = nullptr; // ! Do NOT serialize
             GameObject* yObject = nullptr; // ! Do NOT serialize
             GameObject* activeObject = nullptr; // ! Do NOT serialize

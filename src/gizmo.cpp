@@ -61,7 +61,66 @@ namespace Dralgeer {
     // * Rule of 5 Stuff
     // * ====================
 
-    Gizmo::Gizmo(Gizmo const &gizmo) {}; // ! temp just to get it to compile
+    Gizmo::Gizmo(Gizmo const &gizmo) {
+        gizmoType = gizmo.gizmoType;
+
+        xObject = new GameObject(*gizmo.xObject);
+        yObject = new GameObject(*gizmo.yObject);
+        xSprite = new SpriteRenderer(*gizmo.xSprite);
+        ySprite = new SpriteRenderer(*gizmo.ySprite);
+    };
+
+    Gizmo::Gizmo(Gizmo && gizmo) {
+        gizmoType = gizmo.gizmoType;
+
+        xObject = gizmo.xObject;
+        yObject = gizmo.yObject;
+        xSprite = gizmo.xSprite;
+        ySprite = gizmo.ySprite;
+
+        gizmo.xObject = nullptr;
+        gizmo.yObject = nullptr;
+        gizmo.xSprite = nullptr;
+        gizmo.ySprite = nullptr;
+    };
+
+    Gizmo& Gizmo::operator = (Gizmo const &gizmo) {
+        if (this != &gizmo) {
+            gizmoType = gizmo.gizmoType;
+
+            xObject = new GameObject(*gizmo.xObject);
+            yObject = new GameObject(*gizmo.yObject);
+            xSprite = new SpriteRenderer(*gizmo.xSprite);
+            ySprite = new SpriteRenderer(*gizmo.ySprite);
+        }
+
+        return *this;
+    };
+
+    Gizmo& Gizmo::operator = (Gizmo &&gizmo) {
+        if (this != &gizmo) {
+            gizmoType = gizmo.gizmoType;
+
+            xObject = gizmo.xObject;
+            yObject = gizmo.yObject;
+            xSprite = gizmo.xSprite;
+            ySprite = gizmo.ySprite;
+
+            gizmo.xObject = nullptr;
+            gizmo.yObject = nullptr;
+            gizmo.xSprite = nullptr;
+            gizmo.ySprite = nullptr;
+        }
+
+        return *this;
+    };
+
+    Gizmo::~Gizmo() {
+        delete xObject;
+        delete yObject;
+        delete xSprite;
+        delete ySprite;
+    };
 
     // * =====================
     // * Normal Functions
