@@ -4,6 +4,8 @@
 
 @REM Can only be compiled with GNU
 
+echo "Build Starting"
+
 if not exist "build" (
     echo "Creating 'build' directory"
     mkdir "build"
@@ -212,6 +214,6 @@ g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/*.cpp -o main -I../include -L../li
 
 popd
 
-echo "Building complete"
+echo "Build Complete"
 
 :FAILED
