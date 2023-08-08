@@ -15,6 +15,9 @@ namespace Dralgeer {
             Sprite* sprites = nullptr;
             int numSprites = 0; // this value should not be changed
 
+            // ! Only for debugging
+            std::string filepath;
+
             SpriteSheet() {};
 
 
@@ -104,6 +107,7 @@ namespace Dralgeer {
             void init(Texture* tex, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
                 sprites = new Sprite[numSprites];
                 this->numSprites = numSprites;
+                filepath = tex->filepath;
 
                 int x = 0, y = tex->height - spriteHeight;
                 for (int i = 0; i < numSprites; ++i) {

@@ -84,7 +84,7 @@ namespace Dralgeer {
                 case SceneType::LEVEL_EDITOR_SCENE: {
                     delete currScene;
                     currScene = new LevelEditorScene();
-                    // currScebe->load();
+                    // currScene->load();
                     currScene->init();
                     currScene->start();
                     break;
@@ -248,21 +248,21 @@ namespace Dralgeer {
                 imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID, pickingTexture->fboID);
 
                 // ! for debugging ------------------
-                if (KeyListener::keyPressed[GLFW_KEY_W]) {
-                    // todo same quad issue. Really confused what is causing it
+                // if (KeyListener::keyPressed[GLFW_KEY_W]) {
+                //     // todo same quad issue. Really confused what is causing it
 
-                    pickingTexture->test = 0;
-                    pickingTexture->enableWriting();
-                    glReadBuffer(GL_COLOR_ATTACHMENT0);
+                //     pickingTexture->test = 0;
+                //     pickingTexture->enableWriting();
+                //     glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-                    float pixels[3];
-                    glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
+                //     float pixels[3];
+                //     glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                    std::cout << "Rias Gremory: ";
-                    std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+                //     std::cout << "Test: ";
+                //     std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
 
-                    pickingTexture->disableWriting();
-                }
+                //     pickingTexture->disableWriting();
+                // }
                 // ! --------------------------------
 
                 // initialize the gamepadState // todo set up later

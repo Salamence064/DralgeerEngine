@@ -75,7 +75,7 @@ namespace Dralgeer {
                 float pixels[3];
                 glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+                // std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
 
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 return pixels[0];

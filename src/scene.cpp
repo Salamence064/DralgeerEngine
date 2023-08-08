@@ -46,11 +46,11 @@ namespace Dralgeer {
         spr->init(AssetPool::getTexture("../../assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
         AssetPool::addSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png", spr);
 
-        SpriteSheet* gizmoSpr = new SpriteSheet();
-        spr->init(AssetPool::getTexture("../../assets/images/gizmos.png"), 24, 48, 3, 0);
-        AssetPool::addSpriteSheet("../../assets/images/gizmos.png", gizmoSpr);
+        std::cout << spr->filepath << ": " << spr << "\n";
 
-        // todo add gizmos
+        SpriteSheet* gizmoSpr = new SpriteSheet();
+        gizmoSpr->init(AssetPool::getTexture("../../assets/images/gizmos.png"), 24, 48, 3, 0);
+        AssetPool::addSpriteSheet("../../assets/images/gizmos.png", gizmoSpr);
 
         // todo for testing purposes
         // SpriteRenderer* testSpr = new SpriteRenderer();
@@ -213,7 +213,7 @@ namespace Dralgeer {
         loadResources();
 
         // load sprite sheet
-        sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png"); // ! doesnt seem to be used later
+        sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png");
 
         components.name = "LevelEditor";
         components.transform.zIndex = 0;

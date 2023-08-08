@@ -32,7 +32,7 @@ namespace Dralgeer {
             if (textures.find(filepath) != textures.end()) { return textures[filepath]; }
 
             // add new texture if it is not included
-            Texture* texture = new Texture;
+            Texture* texture = new Texture();
             texture->init(filepath);
             textures.insert({filepath, texture});
             return texture;

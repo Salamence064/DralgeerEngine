@@ -168,11 +168,11 @@ namespace Dralgeer {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
             // ! they get added with proper dimensions to the array
-            std::cout << "\nvertices\n";
-            for (int i = 0; i < numSprites * 40; i += 10) {
-                std::cout << vertices[i] << ", " << vertices[i + 1] << "\n";
-                if (!((i + 10)%40)) { std::cout << "---------------------\n"; }
-            }
+            // std::cout << "\nvertices\n";
+            // for (int i = 0; i < numSprites * 40; i += 10) {
+            //     std::cout << vertices[i] << ", " << vertices[i + 1] << "\n";
+            //     if (!((i + 10)%40)) { std::cout << "---------------------\n"; }
+            // }
 
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
