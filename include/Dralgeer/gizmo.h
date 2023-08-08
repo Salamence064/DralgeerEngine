@@ -8,33 +8,6 @@
 namespace Dralgeer {
     // todo probably end up doing the editor update system (maybe)
 
-    class GizmoSystem : public Component { // todo find a better replacement later on -- probs could do so with an enum + switch system (primary problem is storing the unique objects)
-        private: // todo add rule of 5 shit later
-            SpriteSheet* gizmoSprites; // ! Do NOT serialize
-            GizmoType activeGizmo; // ! Do NOT serialize
-            GameObject* gizmo; // ! Do NOT serialize
-
-        public:
-            GizmoSystem(SpriteSheet* spr) {
-                gizmoSprites = spr;
-                type = GIZMO_SYSTEM;
-                id = IDCounter::componentID++;
-            };
-
-            inline void start() override {
-                gizmo = Prefabs::generateGameObject("Gizmos");
-
-                gizmo->addComponent(new Gizmo(gizmoSprites->sprites[1], TRANSLATE_GIZMO, TRANSLATE_GIZMO_COMPONENT));
-                gizmo->addComponent(new Gizmo(gizmoSprites->sprites[2], SCALE_GIZMO, SCALE_GIZMO_COMPONENT));
-                gizmo->serialize = 0;
-
-                activeGizmo = TRANSLATE_GIZMO;
-                gizmo->start();
-            };
-
-            void update(float dt, Camera const &cam, bool wantCapture) override;            
-    };
-
     class Gizmo : public Component { // todo add rule of 5 later
         private:
             GizmoType gizmoType; // ! Do NOT serialize
@@ -143,5 +116,32 @@ namespace Dralgeer {
             };
 
             void update(float dt, Camera const &cam, bool wantCapture) override;
+    };
+
+    class GizmoSystem : public Component { // todo find a better replacement later on -- probs could do so with an enum + switch system (primary problem is storing the unique objects)
+        private: // todo add rule of 5 shit later
+            SpriteSheet* gizmoSprites; // ! Do NOT serialize
+            GizmoType activeGizmo; // ! Do NOT serialize
+            GameObject* gizmo; // ! Do NOT serialize
+
+        public:
+            GizmoSystem(SpriteSheet* spr) {
+                gizmoSprites = spr;
+                type = GIZMO_SYSTEM;
+                id = IDCounter::componentID++;
+            };
+
+            inline void start() override {
+                gizmo = Prefabs::generateGameObject("Gizmos");
+
+                gizmo->addComponent(new Gizmo(gizmoSprites->sprites[1], TRANSLATE_GIZMO, TRANSLATE_GIZMO_COMPONENT));
+                gizmo->addComponent(new Gizmo(gizmoSprites->sprites[2], SCALE_GIZMO, SCALE_GIZMO_COMPONENT));
+                gizmo->serialize = 0;
+
+                activeGizmo = TRANSLATE_GIZMO;
+                gizmo->start();
+            };
+
+            void update(float dt, Camera const &cam, bool wantCapture) override;            
     };
 }

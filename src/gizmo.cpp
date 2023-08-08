@@ -47,6 +47,8 @@ namespace Dralgeer {
         yObject->serialize = 0;
     };
 
+    Gizmo::Gizmo(Gizmo const &gizmo) {}; // ! temp just to get it to compile
+
     // * =====================
     // * Normal Functions
     // * =====================
