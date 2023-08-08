@@ -46,8 +46,6 @@ namespace Dralgeer {
         spr->init(AssetPool::getTexture("../../assets/images/spritesheets/decorationsAndBlocks.png"), 16, 16, 81, 0);
         AssetPool::addSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png", spr);
 
-        std::cout << spr->filepath << ": " << spr << "\n";
-
         SpriteSheet* gizmoSpr = new SpriteSheet();
         gizmoSpr->init(AssetPool::getTexture("../../assets/images/gizmos.png"), 24, 48, 3, 0);
         AssetPool::addSpriteSheet("../../assets/images/gizmos.png", gizmoSpr);
