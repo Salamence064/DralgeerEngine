@@ -71,7 +71,7 @@ namespace Dralgeer {
     // * ==================
 
     // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer { // todo could refactor to not store a gameobject but instead just a transform -- transform wouldn't need to be a pointer either
+    class SpriteRenderer {
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
@@ -81,34 +81,27 @@ namespace Dralgeer {
             // * ==============
 
             int id;
-            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
             Sprite sprite;
 
-            Transform lastTransform; // ! DO NOT serialize
+            Transform transform, lastTransform; // ! DO NOT serialize
             bool isDirty = 1; // ! DO NOT serialize
 
             // * ==========================================================
 
-            // todo test if you need to do = SpriteRenderer(); or not for default
-            SpriteRenderer();
-            
-            // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
-            SpriteRenderer(SpriteRenderer const &spr);
-            SpriteRenderer(SpriteRenderer &&spr);
-
-            // * Note, components attached to spr's GameObject will not be attached to the GameObject contained in this.
-            SpriteRenderer& operator = (SpriteRenderer const &spr);
-            SpriteRenderer& operator = (SpriteRenderer &&spr);
-
-            ~SpriteRenderer();
-
-            inline void start() { lastTransform = gameObject->transform; };
-            void update();
+            inline SpriteRenderer() { id = IDCounter::componentID++; };
 
             // Create a color picker for the sprites.
             void imGui();
+            inline void start() { lastTransform = transform; };
+
+            inline void update() {
+                if (lastTransform != transform) { // todo I have no idea what this is doing but it doesn't work without it
+                    transform = lastTransform;
+                    isDirty = 1;
+                }
+            };
     };
 
     class EditorCamera {

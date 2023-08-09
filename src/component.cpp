@@ -16,121 +16,6 @@ namespace Dralgeer {
     // * =====================================================================
     // * SpriteRenderer Stuff
 
-    SpriteRenderer::SpriteRenderer() { id = IDCounter::componentID++; };
-
-    // * ====================
-    // * Rule of 5 Stuff
-    // * ====================
-
-    // todo will improve this stuff
-
-    SpriteRenderer::SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
-        id = IDCounter::componentID++;
-
-        imGuiSetup = 1;
-        isDirty = 1;
-
-        sprite.width = spr.sprite.width;
-        sprite.height = spr.sprite.height;
-        sprite.texCoords[0] = spr.sprite.texCoords[0];
-        sprite.texCoords[1] = spr.sprite.texCoords[1];
-        sprite.texCoords[2] = spr.sprite.texCoords[2];
-        sprite.texCoords[3] = spr.sprite.texCoords[3];
-        sprite.texture = spr.sprite.texture;
-
-        if (spr.gameObject) {
-            gameObject = new GameObject();
-            gameObject->transform = spr.gameObject->transform;
-            gameObject->name = spr.gameObject->name;
-        }
-    };
-
-    SpriteRenderer::SpriteRenderer(SpriteRenderer &&spr) : color(std::move(spr.color)), lastTransform(std::move(spr.lastTransform)) {
-        id = IDCounter::componentID++;
-
-        imGuiSetup = 1;
-        isDirty = 1;
-
-        sprite.width = spr.sprite.width;
-        sprite.height = spr.sprite.height;
-        sprite.texture = spr.sprite.texture;
-        sprite.texCoords[0] = spr.sprite.texCoords[0];
-        sprite.texCoords[1] = spr.sprite.texCoords[1];
-        sprite.texCoords[2] = spr.sprite.texCoords[2];
-        sprite.texCoords[3] = spr.sprite.texCoords[3];
-        spr.sprite.texture = NULL;
-
-        gameObject = spr.gameObject;
-        spr.gameObject = NULL;
-    };
-
-    SpriteRenderer& SpriteRenderer::operator = (SpriteRenderer const &spr) {
-        if (this != &spr) {
-            color = spr.color;
-            lastTransform = spr.lastTransform;
-            imGuiSetup = 1;
-            isDirty = 1;
-
-            sprite.width = spr.sprite.width;
-            sprite.height = spr.sprite.height;
-            sprite.texture = spr.sprite.texture;
-            sprite.texCoords[0] = spr.sprite.texCoords[0];
-            sprite.texCoords[1] = spr.sprite.texCoords[1];
-            sprite.texCoords[2] = spr.sprite.texCoords[2];
-            sprite.texCoords[3] = spr.sprite.texCoords[3];
-
-            if (gameObject) { delete gameObject; gameObject = nullptr; }
-            if (spr.gameObject) {
-                gameObject = new GameObject();
-                gameObject->transform = spr.gameObject->transform;
-                gameObject->name = spr.gameObject->name;
-            }
-        }
-
-        return *this;
-    };
-
-    SpriteRenderer& SpriteRenderer::operator = (SpriteRenderer &&spr) {
-        if (this != &spr) { // ensure it is not self assignment
-            color = std::move(spr.color);
-            lastTransform = std::move(spr.lastTransform);
-            imGuiSetup = 1;
-            isDirty = 1;
-
-            sprite.width = spr.sprite.width;
-            sprite.height = spr.sprite.height;
-            sprite.texture = spr.sprite.texture;
-            sprite.texCoords[0] = spr.sprite.texCoords[0];
-            sprite.texCoords[1] = spr.sprite.texCoords[1];
-            sprite.texCoords[2] = spr.sprite.texCoords[2];
-            sprite.texCoords[3] = spr.sprite.texCoords[3];
-            spr.sprite.texture = NULL;
-
-            if (gameObject) { delete gameObject; }
-            gameObject = spr.gameObject;
-            spr.gameObject = NULL;
-        }
-
-        return *this;
-    };
-
-    SpriteRenderer::~SpriteRenderer() {
-        if (sprite.texture != nullptr) { delete sprite.texture; }
-        if (gameObject) { delete gameObject; }
-    };
-
-
-    // * ====================
-    // * Normal Functions
-    // * ====================
-    
-    void SpriteRenderer::update() {
-        if (gameObject && lastTransform != gameObject->transform) { // todo I have no idea what this is doing but it doesn't work without it
-            gameObject->transform = lastTransform;
-            isDirty = 1;
-        }
-    };
-
     void SpriteRenderer::imGui() {
         if (imGuiSetup) {
             ImGui::SetWindowPos(ImVec2(IMGUI_COLOR_PICKER_X, IMGUI_COLOR_PCIKER_Y));
@@ -262,7 +147,7 @@ namespace Dralgeer {
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT;
 
-            heldObject->sprite->gameObject->transform.pos = heldObject->transform.pos;
+            heldObject->sprite->transform.pos = heldObject->transform.pos;
             
             // todo this currently adds an artifact sprite on the final placement (i.e. double places)
             // todo I will figure out how to eliminate this later
