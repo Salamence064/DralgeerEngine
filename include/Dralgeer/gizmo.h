@@ -126,17 +126,16 @@ namespace Dralgeer {
             void update();
     };
 
-    // Note: Do NOT use the gameObject stored in GizmoSystem's Component (will not have to worry when we switch it to void* + switch)
-    class GizmoSystem { // todo find a better replacement later on -- probs could do so with an enum + switch system (primary problem is storing the unique objects)
-        private: // todo add rule of 5 shit later
+    class GizmoSystem {
+        private:
             SpriteSheet* gizmoSprites; // ! Do NOT serialize
             GizmoType activeGizmo; // ! Do NOT serialize
             Gizmo gizmos[2]; // ! Do NOT serialize
 
         public:
-            inline GizmoSystem() {
-                id = IDCounter::componentID++;
-            };
+            int id;
+
+            inline GizmoSystem() { id = IDCounter::componentID++; };
 
             GizmoSystem(GizmoSystem const &gs);
             GizmoSystem(GizmoSystem &&gs);
@@ -146,7 +145,7 @@ namespace Dralgeer {
 
             inline void init(SpriteSheet* spr) { gizmoSprites = spr; };
 
-            inline void start() override {
+            inline void start() {
                 gizmos[TRANSLATE_GIZMO].init(gizmoSprites->sprites[1], TRANSLATE_GIZMO);
                 gizmos[TRANSLATE_GIZMO].start();
                 gizmos[SCALE_GIZMO].init(gizmoSprites->sprites[2], SCALE_GIZMO);
@@ -155,6 +154,6 @@ namespace Dralgeer {
                 activeGizmo = TRANSLATE_GIZMO;
             };
 
-            void update(float dt, Camera const &cam, bool wantCapture) override;            
+            void update(float dt, Camera const &cam, bool wantCapture);            
     };
 }

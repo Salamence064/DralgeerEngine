@@ -131,8 +131,8 @@ namespace Dralgeer {
 
         xObject = Prefabs::generateSpriteObject(spr, gizmoWidth, gizmoHeight);
         yObject = Prefabs::generateSpriteObject(spr, 16, 48);
-        xSprite = (SpriteRenderer*) xObject->getComponent(SPRITE_RENDERER); // todo not handling it properly after prefabs could be a source of error later
-        ySprite = (SpriteRenderer*) yObject->getComponent(SPRITE_RENDERER);
+        xSprite = xObject->sprite; // todo not handling it properly after prefabs could be a source of error later
+        ySprite = yObject->sprite;
 
         xObject->pickable = 0;
         yObject->pickable = 0;
