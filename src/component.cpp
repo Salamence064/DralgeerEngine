@@ -22,6 +22,8 @@ namespace Dralgeer {
     // * Rule of 5 Stuff
     // * ====================
 
+    // todo will improve this stuff
+
     SpriteRenderer::SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
         id = IDCounter::componentID++;
 
@@ -260,14 +262,14 @@ namespace Dralgeer {
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT;
 
-            ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform.pos = heldObject->transform.pos;
+            heldObject->sprite->gameObject->transform.pos = heldObject->transform.pos;
             
             // todo this currently adds an artifact sprite on the final placement (i.e. double places)
             // todo I will figure out how to eliminate this later
             // todo can place sprites over each other without overriding -- fix this (to override) in the future
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-                ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->lastTransform.pos = heldObject->transform.pos;
+                heldObject->sprite->lastTransform.pos = heldObject->transform.pos;
 
                 // ! debugging code -----------------------------
 
@@ -336,37 +338,15 @@ namespace Dralgeer {
     // todo fix the current gameobject systems. They kinda suck
     // todo well, specifically the rule of 5 operators do
 
-    GameObject::GameObject() {
-        components = new Component*[8];
-        id = ++IDCounter::gameObjectID;
-    };
-
     GameObject::GameObject(GameObject const &go) : name(go.name), serialize(go.serialize), transform(go.transform) {
         id = ++IDCounter::gameObjectID;
-        dead = 0;
-
-        capacity = go.capacity;
-        numComponents = go.numComponents;
-        components = new Component*[capacity];
-
-        for (int i = 0; i < numComponents; ++i) {
-            switch (go.components[i]->type) {
-                case SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); break; }
-                case EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
-                case GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
-                case MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
-            }
-        }
+        sprite = new SpriteRenderer(*go.sprite);
     };
 
     GameObject::GameObject(GameObject &&go) : name(std::move(go.name)), serialize(go.serialize), transform(std::move(go.transform)) {
         id = ++IDCounter::gameObjectID;
-        dead = 0;
-
-        capacity = go.capacity;
-        numComponents = go.numComponents;
-        components = go.components;
-        go.components = NULL;
+        sprite = go.sprite;
+        go.sprite = nullptr;
     };
 
     GameObject& GameObject::operator = (GameObject const &go) {
@@ -374,22 +354,7 @@ namespace Dralgeer {
             name = go.name;
             transform = go.transform;
             serialize = go.serialize;
-            
-            for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-            delete[] components;
-
-            capacity = go.capacity;
-            numComponents = go.numComponents;
-            components = new Component*[capacity];
-
-            for (int i = 0; i < numComponents; ++i) {
-                switch (go.components[i]->type) {
-                    case SPRITE_RENDERER: { components[i] = new SpriteRenderer(*((SpriteRenderer*) go.components[i])); break; }
-                    case EDITOR_CAMERA: { components[i] = new EditorCamera(*((EditorCamera*) go.components[i])); break; }
-                    case GRID_LINES: { components[i] = new GridLines(*((GridLines*) go.components[i])); break; }
-                    case MOUSE_CONTROLS: { components[i] = new MouseControls(*((MouseControls*) go.components[i])); break; }
-                }
-            }
+            sprite = new SpriteRenderer(*go.sprite);
         }
 
         return *this;
@@ -400,22 +365,11 @@ namespace Dralgeer {
             name = std::move(go.name);
             transform = std::move(go.transform);
             serialize = go.serialize;
-
-            for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-            delete[] components;
-
-            capacity = go.capacity;
-            numComponents = go.numComponents;
-            components = go.components;
-            go.components = NULL;
+            sprite = go.sprite;
+            go.sprite = nullptr;
         }
 
         return *this;
-    };
-
-    GameObject::~GameObject() {
-        for (int i = 0; i < numComponents; ++i) { delete components[i]; }
-        delete[] components;
     };
 
     // * =====================================================================

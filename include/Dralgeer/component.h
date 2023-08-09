@@ -5,31 +5,7 @@
 #include "listeners.h"
 
 namespace Dralgeer {
-    // * ======================================
-    // * Component Struct with void* + enum
-    // * ======================================
-
-    enum ComponentType {
-        SPRITE_RENDERER,
-        EDITOR_CAMERA,
-        GRID_LINES,
-        MOUSE_CONTROLS,
-        GIZMO_SYSTEM
-    };
-
-    struct Component {
-        void* component;
-        ComponentType type;
-    };
-
-    // todo maybe find a way to do stuff with just a flag inside of this class
-        // ! This would probably be ideal seeing as we have to store it like that already
-        // ! The only hurdle left would be storing the unique data for the different subclasses as inside functions we can use a switch
-    
-    // todo when I implement the enum + void* system instead, I can remove the Camera const &cam from many update function signatures
-    
     namespace IDCounter { extern int componentID, gameObjectID; }
-
 
     // * ====================
     // * Game Object Stuff
@@ -47,13 +23,7 @@ namespace Dralgeer {
     };
 
 
-
     class GameObject {
-        private:
-            Component** components = nullptr;
-            int capacity = 8; // start with 8 slots for components // todo probs up this later
-            int numComponents = 0;
-
         public:
             // * ==============
             // * Attributes
@@ -61,6 +31,7 @@ namespace Dralgeer {
 
             int id;
             std::string name;
+            SpriteRenderer* sprite = nullptr; // todo maybe could make a standard object and take references to it when passing it to the renderer
             Transform transform; // ! DO NOT serialize
 
             bool serialize = 1; // ! DO NOT serialize
@@ -69,7 +40,7 @@ namespace Dralgeer {
             
             // * ===============================================
 
-            GameObject();
+            inline GameObject() { id = ++IDCounter::gameObjectID; };
 
 
             // * ====================
@@ -82,50 +53,16 @@ namespace Dralgeer {
             GameObject& operator = (GameObject const &go);
             GameObject& operator = (GameObject &&go);
 
-            ~GameObject();
+            // Note: we don't need a destructor as the Renderer or Scene should handle the GameObject's sprite's destruction.
 
 
             // * ====================
             // * Normal Functions
             // * ====================
 
-            inline void* getComponent(ComponentType type) const {
-                for (int i = 0; i < numComponents; ++i) {
-                    if (type == components[i]->type) { return components[i]; }
-                }
-
-                return nullptr;
-            };
-
-            inline void removeComponent(ComponentType type) {
-                for (int i = 0; i < numComponents; ++i) {
-                    if (type == components[i]->type) {
-                        delete components[i];
-                        numComponents--;
-                        for (int j = i; j < numComponents; ++j) { components[j] = components[j + 1]; }
-                        return;
-                    }
-                }
-            };
-
-            inline void addComponent(Component* c) {
-                if (numComponents == capacity) {
-                    capacity *= 2;
-
-                    Component** temp = new Component*[capacity];
-                    for (int i = 0; i < numComponents; ++i) { temp[i] = components[i]; }
-                    
-                    delete[] components;
-                    components = temp;
-                }
-
-                components[numComponents++] = c;
-            };
-
-            inline void start() { for (int i = 0; i < numComponents; ++i) { components[i]->start(); }};
-            inline void destory() { for (int i = 0; i < numComponents; ++i) { components[i]->destroy(); }};
-            inline void imGui() { for (int i = 0; i < numComponents; ++i) { components[i]->imGui(); }};
-            inline void update(float dt, Camera const &cam, bool wantCapture) { for (int i = 0; i < numComponents; ++i) { components[i]->update(dt, cam, wantCapture); }};
+            inline void start() { sprite->start(); };
+            inline void imGui() { sprite->imGui(); };
+            inline void update() { sprite->update(); };
     };
 
 
@@ -226,6 +163,8 @@ namespace Dralgeer {
             bool addObject = 0;
 
             MouseControls();
+
+            inline MouseControls(MouseControls const &mc) { throw std::runtime_error("MouseControls object CANNOT be constructed from another."); };
 
             MouseControls& operator = (MouseControls const &mc);
             MouseControls& operator = (MouseControls &&mc);
