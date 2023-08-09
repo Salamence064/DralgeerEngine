@@ -87,7 +87,11 @@ namespace Dralgeer {
                     newScene->init();
                     newScene->start();
 
-                    delete currScene.scene;
+                    // free the memory of the old scene
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { delete (LevelEditorScene*) currScene.scene; break; }
+                    }
+
                     currScene.scene = newScene;
                     currScene.type = LEVEL_EDITOR_SCENE;
 
@@ -321,7 +325,11 @@ namespace Dralgeer {
             glfwDestroyWindow(window);
             glfwSetErrorCallback(NULL);
             glfwTerminate();
-            delete currScene.scene;
+            
+            // free the memory of the scene
+            switch(currScene.type) {
+                case LEVEL_EDITOR_SCENE: { delete (LevelEditorScene*) currScene.scene; break; }
+            }
         };
 
         inline static void onNotify(EventType event) {
