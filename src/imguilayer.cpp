@@ -70,7 +70,7 @@ namespace Dralgeer {
 
     // todo alternatively could make separate overloaded functions for the different scene classes
     // ! for now will do it like this though
-    void ImGuiLayer::update(float dt, void* currScene, SceneType sceneType, unsigned int frameBufferTexID, int windowWidth, int windowHeight, GameViewWindow* window, unsigned int texID2, unsigned int fboID) {
+    void ImGuiLayer::update(float dt, void* currScene, SceneType sceneType, unsigned int frameBufferTexID, int windowWidth, int windowHeight) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -81,7 +81,7 @@ namespace Dralgeer {
             case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene)->imGui(); break; }
         }
 
-        gameViewWindow.imGui(texID2);
+        gameViewWindow.imGui(frameBufferTexID);
         // window->imGui(texID2);
         propertiesWindow.update(dt, currScene, sceneType, gameViewWindow.getWantCaptureMouse());
         propertiesWindow.imGui();

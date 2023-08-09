@@ -166,11 +166,6 @@ namespace Dralgeer {
             scene->start();
             currScene.scene = scene;
             currScene.type = LEVEL_EDITOR_SCENE;
-
-            // ! Debug code
-            // MouseControls* mc = currScene.mou;
-            // mc->fbo = pickingTexture->fboID;
-            // mc->realFbo = frameBuffer.fboID;
         };
 
         inline static void run() {
@@ -196,9 +191,6 @@ namespace Dralgeer {
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
-
-            // ! For debugging
-            GameViewWindow* debugWindow = new GameViewWindow();
 
             // * Game Loop
             while(!glfwWindowShouldClose(window)) {
@@ -263,7 +255,7 @@ namespace Dralgeer {
 
                         // MouseListener and ImGui updates
                         MouseListener::updateWorldCoords(activeScene->camera);
-                        imGuiLayer.update(dt, activeScene, currScene.type, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID, pickingTexture->fboID);
+                        imGuiLayer.update(dt, activeScene, currScene.type, frameBuffer.getTextureID(), data.width, data.height);
 
                         // ! for debugging ------------------
                         // if (KeyListener::keyPressed[GLFW_KEY_W]) {
@@ -314,8 +306,6 @@ namespace Dralgeer {
                 //     std::cout << "[Error] " << err << "\n";
                 // }
             }
-
-            delete debugWindow;
         };
 
         inline static void destroy() {
