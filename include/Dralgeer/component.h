@@ -116,7 +116,9 @@ namespace Dralgeer {
         public:
             int id;
 
-            EditorCamera(Camera const &cam);
+            inline EditorCamera() { id = IDCounter::componentID++; };
+
+            inline void init(Camera const &cam) { camera = cam; };
             inline void update(float dt, bool wantCapture);
 
             inline void imGui() {

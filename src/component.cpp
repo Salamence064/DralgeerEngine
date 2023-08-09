@@ -29,11 +29,6 @@ namespace Dralgeer {
     // * =====================================================================
     // * EditorCamera Stuff
 
-    EditorCamera::EditorCamera(Camera const &cam) {
-        id = IDCounter::componentID++;
-        camera = cam;
-    };
-
     void EditorCamera::update(float dt, bool wantCapture) {
         if (!wantCapture) { return; }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.h"
+#include "gizmo.h"
 #include "render.h"
 
 namespace Dralgeer {
@@ -27,8 +27,13 @@ namespace Dralgeer {
             // todo add physics handler here.
 
             SpriteSheet* sprites = nullptr;
-            // GameObject components;
             bool imGuiSetup = 1; // ! DO NOT serialize
+
+            EditorCamera editorCamera;
+            GridLines gridLines;
+            MouseControls mouseControls;
+            GizmoSystem gizmoSystem;
+
 
             // * ====================
             // * Helper Functions
@@ -55,11 +60,9 @@ namespace Dralgeer {
             // * Attributes
             // * ==============
 
-            SceneType type;
             Camera camera;
-            GameObject components; // ! debugging (should be private)
 
-            LevelEditorScene();
+            inline LevelEditorScene() { gameObjects = new GameObject*[capacity]; };
 
 
             // * ===================
@@ -81,9 +84,11 @@ namespace Dralgeer {
             void imGui();
 
             inline void start() {
+                gizmoSystem.start();
+
                 for (int i = 0; i < numObjects; ++i) {
                     gameObjects[i]->start();
-                    Renderer::add((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));
+                    Renderer::add(gameObjects[i]->sprite);
                 }
 
                 running = 1;
@@ -94,7 +99,7 @@ namespace Dralgeer {
                 
                 if (running) {
                     go->start();
-                    Renderer::add((SpriteRenderer*) go->getComponent(SPRITE_RENDERER));
+                    Renderer::add(go->sprite);
                 }
             };
 
@@ -109,6 +114,5 @@ namespace Dralgeer {
 
             void update(float dt, bool wantCapture);
             inline void render(Shader const &currShader) { Renderer::render(currShader, camera); };
-            inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i]->destory(); }};
     };
 }

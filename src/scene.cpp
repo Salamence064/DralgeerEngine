@@ -12,11 +12,16 @@ namespace Dralgeer {
     void LevelEditorScene::update(float dt, bool wantCapture) {
         camera.adjustProjection();
 
+        editorCamera.update(dt, wantCapture);
+        gridLines.update(camera);
+        mouseControls.update();
+        gizmoSystem.update(dt, camera, wantCapture);
+
         // std::cout << "\n========================================\n";
         // std::cout << "[GameObjects]\n";
 
         for (int i = numObjects - 1; i >= 0; --i) {
-            gameObjects[i]->update(dt, camera, wantCapture);
+            gameObjects[i]->update();
 
             // SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
 
@@ -29,7 +34,8 @@ namespace Dralgeer {
             // }
 
             if (gameObjects[i]->dead) {
-                Renderer::destroy((SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER));
+                Renderer::destroy(gameObjects[i]->sprite);
+                delete gameObjects[i];
                 for (int j = i; j < numObjects - 1; ++j) { gameObjects[j] = gameObjects[j + 1]; }
                 numObjects--;
             }
@@ -86,22 +92,19 @@ namespace Dralgeer {
         // todo ================================================================
 
         for (int i = 0; i < numObjects; ++i) {
-            SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
+            SpriteRenderer* spr = gameObjects[i]->sprite;
             if (spr && spr->sprite.texture) { AssetPool::addTexture(spr->sprite.texture->filepath, spr->sprite.texture); }
         }
     };
 
-    LevelEditorScene::LevelEditorScene() {
-        type = LEVEL_EDITOR_SCENE;
-        gameObjects = new GameObject*[capacity];
-    };
-
     LevelEditorScene::LevelEditorScene(LevelEditorScene const &scene) {
-        type = scene.type;
         camera = scene.camera;
-        sprites = scene.sprites;
-        components = scene.components;
         
+        editorCamera = scene.editorCamera;
+        gridLines = scene.gridLines;
+        mouseControls = scene.mouseControls;
+        gizmoSystem = scene.gizmoSystem;
+
         capacity = scene.capacity;
         numObjects = scene.numObjects;
 
@@ -125,9 +128,12 @@ namespace Dralgeer {
     };
 
     LevelEditorScene::LevelEditorScene(LevelEditorScene &&scene) {
-        type = scene.type;
         camera = std::move(scene.camera);
-        components = std::move(scene.components);
+        editorCamera = std::move(scene.editorCamera);
+        mouseControls = std::move(scene.mouseControls);
+        gridLines = std::move(scene.gridLines);
+        gizmoSystem = std::move(scene.gizmoSystem);
+
         sprites = scene.sprites;
         scene.sprites = NULL;
 
@@ -140,8 +146,11 @@ namespace Dralgeer {
     LevelEditorScene& LevelEditorScene::operator = (LevelEditorScene const &scene) {
         if (this != &scene) {
             camera = scene.camera;
-            sprites = scene.sprites;
-            components = scene.components;
+            
+            editorCamera = scene.editorCamera;
+            gridLines = scene.gridLines;
+            mouseControls = scene.mouseControls;
+            gizmoSystem = scene.gizmoSystem;
 
             // -----------------------------------------------------------
 
@@ -158,7 +167,7 @@ namespace Dralgeer {
 
             // -----------------------------------------------------------
 
-            if (sprites) { delete sprites; }
+            if (sprites) { delete sprites; sprites = nullptr; }
 
             if (scene.sprites && scene.sprites->sprites) {
                 sprites = new SpriteSheet();
@@ -182,7 +191,11 @@ namespace Dralgeer {
     LevelEditorScene& LevelEditorScene::operator = (LevelEditorScene &&scene) {
         if (this != &scene) {
             camera = std::move(scene.camera);
-            components = std::move(scene.components);
+            editorCamera = std::move(scene.editorCamera);
+            mouseControls = std::move(scene.mouseControls);
+            gridLines = std::move(scene.gridLines);
+            gizmoSystem = std::move(scene.gizmoSystem);
+
             sprites = scene.sprites;
             scene.sprites = NULL;
 
@@ -210,18 +223,8 @@ namespace Dralgeer {
         // load sprite sheet
         sprites = AssetPool::getSpriteSheet("../../assets/images/spritesheets/decorationsAndBlocks.png");
 
-        components.name = "LevelEditor";
-        components.transform.zIndex = 0;
-        components.transform.pos = {0.0f, 0.0f};
-        components.transform.scale = {0.0f, 0.0f};
-        components.serialize = 0;
-
-        components.addComponent(new MouseControls());
-        components.addComponent(new GridLines());
-        components.addComponent(new EditorCamera(camera));
-        components.addComponent(new GizmoSystem(AssetPool::getSpriteSheet("../../assets/images/gizmos.png")));
-
-        addGameObject(&components);
+        editorCamera.init(camera);
+        gizmoSystem.init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
     };
 
 
@@ -267,7 +270,7 @@ namespace Dralgeer {
                 // SpriteRenderer* s = (SpriteRenderer*) go->getComponent(SPRITE_RENDERER);
                 // std::cout << s->gameObject->transform.scale.x << ", " << s->gameObject->transform.scale.y << "\n";
 
-                ((MouseControls*) components.getComponent(MOUSE_CONTROLS))->heldObject = go;
+                mouseControls.heldObject = go;
             }
 
             ImGui::PopID();
