@@ -134,28 +134,17 @@ namespace Dralgeer {
     // * ==================
 
     // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer : public Component { // todo could refactor to not store a gameobject but instead just a transform
+    class SpriteRenderer { // todo could refactor to not store a gameobject but instead just a transform -- transform wouldn't need to be a pointer either
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
         public:
-            ComponentType type;
-
-            int id;
-            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
-
-            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
-            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
-            
-            virtual void imGui() {
-                // todo find a way to emulate the Java thing I have setup using .class in c++
-                // todo  (probs will not be in a similar way)
-            };
-
             // * ==============
             // * Attributes
             // * ==============
+
+            int id;
+            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
             Sprite sprite;
@@ -179,7 +168,7 @@ namespace Dralgeer {
             ~SpriteRenderer();
 
             inline void start() { lastTransform = gameObject->transform; };
-            void update(float dt, Camera const &cam, bool wantCapture);
+            void update();
 
             // Create a color picker for the sprites.
             void imGui();

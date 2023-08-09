@@ -16,14 +16,13 @@ namespace Dralgeer {
     // * =====================================================================
     // * SpriteRenderer Stuff
 
-    SpriteRenderer::SpriteRenderer() { type = ComponentType::SPRITE_RENDERER; id = IDCounter::componentID++; };
+    SpriteRenderer::SpriteRenderer() { id = IDCounter::componentID++; };
 
     // * ====================
     // * Rule of 5 Stuff
     // * ====================
 
     SpriteRenderer::SpriteRenderer(SpriteRenderer const &spr) : color(spr.color), lastTransform(spr.lastTransform) {
-        type = spr.type;
         id = IDCounter::componentID++;
 
         imGuiSetup = 1;
@@ -45,7 +44,6 @@ namespace Dralgeer {
     };
 
     SpriteRenderer::SpriteRenderer(SpriteRenderer &&spr) : color(std::move(spr.color)), lastTransform(std::move(spr.lastTransform)) {
-        type = spr.type;
         id = IDCounter::componentID++;
 
         imGuiSetup = 1;
@@ -66,7 +64,6 @@ namespace Dralgeer {
 
     SpriteRenderer& SpriteRenderer::operator = (SpriteRenderer const &spr) {
         if (this != &spr) {
-            type = spr.type;
             color = spr.color;
             lastTransform = spr.lastTransform;
             imGuiSetup = 1;
@@ -93,7 +90,6 @@ namespace Dralgeer {
 
     SpriteRenderer& SpriteRenderer::operator = (SpriteRenderer &&spr) {
         if (this != &spr) { // ensure it is not self assignment
-            type = spr.type;
             color = std::move(spr.color);
             lastTransform = std::move(spr.lastTransform);
             imGuiSetup = 1;
@@ -126,7 +122,7 @@ namespace Dralgeer {
     // * Normal Functions
     // * ====================
     
-    void SpriteRenderer::update(float dt, Camera const &cam, bool wantCapture) {
+    void SpriteRenderer::update() {
         if (gameObject && lastTransform != gameObject->transform) { // todo I have no idea what this is doing but it doesn't work without it
             gameObject->transform = lastTransform;
             isDirty = 1;
