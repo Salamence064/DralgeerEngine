@@ -68,7 +68,7 @@ namespace Dralgeer {
     namespace Window { // todo because this shit is static it can't be accessed by outside .cpp files -- maybe change the currScene one if I find it to be necessary
         static WindowData data;
         static GLFWwindow* window;
-        static Scene* currScene = nullptr;
+        static Scene currScene;
 
         static ImGuiLayer imGuiLayer;
         static FrameBuffer frameBuffer;
@@ -81,12 +81,16 @@ namespace Dralgeer {
 
         inline static void changeScene(SceneType scene) {
             switch(scene) {
-                case SceneType::LEVEL_EDITOR_SCENE: {
-                    delete currScene;
-                    currScene = new LevelEditorScene();
-                    // currScene->load();
-                    currScene->init();
-                    currScene->start();
+                case LEVEL_EDITOR_SCENE: {
+                    LevelEditorScene* newScene = new LevelEditorScene();
+                    // newScene->load();
+                    newScene->init();
+                    newScene->start();
+
+                    delete currScene.scene;
+                    currScene.scene = newScene;
+                    currScene.type = LEVEL_EDITOR_SCENE;
+
                     break;
                 }
             }
@@ -152,13 +156,17 @@ namespace Dralgeer {
             imGuiLayer.init(window, pickingTexture);
 
             // initialize scene
-            currScene = new LevelEditorScene();
-            currScene->init();
+            LevelEditorScene* scene = new LevelEditorScene();
+            // scene->load();
+            scene->init();
+            scene->start();
+            currScene.scene = scene;
+            currScene.type = LEVEL_EDITOR_SCENE;
 
             // ! Debug code
-            MouseControls* mc = (MouseControls*) currScene->components.getComponent(MOUSE_CONTROLS);
+            MouseControls* mc = (MouseControls*) scene->components.getComponent(MOUSE_CONTROLS);
             mc->fbo = pickingTexture->fboID;
-            mc->realFbo = frameBuffer.fboID;           
+            mc->realFbo = frameBuffer.fboID;
         };
 
         inline static void run() {
@@ -166,7 +174,6 @@ namespace Dralgeer {
             float dt = 0.0f;
 
             DebugDraw::start();
-            currScene->start();
 
             // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
             // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
@@ -193,77 +200,88 @@ namespace Dralgeer {
             while(!glfwWindowShouldClose(window)) {
                 // Poll for events and update
                 glfwPollEvents();
-                currScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
 
-                // render picking texture
-                glDisable(GL_BLEND);
-                pickingTexture->enableWriting();
+                // determine the activeScene's type
+                switch(currScene.type) {
+                    case LEVEL_EDITOR_SCENE: {
+                        LevelEditorScene* activeScene = (LevelEditorScene*) currScene.scene;
 
-                glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
-                glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                        // update the scene
+                        activeScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
 
-                // todo possibly the mouse pos isnt being obtained properly
+                        // render picking texture
+                        glDisable(GL_BLEND);
+                        pickingTexture->enableWriting();
 
-                // todo we need to create an imgui offset for the tab bar to calc the pos precisely
-                // todo use imguicursorpos to achieve this
+                        glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
+                        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
-                // todo and not clearing the color outputs 0, 0, 0
+                        // todo possibly the mouse pos isnt being obtained properly
+
+                        // todo we need to create an imgui offset for the tab bar to calc the pos precisely
+                        // todo use imguicursorpos to achieve this
+
+                        // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
+                        // todo and not clearing the color outputs 0, 0, 0
 
 
-                // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
-                // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
+                        // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
+                        // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
 
 
-                // todo part of the issue is when glReadPixels is reading the pixels it reads an entire quad as one of the sprites in it
+                        // todo part of the issue is when glReadPixels is reading the pixels it reads an entire quad as one of the sprites in it
 
-                currScene->render(pickingShader);
+                        activeScene->render(pickingShader);
 
-                pickingTexture->disableWriting();
-                glEnable(GL_BLEND);
+                        pickingTexture->disableWriting();
+                        glEnable(GL_BLEND);
 
-                // render the visual for the scene
-                DebugDraw::beginFrame();
-                frameBuffer.bind();
+                        // render the visual for the scene
+                        DebugDraw::beginFrame();
+                        frameBuffer.bind();
 
-                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                glEnable(GL_DEPTH_TEST);
+                        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                        glEnable(GL_DEPTH_TEST);
 
-                // todo put this segment in the dt loop when I set it up -------------------
-                DebugDraw::draw(currScene->camera);
-                currScene->render(defaultShader);
-                // -------------------------------------------------------------------------
+                        // todo put this segment in the dt loop when I set it up -------------------
+                        DebugDraw::draw(activeScene->camera);
+                        activeScene->render(defaultShader);
+                        // -------------------------------------------------------------------------
 
-                glDisable(GL_DEPTH_TEST);
-                frameBuffer.unbind();
+                        glDisable(GL_DEPTH_TEST);
+                        frameBuffer.unbind();
 
-                // clear the main screen's background
-                glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-                glClear(GL_COLOR_BUFFER_BIT);
+                        // clear the main screen's background
+                        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                        glClear(GL_COLOR_BUFFER_BIT);
 
-                // MouseListener and ImGui updates
-                MouseListener::updateWorldCoords(currScene->camera);
-                imGuiLayer.update(dt, currScene, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID, pickingTexture->fboID);
+                        // MouseListener and ImGui updates
+                        MouseListener::updateWorldCoords(activeScene->camera);
+                        imGuiLayer.update(dt, activeScene, currScene.type, frameBuffer.getTextureID(), data.width, data.height, debugWindow, pickingTexture->pTexID, pickingTexture->fboID);
 
-                // ! for debugging ------------------
-                // if (KeyListener::keyPressed[GLFW_KEY_W]) {
-                //     // todo same quad issue. Really confused what is causing it
+                        // ! for debugging ------------------
+                        // if (KeyListener::keyPressed[GLFW_KEY_W]) {
+                        //     // todo same quad issue. Really confused what is causing it
 
-                //     pickingTexture->test = 0;
-                //     pickingTexture->enableWriting();
-                //     glReadBuffer(GL_COLOR_ATTACHMENT0);
+                        //     pickingTexture->test = 0;
+                        //     pickingTexture->enableWriting();
+                        //     glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-                //     float pixels[3];
-                //     glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
+                        //     float pixels[3];
+                        //     glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                //     std::cout << "Test: ";
-                //     std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+                        //     std::cout << "Test: ";
+                        //     std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
 
-                //     pickingTexture->disableWriting();
-                // }
-                // ! --------------------------------
+                        //     pickingTexture->disableWriting();
+                        // }
+                        // ! --------------------------------
+
+                        break;
+                    }
+                }
 
                 // initialize the gamepadState // todo set up later
                 // if (initGamepadState && JoystickListener::jConnected && JoystickListener::jGamepad) {
@@ -303,7 +321,7 @@ namespace Dralgeer {
             glfwDestroyWindow(window);
             glfwSetErrorCallback(NULL);
             glfwTerminate();
-            delete currScene;
+            delete currScene.scene;
         };
 
         inline static void onNotify(EventType event) {

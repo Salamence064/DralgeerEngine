@@ -73,7 +73,7 @@ namespace Dralgeer {
     // * ======================================================
     // * PropertiesWindow Stuff
 
-    void PropertiesWindow::update(float dt, Scene* currScene, bool wantCapture) {
+    void PropertiesWindow::update(float dt, void* currScene, SceneType sceneType, bool wantCapture) {
         if (!wantCapture) { return; }
 
         debounce -= dt;
@@ -86,7 +86,11 @@ namespace Dralgeer {
             int y = (int) MouseListener::mWorldY;
 
             int id = pickingTexture->readPixel(x, y);
-            GameObject* go = currScene->getGameObject(id);
+            GameObject* go = nullptr;
+
+            switch(sceneType) {
+                case LEVEL_EDITOR_SCENE: { go = ((LevelEditorScene*) currScene)->getGameObject(id); break; }
+            }
 
             if (go && go->pickable) { activeGameObject = go; }
             else if (!go && !MouseListener::mIsDragging) { activeGameObject = nullptr; }

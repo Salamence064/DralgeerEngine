@@ -4,18 +4,20 @@
 #include "render.h"
 
 namespace Dralgeer {
-    // todo probably refactor to use a struct that stores a void* and the enum type of the scene instead of this OOP solution
-    // todo  but use the OOP solution for now
-
     enum SceneType {
         LEVEL_EDITOR_SCENE
     };
 
-    class Scene {
-        protected:
-            // * ======================
-            // * Protected Attributes
-            // * ======================
+    struct Scene {
+        void* scene;
+        SceneType type;
+    };
+
+    class LevelEditorScene {
+        private:
+            // * ==============
+            // * Attributes
+            // * ==============
 
             GameObject** gameObjects = nullptr;
             int capacity = 8; // default capacity of 8 // todo probs will up in the future
@@ -24,12 +26,9 @@ namespace Dralgeer {
             bool running = 0;
             // todo add physics handler here.
 
-            // * ==============================
-            // * Protected abstract function
-            // * ==============================
-
-            virtual inline void loadResources() = 0;
-
+            SpriteSheet* sprites = nullptr;
+            // GameObject components;
+            bool imGuiSetup = 1; // ! DO NOT serialize
 
             // * ====================
             // * Helper Functions
@@ -49,6 +48,8 @@ namespace Dralgeer {
                 gameObjects[numObjects++] = go;
             };
 
+            inline void loadResources();
+
         public:
             // * ==============
             // * Attributes
@@ -56,20 +57,28 @@ namespace Dralgeer {
 
             SceneType type;
             Camera camera;
-            GameObject components; // ! debugging
+            GameObject components; // ! debugging (should be private)
+
+            LevelEditorScene();
 
 
-            // * ======================
-            // * Abstract Functions
-            // * ======================
+            // * ===================
+            // * Rule of 5 Stuff
+            // * ===================
 
-            virtual void init() = 0;
-            virtual void imGui() = 0;
-            
+            LevelEditorScene(LevelEditorScene const &scene);
+            LevelEditorScene(LevelEditorScene &&scene);
+            LevelEditorScene& operator = (LevelEditorScene const &scene);
+            LevelEditorScene& operator = (LevelEditorScene &&scene);
+            ~LevelEditorScene();
+
 
             // * ====================
             // * Normal Functions
             // * ====================
+
+            void init();
+            void imGui();
 
             inline void start() {
                 for (int i = 0; i < numObjects; ++i) {
@@ -101,37 +110,5 @@ namespace Dralgeer {
             void update(float dt, bool wantCapture);
             inline void render(Shader const &currShader) { Renderer::render(currShader, camera); };
             inline void destroy() { for (int i = 0; i < numObjects; ++i) { gameObjects[i]->destory(); }};
-    };
-
-    class LevelEditorScene : public Scene {
-        private:
-            SpriteSheet* sprites = nullptr;
-            // GameObject components;
-            bool imGuiSetup = 1; // ! DO NOT serialize
-
-        protected:
-            inline void loadResources() override;
-
-        public:
-            LevelEditorScene();
-
-
-            // * ===================
-            // * Rule of 5 Stuff
-            // * ===================
-
-            LevelEditorScene(LevelEditorScene const &scene);
-            LevelEditorScene(LevelEditorScene &&scene);
-            LevelEditorScene& operator = (LevelEditorScene const &scene);
-            LevelEditorScene& operator = (LevelEditorScene &&scene);
-            ~LevelEditorScene();
-
-
-            // * ====================
-            // * Normal Functions
-            // * ====================
-
-            void init() override;
-            void imGui() override;
     };
 }

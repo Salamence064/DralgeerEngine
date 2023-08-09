@@ -7,9 +7,9 @@
 
 namespace Dralgeer {
     // * ================================================
-    // * Abstract Scene Class
+    // * Level Editor Class
 
-    void Scene::update(float dt, bool wantCapture) {
+    void LevelEditorScene::update(float dt, bool wantCapture) {
         camera.adjustProjection();
 
         // std::cout << "\n========================================\n";
@@ -37,9 +37,6 @@ namespace Dralgeer {
 
         // std::cout << "\n========================================\n";
     };
-
-    // * ================================================
-    // * LevelEditorScene
 
     inline void LevelEditorScene::loadResources() {
         SpriteSheet* spr = new SpriteSheet();
