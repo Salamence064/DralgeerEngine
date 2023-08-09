@@ -134,7 +134,7 @@ namespace Dralgeer {
     // * ==================
 
     // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer : public Component {
+    class SpriteRenderer : public Component { // todo could refactor to not store a gameobject but instead just a transform
         private:
             bool imGuiSetup = 1; // ! DO NOT serialize
 
@@ -185,7 +185,7 @@ namespace Dralgeer {
             void imGui();
     };
 
-    class EditorCamera : public Component {
+    class EditorCamera {
         private:
             float dragDebounce = 0.032f;
             float lerpTime = 0.0f;
@@ -195,33 +195,15 @@ namespace Dralgeer {
             glm::vec2 clickOrigin;
 
         public:
-            ComponentType type;
-
             int id;
-            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
-            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
-            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
-            
-            virtual void imGui() {
+            EditorCamera(Camera const &cam);
+            inline void update(float dt, bool wantCapture);
+
+            inline void imGui() {
                 // todo find a way to emulate the Java thing I have setup using .class in c++
                 // todo  (probs will not be in a similar way)
             };
-
-            EditorCamera(Camera const &cam);
-
-            // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
-            EditorCamera(EditorCamera const &cam);
-            EditorCamera(EditorCamera &&cam);
-
-            // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
-            EditorCamera& operator = (EditorCamera const &cam);
-            EditorCamera& operator = (EditorCamera &&cam);
-
-            ~EditorCamera();
-
-            inline void update(float dt, Camera const &cam, bool wantCapture);
     };
 
     class GridLines {
@@ -231,7 +213,7 @@ namespace Dralgeer {
             inline GridLines() { id = IDCounter::componentID++; };
 
             void update(Camera const &cam);
-            
+
             inline void imGui() {
                 // todo find a way to emulate the Java thing I have setup using .class in c++
                 // todo  (probs will not be in a similar way)

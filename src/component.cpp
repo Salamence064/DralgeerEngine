@@ -147,81 +147,11 @@ namespace Dralgeer {
     // * EditorCamera Stuff
 
     EditorCamera::EditorCamera(Camera const &cam) {
-        type = ComponentType::EDITOR_CAMERA;
         id = IDCounter::componentID++;
         camera = cam;
     };
 
-    // * ====================
-    // * Rule of 5 Stuff
-    // * ====================
-
-    EditorCamera::EditorCamera(EditorCamera const &cam) {
-        id = IDCounter::componentID++;
-        type = cam.type;
-        camera = cam.camera;
-
-        if (cam.gameObject) {
-            gameObject = new GameObject();
-            gameObject->transform = cam.gameObject->transform;
-            gameObject->name = cam.gameObject->name;
-        }
-    };
-
-    EditorCamera::EditorCamera(EditorCamera &&cam) {
-        id = IDCounter::componentID++;
-        type = cam.type;
-        camera = std::move(cam.camera);
-        gameObject = cam.gameObject;
-        cam.gameObject = NULL;
-    };
-
-    EditorCamera& EditorCamera::operator = (EditorCamera const &cam) {
-        if (this != &cam) {
-            clickOrigin = {0, 0};
-            dragDebounce = 0.032f;
-            lerpTime = 0.0f;
-            reset = 0;
-            camera = cam.camera;
-
-            if (gameObject) { delete gameObject; gameObject = nullptr; }
-            if (cam.gameObject) {
-                gameObject = new GameObject();
-                gameObject->transform = cam.gameObject->transform;
-                gameObject->name = cam.gameObject->name;
-            }
-        }
-
-        return *this;
-    };
-
-    EditorCamera& EditorCamera::operator = (EditorCamera &&cam) {
-        if (this != &cam) {
-            clickOrigin = {0, 0};
-            dragDebounce = 0.032f;
-            lerpTime = 0.0f;
-            reset = 0;
-
-            camera = std::move(cam.camera);
-            if (gameObject) { delete gameObject; }
-            gameObject = cam.gameObject;
-            cam.gameObject = NULL;
-        }
-
-        return *this;
-    };
-
-    EditorCamera::~EditorCamera() { delete gameObject; };
-
-
-    // * =====================
-    // * Normal Functions
-    // * =====================
-
-    void EditorCamera::update(float dt, Camera const &cam, bool wantCapture) {
-        // todo this is probably not gonna work
-        // todo it's getting close to the point where I will refactor it to use void* instead of the abstract class
-        // todo and pass in a bool for the getWantCaptureMouse
+    void EditorCamera::update(float dt, bool wantCapture) {
         if (!wantCapture) { return; }
 
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && dragDebounce > 0.0f) {
