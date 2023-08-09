@@ -60,7 +60,7 @@ namespace Dralgeer {
             if (!spr) { return; }
 
             for (int i = 0; i < numBatches; ++i) {
-                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->gameObject->transform.zIndex) { 
+                if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->transform.zIndex) { 
                     batches[i].addSprite(spr);
                     return;
                 }
@@ -72,7 +72,7 @@ namespace Dralgeer {
             }
 
             if (!numBatches) {
-                batches[numBatches].start(spr->gameObject->transform.zIndex);
+                batches[numBatches].start(spr->transform.zIndex);
                 batches[numBatches++].addSprite(spr);
                 return;
             }
@@ -85,32 +85,32 @@ namespace Dralgeer {
             // todo OR WE COULD make the equals operator functional and just not delete anything and inform users to not use the
             // todo  assignment operator for RenderBatches (in fact, the users shouldn't be using RenderBatches in their code in the first place)
             for(;;) { // todo solution is either the vbo thing or we could make it using a dynamic array
-                if (spr->gameObject->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
+                if (spr->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
                     max = index - 1;
 
                     if (min == max) { // check if we have determined where to place the RenderBatch
                         int j;                    
-                        if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
+                        if (spr->transform.zIndex < batches[min].zIndex) { j = min; }
                         else { j = min + 1; }
 
                         for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-                        batches[j].start(spr->gameObject->transform.zIndex);
+                        batches[j].start(spr->transform.zIndex);
                         batches[j].addSprite(spr);
                         break;
                     }
 
                     index = (max + min)/2;
 
-                } else if (spr->gameObject->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
+                } else if (spr->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
                     min = index + 1;
 
                     if (min == max) { // check if we have determined where to place the RenderBatch
                         int j;                    
-                        if (spr->gameObject->transform.zIndex < batches[min].zIndex) { j = min; }
+                        if (spr->transform.zIndex < batches[min].zIndex) { j = min; }
                         else { j = min + 1; }
 
                         for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-                        batches[j].start(spr->gameObject->transform.zIndex);
+                        batches[j].start(spr->transform.zIndex);
                         batches[j].addSprite(spr);
                         break;
                     }
@@ -120,7 +120,7 @@ namespace Dralgeer {
                 } else { // add it to the index + 1 spot as they are the same zIndex
                     for (int i = numBatches; i > index + 1; --i) { batches[i] = batches[i - 1]; }
                     index++;
-                    batches[index].start(spr->gameObject->transform.zIndex);
+                    batches[index].start(spr->transform.zIndex);
                     batches[index].addSprite(spr);
                     break;
                 }
@@ -129,10 +129,7 @@ namespace Dralgeer {
             numBatches++;
         };
 
-        inline void add(GameObject const &go) {
-            SpriteRenderer* spr = (SpriteRenderer*) go.getComponent(SPRITE_RENDERER);
-            if (spr) { add(spr); }
-        };
+        inline void add(GameObject const &go) { if (go.sprite) { add(go.sprite); }};
 
         // destroy a sprite renderer contained in the renderer
         // returns 1 if it successfully found and destroyed it and 0 otherwise

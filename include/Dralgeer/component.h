@@ -60,7 +60,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            inline void start() { sprite->start(); };
+            inline void start() { sprite->start(); sprite->entityID = id; };
             inline void imGui() { sprite->imGui(); };
             inline void update() { sprite->update(); };
     };
@@ -80,7 +80,9 @@ namespace Dralgeer {
             // * Attributes
             // * ==============
 
-            int id;
+            // This should be equivalent to the ID of the GameObject containing this.
+            // If it's -1, it is not attached to a GameObject.
+            int entityID = -1;
 
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
             Sprite sprite;
@@ -90,7 +92,7 @@ namespace Dralgeer {
 
             // * ==========================================================
 
-            inline SpriteRenderer() { id = IDCounter::componentID++; };
+            inline SpriteRenderer() {};
 
             // Create a color picker for the sprites.
             void imGui();

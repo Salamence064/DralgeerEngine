@@ -48,7 +48,7 @@ namespace Dralgeer {
         }
 
         glm::mat4 transformMat(1);
-        Transform t = sprites[index]->gameObject->transform;
+        Transform t = sprites[index]->transform;
 
         if (!ZMath::compare(t.rotation, 0.0f)) {
             transformMat = glm::translate(transformMat, glm::vec3(t.pos.x, t.pos.y, 0.0f));
@@ -92,7 +92,7 @@ namespace Dralgeer {
             vertices[offset + 8] = texID;
 
             // load entity IDs
-            vertices[offset + 9] = sprites[index]->gameObject->id;
+            vertices[offset + 9] = sprites[index]->entityID;
 
             // std::cout << "Alpha value: " << sprites[index]->color.w << "\n";
             // std::cout << "EntityID: " << sprites[index]->gameObject->id << "\n";
