@@ -5,18 +5,21 @@
 #include "listeners.h"
 
 namespace Dralgeer {
-    class GameObject;
+    // * ======================================
+    // * Component Struct with void* + enum
+    // * ======================================
 
-    // * ===========================
-    // * Abstract Component Class
-    // * ===========================
-
-    enum ComponentType { // todo this gizmo system is a mess -- will have to improve later
+    enum ComponentType {
         SPRITE_RENDERER,
         EDITOR_CAMERA,
         GRID_LINES,
         MOUSE_CONTROLS,
         GIZMO_SYSTEM
+    };
+
+    struct Component {
+        void* component;
+        ComponentType type;
     };
 
     // todo maybe find a way to do stuff with just a flag inside of this class
@@ -26,24 +29,6 @@ namespace Dralgeer {
     // todo when I implement the enum + void* system instead, I can remove the Camera const &cam from many update function signatures
     
     namespace IDCounter { extern int componentID, gameObjectID; }
-
-    // * Implement rule of 5 for anything that extends this.
-    class Component {
-        public:
-            ComponentType type;
-
-            int id;
-            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
-
-            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
-            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
-            
-            virtual void imGui() {
-                // todo find a way to emulate the Java thing I have setup using .class in c++
-                // todo  (probs will not be in a similar way)
-            };
-    };
 
 
     // * ====================
@@ -154,6 +139,20 @@ namespace Dralgeer {
             bool imGuiSetup = 1; // ! DO NOT serialize
 
         public:
+            ComponentType type;
+
+            int id;
+            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
+
+            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
+            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
+            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
+            
+            virtual void imGui() {
+                // todo find a way to emulate the Java thing I have setup using .class in c++
+                // todo  (probs will not be in a similar way)
+            };
+
             // * ==============
             // * Attributes
             // * ==============
@@ -179,11 +178,11 @@ namespace Dralgeer {
 
             ~SpriteRenderer();
 
-            inline void start() override { lastTransform = gameObject->transform; };
-            void update(float dt, Camera const &cam, bool wantCapture) override;
+            inline void start() { lastTransform = gameObject->transform; };
+            void update(float dt, Camera const &cam, bool wantCapture);
 
             // Create a color picker for the sprites.
-            void imGui() override;
+            void imGui();
     };
 
     class EditorCamera : public Component {
@@ -196,6 +195,20 @@ namespace Dralgeer {
             glm::vec2 clickOrigin;
 
         public:
+            ComponentType type;
+
+            int id;
+            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
+
+            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
+            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
+            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
+            
+            virtual void imGui() {
+                // todo find a way to emulate the Java thing I have setup using .class in c++
+                // todo  (probs will not be in a similar way)
+            };
+
             EditorCamera(Camera const &cam);
 
             // * Note, components attached to cam's GameObject will not be attached to the GameObject contained in this.
@@ -208,11 +221,25 @@ namespace Dralgeer {
 
             ~EditorCamera();
 
-            inline void update(float dt, Camera const &cam, bool wantCapture) override;
+            inline void update(float dt, Camera const &cam, bool wantCapture);
     };
 
     class GridLines : public Component {
         public:
+            ComponentType type;
+
+            int id;
+            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
+
+            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
+            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
+            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
+            
+            virtual void imGui() {
+                // todo find a way to emulate the Java thing I have setup using .class in c++
+                // todo  (probs will not be in a similar way)
+            };
+
             GridLines();
 
             // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
@@ -225,10 +252,10 @@ namespace Dralgeer {
 
             ~GridLines();
 
-            void update(float dt, Camera const &cam, bool wantCapture) override;
+            void update(float dt, Camera const &cam, bool wantCapture);
     };
 
-    class MouseControls : public Component {
+    class MouseControls {
         private:
             bool pressedLastFrame = 0;
             glm::vec2* placedTiles = new glm::vec2[16];
@@ -236,24 +263,24 @@ namespace Dralgeer {
             int pCount = 0;
 
         public:
+            int id;
+
             unsigned int fbo; // ! for debugging purposes
             unsigned int realFbo; // ! for debugging purposes
 
-            GameObject* heldObject = nullptr; // only set this equal to an object getting picked up
+            GameObject* heldObject = nullptr; // only set this equal to an object getting picked up // ! (and don't serialize)
             bool addObject = 0;
 
             MouseControls();
 
-            // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
-            MouseControls(MouseControls const &mc);
-            MouseControls(MouseControls &&mc);
-
-            // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.
             MouseControls& operator = (MouseControls const &mc);
             MouseControls& operator = (MouseControls &&mc);
 
-            ~MouseControls();
+            void update();
 
-            void update(float dt, Camera const &cam, bool wantCapture) override;
+            inline void imGui() {
+                // todo find a way to emulate the Java thing I have setup using .class in c++
+                // todo  (probs will not be in a similar way)
+            };
     };
 }

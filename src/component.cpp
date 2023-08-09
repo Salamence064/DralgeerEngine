@@ -351,39 +351,14 @@ namespace Dralgeer {
     // * =====================================================================
     // * MouseControls Stuff
 
-    MouseControls::MouseControls() { type = MOUSE_CONTROLS; id = IDCounter::componentID++; };
+    MouseControls::MouseControls() { id = IDCounter::componentID++; };
 
-    // * ====================
-    // * Rule of 5 Stuff
-    // * ====================
-
-    MouseControls::MouseControls(MouseControls const &mc) {
-        type = mc.type;
-        id = IDCounter::componentID++;
-
-        if (mc.gameObject) {
-            gameObject = new GameObject();
-            gameObject->transform = mc.gameObject->transform;
-            gameObject->name = mc.gameObject->name;
-        }
-    };
-
-    MouseControls::MouseControls(MouseControls &&mc) {
-        type = mc.type;
-        id = IDCounter::componentID++;
-        gameObject = mc.gameObject;
-        mc.gameObject = NULL;
-    };
+    // * ==========================
+    // * Rule of 5 Stuff (Kinda)
+    // * ==========================
 
     MouseControls& MouseControls::operator = (MouseControls const &mc) {
         if (this != &mc) {
-            if (gameObject) { delete gameObject; }
-            if (mc.gameObject) {
-                gameObject = new GameObject();
-                gameObject->transform = mc.gameObject->transform;
-                gameObject->name = mc.gameObject->name;
-            }
-
             heldObject = nullptr; // since the object should be added to the scene this should not cause a memory leak
         }
 
@@ -392,22 +367,19 @@ namespace Dralgeer {
 
     MouseControls& MouseControls::operator = (MouseControls &&mc) {
         if (this != &mc) {
-            if (gameObject) { delete gameObject; }
-            gameObject = mc.gameObject;
-            mc.gameObject = NULL;
+            heldObject = nullptr; // since the object should be added to the scene this should not cause a memory leak
         }
 
         return *this;
     };
 
     // Note, do not delete heldObject for the scene should handle that.
-    MouseControls::~MouseControls() { if (gameObject) { delete gameObject; }};
 
     // * =====================
     // * Normal Functions
     // * =====================
 
-    void MouseControls::update(float dt, Camera const &cam, bool wantCapture) {
+    void MouseControls::update() {
         if (heldObject) {
             // todo the precision when placing sucks -- fix it by changing the values for this a little
 
