@@ -15,7 +15,7 @@ namespace Dralgeer {
         editorCamera.update(dt, wantCapture);
         gridLines.update(camera);
         mouseControls.update();
-        gizmoSystem.update(dt, camera, wantCapture);
+        gizmoSystem.update();
 
         // std::cout << "\n========================================\n";
         // std::cout << "[GameObjects]\n";

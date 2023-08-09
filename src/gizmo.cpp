@@ -41,7 +41,7 @@ namespace Dralgeer {
     // Note: We do not need to have a destructor as the AssetPool's destructor will clean up the SpriteSheet
 
     // ! To expand the number of gizmos handled by this editor to more than just two, we can simply use a for loop that excludes the one active gizmo
-    void GizmoSystem::update(float dt, Camera const &cam, bool wantCapture) {
+    void GizmoSystem::update() {
         gizmos[activeGizmo].inUse = 1;
         gizmos[!activeGizmo].inUse = 0;
         gizmos[!activeGizmo].setInactive();

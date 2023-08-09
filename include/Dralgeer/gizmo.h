@@ -154,6 +154,6 @@ namespace Dralgeer {
                 activeGizmo = TRANSLATE_GIZMO;
             };
 
-            void update(float dt, Camera const &cam, bool wantCapture);            
+            void update();            
     };
 }
