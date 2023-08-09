@@ -168,9 +168,9 @@ namespace Dralgeer {
             currScene.type = LEVEL_EDITOR_SCENE;
 
             // ! Debug code
-            MouseControls* mc = (MouseControls*) scene->components.getComponent(MOUSE_CONTROLS);
-            mc->fbo = pickingTexture->fboID;
-            mc->realFbo = frameBuffer.fboID;
+            // MouseControls* mc = currScene.mou;
+            // mc->fbo = pickingTexture->fboID;
+            // mc->realFbo = frameBuffer.fboID;
         };
 
         inline static void run() {
