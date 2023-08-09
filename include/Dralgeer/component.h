@@ -224,35 +224,18 @@ namespace Dralgeer {
             inline void update(float dt, Camera const &cam, bool wantCapture);
     };
 
-    class GridLines : public Component {
+    class GridLines {
         public:
-            ComponentType type;
-
             int id;
-            GameObject* gameObject = nullptr; // Has to be a pointer due to forward declaration. // ! do not serialize
 
-            virtual inline void start() {}; // by default doesn't do anything, but can be overriden.
-            virtual void update(float dt, Camera const &cam, bool wantCapture) = 0; // every component needs to override update.
-            virtual inline void destroy() {}; // by default doesn't do anything, but can be overriden.
+            inline GridLines() { id = IDCounter::componentID++; };
+
+            void update(Camera const &cam);
             
-            virtual void imGui() {
+            inline void imGui() {
                 // todo find a way to emulate the Java thing I have setup using .class in c++
                 // todo  (probs will not be in a similar way)
             };
-
-            GridLines();
-
-            // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
-            GridLines(GridLines const &gl);
-            GridLines(GridLines &&gl);
-
-            // * Note, components attached to gl's GameObject will not be attached to the GameObject contained in this.
-            GridLines& operator = (GridLines const &gl);
-            GridLines& operator = (GridLines &&gl);
-
-            ~GridLines();
-
-            void update(float dt, Camera const &cam, bool wantCapture);
     };
 
     class MouseControls {

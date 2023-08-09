@@ -272,61 +272,7 @@ namespace Dralgeer {
     // * =====================================================================
     // * GridLines Stuff
 
-    GridLines::GridLines() { type = ComponentType::GRID_LINES; id = IDCounter::componentID++; };
-
-    // * ====================
-    // * Rule of 5 Stuff
-    // * ====================
-
-    GridLines::GridLines(GridLines const &gl) {
-        type = gl.type;
-        id = IDCounter::componentID++;
-
-        if (gl.gameObject) {
-            gameObject = new GameObject();
-            gameObject->transform = gl.gameObject->transform;
-            gameObject->name = gl.gameObject->name;
-        }
-    };
-
-    GridLines::GridLines(GridLines &&gl) {
-        type = gl.type;
-        id = IDCounter::componentID++;
-        gameObject = gl.gameObject;
-        gl.gameObject = NULL;
-    };
-
-    GridLines& GridLines::operator = (GridLines const &gl) {
-        if (this != &gl) {
-            if (gameObject) { delete gameObject; }
-            if (gl.gameObject) {
-                gameObject = new GameObject();
-                gameObject->transform = gl.gameObject->transform;
-                gameObject->name = gl.gameObject->name;
-            }
-        }
-
-        return *this;
-    };
-
-    GridLines& GridLines::operator = (GridLines &&gl) {
-        if (this != &gl) {
-            if (gameObject) { delete gameObject; }
-            gameObject = gl.gameObject;
-            gl.gameObject = NULL;
-        }
-
-        return *this;
-    };
-
-    GridLines::~GridLines() { delete gameObject; };
-
-
-    // * =====================
-    // * Normal Functions
-    // * =====================
-
-    void GridLines::update(float dt, Camera const &cam, bool wantCapture) {
+    void GridLines::update(Camera const &cam) {
         int firstX = ((int) (cam.pos.x * cam.zoom) - GRID_WIDTH);
         int firstY = ((int) (cam.pos.y * cam.zoom) - GRID_HEIGHT);
         int width = ((int) (cam.projSize.x * cam.zoom)) + 2 * GRID_WIDTH;
@@ -339,6 +285,8 @@ namespace Dralgeer {
         // glm::vec3 color(0.8549f, 0.4392f, 0.8392f); // violet
         glm::vec3 color(0.8471f, 0.749f, 0.8471f); // thistle
 
+        // todo consider changing how the lines are handled since this would be a decent chunk of data moving between the GPU and CPU
+        // todo  every frame
         for (int i = 0; i < maxLines; ++i) {
             int x = firstX + i*GRID_WIDTH;
             int y = firstY + i*GRID_HEIGHT;
