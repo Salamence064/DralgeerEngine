@@ -52,8 +52,8 @@ namespace Dralgeer {
             inline void start() { lastTransform = transform; };
 
             inline void update() {
-                if (lastTransform != transform) { // todo I have no idea what this is doing but it doesn't work without it
-                    transform = lastTransform;
+                if (lastTransform != transform) {
+                    lastTransform = transform;
                     isDirty = 1;
                 }
             };

@@ -137,8 +137,6 @@ namespace Dralgeer {
 
     void MouseControls::update() {
         if (heldObject) {
-            // todo the precision when placing sucks -- fix it by changing the values for this a little
-
             heldObject->transform.pos.x = (int) (MouseListener::mWorldX/GRID_WIDTH) * GRID_WIDTH;
             heldObject->transform.pos.y = (int) (MouseListener::mWorldY/GRID_HEIGHT) * GRID_HEIGHT;
 
@@ -149,8 +147,6 @@ namespace Dralgeer {
             // todo can place sprites over each other without overriding -- fix this (to override) in the future
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-                heldObject->sprite->lastTransform.pos = heldObject->transform.pos;
-
                 // ! debugging code -----------------------------
 
                 // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
