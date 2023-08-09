@@ -7,10 +7,6 @@
 namespace Dralgeer {
     namespace IDCounter { extern int componentID, gameObjectID; }
 
-    // * ====================
-    // * Game Object Stuff
-    // * ====================
-
     struct Transform {
         glm::vec2 pos;
         glm::vec2 scale;
@@ -22,6 +18,51 @@ namespace Dralgeer {
         inline bool operator != (Transform const &t) const { return pos != t.pos || scale != t.scale || zIndex != t.zIndex || rotation != t.rotation; };
     };
 
+
+    // * =============================
+    // * Sprite Related Component
+    // * =============================
+
+    // * Remember to set isDirty to true if you change either the sprite or the color.
+    class SpriteRenderer {
+        private:
+            bool imGuiSetup = 1; // ! DO NOT serialize
+
+        public:
+            // * ==============
+            // * Attributes
+            // * ==============
+
+            // This should be equivalent to the ID of the GameObject containing this.
+            // If it's -1, it is not attached to a GameObject.
+            int entityID = -1;
+
+            glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
+            Sprite sprite;
+
+            Transform transform, lastTransform; // ! DO NOT serialize
+            bool isDirty = 1; // ! DO NOT serialize
+
+            // * ==========================================================
+
+            inline SpriteRenderer() {};
+
+            // Create a color picker for the sprites.
+            void imGui();
+            inline void start() { lastTransform = transform; };
+
+            inline void update() {
+                if (lastTransform != transform) { // todo I have no idea what this is doing but it doesn't work without it
+                    transform = lastTransform;
+                    isDirty = 1;
+                }
+            };
+    };
+
+
+    // * ====================
+    // * Game Object Stuff
+    // * ====================
 
     class GameObject {
         public:
@@ -69,42 +110,6 @@ namespace Dralgeer {
     // * ==================
     // * Components
     // * ==================
-
-    // * Remember to set isDirty to true if you change either the sprite or the color.
-    class SpriteRenderer {
-        private:
-            bool imGuiSetup = 1; // ! DO NOT serialize
-
-        public:
-            // * ==============
-            // * Attributes
-            // * ==============
-
-            // This should be equivalent to the ID of the GameObject containing this.
-            // If it's -1, it is not attached to a GameObject.
-            int entityID = -1;
-
-            glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
-            Sprite sprite;
-
-            Transform transform, lastTransform; // ! DO NOT serialize
-            bool isDirty = 1; // ! DO NOT serialize
-
-            // * ==========================================================
-
-            inline SpriteRenderer() {};
-
-            // Create a color picker for the sprites.
-            void imGui();
-            inline void start() { lastTransform = transform; };
-
-            inline void update() {
-                if (lastTransform != transform) { // todo I have no idea what this is doing but it doesn't work without it
-                    transform = lastTransform;
-                    isDirty = 1;
-                }
-            };
-    };
 
     class EditorCamera {
         private:

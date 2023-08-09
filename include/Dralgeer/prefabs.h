@@ -16,26 +16,23 @@ namespace Dralgeer {
             go->transform.scale.x = width;
             go->transform.scale.y = height;
 
-            SpriteRenderer* renderer = new SpriteRenderer();
-            renderer->sprite.width = spr.width;
-            renderer->sprite.height = spr.height;
+            go->sprite = new SpriteRenderer();
+            go->sprite->sprite.width = spr.width;
+            go->sprite->sprite.height = spr.height;
 
-            renderer->sprite.texCoords[0] = spr.texCoords[0];
-            renderer->sprite.texCoords[1] = spr.texCoords[1];
-            renderer->sprite.texCoords[2] = spr.texCoords[2];
-            renderer->sprite.texCoords[3] = spr.texCoords[3];
-            renderer->sprite.texture = spr.texture; // because of how the asset pool will work
+            go->sprite->sprite.texCoords[0] = spr.texCoords[0];
+            go->sprite->sprite.texCoords[1] = spr.texCoords[1];
+            go->sprite->sprite.texCoords[2] = spr.texCoords[2];
+            go->sprite->sprite.texCoords[3] = spr.texCoords[3];
+            go->sprite->sprite.texture = spr.texture; // because of how the asset pool will work
 
-            renderer->gameObject = new GameObject();
-            renderer->gameObject->transform.pos.x = -64.0f;
-            renderer->gameObject->transform.pos.y = -64.0f;
-            renderer->gameObject->transform.scale.x = width;
-            renderer->gameObject->transform.scale.y = height;
-            renderer->gameObject->transform.zIndex = 0;
+            go->sprite->transform.pos.x = -64.0f;
+            go->sprite->transform.pos.y = -64.0f;
+            go->sprite->transform.scale.x = width;
+            go->sprite->transform.scale.y = height;
+            go->sprite->transform.zIndex = 0;
 
-            go->addComponent(renderer);
             go->start();
-
             return go;
         };
     }
