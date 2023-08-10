@@ -162,8 +162,6 @@ namespace Dralgeer {
         }
 
         activeObject = Window::getActiveObject();
-        if (activeObject) { std::cout << "epic\n"; }
-
         if (!activeObject) { setInactive(); return; }
         setActive();
 

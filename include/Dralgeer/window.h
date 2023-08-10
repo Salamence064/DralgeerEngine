@@ -67,7 +67,7 @@ namespace Dralgeer {
         static GLFWwindow* window;
         static Scene currScene;
 
-        static ImGuiLayer imGuiLayer;
+        extern ImGuiLayer imGuiLayer;
         static FrameBuffer frameBuffer;
         static PickingTexture* pickingTexture;
 
@@ -346,7 +346,7 @@ namespace Dralgeer {
                 }
 
                 case ADD_GAMEOBJECT_TO_SCENE: {
-                    switch (currScene.type) {
+                    switch(currScene.type) {
                         case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->addGameObject(go); break; }
                     }
 

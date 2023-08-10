@@ -92,6 +92,8 @@ namespace Dralgeer {
                 case LEVEL_EDITOR_SCENE: { go = ((LevelEditorScene*) currScene)->getGameObject(id); break; }
             }
 
+            std::cout << id << ": " << go << "\n";
+
             if (go && go->pickable) { activeGameObject = go; }
             else if (!go && !MouseListener::mIsDragging) { activeGameObject = nullptr; }
 
