@@ -225,6 +225,12 @@ namespace Dralgeer {
 
         editorCamera.init(camera);
         gizmoSystem.init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
+        gizmoSystem.start();
+
+        addGameObject(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject);
+        addGameObject(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject);
+        addGameObject(gizmoSystem.gizmos[SCALE_GIZMO].xObject);
+        addGameObject(gizmoSystem.gizmos[SCALE_GIZMO].yObject);
     };
 
 

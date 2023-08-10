@@ -26,8 +26,6 @@ namespace Dralgeer {
 
             // ! unsure if these should just be handled by a mixture of the scene and renderer, but since atm this doesnt communicate with either, we will take care of it here for now
             // Note: activeObject is guarenteed to be contained in the scene. Therefore, we do not need to bother with memory management for it.
-            GameObject* xObject = nullptr; // ! Do NOT serialize
-            GameObject* yObject = nullptr; // ! Do NOT serialize
             GameObject* activeObject = nullptr; // ! Do NOT serialize
             SpriteRenderer* xSprite = nullptr; // ! Do NOT serialize
             SpriteRenderer* ySprite = nullptr; // ! Do NOT serialize
@@ -81,6 +79,8 @@ namespace Dralgeer {
 
         public:
             bool inUse = 0; // Remember to call setInactive after setting this to 0.
+            GameObject* xObject = nullptr; // ! Do NOT serialize
+            GameObject* yObject = nullptr; // ! Do NOT serialize
 
             // * ====================
             // * Helper Function
@@ -130,10 +130,10 @@ namespace Dralgeer {
         private:
             SpriteSheet* gizmoSprites; // ! Do NOT serialize
             GizmoType activeGizmo; // ! Do NOT serialize
-            Gizmo gizmos[2]; // ! Do NOT serialize
 
         public:
             int id;
+            Gizmo gizmos[2]; // ! Do NOT serialize
 
             inline GizmoSystem() { id = IDCounter::componentID++; };
 

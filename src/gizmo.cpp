@@ -132,6 +132,7 @@ namespace Dralgeer {
 
         xObject = Prefabs::generateSpriteObject(spr, gizmoWidth, gizmoHeight);
         yObject = Prefabs::generateSpriteObject(spr, 16, 48);
+
         xSprite = xObject->sprite; // todo not handling it properly after prefabs could be a source of error later
         ySprite = yObject->sprite;
 

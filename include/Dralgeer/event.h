@@ -1,5 +1,7 @@
 #pragma once
 
+#include "component.h"
+
 namespace Dralgeer {
     enum EventType {
         START_PLAY,

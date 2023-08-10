@@ -5,8 +5,6 @@
 // todo go through and make sure all memory allocated on the GPU is properly disposed of (with destructors and other stuff)
 // todo go through and make certain constructors inline
 
-// todo I never detach Renderer::currentShader
-
 // todo delete vao and buffers for the other things that use them too in the destructor
 
 // todo go through and do not delete textures when they're inside of a container, only do so in the AssetPool afterwards and ensure
@@ -43,9 +41,8 @@
 // - setup serialization
 // - port over the ImGui stuff to fully furnish the properties window
 // // - port over the event system
-// - make the stuff void* with an enum
+// // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
-// - add pointer operators for equality and constructors
 // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
 // - make a scene selector in the level editor scene
 // - go through the rest of the 2D engine series and see what final things I need to add

@@ -85,8 +85,6 @@ namespace Dralgeer {
             void imGui();
 
             inline void start() {
-                gizmoSystem.start();
-
                 for (int i = 0; i < numObjects; ++i) {
                     gameObjects[i]->start();
                     Renderer::add(gameObjects[i]->sprite);
