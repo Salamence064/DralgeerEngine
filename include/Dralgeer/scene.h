@@ -13,6 +13,7 @@ namespace Dralgeer {
         SceneType type;
     };
 
+    // todo add a removeGameObject function
     class LevelEditorScene {
         private:
             // * ==============

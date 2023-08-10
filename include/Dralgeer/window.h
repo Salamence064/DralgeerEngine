@@ -258,21 +258,21 @@ namespace Dralgeer {
                         imGuiLayer.update(dt, activeScene, currScene.type, frameBuffer.getTextureID(), data.width, data.height);
 
                         // ! for debugging ------------------
-                        // if (KeyListener::keyPressed[GLFW_KEY_W]) {
-                        //     // todo same quad issue. Really confused what is causing it
+                        if (KeyListener::keyPressed[GLFW_KEY_W]) {
+                            // todo same quad issue. Really confused what is causing it
 
-                        //     pickingTexture->test = 0;
-                        //     pickingTexture->enableWriting();
-                        //     glReadBuffer(GL_COLOR_ATTACHMENT0);
+                            pickingTexture->test = 0;
+                            pickingTexture->enableWriting();
+                            glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-                        //     float pixels[3];
-                        //     glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
+                            float pixels[3];
+                            glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
 
-                        //     std::cout << "Test: ";
-                        //     std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+                            std::cout << "Test: ";
+                            std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
 
-                        //     pickingTexture->disableWriting();
-                        // }
+                            pickingTexture->disableWriting();
+                        }
                         // ! --------------------------------
 
                         break;
@@ -322,7 +322,8 @@ namespace Dralgeer {
             }
         };
 
-        inline static void onNotify(EventType event) {
+        // todo potentially add onNotify functions to PropertiesWindow and scenes that this will call when notified
+        inline static void onNotify(EventType event, GameObject* go) {
             switch(event) { // todo add the save stuff when adding serialization
                 case START_PLAY: {
                     runtimePlaying = 1;
@@ -346,7 +347,17 @@ namespace Dralgeer {
                     // currScene->save();
                     break;
                 }
+
+                case ADD_GAMEOBJECT_TO_SCENE: {
+                    switch (currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->addGameObject(go); break; }
+                    }
+
+                    break;
+                }
             }
         };
+
+        inline GameObject* getActiveObject() { return imGuiLayer.propertiesWindow.activeGameObject; };
     }
 }

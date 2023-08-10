@@ -1,5 +1,6 @@
 #include <Dralgeer/gizmo.h>
 #include <Dralgeer/prefabs.h>
+#include <Dralgeer/window.h>
 
 namespace Dralgeer {
     GizmoSystem::GizmoSystem(GizmoSystem const &gs) {
@@ -159,7 +160,8 @@ namespace Dralgeer {
             }
         }
 
-        // todo retrieve the active gameObject from the properties window
+        activeObject = Window::getActiveObject();
+        if (activeObject) { std::cout << "epic\n"; }
 
         if (!activeObject) { setInactive(); return; }
         setActive();
