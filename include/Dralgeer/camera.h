@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GLM/glm/glm.hpp>
+#include <GLM/glm/glm.h>
 #include <GLM/glm/gtc/matrix_transform.hpp>
 
 namespace Dralgeer {

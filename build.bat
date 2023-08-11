@@ -207,6 +207,28 @@ popd @REM "imgui/"
 
 :SKIP_IMGUI_BUILD
 
+if exist "include/GLM/glm/glm.h.gch" (
+    GOTO SKIP_GLM_BUILD
+)
+
+
+@REM --------- Start of GLM Build ------------
+
+echo "Building GLM"
+
+@REM todo consider moving all the glm headers in glm.h directly into it so that we don't have to worry about the precompiled header is actually working
+
+pushd "include/GLM/glm/"
+
+g++ -g -DUNICODE -D_UNICODE -std=c++17 glm.h -o glm.h.gch
+
+popd @REM "include/GLM/glm/"
+
+@REM --------- End of GLM Build ------------
+
+
+:SKIP_GLM_BUILD
+
 pushd "build"
 
 @REM Compiling with g++
