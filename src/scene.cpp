@@ -231,18 +231,14 @@ namespace Dralgeer {
         ImGui::End();
 
         // handle click and drag (maybe should move where in the code this occurs)
-        // MouseControls* mc = (MouseControls*) components.getComponent(MOUSE_CONTROLS);
-        // if (mc->addObject) {
-        //     Sprite sprite = ((SpriteRenderer*) (mc->heldObject->getComponent(SPRITE_RENDERER)))->sprite;
+        if (mouseControls.addObject) {
+            GameObject* go = Prefabs::generateSpriteObject(mouseControls.heldObject->sprite->sprite, GRID_WIDTH, GRID_HEIGHT);
+            go->sprite->transform.pos = mouseControls.heldObject->transform.pos;
+            go->sprite->lastTransform.pos = go->sprite->transform.pos;
 
-        //     GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
-        //     SpriteRenderer* spr = (SpriteRenderer*) go->getComponent(SPRITE_RENDERER);
-        //     spr->gameObject->transform.pos = mc->heldObject->transform.pos;
-        //     spr->lastTransform.pos = spr->gameObject->transform.pos;
-
-        //     addGameObject(go);
-        //     mc->addObject = 0;
-        // }
+            addGameObject(go);
+            mouseControls.addObject = 0;
+        }
     };
 
     #pragma GCC diagnostic pop
