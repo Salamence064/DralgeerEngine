@@ -14209,6 +14209,172 @@ namespace glm
 
 // -------------------------------------------
 
+// ---------- _vectorize.hpp -----------
+
+namespace glm{
+namespace detail
+{
+	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename R, typename T, qualifier Q>
+	struct functor1{};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
+	struct functor1<vec, 1, R, T, Q>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<1, R, Q> call(R (*Func) (T x), vec<1, T, Q> const& v)
+		{
+			return vec<1, R, Q>(Func(v.x));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
+	struct functor1<vec, 2, R, T, Q>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<2, R, Q> call(R (*Func) (T x), vec<2, T, Q> const& v)
+		{
+			return vec<2, R, Q>(Func(v.x), Func(v.y));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
+	struct functor1<vec, 3, R, T, Q>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<3, R, Q> call(R (*Func) (T x), vec<3, T, Q> const& v)
+		{
+			return vec<3, R, Q>(Func(v.x), Func(v.y), Func(v.z));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
+	struct functor1<vec, 4, R, T, Q>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<4, R, Q> call(R (*Func) (T x), vec<4, T, Q> const& v)
+		{
+			return vec<4, R, Q>(Func(v.x), Func(v.y), Func(v.z), Func(v.w));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename T, qualifier Q>
+	struct functor2{};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2<vec, 1, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<1, T, Q> call(T (*Func) (T x, T y), vec<1, T, Q> const& a, vec<1, T, Q> const& b)
+		{
+			return vec<1, T, Q>(Func(a.x, b.x));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2<vec, 2, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<2, T, Q> call(T (*Func) (T x, T y), vec<2, T, Q> const& a, vec<2, T, Q> const& b)
+		{
+			return vec<2, T, Q>(Func(a.x, b.x), Func(a.y, b.y));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2<vec, 3, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<3, T, Q> call(T (*Func) (T x, T y), vec<3, T, Q> const& a, vec<3, T, Q> const& b)
+		{
+			return vec<3, T, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2<vec, 4, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<4, T, Q> call(T (*Func) (T x, T y), vec<4, T, Q> const& a, vec<4, T, Q> const& b)
+		{
+			return vec<4, T, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z), Func(a.w, b.w));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename T, qualifier Q>
+	struct functor2_vec_sca{};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2_vec_sca<vec, 1, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<1, T, Q> call(T (*Func) (T x, T y), vec<1, T, Q> const& a, T b)
+		{
+			return vec<1, T, Q>(Func(a.x, b));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2_vec_sca<vec, 2, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<2, T, Q> call(T (*Func) (T x, T y), vec<2, T, Q> const& a, T b)
+		{
+			return vec<2, T, Q>(Func(a.x, b), Func(a.y, b));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2_vec_sca<vec, 3, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<3, T, Q> call(T (*Func) (T x, T y), vec<3, T, Q> const& a, T b)
+		{
+			return vec<3, T, Q>(Func(a.x, b), Func(a.y, b), Func(a.z, b));
+		}
+	};
+
+	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
+	struct functor2_vec_sca<vec, 4, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<4, T, Q> call(T (*Func) (T x, T y), vec<4, T, Q> const& a, T b)
+		{
+			return vec<4, T, Q>(Func(a.x, b), Func(a.y, b), Func(a.z, b), Func(a.w, b));
+		}
+	};
+
+	template<length_t L, typename T, qualifier Q>
+	struct functor2_vec_int {};
+
+	template<typename T, qualifier Q>
+	struct functor2_vec_int<1, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<1, int, Q> call(int (*Func) (T x, int y), vec<1, T, Q> const& a, vec<1, int, Q> const& b)
+		{
+			return vec<1, int, Q>(Func(a.x, b.x));
+		}
+	};
+
+	template<typename T, qualifier Q>
+	struct functor2_vec_int<2, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<2, int, Q> call(int (*Func) (T x, int y), vec<2, T, Q> const& a, vec<2, int, Q> const& b)
+		{
+			return vec<2, int, Q>(Func(a.x, b.x), Func(a.y, b.y));
+		}
+	};
+
+	template<typename T, qualifier Q>
+	struct functor2_vec_int<3, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<3, int, Q> call(int (*Func) (T x, int y), vec<3, T, Q> const& a, vec<3, int, Q> const& b)
+		{
+			return vec<3, int, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z));
+		}
+	};
+
+	template<typename T, qualifier Q>
+	struct functor2_vec_int<4, T, Q>
+	{
+		GLM_FUNC_QUALIFIER static vec<4, int, Q> call(int (*Func) (T x, int y), vec<4, T, Q> const& a, vec<4, int, Q> const& b)
+		{
+			return vec<4, int, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z), Func(a.w, b.w));
+		}
+	};
+}//namespace detail
+}//namespace glm
+
+
+// -------------------------------------
+
 // ---------- #include "trigonometric.hpp" ----------
 
 namespace glm
@@ -17049,168 +17215,1762 @@ namespace glm
 	/// @}
 }//namespace glm
 
-namespace glm{
-namespace detail
-{
-	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename R, typename T, qualifier Q>
-	struct functor1{};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
-	struct functor1<vec, 1, R, T, Q>
-	{
-		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<1, R, Q> call(R (*Func) (T x), vec<1, T, Q> const& v)
-		{
-			return vec<1, R, Q>(Func(v.x));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
-	struct functor1<vec, 2, R, T, Q>
-	{
-		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<2, R, Q> call(R (*Func) (T x), vec<2, T, Q> const& v)
-		{
-			return vec<2, R, Q>(Func(v.x), Func(v.y));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
-	struct functor1<vec, 3, R, T, Q>
-	{
-		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<3, R, Q> call(R (*Func) (T x), vec<3, T, Q> const& v)
-		{
-			return vec<3, R, Q>(Func(v.x), Func(v.y), Func(v.z));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename R, typename T, qualifier Q>
-	struct functor1<vec, 4, R, T, Q>
-	{
-		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<4, R, Q> call(R (*Func) (T x), vec<4, T, Q> const& v)
-		{
-			return vec<4, R, Q>(Func(v.x), Func(v.y), Func(v.z), Func(v.w));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename T, qualifier Q>
-	struct functor2{};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2<vec, 1, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<1, T, Q> call(T (*Func) (T x, T y), vec<1, T, Q> const& a, vec<1, T, Q> const& b)
-		{
-			return vec<1, T, Q>(Func(a.x, b.x));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2<vec, 2, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<2, T, Q> call(T (*Func) (T x, T y), vec<2, T, Q> const& a, vec<2, T, Q> const& b)
-		{
-			return vec<2, T, Q>(Func(a.x, b.x), Func(a.y, b.y));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2<vec, 3, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<3, T, Q> call(T (*Func) (T x, T y), vec<3, T, Q> const& a, vec<3, T, Q> const& b)
-		{
-			return vec<3, T, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2<vec, 4, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<4, T, Q> call(T (*Func) (T x, T y), vec<4, T, Q> const& a, vec<4, T, Q> const& b)
-		{
-			return vec<4, T, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z), Func(a.w, b.w));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename T, qualifier Q>
-	struct functor2_vec_sca{};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2_vec_sca<vec, 1, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<1, T, Q> call(T (*Func) (T x, T y), vec<1, T, Q> const& a, T b)
-		{
-			return vec<1, T, Q>(Func(a.x, b));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2_vec_sca<vec, 2, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<2, T, Q> call(T (*Func) (T x, T y), vec<2, T, Q> const& a, T b)
-		{
-			return vec<2, T, Q>(Func(a.x, b), Func(a.y, b));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2_vec_sca<vec, 3, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<3, T, Q> call(T (*Func) (T x, T y), vec<3, T, Q> const& a, T b)
-		{
-			return vec<3, T, Q>(Func(a.x, b), Func(a.y, b), Func(a.z, b));
-		}
-	};
-
-	template<template<length_t L, typename T, qualifier Q> class vec, typename T, qualifier Q>
-	struct functor2_vec_sca<vec, 4, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<4, T, Q> call(T (*Func) (T x, T y), vec<4, T, Q> const& a, T b)
-		{
-			return vec<4, T, Q>(Func(a.x, b), Func(a.y, b), Func(a.z, b), Func(a.w, b));
-		}
-	};
-
-	template<length_t L, typename T, qualifier Q>
-	struct functor2_vec_int {};
-
-	template<typename T, qualifier Q>
-	struct functor2_vec_int<1, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<1, int, Q> call(int (*Func) (T x, int y), vec<1, T, Q> const& a, vec<1, int, Q> const& b)
-		{
-			return vec<1, int, Q>(Func(a.x, b.x));
-		}
-	};
-
-	template<typename T, qualifier Q>
-	struct functor2_vec_int<2, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<2, int, Q> call(int (*Func) (T x, int y), vec<2, T, Q> const& a, vec<2, int, Q> const& b)
-		{
-			return vec<2, int, Q>(Func(a.x, b.x), Func(a.y, b.y));
-		}
-	};
-
-	template<typename T, qualifier Q>
-	struct functor2_vec_int<3, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<3, int, Q> call(int (*Func) (T x, int y), vec<3, T, Q> const& a, vec<3, int, Q> const& b)
-		{
-			return vec<3, int, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z));
-		}
-	};
-
-	template<typename T, qualifier Q>
-	struct functor2_vec_int<4, T, Q>
-	{
-		GLM_FUNC_QUALIFIER static vec<4, int, Q> call(int (*Func) (T x, int y), vec<4, T, Q> const& a, vec<4, int, Q> const& b)
-		{
-			return vec<4, int, Q>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z), Func(a.w, b.w));
-		}
-	};
-}//namespace detail
-}//namespace glm
 
 #if(GLM_ARCH & GLM_ARCH_X86 && GLM_COMPILER & GLM_COMPILER_VC)
+
+	#ifndef _VCRUNTIME_H
+#define _VCRUNTIME_H
+
+#ifndef _VCRT_COMPILER_PREPROCESSOR
+// Many VCRuntime headers avoid exposing their contents to non-compilers like
+// the Windows resource compiler and Qt's meta-object compiler (moc).
+#if defined(RC_INVOKED) || defined(Q_MOC_RUN)
+#define _VCRT_COMPILER_PREPROCESSOR 0
+#else
+#define _VCRT_COMPILER_PREPROCESSOR 1
+#endif
+#endif // _VCRT_COMPILER_PREPROCESSOR
+
+#ifndef _UCRT
+    #define _UCRT
+#endif
+
+// The _CRTIMP macro is not used in the VCRuntime or the CoreCRT anymore, but
+// there is a lot of existing code that declares CRT functions using this macro,
+// and if we remove its definition, we break that existing code.  It is thus
+// defined here only for compatibility.
+#ifndef _CRTIMP
+    #define _VCRT_DEFINED_CRTIMP
+    #if defined CRTDLL && defined _CRTBLD
+        #define _CRTIMP __declspec(dllexport)
+    #else
+        #ifdef _DLL
+            #define _CRTIMP __declspec(dllimport)
+        #else
+            #define _CRTIMP
+        #endif
+    #endif
+#endif
+
+#include <sal.h>
+#include <vadefs.h>
+
+#pragma warning(push)
+#pragma warning(disable: _VCRUNTIME_DISABLED_WARNINGS)
+
+// All C headers have a common prologue and epilogue, to enclose the header in
+// an extern "C" declaration when the header is #included in a C++ translation
+// unit and to push/pop the packing.
+#if defined __cplusplus
+
+    #define _CRT_BEGIN_C_HEADER            \
+        __pragma(pack(push, _CRT_PACKING)) \
+        extern "C" {
+
+    #define _CRT_END_C_HEADER \
+        }                     \
+        __pragma(pack(pop))
+
+#elif defined __midl
+
+    #define _CRT_BEGIN_C_HEADER                         \
+        cpp_quote("__pragma(pack(push, _CRT_PACKING))") \
+        cpp_quote("extern \"C\" {")
+
+    #define _CRT_END_C_HEADER            \
+        cpp_quote("}")                   \
+        cpp_quote("__pragma(pack(pop))")
+
+#else
+
+    #define _CRT_BEGIN_C_HEADER            \
+        __pragma(pack(push, _CRT_PACKING))
+
+    #define _CRT_END_C_HEADER \
+        __pragma(pack(pop))
+
+#endif
+
+_CRT_BEGIN_C_HEADER
+
+
+
+#ifndef _HAS_EXCEPTIONS // Predefine as 0 to disable exceptions
+    #ifdef _KERNEL_MODE
+        #define _HAS_EXCEPTIONS 0
+    #else
+        #define _HAS_EXCEPTIONS 1
+    #endif /* _KERNEL_MODE */
+#endif /* _HAS_EXCEPTIONS */
+
+
+
+#define _CRT_STRINGIZE_(x) #x
+#define _CRT_STRINGIZE(x) _CRT_STRINGIZE_(x)
+
+#define _CRT_WIDE_(s) L ## s
+#define _CRT_WIDE(s) _CRT_WIDE_(s)
+
+#define _CRT_CONCATENATE_(a, b) a ## b
+#define _CRT_CONCATENATE(a, b)  _CRT_CONCATENATE_(a, b)
+
+#define _CRT_UNPARENTHESIZE_(...) __VA_ARGS__
+#define _CRT_UNPARENTHESIZE(...)  _CRT_UNPARENTHESIZE_ __VA_ARGS__
+
+#ifndef _VCRTIMP
+    #if defined _CRTIMP && !defined _VCRT_DEFINED_CRTIMP
+        #define _VCRTIMP _CRTIMP
+    #elif defined _VCRT_BUILD && defined CRTDLL && !defined _VCRT_SAT_1
+        #define _VCRTIMP __declspec(dllexport)
+    #else
+        #define _VCRTIMP
+    #endif
+#endif
+
+#ifndef _MRTIMP
+    #if defined MRTDLL && defined _CRTBLD && !defined _M_CEE_PURE
+        #define _MRTIMP __declspec(dllexport)
+    #else
+        #define _MRTIMP
+    #endif
+#endif
+
+// Definitions of calling conventions used code sometimes compiled as managed
+#if defined _M_CEE_PURE || defined MRTDLL
+    #define __CLRCALL_OR_CDECL __clrcall
+    #define __CLR_OR_THIS_CALL __clrcall
+#else
+    #define __CLRCALL_OR_CDECL __cdecl
+    #define __CLR_OR_THIS_CALL
+#endif
+
+#ifdef _M_CEE_PURE
+    #define __CLRCALL_PURE_OR_CDECL __clrcall
+#else
+    #define __CLRCALL_PURE_OR_CDECL __cdecl
+#endif
+
+#define __CRTDECL __CLRCALL_PURE_OR_CDECL
+
+// Definitions of common __declspecs
+#define _VCRT_NOALIAS __declspec(noalias)
+#define _VCRT_RESTRICT __declspec(restrict)
+
+#if !defined _MSC_VER || _MSC_VER >= 1900
+    #define _VCRT_ALLOCATOR __declspec(allocator)
+#else
+    #define _VCRT_ALLOCATOR
+#endif
+
+#if defined _M_CEE && defined _M_X64
+    #define _VCRT_JIT_INTRINSIC __declspec(jitintrinsic)
+#else
+    #define _VCRT_JIT_INTRINSIC
+#endif
+
+#ifdef __midl
+    #define _VCRT_ALIGN(x)
+#else
+    #define _VCRT_ALIGN(x) __declspec(align(x))
+#endif
+
+#ifndef _CONST_RETURN
+    #ifdef __cplusplus
+        #define _CRT_CONST_CORRECT_OVERLOADS
+        #define _CONST_RETURN  const
+    #else
+      #define _CONST_RETURN
+    #endif
+#endif
+
+// For backwards compatibility
+#define _WConst_return _CONST_RETURN
+
+// Definitions of common types
+#ifdef _WIN64
+    typedef unsigned __int64 size_t;
+    typedef __int64          ptrdiff_t;
+    typedef __int64          intptr_t;
+#else
+    typedef unsigned int     size_t;
+    typedef int              ptrdiff_t;
+    typedef int              intptr_t;
+#endif
+
+#if defined __cplusplus
+    typedef bool  __vcrt_bool;
+#elif defined __midl
+    // MIDL understands neither bool nor _Bool.  Use char as a best-fit
+    // replacement (the differences won't matter in practice).
+    typedef char __vcrt_bool;
+#else
+    typedef _Bool __vcrt_bool;
+#endif
+
+// Indicate that these common types are defined
+#ifndef _SIZE_T_DEFINED
+    #define _SIZE_T_DEFINED
+#endif
+
+#ifndef _PTRDIFF_T_DEFINED
+    #define _PTRDIFF_T_DEFINED
+#endif
+
+#ifndef _INTPTR_T_DEFINED
+    #define _INTPTR_T_DEFINED
+#endif
+
+// Provide a typedef for wchar_t for use under /Zc:wchar_t-
+#ifndef _WCHAR_T_DEFINED
+    #define _WCHAR_T_DEFINED
+    typedef unsigned short wchar_t;
+#endif
+
+#ifndef NULL
+    #ifdef __cplusplus
+        #define NULL 0
+    #else
+        #define NULL ((void *)0)
+    #endif
+#endif
+
+#if defined _M_X64 || defined _M_ARM || defined _M_ARM64
+    #define _UNALIGNED __unaligned
+#else
+    #define _UNALIGNED
+#endif
+
+#if defined _M_ARM64EC
+    #define __security_check_cookie __security_check_cookie_arm64ec
+#endif
+
+#ifdef __cplusplus
+    extern "C++"
+    {
+        template <typename _CountofType, size_t _SizeOfArray>
+        char (*__countof_helper(_UNALIGNED _CountofType (&_Array)[_SizeOfArray]))[_SizeOfArray];
+
+        #define __crt_countof(_Array) (sizeof(*__countof_helper(_Array)) + 0)
+    }
+#else
+    #define __crt_countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#endif
+
+#if defined(_M_IX86) && defined(_CRT_LEGACY_X86_FLT_EXCEPTIONS) && !defined(_M_CEE_PURE)
+    #pragma comment(lib, "legacy_x86_flt_exceptions")
+#endif
+
+#if !defined(_HAS_CXX17) && !defined(_HAS_CXX20)
+    #if defined(_MSVC_LANG)
+        #define _STL_LANG _MSVC_LANG
+    #elif defined(__cplusplus) // ^^^ use _MSVC_LANG / use __cplusplus vvv
+        #define _STL_LANG __cplusplus
+    #else  // ^^^ use __cplusplus / no C++ support vvv
+        #define _STL_LANG 0L
+    #endif // ^^^ no C++ support ^^^
+
+    #if _STL_LANG > 201703L
+        #define _HAS_CXX17 1
+        #define _HAS_CXX20 1
+    #elif _STL_LANG > 201402L
+        #define _HAS_CXX17 1
+        #define _HAS_CXX20 0
+    #else // _STL_LANG <= 201402L
+        #define _HAS_CXX17 0
+        #define _HAS_CXX20 0
+    #endif // Use the value of _STL_LANG to define _HAS_CXX17 and _HAS_CXX20
+
+    #undef _STL_LANG
+#endif // !defined(_HAS_CXX17) && !defined(_HAS_CXX20)
+
+#if !defined(_HAS_CXX17) || !defined(_HAS_CXX20) || _HAS_CXX20 && !_HAS_CXX17
+    #error _HAS_CXX17 and _HAS_CXX20 must both be defined, and _HAS_CXX20 must imply _HAS_CXX17
+#endif // Verify _HAS_CXX17 and _HAS_CXX20
+
+// [[nodiscard]] attributes on STL functions
+#ifndef _HAS_NODISCARD
+    #ifndef __has_cpp_attribute
+        #define _HAS_NODISCARD 0
+    #elif __has_cpp_attribute(nodiscard) >= 201603L // TRANSITION, VSO#939899 (need toolset update)
+        #define _HAS_NODISCARD 1
+    #else
+        #define _HAS_NODISCARD 0
+    #endif
+#endif // _HAS_NODISCARD
+
+#if _HAS_NODISCARD
+    #define _NODISCARD [[nodiscard]]
+#else // ^^^ CAN HAZ [[nodiscard]] / NO CAN HAZ [[nodiscard]] vvv
+    #define _NODISCARD
+#endif // _HAS_NODISCARD
+
+// See note on use of "deprecate" at the top of this file
+#define _CRT_DEPRECATE_TEXT(_Text) __declspec(deprecated(_Text))
+
+#if defined _CRT_SECURE_NO_DEPRECATE && !defined _CRT_SECURE_NO_WARNINGS
+    #define _CRT_SECURE_NO_WARNINGS
+#endif
+
+#ifndef _CRT_INSECURE_DEPRECATE
+    #ifdef _CRT_SECURE_NO_WARNINGS
+        #define _CRT_INSECURE_DEPRECATE(_Replacement)
+    #else
+        #define _CRT_INSECURE_DEPRECATE(_Replacement) _CRT_DEPRECATE_TEXT(    \
+            "This function or variable may be unsafe. Consider using "        \
+            #_Replacement                                                     \
+            " instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. " \
+            "See online help for details.")
+    #endif
+#endif
+
+#if defined _CRT_SECURE_DEPRECATE_MEMORY && !defined _CRT_SECURE_WARNINGS_MEMORY
+    #define _CRT_SECURE_WARNINGS_MEMORY
+#endif
+
+#ifndef _CRT_INSECURE_DEPRECATE_MEMORY
+    #ifndef _CRT_SECURE_WARNINGS_MEMORY
+        #define _CRT_INSECURE_DEPRECATE_MEMORY(_Replacement)
+    #else
+        #define _CRT_INSECURE_DEPRECATE_MEMORY(_Replacement) \
+            _CRT_INSECURE_DEPRECATE(_Replacement)
+    #endif
+#endif
+
+#if !defined _M_CEE && !defined __midl
+    void __cdecl __security_init_cookie(void);
+
+    #if defined(_M_IX86)
+        void __fastcall __security_check_cookie(_In_ uintptr_t _StackCookie);
+        __declspec(noreturn) void __cdecl __report_gsfailure(void);
+    #elif defined(_M_ARM64EC)
+        void __cdecl __security_check_cookie_arm64ec(_In_ uintptr_t _StackCookie);
+        __declspec(noreturn) void __cdecl __report_gsfailure(_In_ uintptr_t _StackCookie);
+    #else
+        void __cdecl __security_check_cookie(_In_ uintptr_t _StackCookie);
+        __declspec(noreturn) void __cdecl __report_gsfailure(_In_ uintptr_t _StackCookie);
+    #endif
+#endif
+
+extern uintptr_t __security_cookie;
+
+#ifndef _VCRT_BUILD
+    #define __vcrt_malloc_normal(_Size) malloc(_Size)
+    #define __vcrt_calloc_normal(_Count, _Size) calloc(_Count, _Size)
+    #define __vcrt_free_normal(_Memory) free(_Memory)
+#endif
+
+_CRT_END_C_HEADER
+
+#pragma warning(pop) // _VCRUNTIME_DISABLED_WARNINGS
+
+#endif // _VCRUNTIME_H
+
+#if _VCRT_COMPILER_PREPROCESSOR && !defined(__midl)
+
+#pragma warning(push)
+#pragma warning(disable: _VCRUNTIME_DISABLED_WARNINGS)
+
+#if _VCRT_COMPILER_PREPROCESSOR && !defined(__midl)
+
+#pragma warning(push)
+#pragma warning(disable: _VCRUNTIME_DISABLED_WARNINGS)
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+/*
+** __MACHINE              : everything
+** __MACHINEX86           : x86 only
+** __MACHINEX64           : x64 only
+** __MACHINEX86_X64       : x86 and x64 only
+** __MACHINEARM           : ARM only
+** __MACHINEARM64         : ARM64 only
+** __MACHINEARM_ARM64     : ARM and ARM64 only
+** __MACHINEARM_ARM64_X64 : ARM and 64-bit Arch only
+** __MACHINEARM64_X64     : ARM64 and x64 only
+** __MACHINECHPEX86ARM64  : CHPE x86 on arm64 only
+** __MACHINEWVMPURE       : /clr:pure only
+** __MACHINEZ             : nothing
+*/
+
+#define __MACHINEX86           __MACHINE
+#define __MACHINEX64           __MACHINE
+#define __MACHINEX86_X64       __MACHINE
+#define __MACHINEARM           __MACHINE
+#define __MACHINEARM64         __MACHINE
+#define __MACHINEARM_ARM64     __MACHINE
+#define __MACHINEARM_ARM64_X64 __MACHINE
+#define __MACHINEARM64_X64     __MACHINE
+#define __MACHINECHPEX86ARM64  __MACHINE
+
+/* Most intrinsics not available to pure managed code */
+#if defined(_M_CEE_PURE)
+#define __MACHINE(X)        __MACHINEZ(X)
+#define __MACHINEWVMPURE(X) X;
+#else
+#define __MACHINE(X)        X;
+#define __MACHINEWVMPURE(X) __MACHINEZ(X)
+#endif
+
+#define __MACHINEZ(X)       /* NOTHING */
+
+#if !defined(_M_IX86) || defined(_CHPE_ONLY_)
+#undef __MACHINEX86
+#define __MACHINEX86        __MACHINEZ
+#endif
+
+#if !defined(_M_X64) || defined(_M_ARM64EC)
+#undef __MACHINEX64
+#define __MACHINEX64        __MACHINEZ
+#endif
+
+#if !(defined(_M_IX86) || defined(_M_X64)) || defined(_CHPE_ONLY_) || defined(_M_ARM64EC)
+#undef __MACHINEX86_X64
+#define __MACHINEX86_X64    __MACHINEZ
+#endif
+
+#if !defined(_M_ARM)
+#undef  __MACHINEARM
+#define __MACHINEARM        __MACHINEZ
+#endif
+
+/* For compatibility with <winnt.h>, some intrinsics are __cdecl except on x64 */
+#if defined(_M_X64)
+#define __MACHINECALL_CDECL_OR_DEFAULT
+#else
+#define __MACHINECALL_CDECL_OR_DEFAULT __cdecl
+#endif
+
+#if !defined(_M_ARM64) && !defined(_M_HYBRID_X86_ARM64) && !defined(_M_ARM64EC)
+#undef  __MACHINEARM64
+#define __MACHINEARM64      __MACHINEZ
+#endif
+
+#if !(defined(_M_ARM) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC))
+#undef __MACHINEARM_ARM64
+#define __MACHINEARM_ARM64  __MACHINEZ
+#endif
+
+#if !(defined(_M_ARM) || defined(_M_X64) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC))
+#undef __MACHINEARM_ARM64_X64
+#define __MACHINEARM_ARM64_X64     __MACHINEZ
+#endif
+
+#if !(defined(_M_X64) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC))
+#undef __MACHINEARM64_X64
+#define __MACHINEARM64_X64     __MACHINEZ
+#endif
+
+#if !defined(_M_HYBRID_X86_ARM64)
+#undef __MACHINECHPEX86ARM64
+#define __MACHINECHPEX86ARM64 __MACHINEZ
+#endif
+
+/*******************************************************************
+* Note: New intrinsics should be added here IF AND ONLY IF they're *
+* being used by the C++ Standard Library.                          *
+* OTHERWISE, new intrinsics should be added to intrin.h.           *
+*******************************************************************/
+
+__MACHINEARM_ARM64(void __dmb(unsigned int _Type))
+
+__MACHINE(unsigned char _BitScanForward(unsigned long * _Index, unsigned long _Mask))
+__MACHINEX64(unsigned char _BitScanForward64(unsigned long * _Index, unsigned __int64 _Mask))
+__MACHINEARM64(unsigned char _BitScanForward64(unsigned long * _Index, unsigned __int64 _Mask))
+__MACHINE(unsigned char _BitScanReverse(unsigned long * _Index, unsigned long _Mask))
+__MACHINEX64(unsigned char _BitScanReverse64(unsigned long * _Index, unsigned __int64 _Mask))
+__MACHINEARM64(unsigned char _BitScanReverse64(unsigned long * _Index, unsigned __int64 _Mask))
+__MACHINE(unsigned char _bittest(long const *, long))
+__MACHINEARM_ARM64(unsigned int _CountLeadingZeros(unsigned long))
+__MACHINEARM_ARM64(unsigned int _CountLeadingZeros64(unsigned __int64))
+__MACHINE(long _InterlockedAnd(long volatile * _Value, long _Mask))
+__MACHINE(short _InterlockedAnd16(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedAnd16_acq(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedAnd16_nf(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedAnd16_rel(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedAnd64(__int64 volatile * _Value, __int64 _Mask))
+__MACHINE(__int64 _interlockedand64(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedAnd64_acq(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedAnd64_nf(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedAnd64_rel(__int64 volatile * _Value, __int64 _Mask))
+__MACHINE(char _InterlockedAnd8(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedAnd8_acq(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedAnd8_nf(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedAnd8_rel(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(long _InterlockedAnd_acq(long volatile * _Value, long _Mask))
+__MACHINEARM_ARM64(long _InterlockedAnd_nf(long volatile * _Value, long _Mask))
+__MACHINEARM_ARM64(long _InterlockedAnd_rel(long volatile * _Value, long _Mask))
+__MACHINE(long __MACHINECALL_CDECL_OR_DEFAULT _InterlockedCompareExchange(long volatile * _Destination, long _Exchange, long _Comparand))
+__MACHINEWVMPURE(long _InterlockedCompareExchange(long volatile * _Destination, long _Exchange, long _Comparand))
+__MACHINE(short _InterlockedCompareExchange16(short volatile * _Destination, short _Exchange, short _Comparand))
+__MACHINEARM_ARM64(short _InterlockedCompareExchange16_acq(short volatile * _Destination, short _Exchange, short _Comparand))
+__MACHINEARM_ARM64(short _InterlockedCompareExchange16_nf(short volatile * _Destination, short _Exchange, short _Comparand))
+__MACHINEARM_ARM64(short _InterlockedCompareExchange16_rel(short volatile * _Destination, short _Exchange, short _Comparand))
+__MACHINE(__int64 _InterlockedCompareExchange64(__int64 volatile * _Destination, __int64 _Exchange, __int64 _Comparand))
+__MACHINEARM_ARM64(__int64 _InterlockedCompareExchange64_acq(__int64 volatile * _Destination, __int64 _Exchange, __int64 _Comparand))
+__MACHINEARM_ARM64(__int64 _InterlockedCompareExchange64_nf(__int64 volatile * _Destination, __int64 _Exchange, __int64 _Comparand))
+__MACHINEARM_ARM64(__int64 _InterlockedCompareExchange64_rel(__int64 volatile * _Destination, __int64 _Exchange, __int64 _Comparand))
+__MACHINE(char _InterlockedCompareExchange8(char volatile * _Destination, char _Exchange, char _Comparand))
+__MACHINEARM_ARM64(char _InterlockedCompareExchange8_acq(char volatile * _Destination, char _Exchange, char _Comparand))
+__MACHINEARM_ARM64(char _InterlockedCompareExchange8_nf(char volatile * _Destination, char _Exchange, char _Comparand))
+__MACHINEARM_ARM64(char _InterlockedCompareExchange8_rel(char volatile * _Destination, char _Exchange, char _Comparand))
+__MACHINEARM_ARM64(long _InterlockedCompareExchange_acq(long volatile * _Destination, long _Exchange, long _Comparand))
+__MACHINEARM_ARM64(long _InterlockedCompareExchange_nf(long volatile * _Destination, long _Exchange, long _Comparand))
+__MACHINEARM_ARM64(long _InterlockedCompareExchange_rel(long volatile * _Destination, long _Exchange, long _Comparand))
+__MACHINEARM64_X64(unsigned char _InterlockedCompareExchange128(__int64 volatile * _Destination, __int64 _ExchangeHigh, __int64 _ExchangeLow, __int64 * _ComparandResult))
+__MACHINEARM64(unsigned char _InterlockedCompareExchange128_acq(__int64 volatile * _Destination, __int64 _ExchangeHigh, __int64 _ExchangeLow, __int64 * _ComparandResult))
+__MACHINEARM64(unsigned char _InterlockedCompareExchange128_nf(__int64 volatile * _Destination, __int64 _ExchangeHigh, __int64 _ExchangeLow, __int64 * _ComparandResult))
+__MACHINEARM64(unsigned char _InterlockedCompareExchange128_rel(__int64 volatile * _Destination, __int64 _ExchangeHigh, __int64 _ExchangeLow, __int64 * _ComparandResult))
+__MACHINE(long __MACHINECALL_CDECL_OR_DEFAULT _InterlockedDecrement(long volatile * _Addend))
+__MACHINEWVMPURE(long _InterlockedDecrement(long volatile * _Addend))
+__MACHINE(short _InterlockedDecrement16(short volatile * _Addend))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedDecrement64(__int64 volatile * _Addend))
+__MACHINE(__int64 _interlockeddecrement64(__int64 volatile * _Addend))
+__MACHINE(long __MACHINECALL_CDECL_OR_DEFAULT _InterlockedExchange(long volatile * _Target, long _Value))
+__MACHINEWVMPURE(long __MACHINECALL_CDECL_OR_DEFAULT _InterlockedExchange(long volatile * _Target, long _Value))
+__MACHINE(short _InterlockedExchange16(short volatile * _Target, short _Value))
+__MACHINEARM_ARM64(short _InterlockedExchange16_acq(short volatile * _Target, short _Value))
+__MACHINEARM_ARM64(short _InterlockedExchange16_nf(short volatile * _Target, short _Value))
+__MACHINEARM_ARM64(short _InterlockedExchange16_rel(short volatile * _Target, short _Value))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedExchange64(__int64 volatile * _Target, __int64 _Value))
+__MACHINE(__int64 _interlockedexchange64(__int64 volatile * _Target, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedExchange64_acq(__int64 volatile * _Target, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedExchange64_nf(__int64 volatile * _Target, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedExchange64_rel(__int64 volatile * _Target, __int64 _Value))
+__MACHINE(char _InterlockedExchange8(char volatile * _Target, char _Value))
+__MACHINEARM_ARM64(char _InterlockedExchange8_acq(char volatile * _Target, char _Value))
+__MACHINEARM_ARM64(char _InterlockedExchange8_nf(char volatile * _Target, char _Value))
+__MACHINEARM_ARM64(char _InterlockedExchange8_rel(char volatile * _Target, char _Value))
+__MACHINE(long __MACHINECALL_CDECL_OR_DEFAULT _InterlockedExchangeAdd(long volatile * _Addend, long _Value))
+__MACHINE(short _InterlockedExchangeAdd16(short volatile * _Addend, short _Value))
+__MACHINEARM_ARM64(short _InterlockedExchangeAdd16_acq(short volatile * _Addend, short _Value))
+__MACHINEARM_ARM64(short _InterlockedExchangeAdd16_nf(short volatile * _Addend, short _Value))
+__MACHINEARM_ARM64(short _InterlockedExchangeAdd16_rel(short volatile * _Addend, short _Value))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedExchangeAdd64(__int64 volatile * _Addend, __int64 _Value))
+__MACHINE(__int64 _interlockedexchangeadd64(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedExchangeAdd64_acq(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedExchangeAdd64_nf(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedExchangeAdd64_rel(__int64 volatile * _Addend, __int64 _Value))
+__MACHINE(char _InterlockedExchangeAdd8(char volatile * _Addend, char _Value))
+__MACHINEARM_ARM64(char _InterlockedExchangeAdd8_acq(char volatile * _Addend, char _Value))
+__MACHINEARM_ARM64(char _InterlockedExchangeAdd8_nf(char volatile * _Addend, char _Value))
+__MACHINEARM_ARM64(char _InterlockedExchangeAdd8_rel(char volatile * _Addend, char _Value))
+__MACHINEARM_ARM64(long _InterlockedExchangeAdd_acq(long volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(long _InterlockedExchangeAdd_nf(long volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(long _InterlockedExchangeAdd_rel(long volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(long _InterlockedExchange_acq(long volatile * _Target, long _Value))
+__MACHINEARM_ARM64(long _InterlockedExchange_nf(long volatile * _Target, long _Value))
+__MACHINEARM_ARM64(long _InterlockedExchange_rel(long volatile * _Target, long _Value))
+__MACHINE(long __MACHINECALL_CDECL_OR_DEFAULT _InterlockedIncrement(long volatile * _Addend))
+__MACHINEWVMPURE(long _InterlockedIncrement(long volatile * _Addend))
+__MACHINE(short _InterlockedIncrement16(short volatile * _Addend))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedIncrement64(__int64 volatile * _Addend))
+__MACHINE(__int64 _interlockedincrement64(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(long _InterlockedIncrement_nf(long volatile * _Addend))
+__MACHINE(long _InterlockedOr(long volatile * _Value, long _Mask))
+__MACHINE(short _InterlockedOr16(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedOr16_acq(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedOr16_nf(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedOr16_rel(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedOr64(__int64 volatile * _Value, __int64 _Mask))
+__MACHINE(__int64 _interlockedor64(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedOr64_acq(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedOr64_nf(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedOr64_rel(__int64 volatile * _Value, __int64 _Mask))
+__MACHINE(char _InterlockedOr8(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedOr8_acq(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedOr8_nf(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedOr8_rel(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(long _InterlockedOr_acq(long volatile * _Value, long _Mask))
+__MACHINEARM_ARM64(long _InterlockedOr_nf(long volatile * _Value, long _Mask))
+__MACHINEARM_ARM64(long _InterlockedOr_rel(long volatile * _Value, long _Mask))
+__MACHINE(long _InterlockedXor(long volatile * _Value, long _Mask))
+__MACHINE(short _InterlockedXor16(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedXor16_acq(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedXor16_nf(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64(short _InterlockedXor16_rel(short volatile * _Value, short _Mask))
+__MACHINEARM_ARM64_X64(__int64 _InterlockedXor64(__int64 volatile * _Value, __int64 _Mask))
+__MACHINE(__int64 _interlockedxor64(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedXor64_acq(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedXor64_nf(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEARM_ARM64(__int64 _InterlockedXor64_rel(__int64 volatile * _Value, __int64 _Mask))
+__MACHINE(char _InterlockedXor8(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedXor8_acq(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedXor8_nf(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(char _InterlockedXor8_rel(char volatile * _Value, char _Mask))
+__MACHINEARM_ARM64(long _InterlockedXor_acq(long volatile * _Value, long _Mask))
+__MACHINEARM_ARM64(long _InterlockedXor_nf(long volatile * _Value, long _Mask))
+__MACHINEARM_ARM64(long _InterlockedXor_rel(long volatile * _Value, long _Mask))
+__MACHINE(void _ReadWriteBarrier(void))
+__MACHINE(__int16 __iso_volatile_load16(const volatile __int16 *))
+__MACHINE(__int32 __iso_volatile_load32(const volatile __int32 *))
+__MACHINE(__int64 __iso_volatile_load64(const volatile __int64 *))
+__MACHINE(__int8 __iso_volatile_load8(const volatile __int8 *))
+__MACHINE(void __iso_volatile_store16(volatile __int16 *, __int16))
+__MACHINE(void __iso_volatile_store32(volatile __int32 *, __int32))
+__MACHINE(void __iso_volatile_store64(volatile __int64 *, __int64))
+__MACHINE(void __iso_volatile_store8(volatile __int8 *, __int8))
+__MACHINEARM(__int64 __ldrexd(const volatile __int64 *))
+__MACHINEARM_ARM64(void __yield(void))
+__MACHINE(unsigned char _interlockedbittestandset(long volatile *, long))
+__MACHINEARM_ARM64(unsigned char _interlockedbittestandset_acq(long volatile *, long))
+__MACHINEARM_ARM64(unsigned char _interlockedbittestandset_nf(long volatile *, long))
+__MACHINEARM_ARM64(unsigned char _interlockedbittestandset_rel(long volatile *, long))
+__MACHINEX86_X64(void _mm_pause(void))
+__MACHINEX86_X64(unsigned int __lzcnt(unsigned int))
+__MACHINEX86_X64(unsigned short __lzcnt16(unsigned short))
+__MACHINEX64(unsigned __int64 __lzcnt64(unsigned __int64))
+__MACHINEX86_X64(unsigned int __popcnt(unsigned int))
+__MACHINEX86_X64(unsigned short __popcnt16(unsigned short))
+__MACHINEX64(unsigned __int64 __popcnt64(unsigned __int64))
+__MACHINEX64(unsigned __int64 __shiftright128(unsigned __int64 _LowPart, unsigned __int64 _HighPart, unsigned char _Shift))
+#ifndef __clang__
+__MACHINEX86_X64(unsigned int _tzcnt_u32(unsigned int))
+__MACHINEX64(unsigned __int64 _tzcnt_u64(unsigned __int64))
+#endif // __clang__
+__MACHINEX64(unsigned __int64 _umul128(unsigned __int64 _Multiplier, unsigned __int64 _Multiplicand, unsigned __int64 * _HighProduct))
+__MACHINE(double __ceil(double))
+__MACHINE(float __ceilf(float))
+__MACHINE(double __floor(double))
+__MACHINE(float __floorf(float))
+__MACHINE(double __round(double))
+__MACHINE(float __roundf(float))
+__MACHINE(double __trunc(double))
+__MACHINE(float __truncf(float))
+__MACHINE(double __copysign(double, double))
+__MACHINE(float __copysignf(float, float))
+__MACHINE(unsigned __signbitvalue(double))
+__MACHINE(unsigned __signbitvaluef(float))
+__MACHINEX86_X64(int _cvt_ftoi_sat (float a))
+__MACHINEX86_X64(unsigned _cvt_ftoui_sat (float a))
+__MACHINEX86_X64(long long _cvt_ftoll_sat (float a))
+__MACHINEX86_X64(unsigned long long _cvt_ftoull_sat (float a))
+__MACHINEX86_X64(int _cvt_ftoi_sent (float a))
+__MACHINEX86_X64(unsigned _cvt_ftoui_sent (float a))
+__MACHINEX86_X64(long long _cvt_ftoll_sent (float a))
+__MACHINEX86_X64(unsigned long long _cvt_ftoull_sent (float a))
+__MACHINEX86_X64(int _cvt_dtoi_sat (double a))
+__MACHINEX86_X64(unsigned _cvt_dtoui_sat (double a))
+__MACHINEX86_X64(long long _cvt_dtoll_sat (double a))
+__MACHINEX86_X64(unsigned long long _cvt_dtoull_sat (double a))
+__MACHINEX86_X64(int _cvt_dtoi_sent (double a))
+__MACHINEX86_X64(unsigned _cvt_dtoui_sent (double a))
+__MACHINEX86_X64(long long _cvt_dtoll_sent (double a))
+__MACHINEX86_X64(unsigned long long _cvt_dtoull_sent (double a))
+#if defined(__cplusplus)
+#if !defined(__clang__) && !defined(__EDG__) && !defined(__CUDACC__)
+__MACHINE(constexpr void * __cdecl __builtin_assume_aligned(const void *, size_t, ...) noexcept)
+#else
+__MACHINE(void * __cdecl __builtin_assume_aligned(const void *, size_t, ...) noexcept)
+#endif // !defined(__clang__) && !defined(__EDG__) && !defined(__CUDACC__)
+#endif // defined(__cplusplus)
+
+/*******************************************************************
+* Note: New intrinsics should be added here IF AND ONLY IF they're *
+* being used by the C++ Standard Library.                          *
+* OTHERWISE, new intrinsics should be added to intrin.h.           *
+*******************************************************************/
+
+#if defined(__cplusplus)
+}
+#endif
+#pragma warning(pop) // _VCRUNTIME_DISABLED_WARNINGS
+#endif /* _VCRT_COMPILER_PREPROCESSOR && !defined(__midl) */
+
+#ifdef _M_CEE
+    // The reason why simple setjmp won't work here is that there may
+    // be case when CLR stubs are on the stack e.g. function call just
+    // after jitting, and not unwinding CLR will result in bad state of
+    // CLR which then can AV or do something very bad.
+    #include <setjmpex.h>
+#endif
+
+#pragma warning(push)
+#pragma warning(disable: _VCRUNTIME_DISABLED_WARNINGS)
+
+_CRT_BEGIN_C_HEADER
+
+
+
+// Definitions specific to particular setjmp implementations.
+#if defined _M_IX86
+
+    #define _JBLEN  16
+    #define _JBTYPE int
+
+    typedef struct __JUMP_BUFFER
+    {
+        unsigned long Ebp;
+        unsigned long Ebx;
+        unsigned long Edi;
+        unsigned long Esi;
+        unsigned long Esp;
+        unsigned long Eip;
+        unsigned long Registration;
+        unsigned long TryLevel;
+        unsigned long Cookie;
+        unsigned long UnwindFunc;
+        unsigned long UnwindData[6];
+    } _JUMP_BUFFER;
+
+#elif defined _M_X64
+
+    typedef struct _VCRT_ALIGN(16) _SETJMP_FLOAT128
+    {
+        unsigned __int64 Part[2];
+    } SETJMP_FLOAT128;
+
+    #define _JBLEN  16
+    typedef SETJMP_FLOAT128 _JBTYPE;
+
+    typedef struct _JUMP_BUFFER
+    {
+        unsigned __int64 Frame;
+        unsigned __int64 Rbx;
+        unsigned __int64 Rsp;
+        unsigned __int64 Rbp;
+        unsigned __int64 Rsi;
+        unsigned __int64 Rdi;
+        unsigned __int64 R12;
+        unsigned __int64 R13;
+        unsigned __int64 R14;
+        unsigned __int64 R15;
+        unsigned __int64 Rip;
+        unsigned long MxCsr;
+        unsigned short FpCsr;
+        unsigned short Spare;
+
+        SETJMP_FLOAT128 Xmm6;
+        SETJMP_FLOAT128 Xmm7;
+        SETJMP_FLOAT128 Xmm8;
+        SETJMP_FLOAT128 Xmm9;
+        SETJMP_FLOAT128 Xmm10;
+        SETJMP_FLOAT128 Xmm11;
+        SETJMP_FLOAT128 Xmm12;
+        SETJMP_FLOAT128 Xmm13;
+        SETJMP_FLOAT128 Xmm14;
+        SETJMP_FLOAT128 Xmm15;
+    } _JUMP_BUFFER;
+
+#elif defined _M_ARM
+
+    #define _JBLEN  28
+    #define _JBTYPE int
+
+    typedef struct _JUMP_BUFFER
+    {
+        unsigned long Frame;
+
+        unsigned long R4;
+        unsigned long R5;
+        unsigned long R6;
+        unsigned long R7;
+        unsigned long R8;
+        unsigned long R9;
+        unsigned long R10;
+        unsigned long R11;
+
+        unsigned long Sp;
+        unsigned long Pc;
+        unsigned long Fpscr;
+        unsigned long long D[8]; // D8-D15 VFP/NEON regs
+    } _JUMP_BUFFER;
+
+#elif defined _M_ARM64
+
+    #define _JBLEN  24
+    #define _JBTYPE unsigned __int64
+
+    typedef struct _JUMP_BUFFER {
+        unsigned __int64 Frame;
+        unsigned __int64 Reserved;
+        unsigned __int64 X19;   // x19 -- x28: callee saved registers
+        unsigned __int64 X20;
+        unsigned __int64 X21;
+        unsigned __int64 X22;
+        unsigned __int64 X23;
+        unsigned __int64 X24;
+        unsigned __int64 X25;
+        unsigned __int64 X26;
+        unsigned __int64 X27;
+        unsigned __int64 X28;
+        unsigned __int64 Fp;    // x29 frame pointer
+        unsigned __int64 Lr;    // x30 link register
+        unsigned __int64 Sp;    // x31 stack pointer
+        unsigned __int32 Fpcr;  // fp control register
+        unsigned __int32 Fpsr;  // fp status register
+
+        double D[8]; // D8-D15 FP regs
+    } _JUMP_BUFFER;
+
+
+
+#endif
+
+
+
+// Define the buffer type for holding the state information
+#ifndef _JMP_BUF_DEFINED
+    #define _JMP_BUF_DEFINED
+    typedef _JBTYPE jmp_buf[_JBLEN];
+#endif
+
+
+
+#ifndef _INC_SETJMPEX
+    #define setjmp _setjmp
+#endif
+
+
+
+// Function prototypes
+int __cdecl setjmp(
+    _Out_ jmp_buf _Buf
+    );
+
+#ifdef __cplusplus
+    __declspec(noreturn) void __cdecl longjmp(
+        _In_reads_(_JBLEN) jmp_buf _Buf,
+        _In_ int     _Value
+        ) noexcept(false);
+#else
+    __declspec(noreturn) void __cdecl longjmp(
+        _In_reads_(_JBLEN) jmp_buf _Buf,
+        _In_ int     _Value
+        );
+#endif
+
+
+_CRT_END_C_HEADER
+
+#pragma warning(pop) // _VCRUNTIME_DISABLED_WARNINGS
+
+#if defined (_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC)
+#include <stdint.h> // uint8_t
+#endif
+
+#ifndef _M_CEE_PURE
+
+    #if (defined (_M_IX86) || defined (_M_X64)) && !defined(_CHPE_ONLY_) && (!defined(_M_ARM64EC) || !defined(_DISABLE_SOFTINTRIN_))
+        #include <immintrin.h>
+        #include <ammintrin.h>
+    #endif
+
+    #if defined (_M_IX86) && !defined(_CHPE_ONLY_)
+        #include <mm3dnow.h>
+    #endif
+
+    #if defined (_M_ARM)
+        #include <armintr.h>
+        #include <arm_neon.h>
+    #endif
+
+    #if defined (_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC)
+        #include <arm64intr.h>
+        #include <arm64_neon.h>
+    #endif
+#endif
+
+#if defined (__cplusplus)
+extern "C" {
+#endif  /* defined (__cplusplus) */
+
+__MACHINEARM(int _AddSatInt(int, int))
+__MACHINE(void * _AddressOfReturnAddress(void))
+__MACHINEARM_ARM64(double _CopyDoubleFromInt64(__int64))
+__MACHINEARM_ARM64(float _CopyFloatFromInt32(__int32))
+__MACHINEARM_ARM64(__int32 _CopyInt32FromFloat(float))
+__MACHINEARM_ARM64(__int64 _CopyInt64FromDouble(double))
+__MACHINEARM_ARM64(unsigned int _CountLeadingOnes(unsigned long))
+__MACHINEARM_ARM64(unsigned int _CountLeadingOnes64(unsigned __int64))
+__MACHINEARM_ARM64(unsigned int _CountLeadingSigns(long))
+__MACHINEARM_ARM64(unsigned int _CountLeadingSigns64(__int64))
+__MACHINEARM(unsigned int _CountOneBits(unsigned long))
+__MACHINEARM(unsigned int _CountOneBits64(unsigned __int64))
+__MACHINEARM(int _DAddSatInt(int, int))
+__MACHINEARM(int _DSubSatInt(int, int))
+__MACHINECHPEX86ARM64(void _HybridGenerateThunks(void *, unsigned))
+__MACHINEARM_ARM64(long _InterlockedAdd(long volatile * _Addend, long _Value))
+__MACHINE(long _interlockedadd(long volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedAdd64(__int64 volatile * _Addend, __int64 _Value))
+__MACHINE(__int64 _interlockedadd64(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedAdd64_acq(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedAdd64_nf(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEARM_ARM64(__int64 _InterlockedAdd64_rel(__int64 volatile * _Addend, __int64 _Value))
+__MACHINEX86(long _InterlockedAddLargeStatistic(__int64 volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(long _InterlockedAdd_acq(long volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(long _InterlockedAdd_nf(long volatile * _Addend, long _Value))
+__MACHINEARM_ARM64(long _InterlockedAdd_rel(long volatile * _Addend, long _Value))
+__MACHINEX64(short _InterlockedAnd16_np(short volatile * _Value, short _Mask))
+__MACHINEX64(__int64 _InterlockedAnd64_np(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEX64(char _InterlockedAnd8_np(char volatile * _Value, char _Mask))
+__MACHINEX64(long _InterlockedAnd_np(long volatile * _Value, long _Mask))
+__MACHINEX64(unsigned char _InterlockedCompareExchange128_np(__int64 volatile * _Destination, __int64 _ExchangeHigh, __int64 _ExchangeLow, __int64 * _ComparandResult))
+__MACHINEX64(short _InterlockedCompareExchange16_np(short volatile * _Destination, short _Exchange, short _Comparand))
+__MACHINEX64(__int64 _InterlockedCompareExchange64_np(__int64 volatile * _Destination, __int64 _Exchange, __int64 _Comparand))
+__MACHINE(void * _InterlockedCompareExchangePointer(void * volatile * _Destination, void * _Exchange, void * _Comparand))
+__MACHINEARM_ARM64(void * _InterlockedCompareExchangePointer_acq(void * volatile * _Destination, void * _Exchange, void * _Comparand))
+__MACHINEARM_ARM64(void * _InterlockedCompareExchangePointer_nf(void * volatile * _Destination, void * _Exchange, void * _Comparand))
+__MACHINEX64(void * _InterlockedCompareExchangePointer_np(void * volatile * _Destination, void * _Exchange, void * _Comparand))
+__MACHINEARM_ARM64(void * _InterlockedCompareExchangePointer_rel(void * volatile * _Destination, void * _Exchange, void * _Comparand))
+__MACHINEX64(long _InterlockedCompareExchange_np(long volatile * _Destination, long _Exchange, long _Comparand))
+__MACHINEARM_ARM64(short _InterlockedDecrement16_acq(short volatile * _Addend))
+__MACHINEARM_ARM64(short _InterlockedDecrement16_nf(short volatile * _Addend))
+__MACHINEARM_ARM64(short _InterlockedDecrement16_rel(short volatile * _Addend))
+__MACHINEARM_ARM64(__int64 _InterlockedDecrement64_acq(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(__int64 _InterlockedDecrement64_nf(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(__int64 _InterlockedDecrement64_rel(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(long _InterlockedDecrement_acq(long volatile * _Addend))
+__MACHINEARM_ARM64(long _InterlockedDecrement_nf(long volatile * _Addend))
+__MACHINEARM_ARM64(long _InterlockedDecrement_rel(long volatile * _Addend))
+__MACHINE(void * _InterlockedExchangePointer(void * volatile * _Target, void * _Value))
+__MACHINEARM_ARM64(void * _InterlockedExchangePointer_acq(void * volatile * _Target, void * _Value))
+__MACHINEARM_ARM64(void * _InterlockedExchangePointer_nf(void * volatile * _Target, void * _Value))
+__MACHINEARM_ARM64(void * _InterlockedExchangePointer_rel(void * volatile * _Target, void * _Value))
+__MACHINEARM_ARM64(short _InterlockedIncrement16_acq(short volatile * _Addend))
+__MACHINEARM_ARM64(short _InterlockedIncrement16_nf(short volatile * _Addend))
+__MACHINEARM_ARM64(short _InterlockedIncrement16_rel(short volatile * _Addend))
+__MACHINEARM_ARM64(__int64 _InterlockedIncrement64_acq(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(__int64 _InterlockedIncrement64_nf(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(__int64 _InterlockedIncrement64_rel(__int64 volatile * _Addend))
+__MACHINEARM_ARM64(long _InterlockedIncrement_acq(long volatile * _Addend))
+__MACHINEARM_ARM64(long _InterlockedIncrement_rel(long volatile * _Addend))
+__MACHINEX64(short _InterlockedOr16_np(short volatile * _Value, short _Mask))
+__MACHINEX64(__int64 _InterlockedOr64_np(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEX64(char _InterlockedOr8_np(char volatile * _Value, char _Mask))
+__MACHINEX64(long _InterlockedOr_np(long volatile * _Value, long _Mask))
+__MACHINEX64(short _InterlockedXor16_np(short volatile * _Value, short _Mask))
+__MACHINEX64(__int64 _InterlockedXor64_np(__int64 volatile * _Value, __int64 _Mask))
+__MACHINEX64(char _InterlockedXor8_np(char volatile * _Value, char _Mask))
+__MACHINEX64(long _InterlockedXor_np(long volatile * _Value, long _Mask))
+__MACHINEARM(unsigned int _MoveFromCoprocessor(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int))
+__MACHINEARM(unsigned int _MoveFromCoprocessor2(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int))
+__MACHINEARM(unsigned __int64 _MoveFromCoprocessor64(unsigned int, unsigned int, unsigned int))
+__MACHINEARM(void _MoveToCoprocessor(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int))
+__MACHINEARM(void _MoveToCoprocessor2(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int))
+__MACHINEARM(void _MoveToCoprocessor64(unsigned __int64, unsigned int, unsigned int, unsigned int))
+__MACHINEARM(long _MulHigh(long, long))
+__MACHINEARM(unsigned long _MulUnsignedHigh(unsigned long, unsigned long))
+__MACHINE(void _ReadBarrier(void))
+__MACHINEARM(int _ReadStatusReg(int))
+__MACHINEARM64(__int64 _ReadStatusReg(int))
+__MACHINEARM64(unsigned __int64 __getReg(int))
+__MACHINEARM64(unsigned __int64 __getCallerReg(int))
+__MACHINEARM64(double __getRegFp(int))
+__MACHINEARM64(double __getCallerRegFp(int))
+__MACHINE(void * _ReturnAddress(void))
+__MACHINEARM(int _SubSatInt(int, int))
+__MACHINE(void _WriteBarrier(void))
+__MACHINEARM(void _WriteStatusReg(int, int, int))
+__MACHINEARM64(void _WriteStatusReg(int, __int64))
+__MACHINEARM64(void __setReg(int, unsigned __int64))
+__MACHINEARM64(void __setCallerReg(int, unsigned __int64))
+__MACHINEARM64(void __setRegFp(int, double))
+__MACHINEARM64(void __setCallerRegFp(int, double))
+__MACHINEX86(void __addfsbyte(unsigned long, unsigned char))
+__MACHINEX86(void __addfsdword(unsigned long, unsigned long))
+__MACHINEX86(void __addfsword(unsigned long, unsigned short))
+__MACHINEX64(void __addgsbyte(unsigned long, unsigned char))
+__MACHINEX64(void __addgsdword(unsigned long, unsigned long))
+__MACHINEX64(void __addgsqword(unsigned long, unsigned __int64))
+__MACHINEX64(void __addgsword(unsigned long, unsigned short))
+__MACHINEARM64(void __addx18byte(unsigned long, unsigned char))
+__MACHINEARM64(void __addx18dword(unsigned long, unsigned long))
+__MACHINEARM64(void __addx18qword(unsigned long, unsigned __int64))
+__MACHINEARM64(void __addx18word(unsigned long, unsigned short))
+__MACHINEX86_X64(void __clts(void))
+__MACHINE(void __code_seg(const char *))
+__MACHINEX86_X64(void __cpuid(int[4], int))
+__MACHINEX86_X64(void __cpuidex(int[4], int, int))
+__MACHINE(void __cdecl __debugbreak(void))
+__MACHINEARM_ARM64(void __emit(unsigned __int32))
+__MACHINEX86_X64(__int64 __emul(int, int))
+__MACHINEX86_X64(unsigned __int64 __emulu(unsigned int, unsigned int))
+__MACHINE(__declspec(noreturn) void __fastfail(unsigned int))
+__MACHINEX64(void __faststorefence(void))
+__MACHINEX86_X64(unsigned int __getcallerseflags(void))
+__MACHINEX86_X64(void __halt(void))
+__MACHINEARM_ARM64(unsigned int __hvc(unsigned int, ...))
+__MACHINEARM64(void __break(int))
+__MACHINEX86_X64(unsigned char __inbyte(unsigned short))
+__MACHINEX86_X64(void __inbytestring(unsigned short, unsigned char *, unsigned long))
+__MACHINEX86(void __incfsbyte(unsigned long))
+__MACHINEX86(void __incfsdword(unsigned long))
+__MACHINEX86(void __incfsword(unsigned long))
+__MACHINEX64(void __incgsbyte(unsigned long))
+__MACHINEX64(void __incgsdword(unsigned long))
+__MACHINEX64(void __incgsqword(unsigned long))
+__MACHINEX64(void __incgsword(unsigned long))
+__MACHINEARM64(void __incx18byte(unsigned long))
+__MACHINEARM64(void __incx18dword(unsigned long))
+__MACHINEARM64(void __incx18qword(unsigned long))
+__MACHINEARM64(void __incx18word(unsigned long))
+__MACHINEX86_X64(unsigned long __indword(unsigned short))
+__MACHINEX86_X64(void __indwordstring(unsigned short, unsigned long *, unsigned long))
+__MACHINEX86_X64(void __int2c(void))
+__MACHINEX86_X64(void __invlpg(void *))
+__MACHINEX86_X64(unsigned short __inword(unsigned short))
+__MACHINEX86_X64(void __inwordstring(unsigned short, unsigned short *, unsigned long))
+__MACHINEX86_X64(void __lidt(void *))
+__MACHINEX86_X64(unsigned __int64 __ll_lshift(unsigned __int64, int))
+__MACHINEX86_X64(__int64 __ll_rshift(__int64, int))
+__MACHINEX86_X64(void __movsb(unsigned char *, unsigned char const *, size_t))
+__MACHINEX86_X64(void __movsd(unsigned long *, unsigned long const *, size_t))
+__MACHINEX64(void __movsq(unsigned long long *, unsigned long long const *, size_t))
+__MACHINEX86_X64(void __movsw(unsigned short *, unsigned short const *, size_t))
+__MACHINEARM64_X64(__int64 __mulh(__int64, __int64))
+__MACHINE(void __nop(void))
+__MACHINEX86_X64(void __nvreg_restore_fence(void))
+__MACHINEX86_X64(void __nvreg_save_fence(void))
+__MACHINEX86_X64(void __outbyte(unsigned short, unsigned char))
+__MACHINEX86_X64(void __outbytestring(unsigned short, unsigned char *, unsigned long))
+__MACHINEX86_X64(void __outdword(unsigned short, unsigned long))
+__MACHINEX86_X64(void __outdwordstring(unsigned short, unsigned long *, unsigned long))
+__MACHINEX86_X64(void __outword(unsigned short, unsigned short))
+__MACHINEX86_X64(void __outwordstring(unsigned short, unsigned short *, unsigned long))
+__MACHINEARM_ARM64(void __cdecl __prefetch(const void *))
+__MACHINEARM64(void __cdecl __prefetch2(const void *, uint8_t prfop))
+__MACHINEARM(void __cdecl __prefetchw(const void *))
+__MACHINEARM(unsigned __int64 __rdpmccntr64(void))
+__MACHINEX86_X64(unsigned __int64 __rdtsc(void))
+__MACHINEX86_X64(unsigned __int64 __rdtscp(unsigned int *))
+__MACHINEX64(unsigned __int64 __readcr0(void))
+__MACHINEX86(unsigned long __readcr0(void))
+__MACHINEX64(unsigned __int64 __readcr2(void))
+__MACHINEX86(unsigned long __readcr2(void))
+__MACHINEX64(unsigned __int64 __readcr3(void))
+__MACHINEX86(unsigned long __readcr3(void))
+__MACHINEX64(unsigned __int64 __readcr4(void))
+__MACHINEX86(unsigned long __readcr4(void))
+__MACHINEX64(unsigned __int64 __readcr8(void))
+__MACHINEX86(unsigned long __readcr8(void))
+__MACHINEX64(unsigned __int64 __readdr(unsigned int))
+__MACHINEX86(unsigned int __readdr(unsigned int))
+__MACHINEX64(unsigned __int64 __readeflags(void))
+__MACHINEX86(unsigned int __readeflags(void))
+__MACHINEX86(unsigned char __readfsbyte(unsigned long))
+__MACHINEX86(unsigned long __readfsdword(unsigned long))
+__MACHINEX86(unsigned __int64 __readfsqword(unsigned long))
+__MACHINEX86(unsigned short __readfsword(unsigned long))
+__MACHINEX64(unsigned char __readgsbyte(unsigned long))
+__MACHINEX64(unsigned long __readgsdword(unsigned long))
+__MACHINEX64(unsigned __int64 __readgsqword(unsigned long))
+__MACHINEX64(unsigned short __readgsword(unsigned long))
+__MACHINEX86_X64(unsigned __int64 __readmsr(unsigned long))
+__MACHINEX86_X64(unsigned __int64 __readpmc(unsigned long))
+__MACHINEARM64(unsigned char __readx18byte(unsigned long))
+__MACHINEARM64(unsigned long __readx18dword(unsigned long))
+__MACHINEARM64(unsigned __int64 __readx18qword(unsigned long))
+__MACHINEARM64(unsigned short __readx18word(unsigned long))
+__MACHINEX86_X64(unsigned long __segmentlimit(unsigned long))
+__MACHINEARM_ARM64(void __sev(void))
+__MACHINEX64(unsigned __int64 __shiftleft128(unsigned __int64 _LowPart, unsigned __int64 _HighPart, unsigned char _Shift))
+__MACHINEX86_X64(void __sidt(void *))
+__MACHINEARM_ARM64(void __static_assert(int, const char *))
+__MACHINEX86_X64(void __stosb(unsigned char *, unsigned char, size_t))
+__MACHINEX86_X64(void __stosd(unsigned long *, unsigned long, size_t))
+__MACHINEX64(void __stosq(unsigned __int64 *, unsigned __int64, size_t))
+__MACHINEX86_X64(void __stosw(unsigned short *, unsigned short, size_t))
+__MACHINEX86_X64(void __svm_clgi(void))
+__MACHINEX86_X64(void __svm_invlpga(void *, int))
+__MACHINEX86_X64(void __svm_skinit(int))
+__MACHINEX86_X64(void __svm_stgi(void))
+__MACHINEX86_X64(void __svm_vmload(size_t))
+__MACHINEX86_X64(void __svm_vmrun(size_t))
+__MACHINEX86_X64(void __svm_vmsave(size_t))
+__MACHINEARM(unsigned int __swi(unsigned int, ...))
+__MACHINEARM_ARM64(unsigned int __svc(unsigned int, ...))
+__MACHINEARM64(unsigned int __hlt(unsigned int, ...))
+__MACHINEARM64(unsigned int __sys(int, __int64))
+__MACHINEARM(int __trap(int, ...))
+__MACHINEX86_X64(void __ud2(void))
+__MACHINEX86_X64(unsigned __int64 __ull_rshift(unsigned __int64, int))
+__MACHINEARM64_X64(unsigned __int64 __umulh(unsigned __int64, unsigned __int64))
+__MACHINEX86_X64(void __vmx_off(void))
+__MACHINEX64(unsigned char __vmx_on(unsigned __int64 *))
+__MACHINEX64(unsigned char __vmx_vmclear(unsigned __int64 *))
+__MACHINEX64(unsigned char __vmx_vmlaunch(void))
+__MACHINEX64(unsigned char __vmx_vmptrld(unsigned __int64 *))
+__MACHINEX86_X64(void __vmx_vmptrst(unsigned __int64 *))
+__MACHINEX64(unsigned char __vmx_vmread(size_t, size_t *))
+__MACHINEX64(unsigned char __vmx_vmresume(void))
+__MACHINEX64(unsigned char __vmx_vmwrite(size_t, size_t))
+__MACHINEX86_X64(void __wbinvd(void))
+__MACHINEARM_ARM64(void __wfe(void))
+__MACHINEARM_ARM64(void __wfi(void))
+__MACHINEX64(void __writecr0(unsigned __int64))
+__MACHINEX86(void __writecr0(unsigned int))
+__MACHINEX64(void __writecr2(unsigned __int64))
+__MACHINEX86(void __writecr2(unsigned int))
+__MACHINEX64(void __writecr3(unsigned __int64))
+__MACHINEX86(void __writecr3(unsigned int))
+__MACHINEX64(void __writecr4(unsigned __int64))
+__MACHINEX86(void __writecr4(unsigned int))
+__MACHINEX64(void __writecr8(unsigned __int64))
+__MACHINEX86(void __writecr8(unsigned int))
+__MACHINEX64(void __writedr(unsigned int, unsigned __int64))
+__MACHINEX86(void __writedr(unsigned int, unsigned int))
+__MACHINEX64(void __writeeflags(unsigned __int64))
+__MACHINEX86(void __writeeflags(unsigned int))
+__MACHINEX86(void __writefsbyte(unsigned long, unsigned char))
+__MACHINEX86(void __writefsdword(unsigned long, unsigned long))
+__MACHINEX86(void __writefsqword(unsigned long, unsigned __int64))
+__MACHINEX86(void __writefsword(unsigned long, unsigned short))
+__MACHINEX64(void __writegsbyte(unsigned long, unsigned char))
+__MACHINEX64(void __writegsdword(unsigned long, unsigned long))
+__MACHINEX64(void __writegsqword(unsigned long, unsigned __int64))
+__MACHINEX64(void __writegsword(unsigned long, unsigned short))
+__MACHINEX86_X64(void __writemsr(unsigned long, unsigned __int64))
+__MACHINEARM64(void __writex18byte(unsigned long, unsigned char))
+__MACHINEARM64(void __writex18dword(unsigned long, unsigned long))
+__MACHINEARM64(void __writex18qword(unsigned long, unsigned __int64))
+__MACHINEARM64(void __writex18word(unsigned long, unsigned short))
+__MACHINEARM64_X64(unsigned char _bittest64(__int64 const *, __int64))
+__MACHINE(unsigned char _bittestandcomplement(long *, long))
+__MACHINEARM64_X64(unsigned char _bittestandcomplement64(__int64 *, __int64))
+__MACHINE(unsigned char _bittestandreset(long *, long))
+__MACHINEARM64_X64(unsigned char _bittestandreset64(__int64 *, __int64))
+__MACHINE(unsigned char _bittestandset(long *, long))
+__MACHINEARM64_X64(unsigned char _bittestandset64(__int64 *, __int64))
+__MACHINE(_NODISCARD _Check_return_ unsigned __int64 __cdecl _byteswap_uint64(_In_ unsigned __int64))
+__MACHINE(_NODISCARD _Check_return_ unsigned long __cdecl _byteswap_ulong(_In_ unsigned long))
+__MACHINE(_NODISCARD _Check_return_ unsigned short __cdecl _byteswap_ushort(_In_ unsigned short))
+__MACHINE(void __cdecl _disable(void))
+__MACHINE(void __cdecl _enable(void))
+__MACHINE(unsigned char _interlockedbittestandreset(long volatile *, long))
+__MACHINEARM64_X64(unsigned char _interlockedbittestandreset64(__int64 volatile *, __int64))
+__MACHINEARM_ARM64(unsigned char _interlockedbittestandreset_acq(long volatile *, long))
+__MACHINEARM_ARM64(unsigned char _interlockedbittestandreset_nf(long volatile *, long))
+__MACHINEARM_ARM64(unsigned char _interlockedbittestandreset_rel(long volatile *, long))
+__MACHINEARM64(unsigned char _interlockedbittestandreset64_acq(__int64 volatile *, __int64))
+__MACHINEARM64(unsigned char _interlockedbittestandreset64_rel(__int64 volatile *, __int64))
+__MACHINEARM64(unsigned char _interlockedbittestandreset64_nf(__int64 volatile *, __int64))
+__MACHINEARM64_X64(unsigned char _interlockedbittestandset64(__int64 volatile *, __int64))
+__MACHINEARM64(unsigned char _interlockedbittestandset64_acq(__int64 volatile *, __int64))
+__MACHINEARM64(unsigned char _interlockedbittestandset64_rel(__int64 volatile *, __int64))
+__MACHINEARM64(unsigned char _interlockedbittestandset64_nf(__int64 volatile *, __int64))
+__MACHINEARM64(unsigned __int32 __crc32b(unsigned __int32, unsigned __int32))
+__MACHINEARM64(unsigned __int32 __crc32h(unsigned __int32, unsigned __int32))
+__MACHINEARM64(unsigned __int32 __crc32w(unsigned __int32, unsigned __int32))
+__MACHINEARM64(unsigned __int32 __crc32d(unsigned __int32, unsigned __int64))
+__MACHINEARM64(unsigned __int32 __crc32cb(unsigned __int32, unsigned __int32))
+__MACHINEARM64(unsigned __int32 __crc32ch(unsigned __int32, unsigned __int32))
+__MACHINEARM64(unsigned __int32 __crc32cw(unsigned __int32, unsigned __int32))
+__MACHINEARM64(unsigned __int32 __crc32cd(unsigned __int32, unsigned __int64))
+__MACHINEARM(int _isunordered(double, double))
+__MACHINEARM(int _isunorderedf(float, float))
+__MACHINE(_NODISCARD _Check_return_ unsigned long __cdecl _lrotl(_In_ unsigned long, _In_ int))
+__MACHINE(_NODISCARD _Check_return_ unsigned long __cdecl _lrotr(_In_ unsigned long, _In_ int))
+__MACHINEX86(void _m_empty(void))
+__MACHINEX86(void _m_femms(void))
+__MACHINEX86(__m64 _m_from_float(float))
+__MACHINEX86(__m64 _m_from_int(int))
+__MACHINEX86(void _m_maskmovq(__m64, __m64, char *))
+__MACHINEX86(__m64 _m_packssdw(__m64, __m64))
+__MACHINEX86(__m64 _m_packsswb(__m64, __m64))
+__MACHINEX86(__m64 _m_packuswb(__m64, __m64))
+__MACHINEX86(__m64 _m_paddb(__m64, __m64))
+__MACHINEX86(__m64 _m_paddd(__m64, __m64))
+__MACHINEX86(__m64 _m_paddsb(__m64, __m64))
+__MACHINEX86(__m64 _m_paddsw(__m64, __m64))
+__MACHINEX86(__m64 _m_paddusb(__m64, __m64))
+__MACHINEX86(__m64 _m_paddusw(__m64, __m64))
+__MACHINEX86(__m64 _m_paddw(__m64, __m64))
+__MACHINEX86(__m64 _m_pand(__m64, __m64))
+__MACHINEX86(__m64 _m_pandn(__m64, __m64))
+__MACHINEX86(__m64 _m_pavgb(__m64, __m64))
+__MACHINEX86(__m64 _m_pavgusb(__m64, __m64))
+__MACHINEX86(__m64 _m_pavgw(__m64, __m64))
+__MACHINEX86(__m64 _m_pcmpeqb(__m64, __m64))
+__MACHINEX86(__m64 _m_pcmpeqd(__m64, __m64))
+__MACHINEX86(__m64 _m_pcmpeqw(__m64, __m64))
+__MACHINEX86(__m64 _m_pcmpgtb(__m64, __m64))
+__MACHINEX86(__m64 _m_pcmpgtd(__m64, __m64))
+__MACHINEX86(__m64 _m_pcmpgtw(__m64, __m64))
+__MACHINEX86(int _m_pextrw(__m64, int))
+__MACHINEX86(__m64 _m_pf2id(__m64))
+__MACHINEX86(__m64 _m_pf2iw(__m64))
+__MACHINEX86(__m64 _m_pfacc(__m64, __m64))
+__MACHINEX86(__m64 _m_pfadd(__m64, __m64))
+__MACHINEX86(__m64 _m_pfcmpeq(__m64, __m64))
+__MACHINEX86(__m64 _m_pfcmpge(__m64, __m64))
+__MACHINEX86(__m64 _m_pfcmpgt(__m64, __m64))
+__MACHINEX86(__m64 _m_pfmax(__m64, __m64))
+__MACHINEX86(__m64 _m_pfmin(__m64, __m64))
+__MACHINEX86(__m64 _m_pfmul(__m64, __m64))
+__MACHINEX86(__m64 _m_pfnacc(__m64, __m64))
+__MACHINEX86(__m64 _m_pfpnacc(__m64, __m64))
+__MACHINEX86(__m64 _m_pfrcp(__m64))
+__MACHINEX86(__m64 _m_pfrcpit1(__m64, __m64))
+__MACHINEX86(__m64 _m_pfrcpit2(__m64, __m64))
+__MACHINEX86(__m64 _m_pfrsqit1(__m64, __m64))
+__MACHINEX86(__m64 _m_pfrsqrt(__m64))
+__MACHINEX86(__m64 _m_pfsub(__m64, __m64))
+__MACHINEX86(__m64 _m_pfsubr(__m64, __m64))
+__MACHINEX86(__m64 _m_pi2fd(__m64))
+__MACHINEX86(__m64 _m_pi2fw(__m64))
+__MACHINEX86(__m64 _m_pinsrw(__m64, int, int))
+__MACHINEX86(__m64 _m_pmaddwd(__m64, __m64))
+__MACHINEX86(__m64 _m_pmaxsw(__m64, __m64))
+__MACHINEX86(__m64 _m_pmaxub(__m64, __m64))
+__MACHINEX86(__m64 _m_pminsw(__m64, __m64))
+__MACHINEX86(__m64 _m_pminub(__m64, __m64))
+__MACHINEX86(int _m_pmovmskb(__m64))
+__MACHINEX86(__m64 _m_pmulhrw(__m64, __m64))
+__MACHINEX86(__m64 _m_pmulhuw(__m64, __m64))
+__MACHINEX86(__m64 _m_pmulhw(__m64, __m64))
+__MACHINEX86(__m64 _m_pmullw(__m64, __m64))
+__MACHINEX86(__m64 _m_por(__m64, __m64))
+__MACHINEX86_X64(void _m_prefetch(void *))
+__MACHINEX86_X64(void _m_prefetchw(volatile const void *))
+__MACHINEX86(__m64 _m_psadbw(__m64, __m64))
+__MACHINEX86(__m64 _m_pshufw(__m64, int))
+__MACHINEX86(__m64 _m_pslld(__m64, __m64))
+__MACHINEX86(__m64 _m_pslldi(__m64, int))
+__MACHINEX86(__m64 _m_psllq(__m64, __m64))
+__MACHINEX86(__m64 _m_psllqi(__m64, int))
+__MACHINEX86(__m64 _m_psllw(__m64, __m64))
+__MACHINEX86(__m64 _m_psllwi(__m64, int))
+__MACHINEX86(__m64 _m_psrad(__m64, __m64))
+__MACHINEX86(__m64 _m_psradi(__m64, int))
+__MACHINEX86(__m64 _m_psraw(__m64, __m64))
+__MACHINEX86(__m64 _m_psrawi(__m64, int))
+__MACHINEX86(__m64 _m_psrld(__m64, __m64))
+__MACHINEX86(__m64 _m_psrldi(__m64, int))
+__MACHINEX86(__m64 _m_psrlq(__m64, __m64))
+__MACHINEX86(__m64 _m_psrlqi(__m64, int))
+__MACHINEX86(__m64 _m_psrlw(__m64, __m64))
+__MACHINEX86(__m64 _m_psrlwi(__m64, int))
+__MACHINEX86(__m64 _m_psubb(__m64, __m64))
+__MACHINEX86(__m64 _m_psubd(__m64, __m64))
+__MACHINEX86(__m64 _m_psubsb(__m64, __m64))
+__MACHINEX86(__m64 _m_psubsw(__m64, __m64))
+__MACHINEX86(__m64 _m_psubusb(__m64, __m64))
+__MACHINEX86(__m64 _m_psubusw(__m64, __m64))
+__MACHINEX86(__m64 _m_psubw(__m64, __m64))
+__MACHINEX86(__m64 _m_pswapd(__m64))
+__MACHINEX86(__m64 _m_punpckhbw(__m64, __m64))
+__MACHINEX86(__m64 _m_punpckhdq(__m64, __m64))
+__MACHINEX86(__m64 _m_punpckhwd(__m64, __m64))
+__MACHINEX86(__m64 _m_punpcklbw(__m64, __m64))
+__MACHINEX86(__m64 _m_punpckldq(__m64, __m64))
+__MACHINEX86(__m64 _m_punpcklwd(__m64, __m64))
+__MACHINEX86(__m64 _m_pxor(__m64, __m64))
+__MACHINEX86(float _m_to_float(__m64))
+__MACHINEX86(int _m_to_int(__m64))
+__MACHINEX86_X64(__m128i _mm_abs_epi16(__m128i))
+__MACHINEX86_X64(__m128i _mm_abs_epi32(__m128i))
+__MACHINEX86_X64(__m128i _mm_abs_epi8(__m128i))
+__MACHINEX86(__m64 _mm_abs_pi16(__m64))
+__MACHINEX86(__m64 _mm_abs_pi32(__m64))
+__MACHINEX86(__m64 _mm_abs_pi8(__m64))
+__MACHINEX86_X64(__m128i _mm_add_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_add_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_add_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_add_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_add_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_add_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_add_sd(__m128d, __m128d))
+__MACHINEX86(__m64 _mm_add_si64(__m64, __m64))
+__MACHINEX86_X64(__m128 _mm_add_ss(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_adds_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_adds_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_adds_epu16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_adds_epu8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_addsub_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_addsub_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_alignr_epi8(__m128i, __m128i, int))
+__MACHINEX86(__m64 _mm_alignr_pi8(__m64, __m64, int))
+__MACHINEX86_X64(__m128d _mm_and_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_and_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_and_si128(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_andnot_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_andnot_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_andnot_si128(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_avg_epu16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_avg_epu8(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_blend_epi16(__m128i, __m128i, int))
+__MACHINEX86_X64(__m128d _mm_blend_pd(__m128d, __m128d, int))
+__MACHINEX86_X64(__m128 _mm_blend_ps(__m128, __m128, int))
+__MACHINEX86_X64(__m128i _mm_blendv_epi8(__m128i, __m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_blendv_pd(__m128d, __m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_blendv_ps(__m128, __m128, __m128))
+__MACHINEX86_X64(void _mm_clflush(void const *))
+__MACHINEX86_X64(void _mm_clflushopt(void const *))
+__MACHINEX86_X64(void _mm_clwb(void const *))
+__MACHINEX86_X64(void _mm_clzero(void const *))
+__MACHINEX86_X64(__m128i _mm_cmpeq_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmpeq_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmpeq_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmpeq_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_cmpeq_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpeq_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpeq_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpeq_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_cmpestra(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(int _mm_cmpestrc(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(int _mm_cmpestri(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(__m128i _mm_cmpestrm(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(int _mm_cmpestro(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(int _mm_cmpestrs(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(int _mm_cmpestrz(__m128i, int, __m128i, int, int))
+__MACHINEX86_X64(__m128d _mm_cmpge_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpge_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpge_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpge_ss(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_cmpgt_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmpgt_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmpgt_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmpgt_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_cmpgt_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpgt_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpgt_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpgt_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_cmpistra(__m128i, __m128i, int))
+__MACHINEX86_X64(int _mm_cmpistrc(__m128i, __m128i, int))
+__MACHINEX86_X64(int _mm_cmpistri(__m128i, __m128i, int))
+__MACHINEX86_X64(__m128i _mm_cmpistrm(__m128i, __m128i, int))
+__MACHINEX86_X64(int _mm_cmpistro(__m128i, __m128i, int))
+__MACHINEX86_X64(int _mm_cmpistrs(__m128i, __m128i, int))
+__MACHINEX86_X64(int _mm_cmpistrz(__m128i, __m128i, int))
+__MACHINEX86_X64(__m128d _mm_cmple_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmple_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmple_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmple_ss(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_cmplt_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmplt_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_cmplt_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_cmplt_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmplt_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmplt_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmplt_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpneq_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpneq_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpneq_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpneq_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpnge_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpnge_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpnge_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpnge_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpngt_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpngt_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpngt_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpngt_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpnle_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpnle_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpnle_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpnle_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpnlt_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpnlt_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpnlt_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpnlt_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpord_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpord_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpord_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpord_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpunord_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpunord_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_cmpunord_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_cmpunord_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_comieq_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_comieq_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_comige_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_comige_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_comigt_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_comigt_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_comile_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_comile_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_comilt_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_comilt_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_comineq_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_comineq_ss(__m128, __m128))
+__MACHINEX86_X64(unsigned int _mm_crc32_u16(unsigned int, unsigned short))
+__MACHINEX86_X64(unsigned int _mm_crc32_u32(unsigned int, unsigned int))
+__MACHINEX64(unsigned __int64 _mm_crc32_u64(unsigned __int64, unsigned __int64))
+__MACHINEX86_X64(unsigned int _mm_crc32_u8(unsigned int, unsigned char))
+__MACHINEX86(__m128 _mm_cvt_pi2ps(__m128, __m64))
+__MACHINEX86(__m64 _mm_cvt_ps2pi(__m128))
+__MACHINEX86_X64(__m128 _mm_cvt_si2ss(__m128, int))
+__MACHINEX86_X64(int _mm_cvt_ss2si(__m128))
+__MACHINEX86_X64(__m128i _mm_cvtepi16_epi32(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepi16_epi64(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepi32_epi64(__m128i))
+__MACHINEX86_X64(__m128d _mm_cvtepi32_pd(__m128i))
+__MACHINEX86_X64(__m128 _mm_cvtepi32_ps(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepi8_epi16(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepi8_epi32(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepi8_epi64(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepu16_epi32(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepu16_epi64(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepu32_epi64(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepu8_epi16(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepu8_epi32(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtepu8_epi64(__m128i))
+__MACHINEX86_X64(__m128i _mm_cvtpd_epi32(__m128d))
+__MACHINEX86(__m64 _mm_cvtpd_pi32(__m128d))
+__MACHINEX86_X64(__m128 _mm_cvtpd_ps(__m128d))
+__MACHINEX86(__m128d _mm_cvtpi32_pd(__m64))
+__MACHINEX86_X64(__m128i _mm_cvtps_epi32(__m128))
+__MACHINEX86_X64(__m128d _mm_cvtps_pd(__m128))
+__MACHINEX86_X64(int _mm_cvtsd_si32(__m128d))
+__MACHINEX64(__int64 _mm_cvtsd_si64(__m128d))
+__MACHINEX64(__int64 _mm_cvtsd_si64x(__m128d))
+__MACHINEX86_X64(__m128 _mm_cvtsd_ss(__m128, __m128d))
+__MACHINEX86_X64(int _mm_cvtsi128_si32(__m128i))
+__MACHINEX64(__int64 _mm_cvtsi128_si64(__m128i))
+__MACHINEX64(__int64 _mm_cvtsi128_si64x(__m128i))
+__MACHINEX86_X64(__m128d _mm_cvtsi32_sd(__m128d, int))
+__MACHINEX86_X64(__m128i _mm_cvtsi32_si128(int))
+__MACHINEX64(__m128d _mm_cvtsi64_sd(__m128d, __int64))
+__MACHINEX64(__m128i _mm_cvtsi64_si128(__int64))
+__MACHINEX64(__m128 _mm_cvtsi64_ss(__m128, __int64))
+__MACHINEX64(__m128d _mm_cvtsi64x_sd(__m128d, __int64))
+__MACHINEX64(__m128i _mm_cvtsi64x_si128(__int64))
+__MACHINEX64(__m128 _mm_cvtsi64x_ss(__m128, __int64))
+__MACHINEX86_X64(__m128d _mm_cvtss_sd(__m128d, __m128))
+__MACHINEX64(__int64 _mm_cvtss_si64(__m128))
+__MACHINEX64(__int64 _mm_cvtss_si64x(__m128))
+__MACHINEX86(__m64 _mm_cvtt_ps2pi(__m128))
+__MACHINEX86_X64(int _mm_cvtt_ss2si(__m128))
+__MACHINEX86_X64(__m128i _mm_cvttpd_epi32(__m128d))
+__MACHINEX86(__m64 _mm_cvttpd_pi32(__m128d))
+__MACHINEX86_X64(__m128i _mm_cvttps_epi32(__m128))
+__MACHINEX86_X64(int _mm_cvttsd_si32(__m128d))
+__MACHINEX64(__int64 _mm_cvttsd_si64(__m128d))
+__MACHINEX64(__int64 _mm_cvttsd_si64x(__m128d))
+__MACHINEX64(__int64 _mm_cvttss_si64(__m128))
+__MACHINEX64(__int64 _mm_cvttss_si64x(__m128))
+__MACHINEX86_X64(__m128d _mm_div_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_div_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_div_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_div_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_dp_pd(__m128d, __m128d, int))
+__MACHINEX86_X64(__m128 _mm_dp_ps(__m128, __m128, int))
+__MACHINEX86_X64(int _mm_extract_epi16(__m128i, int))
+__MACHINEX86_X64(int _mm_extract_epi32(__m128i, int))
+__MACHINEX64(__int64 _mm_extract_epi64(__m128i, int))
+__MACHINEX86_X64(int _mm_extract_epi8(__m128i, int))
+__MACHINEX86_X64(int _mm_extract_ps(__m128, int))
+__MACHINEX86_X64(__m128i _mm_extract_si64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_extracti_si64(__m128i, int, int))
+__MACHINEX86_X64(unsigned int _mm_getcsr(void))
+__MACHINEX86_X64(__m128i _mm_hadd_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_hadd_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_hadd_pd(__m128d, __m128d))
+__MACHINEX86(__m64 _mm_hadd_pi16(__m64, __m64))
+__MACHINEX86(__m64 _mm_hadd_pi32(__m64, __m64))
+__MACHINEX86_X64(__m128 _mm_hadd_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_hadds_epi16(__m128i, __m128i))
+__MACHINEX86(__m64 _mm_hadds_pi16(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_hsub_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_hsub_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_hsub_pd(__m128d, __m128d))
+__MACHINEX86(__m64 _mm_hsub_pi16(__m64, __m64))
+__MACHINEX86(__m64 _mm_hsub_pi32(__m64, __m64))
+__MACHINEX86_X64(__m128 _mm_hsub_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_hsubs_epi16(__m128i, __m128i))
+__MACHINEX86(__m64 _mm_hsubs_pi16(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_insert_epi16(__m128i, int, int))
+__MACHINEX86_X64(__m128i _mm_insert_epi32(__m128i, int, int))
+__MACHINEX64(__m128i _mm_insert_epi64(__m128i, __int64, int))
+__MACHINEX86_X64(__m128i _mm_insert_epi8(__m128i, int, int))
+__MACHINEX86_X64(__m128 _mm_insert_ps(__m128, __m128, int))
+__MACHINEX86_X64(__m128i _mm_insert_si64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_inserti_si64(__m128i, __m128i, int, int))
+__MACHINEX86_X64(__m128i _mm_lddqu_si128(__m128i const *))
+__MACHINEX86_X64(void _mm_lfence(void))
+__MACHINEX86_X64(__m128d _mm_load1_pd(double const *))
+__MACHINEX86_X64(__m128d _mm_load_pd(double const *))
+__MACHINEX86_X64(__m128 _mm_load_ps(float const *))
+__MACHINEX86_X64(__m128 _mm_load_ps1(float const *))
+__MACHINEX86_X64(__m128d _mm_load_sd(double const *))
+__MACHINEX86_X64(__m128i _mm_load_si128(__m128i const *))
+__MACHINEX86_X64(__m128 _mm_load_ss(float const *))
+__MACHINEX86_X64(__m128d _mm_loaddup_pd(double const *))
+__MACHINEX86_X64(__m128d _mm_loadh_pd(__m128d, double const *))
+__MACHINEX86_X64(__m128 _mm_loadh_pi(__m128, __m64 const *))
+__MACHINEX86_X64(__m128i _mm_loadl_epi64(__m128i const *))
+__MACHINEX86_X64(__m128d _mm_loadl_pd(__m128d, double const *))
+__MACHINEX86_X64(__m128 _mm_loadl_pi(__m128, __m64 const *))
+__MACHINEX86_X64(__m128d _mm_loadr_pd(double const *))
+__MACHINEX86_X64(__m128 _mm_loadr_ps(float const *))
+__MACHINEX86_X64(__m128d _mm_loadu_pd(double const *))
+__MACHINEX86_X64(__m128 _mm_loadu_ps(float const *))
+__MACHINEX86_X64(__m128i _mm_loadu_si128(__m128i const *))
+__MACHINEX86_X64(__m128i _mm_madd_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_maddubs_epi16(__m128i, __m128i))
+__MACHINEX86(__m64 _mm_maddubs_pi16(__m64, __m64))
+__MACHINEX86_X64(void _mm_maskmoveu_si128(__m128i, __m128i, char *))
+__MACHINEX86_X64(__m128i _mm_max_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_max_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_max_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_max_epu16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_max_epu32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_max_epu8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_max_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_max_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_max_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_max_ss(__m128, __m128))
+__MACHINEX86_X64(void _mm_mfence(void))
+__MACHINEX86_X64(__m128i _mm_min_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_min_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_min_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_min_epu16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_min_epu32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_min_epu8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_min_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_min_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_min_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_min_ss(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_minpos_epu16(__m128i))
+__MACHINEX86_X64(void _mm_monitor(void const *, unsigned int, unsigned int))
+__MACHINEX86_X64(__m128i _mm_move_epi64(__m128i))
+__MACHINEX86_X64(__m128d _mm_move_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_move_ss(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_movedup_pd(__m128d))
+__MACHINEX86_X64(__m128 _mm_movehdup_ps(__m128))
+__MACHINEX86_X64(__m128 _mm_movehl_ps(__m128, __m128))
+__MACHINEX86_X64(__m128 _mm_moveldup_ps(__m128))
+__MACHINEX86_X64(__m128 _mm_movelh_ps(__m128, __m128))
+__MACHINEX86_X64(int _mm_movemask_epi8(__m128i))
+__MACHINEX86_X64(int _mm_movemask_pd(__m128d))
+__MACHINEX86_X64(int _mm_movemask_ps(__m128))
+__MACHINEX86(__m64 _mm_movepi64_pi64(__m128i))
+__MACHINEX86(__m128i _mm_movpi64_epi64(__m64))
+__MACHINEX86_X64(__m128i _mm_mpsadbw_epu8(__m128i, __m128i, int))
+__MACHINEX86_X64(__m128i _mm_mul_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_mul_epu32(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_mul_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_mul_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_mul_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_mul_ss(__m128, __m128))
+__MACHINEX86(__m64 _mm_mul_su32(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_mulhi_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_mulhi_epu16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_mulhrs_epi16(__m128i, __m128i))
+__MACHINEX86(__m64 _mm_mulhrs_pi16(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_mullo_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_mullo_epi32(__m128i, __m128i))
+__MACHINEX86_X64(void _mm_mwait(unsigned int, unsigned int))
+__MACHINEX86_X64(__m128d _mm_or_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_or_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_or_si128(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_packs_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_packs_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_packus_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_packus_epi32(__m128i, __m128i))
+__MACHINEX86_X64(int _mm_popcnt_u32(unsigned int))
+__MACHINEX64(__int64 _mm_popcnt_u64(unsigned __int64))
+__MACHINEX86_X64(void _mm_prefetch(char const *, int))
+__MACHINEX86_X64(__m128 _mm_rcp_ps(__m128))
+__MACHINEX86_X64(__m128 _mm_rcp_ss(__m128))
+__MACHINEX86_X64(__m128d _mm_round_pd(__m128d, int))
+__MACHINEX86_X64(__m128 _mm_round_ps(__m128, int))
+__MACHINEX86_X64(__m128d _mm_round_sd(__m128d, __m128d, int))
+__MACHINEX86_X64(__m128 _mm_round_ss(__m128, __m128, int))
+__MACHINEX86_X64(__m128 _mm_rsqrt_ps(__m128))
+__MACHINEX86_X64(__m128 _mm_rsqrt_ss(__m128))
+__MACHINEX86_X64(__m128i _mm_sad_epu8(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_set1_epi16(short))
+__MACHINEX86_X64(__m128i _mm_set1_epi32(int))
+__MACHINEX86(__m128i _mm_set1_epi64(__m64))
+__MACHINEX86_X64(__m128i _mm_set1_epi64x(__int64))
+__MACHINEX86_X64(__m128i _mm_set1_epi8(char))
+__MACHINEX86_X64(__m128d _mm_set1_pd(double))
+__MACHINEX86(__m64 _mm_set1_pi16(short))
+__MACHINEX86(__m64 _mm_set1_pi32(int))
+__MACHINEX86(__m64 _mm_set1_pi8(char))
+__MACHINEX86_X64(__m128i _mm_set_epi16(short, short, short, short, short, short, short, short))
+__MACHINEX86_X64(__m128i _mm_set_epi32(int, int, int, int))
+__MACHINEX86(__m128i _mm_set_epi64(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_set_epi64x(__int64, __int64))
+__MACHINEX86_X64(__m128i _mm_set_epi8(char, char, char, char, char, char, char, char, char, char, char, char, char, char, char, char))
+__MACHINEX86_X64(__m128d _mm_set_pd(double, double))
+__MACHINEX86(__m64 _mm_set_pi16(short, short, short, short))
+__MACHINEX86(__m64 _mm_set_pi32(int, int))
+__MACHINEX86(__m64 _mm_set_pi8(char, char, char, char, char, char, char, char))
+__MACHINEX86_X64(__m128 _mm_set_ps(float, float, float, float))
+__MACHINEX86_X64(__m128 _mm_set_ps1(float))
+__MACHINEX86_X64(__m128d _mm_set_sd(double))
+__MACHINEX86_X64(__m128 _mm_set_ss(float))
+__MACHINEX86_X64(void _mm_setcsr(unsigned int))
+__MACHINEX86_X64(__m128i _mm_setl_epi64(__m128i))
+__MACHINEX86_X64(__m128i _mm_setr_epi16(short, short, short, short, short, short, short, short))
+__MACHINEX86_X64(__m128i _mm_setr_epi32(int, int, int, int))
+__MACHINEX86(__m128i _mm_setr_epi64(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_setr_epi64x(__int64, __int64))
+__MACHINEX86_X64(__m128i _mm_setr_epi8(char, char, char, char, char, char, char, char, char, char, char, char, char, char, char, char))
+__MACHINEX86_X64(__m128d _mm_setr_pd(double, double))
+__MACHINEX86(__m64 _mm_setr_pi16(short, short, short, short))
+__MACHINEX86(__m64 _mm_setr_pi32(int, int))
+__MACHINEX86(__m64 _mm_setr_pi8(char, char, char, char, char, char, char, char))
+__MACHINEX86_X64(__m128 _mm_setr_ps(float, float, float, float))
+__MACHINEX86_X64(__m128d _mm_setzero_pd(void))
+__MACHINEX86_X64(__m128 _mm_setzero_ps(void))
+__MACHINEX86_X64(__m128i _mm_setzero_si128(void))
+__MACHINEX86(__m64 _mm_setzero_si64(void))
+__MACHINEX86_X64(void _mm_sfence(void))
+__MACHINEX86_X64(__m128i _mm_shuffle_epi32(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_shuffle_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_shuffle_pd(__m128d, __m128d, int))
+__MACHINEX86(__m64 _mm_shuffle_pi8(__m64, __m64))
+__MACHINEX86_X64(__m128 _mm_shuffle_ps(__m128, __m128, unsigned int))
+__MACHINEX86_X64(__m128i _mm_shufflehi_epi16(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_shufflelo_epi16(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_sign_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sign_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sign_epi8(__m128i, __m128i))
+__MACHINEX86(__m64 _mm_sign_pi16(__m64, __m64))
+__MACHINEX86(__m64 _mm_sign_pi32(__m64, __m64))
+__MACHINEX86(__m64 _mm_sign_pi8(__m64, __m64))
+__MACHINEX86_X64(__m128i _mm_sll_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sll_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sll_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_slli_epi16(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_slli_epi32(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_slli_epi64(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_slli_si128(__m128i, int))
+__MACHINEX86_X64(__m128d _mm_sqrt_pd(__m128d))
+__MACHINEX86_X64(__m128 _mm_sqrt_ps(__m128))
+__MACHINEX86_X64(__m128d _mm_sqrt_sd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_sqrt_ss(__m128))
+__MACHINEX86_X64(__m128i _mm_sra_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sra_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_srai_epi16(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_srai_epi32(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_srl_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_srl_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_srl_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_srli_epi16(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_srli_epi32(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_srli_epi64(__m128i, int))
+__MACHINEX86_X64(__m128i _mm_srli_si128(__m128i, int))
+__MACHINEX86_X64(void _mm_store1_pd(double *, __m128d))
+__MACHINEX86_X64(void _mm_store_pd(double *, __m128d))
+__MACHINEX86_X64(void _mm_store_ps(float *, __m128))
+__MACHINEX86_X64(void _mm_store_ps1(float *, __m128))
+__MACHINEX86_X64(void _mm_store_sd(double *, __m128d))
+__MACHINEX86_X64(void _mm_store_si128(__m128i *, __m128i))
+__MACHINEX86_X64(void _mm_store_ss(float *, __m128))
+__MACHINEX86_X64(void _mm_storeh_pd(double *, __m128d))
+__MACHINEX86_X64(void _mm_storeh_pi(__m64 *, __m128))
+__MACHINEX86_X64(void _mm_storel_epi64(__m128i *, __m128i))
+__MACHINEX86_X64(void _mm_storel_pd(double *, __m128d))
+__MACHINEX86_X64(void _mm_storel_pi(__m64 *, __m128))
+__MACHINEX86_X64(void _mm_storer_pd(double *, __m128d))
+__MACHINEX86_X64(void _mm_storer_ps(float *, __m128))
+__MACHINEX86_X64(void _mm_storeu_pd(double *, __m128d))
+__MACHINEX86_X64(void _mm_storeu_ps(float *, __m128))
+__MACHINEX86_X64(void _mm_storeu_si128(__m128i *, __m128i))
+#if defined(_CRT_WINDOWS) || defined(UNDOCKED_WINDOWS_UCRT)
+__MACHINEX86_X64(__m128i _mm_stream_load_si128(__m128i *))
+#else
+__MACHINEX86_X64(__m128i _mm_stream_load_si128(const __m128i *))
+#endif
+__MACHINEX86_X64(void _mm_stream_pd(double *, __m128d))
+__MACHINEX86(void _mm_stream_pi(__m64 *, __m64))
+__MACHINEX86_X64(void _mm_stream_ps(float *, __m128))
+__MACHINEX86_X64(void _mm_stream_sd(double *, __m128d))
+__MACHINEX86_X64(void _mm_stream_si128(__m128i *, __m128i))
+__MACHINEX86_X64(void _mm_stream_si32(int *, int))
+__MACHINEX64(void _mm_stream_si64x(__int64 *, __int64))
+__MACHINEX86_X64(void _mm_stream_ss(float *, __m128))
+__MACHINEX86_X64(__m128i _mm_sub_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sub_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sub_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_sub_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_sub_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_sub_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_sub_sd(__m128d, __m128d))
+__MACHINEX86(__m64 _mm_sub_si64(__m64, __m64))
+__MACHINEX86_X64(__m128 _mm_sub_ss(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_subs_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_subs_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_subs_epu16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_subs_epu8(__m128i, __m128i))
+__MACHINEX86_X64(int _mm_testc_si128(__m128i, __m128i))
+__MACHINEX86_X64(int _mm_testnzc_si128(__m128i, __m128i))
+__MACHINEX86_X64(int _mm_testz_si128(__m128i, __m128i))
+__MACHINEX86_X64(int _mm_ucomieq_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_ucomieq_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_ucomige_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_ucomige_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_ucomigt_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_ucomigt_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_ucomile_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_ucomile_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_ucomilt_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_ucomilt_ss(__m128, __m128))
+__MACHINEX86_X64(int _mm_ucomineq_sd(__m128d, __m128d))
+__MACHINEX86_X64(int _mm_ucomineq_ss(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_unpackhi_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_unpackhi_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_unpackhi_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_unpackhi_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_unpackhi_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_unpackhi_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_unpacklo_epi16(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_unpacklo_epi32(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_unpacklo_epi64(__m128i, __m128i))
+__MACHINEX86_X64(__m128i _mm_unpacklo_epi8(__m128i, __m128i))
+__MACHINEX86_X64(__m128d _mm_unpacklo_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_unpacklo_ps(__m128, __m128))
+__MACHINEX86_X64(__m128d _mm_xor_pd(__m128d, __m128d))
+__MACHINEX86_X64(__m128 _mm_xor_ps(__m128, __m128))
+__MACHINEX86_X64(__m128i _mm_xor_si128(__m128i, __m128i))
+__MACHINEX64(__int64 _mul128(__int64 _Multiplier, __int64 _Multiplicand, __int64 * _HighProduct))
+__MACHINE(unsigned int __cdecl _rotl(_In_ unsigned int _Value, _In_ int _Shift))
+__MACHINE(unsigned short __cdecl _rotl16(unsigned short _Value, unsigned char _Shift))
+__MACHINE(unsigned __int64 __cdecl _rotl64(_In_ unsigned __int64 _Value, _In_ int _Shift))
+__MACHINE(unsigned char __cdecl _rotl8(unsigned char _Value, unsigned char _Shift))
+__MACHINE(unsigned int __cdecl _rotr(_In_ unsigned int _Value, _In_ int _Shift))
+__MACHINE(unsigned short __cdecl _rotr16(unsigned short _Value, unsigned char _Shift))
+__MACHINE(unsigned __int64 __cdecl _rotr64(_In_ unsigned __int64 _Value, _In_ int _Shift))
+__MACHINE(unsigned char __cdecl _rotr8(unsigned char _Value, unsigned char _Shift))
+__MACHINE(int __cdecl _setjmp(jmp_buf))
+__MACHINEARM_ARM64_X64(int __cdecl _setjmpex(jmp_buf))
+__MACHINEX86_X64(void _rsm(void))
+__MACHINEX86_X64(void _lgdt(void *))
+__MACHINEX86_X64(void _sgdt(void *))
+__MACHINEX86_X64(void _clac(void))
+__MACHINEX86_X64(void _stac(void))
+__MACHINEX86_X64(unsigned char __cdecl _addcarry_u8(unsigned char, unsigned char, unsigned char, unsigned char *))
+__MACHINEX86_X64(unsigned char __cdecl _subborrow_u8(unsigned char, unsigned char, unsigned char, unsigned char *))
+__MACHINEX86_X64(unsigned char __cdecl _addcarry_u16(unsigned char, unsigned short, unsigned short, unsigned short *))
+__MACHINEX86_X64(unsigned char __cdecl _subborrow_u16(unsigned char, unsigned short, unsigned short, unsigned short *))
+__MACHINEX86_X64(unsigned char __cdecl _addcarry_u32(unsigned char, unsigned int, unsigned int, unsigned int *))
+__MACHINEX86_X64(unsigned char __cdecl _subborrow_u32(unsigned char, unsigned int, unsigned int, unsigned int *))
+__MACHINEX64(unsigned char __cdecl _addcarry_u64(unsigned char, unsigned __int64, unsigned __int64, unsigned __int64 *))
+__MACHINEX64(unsigned char __cdecl _subborrow_u64(unsigned char, unsigned __int64, unsigned __int64, unsigned __int64 *))
+__MACHINEX86_X64(void _mm_monitorx(void const *, unsigned int, unsigned int))
+__MACHINEX86_X64(void _mm_mwaitx(unsigned int, unsigned int, unsigned int))
+__MACHINEX64(unsigned int __rmpupdate(unsigned __int64, rmp_seg *, int))
+__MACHINEX64(unsigned int __psmash(unsigned __int64))
+__MACHINEX64(unsigned int __rmpadjust(unsigned __int64, int, int))
+__MACHINEX64(unsigned int __pvalidate(unsigned __int64, int, int, int*))
+__MACHINEX86_X64(void __svm_invlpgb(void*, int))
+__MACHINEX86_X64(void __svm_tlbsync(void))
+
+#ifndef _M_CEE_PURE
+
+    #if defined(_M_ARM64EC) && !defined(_DISABLE_SOFTINTRIN_)
+    /***
+     * softintrin.h includes widemath.h, which uses _rotr64, so
+     * softintrin.h must be included after declaration of _rotr64.
+     ****/
+        #include <softintrin.h>
+    #endif
+
+#endif
+
+#if defined (__cplusplus)
+}
+#endif /* defined (__cplusplus) */
+#pragma warning(pop) // _VCRUNTIME_DISABLED_WARNINGS
+#endif /* _VCRT_COMPILER_PREPROCESSOR && !defined(__midl) */
+
+
 #	include <intrin.h>
 #	pragma intrinsic(_BitScanReverse)
 #endif//(GLM_ARCH & GLM_ARCH_X86 && GLM_COMPILER & GLM_COMPILER_VC)
@@ -19583,7 +21343,909 @@ namespace detail
 #endif
 
 
+#if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+#	include "_swizzle.hpp"
+#elif GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_FUNCTION
+#	include "_swizzle_func.hpp"
+#endif
+#include <cstddef>
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	struct vec<1, T, Q>
+	{
+		// -- Implementation detail --
+
+		typedef T value_type;
+		typedef vec<1, T, Q> type;
+		typedef vec<1, bool, Q> bool_type;
+
+		// -- Data --
+
+#		if GLM_SILENT_WARNINGS == GLM_ENABLE
+#			if GLM_COMPILER & GLM_COMPILER_GCC
+#				pragma GCC diagnostic push
+#				pragma GCC diagnostic ignored "-Wpedantic"
+#			elif GLM_COMPILER & GLM_COMPILER_CLANG
+#				pragma clang diagnostic push
+#				pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
+#				pragma clang diagnostic ignored "-Wnested-anon-types"
+#			elif GLM_COMPILER & GLM_COMPILER_VC
+#				pragma warning(push)
+#				pragma warning(disable: 4201)  // nonstandard extension used : nameless struct/union
+#			endif
+#		endif
+
+#		if GLM_CONFIG_XYZW_ONLY
+			T x;
+#		elif GLM_CONFIG_ANONYMOUS_STRUCT == GLM_ENABLE
+			union
+			{
+				T x;
+				T r;
+				T s;
+
+				typename detail::storage<1, T, detail::is_aligned<Q>::value>::type data;
+/*
+#				if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+					_GLM_SWIZZLE1_2_MEMBERS(T, Q, x)
+					_GLM_SWIZZLE1_2_MEMBERS(T, Q, r)
+					_GLM_SWIZZLE1_2_MEMBERS(T, Q, s)
+					_GLM_SWIZZLE1_3_MEMBERS(T, Q, x)
+					_GLM_SWIZZLE1_3_MEMBERS(T, Q, r)
+					_GLM_SWIZZLE1_3_MEMBERS(T, Q, s)
+					_GLM_SWIZZLE1_4_MEMBERS(T, Q, x)
+					_GLM_SWIZZLE1_4_MEMBERS(T, Q, r)
+					_GLM_SWIZZLE1_4_MEMBERS(T, Q, s)
+#				endif
+*/
+			};
+#		else
+			union {T x, r, s;};
+/*
+#			if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_FUNCTION
+				GLM_SWIZZLE_GEN_VEC_FROM_VEC1(T, Q)
+#			endif
+*/
+#		endif
+
+#		if GLM_SILENT_WARNINGS == GLM_ENABLE
+#			if GLM_COMPILER & GLM_COMPILER_CLANG
+#				pragma clang diagnostic pop
+#			elif GLM_COMPILER & GLM_COMPILER_GCC
+#				pragma GCC diagnostic pop
+#			elif GLM_COMPILER & GLM_COMPILER_VC
+#				pragma warning(pop)
+#			endif
+#		endif
+
+		// -- Component accesses --
+
+		/// Return the count of components of the vector
+		typedef length_t length_type;
+		GLM_FUNC_DECL static GLM_CONSTEXPR length_type length(){return 1;}
+
+		GLM_FUNC_DECL GLM_CONSTEXPR T & operator[](length_type i);
+		GLM_FUNC_DECL GLM_CONSTEXPR T const& operator[](length_type i) const;
+
+		// -- Implicit basic constructors --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR vec() GLM_DEFAULT;
+		GLM_FUNC_DECL GLM_CONSTEXPR vec(vec const& v) GLM_DEFAULT;
+		template<qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec(vec<1, T, P> const& v);
+
+		// -- Explicit basic constructors --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR explicit vec(T scalar);
+
+		// -- Conversion vector constructors --
+
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<2, U, P> const& v);
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<3, U, P> const& v);
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<4, U, P> const& v);
+
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<1, U, P> const& v);
+
+		// -- Swizzle constructors --
+/*
+#		if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+			template<int E0>
+			GLM_FUNC_DECL GLM_CONSTEXPR vec(detail::_swizzle<1, T, Q, E0, -1,-2,-3> const& that)
+			{
+				*this = that();
+			}
+#		endif//GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+*/
+		// -- Unary arithmetic operators --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator=(vec const& v) GLM_DEFAULT;
+
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator+=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator+=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator-=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator-=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator*=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator*=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator/=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator/=(vec<1, U, Q> const& v);
+
+		// -- Increment and decrement operators --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator++();
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator--();
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator++(int);
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator--(int);
+
+		// -- Unary bit operators --
+
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator%=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator%=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator&=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator&=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator|=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator|=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator^=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator^=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator<<=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator<<=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator>>=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator>>=(vec<1, U, Q> const& v);
+	};
+
+	// -- Unary operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v);
+
+	// -- Binary operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator*(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator/(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator%(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator&(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator|(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator^(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator<<(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator>>(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator~(vec<1, T, Q> const& v);
+
+	// -- Boolean operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR bool operator==(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR bool operator!=(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, bool, Q> operator&&(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2);
+
+	template<qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, bool, Q> operator||(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2);
+}//namespace glm
+
+#ifndef GLM_EXTERNAL_TEMPLATE
+
+namespace glm
+{
+	// -- Implicit basic constructors --
+
+#	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec()
+#			if GLM_CONFIG_CTOR_INIT != GLM_CTOR_INIT_DISABLE
+				: x(0)
+#			endif
+		{}
+
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<1, T, Q> const& v)
+			: x(v.x)
+		{}
+#	endif
+
+	template<typename T, qualifier Q>
+	template<qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<1, T, P> const& v)
+		: x(v.x)
+	{}
+
+	// -- Explicit basic constructors --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(T scalar)
+		: x(scalar)
+	{}
+
+	// -- Conversion vector constructors --
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<1, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<2, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<3, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<4, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	// -- Component accesses --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T & vec<1, T, Q>::operator[](typename vec<1, T, Q>::length_type)
+	{
+		return x;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T const& vec<1, T, Q>::operator[](typename vec<1, T, Q>::length_type) const
+	{
+		return x;
+	}
+
+	// -- Unary arithmetic operators --
+
+#	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator=(vec<1, T, Q> const& v)
+		{
+			this->x = v.x;
+			return *this;
+		}
+#	endif
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator=(vec<1, U, Q> const& v)
+	{
+		this->x = static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator+=(U scalar)
+	{
+		this->x += static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator+=(vec<1, U, Q> const& v)
+	{
+		this->x += static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator-=(U scalar)
+	{
+		this->x -= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator-=(vec<1, U, Q> const& v)
+	{
+		this->x -= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator*=(U scalar)
+	{
+		this->x *= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator*=(vec<1, U, Q> const& v)
+	{
+		this->x *= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator/=(U scalar)
+	{
+		this->x /= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator/=(vec<1, U, Q> const& v)
+	{
+		this->x /= static_cast<T>(v.x);
+		return *this;
+	}
+
+	// -- Increment and decrement operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator++()
+	{
+		++this->x;
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator--()
+	{
+		--this->x;
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> vec<1, T, Q>::operator++(int)
+	{
+		vec<1, T, Q> Result(*this);
+		++*this;
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> vec<1, T, Q>::operator--(int)
+	{
+		vec<1, T, Q> Result(*this);
+		--*this;
+		return Result;
+	}
+
+	// -- Unary bit operators --
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator%=(U scalar)
+	{
+		this->x %= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator%=(vec<1, U, Q> const& v)
+	{
+		this->x %= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator&=(U scalar)
+	{
+		this->x &= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator&=(vec<1, U, Q> const& v)
+	{
+		this->x &= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator|=(U scalar)
+	{
+		this->x |= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator|=(vec<1, U, Q> const& v)
+	{
+		this->x |= U(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator^=(U scalar)
+	{
+		this->x ^= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator^=(vec<1, U, Q> const& v)
+	{
+		this->x ^= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator<<=(U scalar)
+	{
+		this->x <<= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator<<=(vec<1, U, Q> const& v)
+	{
+		this->x <<= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator>>=(U scalar)
+	{
+		this->x >>= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator>>=(vec<1, U, Q> const& v)
+	{
+		this->x >>= static_cast<T>(v.x);
+		return *this;
+	}
+
+	// -- Unary constant operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v)
+	{
+		return v;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			-v.x);
+	}
+
+	// -- Binary arithmetic operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x + scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar + v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x + v2.x);
+	}
+
+	//operator-
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x - scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar - v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x - v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x * scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator*(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar * v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x * v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x / scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator/(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar / v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x / v2.x);
+	}
+
+	// -- Binary bit operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x % scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator%(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar % v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x % v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x & scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator&(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar & v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x & v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x | scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator|(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar | v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x | v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x ^ scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator^(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar ^ v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x ^ v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v.x << scalar));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator<<(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(scalar << v.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v1.x << v2.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v.x >> scalar));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator>>(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(scalar >> v.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v1.x >> v2.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator~(vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			~v.x);
+	}
+
+	// -- Boolean operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return detail::compute_equal<T, std::numeric_limits<T>::is_iec559>::call(v1.x, v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator!=(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return !(v1 == v2);
+	}
+
+	template<qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, bool, Q> operator&&(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2)
+	{
+		return vec<1, bool, Q>(v1.x && v2.x);
+	}
+
+	template<qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, bool, Q> operator||(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2)
+	{
+		return vec<1, bool, Q>(v1.x || v2.x);
+	}
+}//namespace glm
+
+
+#endif//GLM_EXTERNAL_TEMPLATE
+
+
+
 // common .inl file
+
+
+namespace glm{
+namespace detail
+{
+	template<typename genFIType, bool /*signed*/>
+	struct compute_abs
+	{};
+
+	template<typename genFIType>
+	struct compute_abs<genFIType, true>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static genFIType call(genFIType x)
+		{
+			GLM_STATIC_ASSERT(
+				std::numeric_limits<genFIType>::is_iec559 || std::numeric_limits<genFIType>::is_signed,
+				"'abs' only accept floating-point and integer scalar or vector inputs");
+
+			return x >= genFIType(0) ? x : -x;
+			// TODO, perf comp with: *(((int *) &x) + 1) &= 0x7fffffff;
+		}
+	};
+
+#if GLM_COMPILER & GLM_COMPILER_CUDA
+	template<>
+	struct compute_abs<float, true>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static float call(float x)
+		{
+			return fabsf(x);
+		}
+	};
+#endif
+
+	template<typename genFIType>
+	struct compute_abs<genFIType, false>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static genFIType call(genFIType x)
+		{
+			GLM_STATIC_ASSERT(
+				(!std::numeric_limits<genFIType>::is_signed && std::numeric_limits<genFIType>::is_integer),
+				"'abs' only accept floating-point and integer scalar or vector inputs");
+			return x;
+		}
+	};
+}//namespace detail
+}//namespace glm
+
 
 namespace glm
 {
