@@ -2,7 +2,7 @@
 
 #include "constants.h"
 #include <string>
-#include <GLM/glm/glm.h>
+#include <GLM/glm/glm.hpp>
 #include <IMGUI/imgui.h>
 
 namespace Dralgeer {
