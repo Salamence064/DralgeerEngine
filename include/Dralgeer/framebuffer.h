@@ -46,36 +46,12 @@ namespace Dralgeer {
             inline PickingTexture() {};
             void init(int width, int height);
 
-            // todo the goal of this coding session will be:
-            // get readPixel to correctly read the pixel
-            // could potentially look into what's being passed to the shader through the vbo and see if the attribute for it is getting enabled
-
             inline int readPixel(int x, int y) const {
-                if (test) { return 0; }
-
-                // todo
-                // first: refactor the renderer to store gameobjects with SpriteRenderers
-                // // second: don't store a gameobject inside of a component and refactor the program based around that (maybe)
-                // third: ensure the proper id is getting passed from the renderer to the pickingShader
-
-                // todo seems to only ever read some of it while mouse is held down
-
-                // todo I wonder if part of the issue is caused by the artifacts caused from drag clicking
-                // todo try temporarily removing drag clicking and see if that is in fact the issue
-                // todo I think I will do this when I come back to it
-
-                std::cout << "[DEBUG] x, y: " << x << ", " << y << "\n";
-                // std::cout << "[DEBUG] Mouse x, y: " << MouseListener::mWorldX << ", " << MouseListener::mWorldY << "\n";
-
                 glBindFramebuffer(GL_FRAMEBUFFER, fboID);
                 glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-                // todo this doesn't properly read the entityID for all of the sprites
-                // todo look through tutorials probably and see how it's supposed to be done
                 float pixels[3];
-                glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, pixels);
-
-                std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
+                glReadPixels(2*x, 2*y, 1, 1, GL_RGB, GL_FLOAT, pixels); // ! there's some issue that makes me need to multiply by 2 for it, but I have no idea why
 
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 return pixels[0];
