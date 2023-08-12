@@ -82,7 +82,6 @@ namespace Dralgeer {
         }
 
         gameViewWindow.imGui(frameBufferTexID);
-        // window->imGui(texID2);
         propertiesWindow.update(dt, currScene, sceneType, gameViewWindow.getWantCaptureMouse());
         propertiesWindow.imGui();
 

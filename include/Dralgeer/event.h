@@ -10,7 +10,6 @@ namespace Dralgeer {
         LOAD_LEVEL,
         ADD_GAMEOBJECT_TO_SCENE,
         // REMOVE_GAMEOBJECT_FROM_SCENE,
-        UPDATE_ACTIVE_OBJECT,
         USER_EVENT
     };
 

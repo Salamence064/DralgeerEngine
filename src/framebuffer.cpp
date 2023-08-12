@@ -48,8 +48,6 @@ namespace Dralgeer {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pTexID, 0);
 
         // create the texture object for the depth buffer
-        // todo issue might have something to do with this
-        // todo worth trying to set up a render buffer instead of this
         glEnable(GL_DEPTH_TEST);
         glGenTextures(1, &depthTexID);
         glBindTexture(GL_TEXTURE_2D, depthTexID);
@@ -58,9 +56,8 @@ namespace Dralgeer {
         glDisable(GL_DEPTH_TEST);
 
         // disable the reading
-        // glReadBuffer(GL_NONE);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0); // todo im unsure if the color attachment I'm drawing to could be causing the issue
-        // todo I think I will have to watch the videos
+        glReadBuffer(GL_NONE);
+        glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
         // ensure the frame buffer is complete
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {

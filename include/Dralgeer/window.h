@@ -35,7 +35,7 @@
 // // - Pick up the Sprite selected from the ImGui menu
 // // - Place down the sprite on the gameview window (and only there)
 // // - Add a drag click feature
-// - PickingTexture stuff for the properties window
+// // - PickingTexture stuff for the properties window
 // // - port over gizmos
 // - setup physics (update Zeta2D, too)
 // - setup serialization
@@ -206,24 +206,9 @@ namespace Dralgeer {
                         glDisable(GL_BLEND);
                         pickingTexture->enableWriting();
 
-                        glViewport(0, 0, 1920, 1080); // todo not sure if this is needed. Test after getting it to work (ahhhhhhh)
-                        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // todo this is what the mouse picking gives as the numbers
+                        glViewport(0, 0, 1920, 1080);
+                        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                        // todo possibly the mouse pos isnt being obtained properly
-
-                        // todo we need to create an imgui offset for the tab bar to calc the pos precisely
-                        // todo use imguicursorpos to achieve this
-
-                        // todo regardless of the fbo I attach it to, it just outputs the color of the glClearColor
-                        // todo and not clearing the color outputs 0, 0, 0
-
-
-                        // todo issue seems to be a combo of code structure as the glClearColor call makes it so the rendered scene doesnt work for it
-                        // todo and the coordinate system might be fucked since it doesnt work consistently when drag placing
-
-
-                        // todo part of the issue is when glReadPixels is reading the pixels it reads an entire quad as one of the sprites in it
 
                         activeScene->render(pickingShader);
 
@@ -253,24 +238,6 @@ namespace Dralgeer {
                         // MouseListener and ImGui updates
                         MouseListener::updateWorldCoords(activeScene->camera);
                         imGuiLayer.update(dt, activeScene, currScene.type, frameBuffer.getTextureID(), data.width, data.height);
-
-                        // ! for debugging ------------------
-                        if (KeyListener::keyPressed[GLFW_KEY_W]) {
-                            // todo same quad issue. Really confused what is causing it
-
-                            pickingTexture->test = 0;
-                            pickingTexture->enableWriting();
-                            glReadBuffer(GL_COLOR_ATTACHMENT0);
-
-                            float pixels[3];
-                            glReadPixels(16, 80, 1, 1, GL_RGB, GL_FLOAT, pixels);
-
-                            std::cout << "Test: ";
-                            std::cout << pixels[0] << ", " << pixels[1] << ", " << pixels[2] << "\n";
-
-                            pickingTexture->disableWriting();
-                        }
-                        // ! --------------------------------
 
                         break;
                     }

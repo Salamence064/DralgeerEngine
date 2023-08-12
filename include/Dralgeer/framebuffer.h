@@ -1,17 +1,14 @@
 #pragma once
 
 #include "texture.h"
-#include "listeners.h" // todo i think this is just for debugging
 
 namespace Dralgeer {
     class FrameBuffer {
         private:
-            unsigned int rboID;
+            unsigned int fboID, rboID;
             Texture tex;
 
         public:
-            unsigned int fboID; // ! debugging
-
             FrameBuffer() {};
             void init(int width, int height);
             inline unsigned int getTextureID() const { return tex.texID; };
@@ -34,14 +31,10 @@ namespace Dralgeer {
 
     class PickingTexture {
         private:
-            unsigned int depthTexID;
+            unsigned int fboID, pTexID, depthTexID;
 
         public:
-            unsigned int pTexID, fboID; // ! debugging
-
             int width, height;
-
-            bool test = 1; // ! debugging
 
             inline PickingTexture() {};
             void init(int width, int height);

@@ -3,8 +3,6 @@
 #include "component.h"
 #include "prefabs.h"
 
-// todo we could forwardly declare the properties window class and then include the editor header in the .cpp file
-
 namespace Dralgeer {
     enum GizmoType {
         TRANSLATE_GIZMO = 0,

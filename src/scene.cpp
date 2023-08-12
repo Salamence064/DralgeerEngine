@@ -17,21 +17,8 @@ namespace Dralgeer {
         mouseControls.update();
         gizmoSystem.update();
 
-        // std::cout << "\n========================================\n";
-        // std::cout << "[GameObjects]\n";
-
         for (int i = numObjects - 1; i >= 0; --i) {
             gameObjects[i]->update();
-
-            // SpriteRenderer* spr = (SpriteRenderer*) gameObjects[i]->getComponent(SPRITE_RENDERER);
-
-            // if (spr) {
-            //     std::cout << "\nGameObject: " <<  gameObjects[i]->name << " " << spr->gameObject->id << "\n";
-            //     std::cout << "\tPos: " << spr->gameObject->transform.pos.x << ", " << spr->gameObject->transform.pos.y << "\n";
-            //     std::cout << "\tScale: " << spr->gameObject->transform.scale.x << ", " << spr->gameObject->transform.scale.y << "\n";
-            //     std::cout << "\tFilepath: " << spr->sprite.texture->filepath << "\n";
-            //     std::cout << "\tzIndex: " << spr->gameObject->transform.zIndex << "\n";
-            // }
 
             if (gameObjects[i]->dead) {
                 Renderer::destroy(gameObjects[i]->sprite);
@@ -40,8 +27,6 @@ namespace Dralgeer {
                 numObjects--;
             }
         }
-
-        // std::cout << "\n========================================\n";
     };
 
     inline void LevelEditorScene::loadResources() {
@@ -52,44 +37,6 @@ namespace Dralgeer {
         SpriteSheet* gizmoSpr = new SpriteSheet();
         gizmoSpr->init(AssetPool::getTexture("../../assets/images/gizmos.png"), 24, 48, 3, 0);
         AssetPool::addSpriteSheet("../../assets/images/gizmos.png", gizmoSpr);
-
-        // todo for testing purposes
-        // SpriteRenderer* testSpr = new SpriteRenderer();
-        // testSpr->sprite.texture = new Texture();
-        // testSpr->sprite.texture->init("../../assets/images/wall.jpg");
-        // testSpr->sprite.width = testSpr->sprite.texture->width;
-        // testSpr->sprite.height = testSpr->sprite.texture->height;
-        // testSpr->color = {0.8824f, 0.0039f, 0.0039f, 1.0f};
-        // testSpr->gameObject = new GameObject();
-        // testSpr->gameObject->transform.pos = {100.0f, 100.0f};
-        // testSpr->gameObject->name = "ThisIsATest";
-        // testSpr->gameObject->transform.scale = {300.0f, 300.0f};
-        // testSpr->gameObject->transform.zIndex = 1;
-        // testSpr->start();
-
-        // Renderer::add(testSpr);
-
-        // for (int i = 0; i < spr->numSprites; ++i) {
-        //     SpriteRenderer* testSpr = new SpriteRenderer();
-        //     testSpr->sprite.texture = spr->sprites[i].texture;
-        //     testSpr->sprite.height = spr->sprites[i].height;
-        //     testSpr->sprite.width = spr->sprites[i].width;
-        //     testSpr->sprite.texCoords[0] = spr->sprites[i].texCoords[0];
-        //     testSpr->sprite.texCoords[1] = spr->sprites[i].texCoords[1];
-        //     testSpr->sprite.texCoords[2] = spr->sprites[i].texCoords[2];
-        //     testSpr->sprite.texCoords[3] = spr->sprites[i].texCoords[3];
-        //     testSpr->color = {1.0f, 1.0f, 1.0f, 1.0f};
-        //     testSpr->gameObject = new GameObject();
-        //     testSpr->gameObject->name = "Test";
-        //     testSpr->gameObject->transform.pos = {16*i - 16*(i%16), 16*(i%16)};
-        //     testSpr->gameObject->transform.scale = {16.0f, 16.0f};
-        //     testSpr->gameObject->transform.zIndex = 0;
-        //     testSpr->start();
-
-        //     Renderer::add(testSpr);
-        // }
-
-        // todo ================================================================
 
         for (int i = 0; i < numObjects; ++i) {
             SpriteRenderer* spr = gameObjects[i]->sprite;
@@ -272,10 +219,6 @@ namespace Dralgeer {
                 // todo remove any blocks that are stacked on top of each other. This can be done when the held object is placed and before its lastTransform is set
                 GameObject* go = Prefabs::generateSpriteObject(sprite, GRID_WIDTH, GRID_HEIGHT);
                 addGameObject(go);
-
-                // SpriteRenderer* s = (SpriteRenderer*) go->getComponent(SPRITE_RENDERER);
-                // std::cout << s->gameObject->transform.scale.x << ", " << s->gameObject->transform.scale.y << "\n";
-
                 mouseControls.heldObject = go;
             }
 

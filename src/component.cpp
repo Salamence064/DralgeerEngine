@@ -147,22 +147,6 @@ namespace Dralgeer {
             // todo can place sprites over each other without overriding -- fix this (to override) in the future
 
             if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT]) {
-                // ! debugging code -----------------------------
-
-                // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-                // Transform t = ((SpriteRenderer*) heldObject->getComponent(SPRITE_RENDERER))->gameObject->transform;
-
-                // DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x + t.scale.x, t.pos.y), glm::vec3(0.5, 1, 0));
-                // DebugDraw::addLine2D(t.pos, glm::vec2(t.pos.x, t.pos.y + t.scale.y));
-                // DebugDraw::addLine2D(glm::vec2(t.pos.x, t.pos.y + t.scale.y), t.pos + t.scale);
-                // DebugDraw::addLine2D(glm::vec2(t.pos.x + t.scale.x, t.pos.y), t.pos + t.scale);
-
-                // glBindFramebuffer(GL_FRAMEBUFFER, realFbo);
-
-                // ! --------------------------------------------
-
-                // std::cout << t.scale.x << ", " << t.scale.y << "\n";
                 heldObject = nullptr;
 
                 // handle click and drag
