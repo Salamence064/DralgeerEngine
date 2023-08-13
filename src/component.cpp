@@ -230,5 +230,21 @@ namespace Dralgeer {
         return *this;
     };
 
+
+    // * =====================
+    // * Normal Functions
+    // * =====================
+
+    void GameObject::imGui() {
+        // transform
+        DImGui::drawVec2Control("Position", sprite->transform.pos);
+        DImGui::drawVec2Control("Scale", sprite->transform.scale);
+        DImGui::dragFloat("Rotation", sprite->transform.rotation);
+        DImGui::dragInt("Z-Index", sprite->transform.zIndex);
+
+        // sprite
+        sprite->imGui();
+    };
+
     // * =====================================================================
 }

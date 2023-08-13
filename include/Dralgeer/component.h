@@ -102,8 +102,8 @@ namespace Dralgeer {
             // * ====================
 
             inline void start() { sprite->start(); sprite->entityID = id; };
-            inline void imGui() { sprite->imGui(); };
-            inline void update() { sprite->update(); };
+            inline void update() { sprite->update(); transform = sprite->transform; };
+            void imGui();
     };
 
 
