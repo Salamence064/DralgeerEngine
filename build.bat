@@ -213,22 +213,22 @@ echo "DearImGui Build Complete"
 
 :SKIP_IMGUI_BUILD
 
-if exist "include/GLM/glm/glm.h.gch" (
+if exist "include/GLM/glm/glm.hpp.gch" (
     GOTO SKIP_GLM_BUILD
 )
 
 
 @REM --------- Start of GLM Build ------------
 
-echo "Building GLM"
+@REM echo "Building GLM"
 
-pushd "include/GLM/glm/"
+@REM pushd "include/GLM/glm/"
 
-g++ -g -DUNICODE -D_UNICODE -std=c++17 glm.h -o glm.h.gch
+@REM g++ -g -DUNICODE -D_UNICODE -std=c++17 glm.hpp -o glm.hpp.gch
 
-popd @REM "include/GLM/glm/"
+@REM popd @REM "include/GLM/glm/"
 
-echo "GLM Build Complete"
+@REM echo "GLM Build Complete"
 
 @REM --------- End of GLM Build ------------
 
