@@ -127,11 +127,6 @@ namespace Dralgeer {
 
             inline void init(Camera const &cam) { camera = cam; };
             void update(float dt, bool wantCapture);
-
-            inline void imGui() {
-                // todo find a way to emulate the Java thing I have setup using .class in c++
-                // todo  (probs will not be in a similar way)
-            };
     };
 
     class GridLines {
@@ -139,13 +134,7 @@ namespace Dralgeer {
             int id;
 
             inline GridLines() { id = IDCounter::componentID++; };
-
             void update(Camera const &cam);
-
-            inline void imGui() {
-                // todo find a way to emulate the Java thing I have setup using .class in c++
-                // todo  (probs will not be in a similar way)
-            };
     };
 
     class MouseControls {
@@ -169,10 +158,5 @@ namespace Dralgeer {
             MouseControls& operator = (MouseControls &&mc);
 
             void update();
-
-            inline void imGui() {
-                // todo find a way to emulate the Java thing I have setup using .class in c++
-                // todo  (probs will not be in a similar way)
-            };
     };
 }
