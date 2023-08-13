@@ -33,6 +33,8 @@
 
 #pragma once
 
+// todo include this stuff in glm.h
+
 // Dependency:
 #include "../gtc/quaternion.hpp"
 #include "../gtc/vec1.hpp"

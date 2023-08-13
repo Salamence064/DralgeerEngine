@@ -100,6 +100,8 @@
 /// - <a href="modules.html">GLM API documentation</a>
 /// - <a href="https://github.com/g-truc/glm/blob/master/manual.md">GLM Manual</a>
 
+// todo go through and add #define directives for various files that get included from this and other glm stuff
+
 #pragma once
 
 // ---------- #include "detail/_fixes.hpp" ----------
@@ -23027,4 +23029,5602 @@ namespace detail
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "detail/func_common_simd.inl"
 #endif
+
+
+// ! Extensions used for this engine
+
+// ---------- type_ptr.hpp ----------
+
+// ---------- "../gtc/quaternion.hpp" -----------
+
+	// ---------- "../gtc/constants.hpp" ----------
+
+	#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_scalar_constants extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_scalar_constants
+	/// @{
+
+	/// Return the epsilon constant for floating point types.
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType epsilon();
+
+	/// Return the pi constant for floating point types.
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType pi();
+
+	/// Return the value of cos(1 / 2) for floating point types.
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType cos_one_over_two();
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType epsilon()
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'epsilon' only accepts floating-point inputs");
+		return std::numeric_limits<genType>::epsilon();
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType pi()
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'pi' only accepts floating-point inputs");
+		return static_cast<genType>(3.14159265358979323846264338327950288);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType cos_one_over_two()
+	{
+		return genType(0.877582561890372716130286068203503191);
+	}
+} //namespace glm
+
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_GTC_constants extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup gtc_constants
+	/// @{
+
+	/// Return 0.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType zero();
+
+	/// Return 1.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType one();
+
+	/// Return pi * 2.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType two_pi();
+
+	/// Return square root of pi.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_pi();
+
+	/// Return pi / 2.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType half_pi();
+
+	/// Return pi / 2 * 3.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType three_over_two_pi();
+
+	/// Return pi / 4.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType quarter_pi();
+
+	/// Return 1 / pi.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType one_over_pi();
+
+	/// Return 1 / (pi * 2).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType one_over_two_pi();
+
+	/// Return 2 / pi.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType two_over_pi();
+
+	/// Return 4 / pi.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType four_over_pi();
+
+	/// Return 2 / sqrt(pi).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType two_over_root_pi();
+
+	/// Return 1 / sqrt(2).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType one_over_root_two();
+
+	/// Return sqrt(pi / 2).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_half_pi();
+
+	/// Return sqrt(2 * pi).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_two_pi();
+
+	/// Return sqrt(ln(4)).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_ln_four();
+
+	/// Return e constant.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType e();
+
+	/// Return Euler's constant.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType euler();
+
+	/// Return sqrt(2).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_two();
+
+	/// Return sqrt(3).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_three();
+
+	/// Return sqrt(5).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType root_five();
+
+	/// Return ln(2).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType ln_two();
+
+	/// Return ln(10).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType ln_ten();
+
+	/// Return ln(ln(2)).
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType ln_ln_two();
+
+	/// Return 1 / 3.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType third();
+
+	/// Return 2 / 3.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType two_thirds();
+
+	/// Return the golden ratio constant.
+	/// @see gtc_constants
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType golden_ratio();
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType zero()
+	{
+		return genType(0);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType one()
+	{
+		return genType(1);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType two_pi()
+	{
+		return genType(6.28318530717958647692528676655900576);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_pi()
+	{
+		return genType(1.772453850905516027);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType half_pi()
+	{
+		return genType(1.57079632679489661923132169163975144);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType three_over_two_pi()
+	{
+		return genType(4.71238898038468985769396507491925432);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType quarter_pi()
+	{
+		return genType(0.785398163397448309615660845819875721);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType one_over_pi()
+	{
+		return genType(0.318309886183790671537767526745028724);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType one_over_two_pi()
+	{
+		return genType(0.159154943091895335768883763372514362);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType two_over_pi()
+	{
+		return genType(0.636619772367581343075535053490057448);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType four_over_pi()
+	{
+		return genType(1.273239544735162686151070106980114898);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType two_over_root_pi()
+	{
+		return genType(1.12837916709551257389615890312154517);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType one_over_root_two()
+	{
+		return genType(0.707106781186547524400844362104849039);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_half_pi()
+	{
+		return genType(1.253314137315500251);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_two_pi()
+	{
+		return genType(2.506628274631000502);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_ln_four()
+	{
+		return genType(1.17741002251547469);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType e()
+	{
+		return genType(2.71828182845904523536);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType euler()
+	{
+		return genType(0.577215664901532860606);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_two()
+	{
+		return genType(1.41421356237309504880168872420969808);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_three()
+	{
+		return genType(1.73205080756887729352744634150587236);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType root_five()
+	{
+		return genType(2.23606797749978969640917366873127623);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType ln_two()
+	{
+		return genType(0.693147180559945309417232121458176568);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType ln_ten()
+	{
+		return genType(2.30258509299404568401799145468436421);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType ln_ln_two()
+	{
+		return genType(-0.3665129205816643);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType third()
+	{
+		return genType(0.3333333333333333333333333333333333333333);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType two_thirds()
+	{
+		return genType(0.666666666666666666666666666666666666667);
+	}
+
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType golden_ratio()
+	{
+		return genType(1.61803398874989484820458683436563811);
+	}
+
+} //namespace glm
+
+
+
+
+	// ---------- "../gtc/matrix_transform.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_matrix_projection extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_matrix_projection
+	/// @{
+
+	/// Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param obj Specify the object coordinates.
+	/// @param model Specifies the current modelview matrix
+	/// @param proj Specifies the current projection matrix
+	/// @param viewport Specifies the current viewport
+	/// @return Return the computed window coordinates.
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluProject.xml">gluProject man page</a>
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> projectZO(
+		vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
+
+	/// Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param obj Specify the object coordinates.
+	/// @param model Specifies the current modelview matrix
+	/// @param proj Specifies the current projection matrix
+	/// @param viewport Specifies the current viewport
+	/// @return Return the computed window coordinates.
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluProject.xml">gluProject man page</a>
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> projectNO(
+		vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
+
+	/// Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates using default near and far clip planes definition.
+	/// To change default near and far clip planes definition use GLM_FORCE_DEPTH_ZERO_TO_ONE.
+	///
+	/// @param obj Specify the object coordinates.
+	/// @param model Specifies the current modelview matrix
+	/// @param proj Specifies the current projection matrix
+	/// @param viewport Specifies the current viewport
+	/// @return Return the computed window coordinates.
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluProject.xml">gluProject man page</a>
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> project(
+		vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
+
+	/// Map the specified window coordinates (win.x, win.y, win.z) into object coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param win Specify the window coordinates to be mapped.
+	/// @param model Specifies the modelview matrix
+	/// @param proj Specifies the projection matrix
+	/// @param viewport Specifies the viewport
+	/// @return Returns the computed object coordinates.
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluUnProject.xml">gluUnProject man page</a>
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> unProjectZO(
+		vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
+
+	/// Map the specified window coordinates (win.x, win.y, win.z) into object coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param win Specify the window coordinates to be mapped.
+	/// @param model Specifies the modelview matrix
+	/// @param proj Specifies the projection matrix
+	/// @param viewport Specifies the viewport
+	/// @return Returns the computed object coordinates.
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluUnProject.xml">gluUnProject man page</a>
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> unProjectNO(
+		vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
+
+	/// Map the specified window coordinates (win.x, win.y, win.z) into object coordinates using default near and far clip planes definition.
+	/// To change default near and far clip planes definition use GLM_FORCE_DEPTH_ZERO_TO_ONE.
+	///
+	/// @param win Specify the window coordinates to be mapped.
+	/// @param model Specifies the modelview matrix
+	/// @param proj Specifies the projection matrix
+	/// @param viewport Specifies the viewport
+	/// @return Returns the computed object coordinates.
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluUnProject.xml">gluUnProject man page</a>
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> unProject(
+		vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport);
+
+	/// Define a picking region
+	///
+	/// @param center Specify the center of a picking region in window coordinates.
+	/// @param delta Specify the width and height, respectively, of the picking region in window coordinates.
+	/// @param viewport Rendering viewport
+	/// @tparam T Native type used for the computation. Currently supported: half (not recommended), float or double.
+	/// @tparam U Currently supported: Floating-point types and integer types.
+	///
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPickMatrix.xml">gluPickMatrix man page</a>
+	template<typename T, qualifier Q, typename U>
+	GLM_FUNC_DECL mat<4, 4, T, Q> pickMatrix(
+		vec<2, T, Q> const& center, vec<2, T, Q> const& delta, vec<4, U, Q> const& viewport);
+
+	/// @}
+}//namespace glm
+
+namespace glm
+{
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> projectZO(vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport)
+	{
+		vec<4, T, Q> tmp = vec<4, T, Q>(obj, static_cast<T>(1));
+		tmp = model * tmp;
+		tmp = proj * tmp;
+
+		tmp /= tmp.w;
+		tmp.x = tmp.x * static_cast<T>(0.5) + static_cast<T>(0.5);
+		tmp.y = tmp.y * static_cast<T>(0.5) + static_cast<T>(0.5);
+
+		tmp[0] = tmp[0] * T(viewport[2]) + T(viewport[0]);
+		tmp[1] = tmp[1] * T(viewport[3]) + T(viewport[1]);
+
+		return vec<3, T, Q>(tmp);
+	}
+
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> projectNO(vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport)
+	{
+		vec<4, T, Q> tmp = vec<4, T, Q>(obj, static_cast<T>(1));
+		tmp = model * tmp;
+		tmp = proj * tmp;
+
+		tmp /= tmp.w;
+		tmp = tmp * static_cast<T>(0.5) + static_cast<T>(0.5);
+		tmp[0] = tmp[0] * T(viewport[2]) + T(viewport[0]);
+		tmp[1] = tmp[1] * T(viewport[3]) + T(viewport[1]);
+
+		return vec<3, T, Q>(tmp);
+	}
+
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> project(vec<3, T, Q> const& obj, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return projectZO(obj, model, proj, viewport);
+#		else
+			return projectNO(obj, model, proj, viewport);
+#		endif
+	}
+
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> unProjectZO(vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport)
+	{
+		mat<4, 4, T, Q> Inverse = inverse(proj * model);
+
+		vec<4, T, Q> tmp = vec<4, T, Q>(win, T(1));
+		tmp.x = (tmp.x - T(viewport[0])) / T(viewport[2]);
+		tmp.y = (tmp.y - T(viewport[1])) / T(viewport[3]);
+		tmp.x = tmp.x * static_cast<T>(2) - static_cast<T>(1);
+		tmp.y = tmp.y * static_cast<T>(2) - static_cast<T>(1);
+
+		vec<4, T, Q> obj = Inverse * tmp;
+		obj /= obj.w;
+
+		return vec<3, T, Q>(obj);
+	}
+
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> unProjectNO(vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport)
+	{
+		mat<4, 4, T, Q> Inverse = inverse(proj * model);
+
+		vec<4, T, Q> tmp = vec<4, T, Q>(win, T(1));
+		tmp.x = (tmp.x - T(viewport[0])) / T(viewport[2]);
+		tmp.y = (tmp.y - T(viewport[1])) / T(viewport[3]);
+		tmp = tmp * static_cast<T>(2) - static_cast<T>(1);
+
+		vec<4, T, Q> obj = Inverse * tmp;
+		obj /= obj.w;
+
+		return vec<3, T, Q>(obj);
+	}
+
+	template<typename T, typename U, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> unProject(vec<3, T, Q> const& win, mat<4, 4, T, Q> const& model, mat<4, 4, T, Q> const& proj, vec<4, U, Q> const& viewport)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return unProjectZO(win, model, proj, viewport);
+#		else
+			return unProjectNO(win, model, proj, viewport);
+#		endif
+	}
+
+	template<typename T, qualifier Q, typename U>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> pickMatrix(vec<2, T, Q> const& center, vec<2, T, Q> const& delta, vec<4, U, Q> const& viewport)
+	{
+		assert(delta.x > static_cast<T>(0) && delta.y > static_cast<T>(0));
+		mat<4, 4, T, Q> Result(static_cast<T>(1));
+
+		if(!(delta.x > static_cast<T>(0) && delta.y > static_cast<T>(0)))
+			return Result; // Error
+
+		vec<3, T, Q> Temp(
+			(static_cast<T>(viewport[2]) - static_cast<T>(2) * (center.x - static_cast<T>(viewport[0]))) / delta.x,
+			(static_cast<T>(viewport[3]) - static_cast<T>(2) * (center.y - static_cast<T>(viewport[1]))) / delta.y,
+			static_cast<T>(0));
+
+		// Translate and scale the picked region to the entire window
+		Result = translate(Result, Temp);
+		return scale(Result, vec<3, T, Q>(static_cast<T>(viewport[2]) / delta.x, static_cast<T>(viewport[3]) / delta.y, static_cast<T>(1)));
+	}
+}//namespace glm
+
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_matrix_clip_space extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_matrix_clip_space
+	/// @{
+
+	/// Creates a matrix for projecting two-dimensional coordinates onto the screen.
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top, T const& zNear, T const& zFar)
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluOrtho2D.xml">gluOrtho2D man page</a>
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> ortho(
+		T left, T right, T bottom, T top);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoLH_ZO(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume using right-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoLH_NO(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoRH_ZO(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoRH_NO(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoZO(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoNO(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using left-handed coordinates.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoLH(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using right-handed coordinates.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoRH(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a matrix for an orthographic parallel viewing volume, using the default handedness and default near and far clip planes definition.
+	/// To change default handedness use GLM_FORCE_LEFT_HANDED. To change default near and far clip planes definition use GLM_FORCE_DEPTH_ZERO_TO_ONE.
+	///
+	/// @tparam T A floating-point scalar type
+	///
+	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml">glOrtho man page</a>
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> ortho(
+		T left, T right, T bottom, T top, T zNear, T zFar);
+
+	/// Creates a left handed frustum matrix.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumLH_ZO(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a left handed frustum matrix.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumLH_NO(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a right handed frustum matrix.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumRH_ZO(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a right handed frustum matrix.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumRH_NO(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a frustum matrix using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumZO(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a frustum matrix using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumNO(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a left handed frustum matrix.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumLH(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a right handed frustum matrix.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustumRH(
+		T left, T right, T bottom, T top, T near, T far);
+
+	/// Creates a frustum matrix with default handedness, using the default handedness and default near and far clip planes definition.
+	/// To change default handedness use GLM_FORCE_LEFT_HANDED. To change default near and far clip planes definition use GLM_FORCE_DEPTH_ZERO_TO_ONE.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml">glFrustum man page</a>
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> frustum(
+		T left, T right, T bottom, T top, T near, T far);
+
+
+	/// Creates a matrix for a right handed, symetric perspective-view frustum.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveRH_ZO(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a right handed, symetric perspective-view frustum.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveRH_NO(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a left handed, symetric perspective-view frustum.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveLH_ZO(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a left handed, symetric perspective-view frustum.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveLH_NO(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a symetric perspective-view frustum using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveZO(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a symetric perspective-view frustum using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveNO(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a right handed, symetric perspective-view frustum.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveRH(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a left handed, symetric perspective-view frustum.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveLH(
+		T fovy, T aspect, T near, T far);
+
+	/// Creates a matrix for a symetric perspective-view frustum based on the default handedness and default near and far clip planes definition.
+	/// To change default handedness use GLM_FORCE_LEFT_HANDED. To change default near and far clip planes definition use GLM_FORCE_DEPTH_ZERO_TO_ONE.
+	///
+	/// @param fovy Specifies the field of view angle in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml">gluPerspective man page</a>
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspective(
+		T fovy, T aspect, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view using right-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovRH_ZO(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view using right-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovRH_NO(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovLH_ZO(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovLH_NO(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovZO(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view using left-handed coordinates if GLM_FORCE_LEFT_HANDED if defined or right-handed coordinates otherwise.
+	/// The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovNO(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a right handed perspective projection matrix based on a field of view.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovRH(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a left handed perspective projection matrix based on a field of view.
+	/// If GLM_FORCE_DEPTH_ZERO_TO_ONE is defined, the near and far clip planes correspond to z normalized device coordinates of 0 and +1 respectively. (Direct3D clip volume definition)
+	/// Otherwise, the near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFovLH(
+		T fov, T width, T height, T near, T far);
+
+	/// Builds a perspective projection matrix based on a field of view and the default handedness and default near and far clip planes definition.
+	/// To change default handedness use GLM_FORCE_LEFT_HANDED. To change default near and far clip planes definition use GLM_FORCE_DEPTH_ZERO_TO_ONE.
+	///
+	/// @param fov Expressed in radians.
+	/// @param width Width of the viewport
+	/// @param height Height of the viewport
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> perspectiveFov(
+		T fov, T width, T height, T near, T far);
+
+	/// Creates a matrix for a left handed, symmetric perspective-view frustum with far plane at infinite.
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> infinitePerspectiveLH(
+		T fovy, T aspect, T near);
+
+	/// Creates a matrix for a right handed, symmetric perspective-view frustum with far plane at infinite.
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> infinitePerspectiveRH(
+		T fovy, T aspect, T near);
+
+	/// Creates a matrix for a symmetric perspective-view frustum with far plane at infinite with default handedness.
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> infinitePerspective(
+		T fovy, T aspect, T near);
+
+	/// Creates a matrix for a symmetric perspective-view frustum with far plane at infinite for graphics hardware that doesn't support depth clamping.
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> tweakedInfinitePerspective(
+		T fovy, T aspect, T near);
+
+	/// Creates a matrix for a symmetric perspective-view frustum with far plane at infinite for graphics hardware that doesn't support depth clamping.
+	///
+	/// @param fovy Specifies the field of view angle, in degrees, in the y direction. Expressed in radians.
+	/// @param aspect Specifies the aspect ratio that determines the field of view in the x direction. The aspect ratio is the ratio of x (width) to y (height).
+	/// @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+	/// @param ep Epsilon
+	///
+	/// @tparam T A floating-point scalar type
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> tweakedInfinitePerspective(
+		T fovy, T aspect, T near, T ep);
+
+	/// @}
+}//namespace glm
+
+namespace glm
+{
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> ortho(T left, T right, T bottom, T top)
+	{
+		mat<4, 4, T, defaultp> Result(static_cast<T>(1));
+		Result[0][0] = static_cast<T>(2) / (right - left);
+		Result[1][1] = static_cast<T>(2) / (top - bottom);
+		Result[2][2] = - static_cast<T>(1);
+		Result[3][0] = - (right + left) / (right - left);
+		Result[3][1] = - (top + bottom) / (top - bottom);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoLH_ZO(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+		mat<4, 4, T, defaultp> Result(1);
+		Result[0][0] = static_cast<T>(2) / (right - left);
+		Result[1][1] = static_cast<T>(2) / (top - bottom);
+		Result[2][2] = static_cast<T>(1) / (zFar - zNear);
+		Result[3][0] = - (right + left) / (right - left);
+		Result[3][1] = - (top + bottom) / (top - bottom);
+		Result[3][2] = - zNear / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoLH_NO(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+		mat<4, 4, T, defaultp> Result(1);
+		Result[0][0] = static_cast<T>(2) / (right - left);
+		Result[1][1] = static_cast<T>(2) / (top - bottom);
+		Result[2][2] = static_cast<T>(2) / (zFar - zNear);
+		Result[3][0] = - (right + left) / (right - left);
+		Result[3][1] = - (top + bottom) / (top - bottom);
+		Result[3][2] = - (zFar + zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoRH_ZO(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+		mat<4, 4, T, defaultp> Result(1);
+		Result[0][0] = static_cast<T>(2) / (right - left);
+		Result[1][1] = static_cast<T>(2) / (top - bottom);
+		Result[2][2] = - static_cast<T>(1) / (zFar - zNear);
+		Result[3][0] = - (right + left) / (right - left);
+		Result[3][1] = - (top + bottom) / (top - bottom);
+		Result[3][2] = - zNear / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoRH_NO(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+		mat<4, 4, T, defaultp> Result(1);
+		Result[0][0] = static_cast<T>(2) / (right - left);
+		Result[1][1] = static_cast<T>(2) / (top - bottom);
+		Result[2][2] = - static_cast<T>(2) / (zFar - zNear);
+		Result[3][0] = - (right + left) / (right - left);
+		Result[3][1] = - (top + bottom) / (top - bottom);
+		Result[3][2] = - (zFar + zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoZO(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return orthoLH_ZO(left, right, bottom, top, zNear, zFar);
+#		else
+			return orthoRH_ZO(left, right, bottom, top, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoNO(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return orthoLH_NO(left, right, bottom, top, zNear, zFar);
+#		else
+			return orthoRH_NO(left, right, bottom, top, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoLH(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return orthoLH_ZO(left, right, bottom, top, zNear, zFar);
+#		else
+			return orthoLH_NO(left, right, bottom, top, zNear, zFar);
+#		endif
+
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> orthoRH(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return orthoRH_ZO(left, right, bottom, top, zNear, zFar);
+#		else
+			return orthoRH_NO(left, right, bottom, top, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> ortho(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_ZO
+			return orthoLH_ZO(left, right, bottom, top, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_NO
+			return orthoLH_NO(left, right, bottom, top, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_ZO
+			return orthoRH_ZO(left, right, bottom, top, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_NO
+			return orthoRH_NO(left, right, bottom, top, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumLH_ZO(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+		mat<4, 4, T, defaultp> Result(0);
+		Result[0][0] = (static_cast<T>(2) * nearVal) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * nearVal) / (top - bottom);
+		Result[2][0] = (right + left) / (right - left);
+		Result[2][1] = (top + bottom) / (top - bottom);
+		Result[2][2] = farVal / (farVal - nearVal);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = -(farVal * nearVal) / (farVal - nearVal);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumLH_NO(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+		mat<4, 4, T, defaultp> Result(0);
+		Result[0][0] = (static_cast<T>(2) * nearVal) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * nearVal) / (top - bottom);
+		Result[2][0] = (right + left) / (right - left);
+		Result[2][1] = (top + bottom) / (top - bottom);
+		Result[2][2] = (farVal + nearVal) / (farVal - nearVal);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = - (static_cast<T>(2) * farVal * nearVal) / (farVal - nearVal);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumRH_ZO(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+		mat<4, 4, T, defaultp> Result(0);
+		Result[0][0] = (static_cast<T>(2) * nearVal) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * nearVal) / (top - bottom);
+		Result[2][0] = (right + left) / (right - left);
+		Result[2][1] = (top + bottom) / (top - bottom);
+		Result[2][2] = farVal / (nearVal - farVal);
+		Result[2][3] = static_cast<T>(-1);
+		Result[3][2] = -(farVal * nearVal) / (farVal - nearVal);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumRH_NO(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+		mat<4, 4, T, defaultp> Result(0);
+		Result[0][0] = (static_cast<T>(2) * nearVal) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * nearVal) / (top - bottom);
+		Result[2][0] = (right + left) / (right - left);
+		Result[2][1] = (top + bottom) / (top - bottom);
+		Result[2][2] = - (farVal + nearVal) / (farVal - nearVal);
+		Result[2][3] = static_cast<T>(-1);
+		Result[3][2] = - (static_cast<T>(2) * farVal * nearVal) / (farVal - nearVal);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumZO(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return frustumLH_ZO(left, right, bottom, top, nearVal, farVal);
+#		else
+			return frustumRH_ZO(left, right, bottom, top, nearVal, farVal);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumNO(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return frustumLH_NO(left, right, bottom, top, nearVal, farVal);
+#		else
+			return frustumRH_NO(left, right, bottom, top, nearVal, farVal);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumLH(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return frustumLH_ZO(left, right, bottom, top, nearVal, farVal);
+#		else
+			return frustumLH_NO(left, right, bottom, top, nearVal, farVal);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustumRH(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return frustumRH_ZO(left, right, bottom, top, nearVal, farVal);
+#		else
+			return frustumRH_NO(left, right, bottom, top, nearVal, farVal);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> frustum(T left, T right, T bottom, T top, T nearVal, T farVal)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_ZO
+			return frustumLH_ZO(left, right, bottom, top, nearVal, farVal);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_NO
+			return frustumLH_NO(left, right, bottom, top, nearVal, farVal);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_ZO
+			return frustumRH_ZO(left, right, bottom, top, nearVal, farVal);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_NO
+			return frustumRH_NO(left, right, bottom, top, nearVal, farVal);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveRH_ZO(T fovy, T aspect, T zNear, T zFar)
+	{
+		assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
+
+		T const tanHalfFovy = tan(fovy / static_cast<T>(2));
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+		Result[2][2] = zFar / (zNear - zFar);
+		Result[2][3] = - static_cast<T>(1);
+		Result[3][2] = -(zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveRH_NO(T fovy, T aspect, T zNear, T zFar)
+	{
+		assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
+
+		T const tanHalfFovy = tan(fovy / static_cast<T>(2));
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+		Result[2][2] = - (zFar + zNear) / (zFar - zNear);
+		Result[2][3] = - static_cast<T>(1);
+		Result[3][2] = - (static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveLH_ZO(T fovy, T aspect, T zNear, T zFar)
+	{
+		assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
+
+		T const tanHalfFovy = tan(fovy / static_cast<T>(2));
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+		Result[2][2] = zFar / (zFar - zNear);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = -(zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveLH_NO(T fovy, T aspect, T zNear, T zFar)
+	{
+		assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
+
+		T const tanHalfFovy = tan(fovy / static_cast<T>(2));
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+		Result[2][2] = (zFar + zNear) / (zFar - zNear);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = - (static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveZO(T fovy, T aspect, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return perspectiveLH_ZO(fovy, aspect, zNear, zFar);
+#		else
+			return perspectiveRH_ZO(fovy, aspect, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveNO(T fovy, T aspect, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return perspectiveLH_NO(fovy, aspect, zNear, zFar);
+#		else
+			return perspectiveRH_NO(fovy, aspect, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveLH(T fovy, T aspect, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return perspectiveLH_ZO(fovy, aspect, zNear, zFar);
+#		else
+			return perspectiveLH_NO(fovy, aspect, zNear, zFar);
+#		endif
+
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveRH(T fovy, T aspect, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return perspectiveRH_ZO(fovy, aspect, zNear, zFar);
+#		else
+			return perspectiveRH_NO(fovy, aspect, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspective(T fovy, T aspect, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_ZO
+			return perspectiveLH_ZO(fovy, aspect, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_NO
+			return perspectiveLH_NO(fovy, aspect, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_ZO
+			return perspectiveRH_ZO(fovy, aspect, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_NO
+			return perspectiveRH_NO(fovy, aspect, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovRH_ZO(T fov, T width, T height, T zNear, T zFar)
+	{
+		assert(width > static_cast<T>(0));
+		assert(height > static_cast<T>(0));
+		assert(fov > static_cast<T>(0));
+
+		T const rad = fov;
+		T const h = glm::cos(static_cast<T>(0.5) * rad) / glm::sin(static_cast<T>(0.5) * rad);
+		T const w = h * height / width; ///todo max(width , Height) / min(width , Height)?
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = w;
+		Result[1][1] = h;
+		Result[2][2] = zFar / (zNear - zFar);
+		Result[2][3] = - static_cast<T>(1);
+		Result[3][2] = -(zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovRH_NO(T fov, T width, T height, T zNear, T zFar)
+	{
+		assert(width > static_cast<T>(0));
+		assert(height > static_cast<T>(0));
+		assert(fov > static_cast<T>(0));
+
+		T const rad = fov;
+		T const h = glm::cos(static_cast<T>(0.5) * rad) / glm::sin(static_cast<T>(0.5) * rad);
+		T const w = h * height / width; ///todo max(width , Height) / min(width , Height)?
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = w;
+		Result[1][1] = h;
+		Result[2][2] = - (zFar + zNear) / (zFar - zNear);
+		Result[2][3] = - static_cast<T>(1);
+		Result[3][2] = - (static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovLH_ZO(T fov, T width, T height, T zNear, T zFar)
+	{
+		assert(width > static_cast<T>(0));
+		assert(height > static_cast<T>(0));
+		assert(fov > static_cast<T>(0));
+
+		T const rad = fov;
+		T const h = glm::cos(static_cast<T>(0.5) * rad) / glm::sin(static_cast<T>(0.5) * rad);
+		T const w = h * height / width; ///todo max(width , Height) / min(width , Height)?
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = w;
+		Result[1][1] = h;
+		Result[2][2] = zFar / (zFar - zNear);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = -(zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovLH_NO(T fov, T width, T height, T zNear, T zFar)
+	{
+		assert(width > static_cast<T>(0));
+		assert(height > static_cast<T>(0));
+		assert(fov > static_cast<T>(0));
+
+		T const rad = fov;
+		T const h = glm::cos(static_cast<T>(0.5) * rad) / glm::sin(static_cast<T>(0.5) * rad);
+		T const w = h * height / width; ///todo max(width , Height) / min(width , Height)?
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = w;
+		Result[1][1] = h;
+		Result[2][2] = (zFar + zNear) / (zFar - zNear);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = - (static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovZO(T fov, T width, T height, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return perspectiveFovLH_ZO(fov, width, height, zNear, zFar);
+#		else
+			return perspectiveFovRH_ZO(fov, width, height, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovNO(T fov, T width, T height, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return perspectiveFovLH_NO(fov, width, height, zNear, zFar);
+#		else
+			return perspectiveFovRH_NO(fov, width, height, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovLH(T fov, T width, T height, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return perspectiveFovLH_ZO(fov, width, height, zNear, zFar);
+#		else
+			return perspectiveFovLH_NO(fov, width, height, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFovRH(T fov, T width, T height, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_ZO_BIT
+			return perspectiveFovRH_ZO(fov, width, height, zNear, zFar);
+#		else
+			return perspectiveFovRH_NO(fov, width, height, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> perspectiveFov(T fov, T width, T height, T zNear, T zFar)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_ZO
+			return perspectiveFovLH_ZO(fov, width, height, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_LH_NO
+			return perspectiveFovLH_NO(fov, width, height, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_ZO
+			return perspectiveFovRH_ZO(fov, width, height, zNear, zFar);
+#		elif GLM_CONFIG_CLIP_CONTROL == GLM_CLIP_CONTROL_RH_NO
+			return perspectiveFovRH_NO(fov, width, height, zNear, zFar);
+#		endif
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> infinitePerspectiveRH(T fovy, T aspect, T zNear)
+	{
+		T const range = tan(fovy / static_cast<T>(2)) * zNear;
+		T const left = -range * aspect;
+		T const right = range * aspect;
+		T const bottom = -range;
+		T const top = range;
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = (static_cast<T>(2) * zNear) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * zNear) / (top - bottom);
+		Result[2][2] = - static_cast<T>(1);
+		Result[2][3] = - static_cast<T>(1);
+		Result[3][2] = - static_cast<T>(2) * zNear;
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> infinitePerspectiveLH(T fovy, T aspect, T zNear)
+	{
+		T const range = tan(fovy / static_cast<T>(2)) * zNear;
+		T const left = -range * aspect;
+		T const right = range * aspect;
+		T const bottom = -range;
+		T const top = range;
+
+		mat<4, 4, T, defaultp> Result(T(0));
+		Result[0][0] = (static_cast<T>(2) * zNear) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * zNear) / (top - bottom);
+		Result[2][2] = static_cast<T>(1);
+		Result[2][3] = static_cast<T>(1);
+		Result[3][2] = - static_cast<T>(2) * zNear;
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> infinitePerspective(T fovy, T aspect, T zNear)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return infinitePerspectiveLH(fovy, aspect, zNear);
+#		else
+			return infinitePerspectiveRH(fovy, aspect, zNear);
+#		endif
+	}
+
+	// Infinite projection matrix: http://www.terathon.com/gdc07_lengyel.pdf
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> tweakedInfinitePerspective(T fovy, T aspect, T zNear, T ep)
+	{
+		T const range = tan(fovy / static_cast<T>(2)) * zNear;
+		T const left = -range * aspect;
+		T const right = range * aspect;
+		T const bottom = -range;
+		T const top = range;
+
+		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
+		Result[0][0] = (static_cast<T>(2) * zNear) / (right - left);
+		Result[1][1] = (static_cast<T>(2) * zNear) / (top - bottom);
+		Result[2][2] = ep - static_cast<T>(1);
+		Result[2][3] = static_cast<T>(-1);
+		Result[3][2] = (ep - static_cast<T>(2)) * zNear;
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> tweakedInfinitePerspective(T fovy, T aspect, T zNear)
+	{
+		return tweakedInfinitePerspective(fovy, aspect, zNear, epsilon<T>());
+	}
+}//namespace glm
+
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_matrix_transform extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_matrix_transform
+	/// @{
+
+	/// Builds an identity matrix.
+	template<typename genType>
+	GLM_FUNC_DECL GLM_CONSTEXPR genType identity();
+
+	/// Builds a translation 4 * 4 matrix created from a vector of 3 components.
+	///
+	/// @param m Input matrix multiplied by this translation matrix.
+	/// @param v Coordinates of a translation vector.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @code
+	/// #include <glm/glm.hpp>
+	/// #include <glm/gtc/matrix_transform.hpp>
+	/// ...
+	/// glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f));
+	/// // m[0][0] == 1.0f, m[0][1] == 0.0f, m[0][2] == 0.0f, m[0][3] == 0.0f
+	/// // m[1][0] == 0.0f, m[1][1] == 1.0f, m[1][2] == 0.0f, m[1][3] == 0.0f
+	/// // m[2][0] == 0.0f, m[2][1] == 0.0f, m[2][2] == 1.0f, m[2][3] == 0.0f
+	/// // m[3][0] == 1.0f, m[3][1] == 1.0f, m[3][2] == 1.0f, m[3][3] == 1.0f
+	/// @endcode
+	///
+	/// @see - translate(mat<4, 4, T, Q> const& m, T x, T y, T z)
+	/// @see - translate(vec<3, T, Q> const& v)
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml">glTranslate man page</a>
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> translate(
+		mat<4, 4, T, Q> const& m, vec<3, T, Q> const& v);
+
+	/// Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
+	///
+	/// @param m Input matrix multiplied by this rotation matrix.
+	/// @param angle Rotation angle expressed in radians.
+	/// @param axis Rotation axis, recommended to be normalized.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @see - rotate(mat<4, 4, T, Q> const& m, T angle, T x, T y, T z)
+	/// @see - rotate(T angle, vec<3, T, Q> const& v)
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml">glRotate man page</a>
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> rotate(
+		mat<4, 4, T, Q> const& m, T angle, vec<3, T, Q> const& axis);
+
+	/// Builds a scale 4 * 4 matrix created from 3 scalars.
+	///
+	/// @param m Input matrix multiplied by this scale matrix.
+	/// @param v Ratio of scaling for each axis.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @see - scale(mat<4, 4, T, Q> const& m, T x, T y, T z)
+	/// @see - scale(vec<3, T, Q> const& v)
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml">glScale man page</a>
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> scale(
+		mat<4, 4, T, Q> const& m, vec<3, T, Q> const& v);
+
+	/// Build a right handed look at view matrix.
+	///
+	/// @param eye Position of the camera
+	/// @param center Position where the camera is looking at
+	/// @param up Normalized up vector, how the camera is oriented. Typically (0, 0, 1)
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @see - frustum(T const& left, T const& right, T const& bottom, T const& top, T const& nearVal, T const& farVal) frustum(T const& left, T const& right, T const& bottom, T const& top, T const& nearVal, T const& farVal)
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> lookAtRH(
+		vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up);
+
+	/// Build a left handed look at view matrix.
+	///
+	/// @param eye Position of the camera
+	/// @param center Position where the camera is looking at
+	/// @param up Normalized up vector, how the camera is oriented. Typically (0, 0, 1)
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @see - frustum(T const& left, T const& right, T const& bottom, T const& top, T const& nearVal, T const& farVal) frustum(T const& left, T const& right, T const& bottom, T const& top, T const& nearVal, T const& farVal)
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> lookAtLH(
+		vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up);
+
+	/// Build a look at view matrix based on the default handedness.
+	///
+	/// @param eye Position of the camera
+	/// @param center Position where the camera is looking at
+	/// @param up Normalized up vector, how the camera is oriented. Typically (0, 0, 1)
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @see - frustum(T const& left, T const& right, T const& bottom, T const& top, T const& nearVal, T const& farVal) frustum(T const& left, T const& right, T const& bottom, T const& top, T const& nearVal, T const& farVal)
+	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml">gluLookAt man page</a>
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> lookAt(
+		vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up);
+
+	/// @}
+}//namespace glm
+
+namespace glm
+{
+	template<typename genType>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType identity()
+	{
+		return detail::init_gentype<genType, detail::genTypeTrait<genType>::GENTYPE>::identity();
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> translate(mat<4, 4, T, Q> const& m, vec<3, T, Q> const& v)
+	{
+		mat<4, 4, T, Q> Result(m);
+		Result[3] = m[0] * v[0] + m[1] * v[1] + m[2] * v[2] + m[3];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> rotate(mat<4, 4, T, Q> const& m, T angle, vec<3, T, Q> const& v)
+	{
+		T const a = angle;
+		T const c = cos(a);
+		T const s = sin(a);
+
+		vec<3, T, Q> axis(normalize(v));
+		vec<3, T, Q> temp((T(1) - c) * axis);
+
+		mat<4, 4, T, Q> Rotate;
+		Rotate[0][0] = c + temp[0] * axis[0];
+		Rotate[0][1] = temp[0] * axis[1] + s * axis[2];
+		Rotate[0][2] = temp[0] * axis[2] - s * axis[1];
+
+		Rotate[1][0] = temp[1] * axis[0] - s * axis[2];
+		Rotate[1][1] = c + temp[1] * axis[1];
+		Rotate[1][2] = temp[1] * axis[2] + s * axis[0];
+
+		Rotate[2][0] = temp[2] * axis[0] + s * axis[1];
+		Rotate[2][1] = temp[2] * axis[1] - s * axis[0];
+		Rotate[2][2] = c + temp[2] * axis[2];
+
+		mat<4, 4, T, Q> Result;
+		Result[0] = m[0] * Rotate[0][0] + m[1] * Rotate[0][1] + m[2] * Rotate[0][2];
+		Result[1] = m[0] * Rotate[1][0] + m[1] * Rotate[1][1] + m[2] * Rotate[1][2];
+		Result[2] = m[0] * Rotate[2][0] + m[1] * Rotate[2][1] + m[2] * Rotate[2][2];
+		Result[3] = m[3];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> rotate_slow(mat<4, 4, T, Q> const& m, T angle, vec<3, T, Q> const& v)
+	{
+		T const a = angle;
+		T const c = cos(a);
+		T const s = sin(a);
+		mat<4, 4, T, Q> Result;
+
+		vec<3, T, Q> axis = normalize(v);
+
+		Result[0][0] = c + (static_cast<T>(1) - c)      * axis.x     * axis.x;
+		Result[0][1] = (static_cast<T>(1) - c) * axis.x * axis.y + s * axis.z;
+		Result[0][2] = (static_cast<T>(1) - c) * axis.x * axis.z - s * axis.y;
+		Result[0][3] = static_cast<T>(0);
+
+		Result[1][0] = (static_cast<T>(1) - c) * axis.y * axis.x - s * axis.z;
+		Result[1][1] = c + (static_cast<T>(1) - c) * axis.y * axis.y;
+		Result[1][2] = (static_cast<T>(1) - c) * axis.y * axis.z + s * axis.x;
+		Result[1][3] = static_cast<T>(0);
+
+		Result[2][0] = (static_cast<T>(1) - c) * axis.z * axis.x + s * axis.y;
+		Result[2][1] = (static_cast<T>(1) - c) * axis.z * axis.y - s * axis.x;
+		Result[2][2] = c + (static_cast<T>(1) - c) * axis.z * axis.z;
+		Result[2][3] = static_cast<T>(0);
+
+		Result[3] = vec<4, T, Q>(0, 0, 0, 1);
+		return m * Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> scale(mat<4, 4, T, Q> const& m, vec<3, T, Q> const& v)
+	{
+		mat<4, 4, T, Q> Result;
+		Result[0] = m[0] * v[0];
+		Result[1] = m[1] * v[1];
+		Result[2] = m[2] * v[2];
+		Result[3] = m[3];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> scale_slow(mat<4, 4, T, Q> const& m, vec<3, T, Q> const& v)
+	{
+		mat<4, 4, T, Q> Result(T(1));
+		Result[0][0] = v.x;
+		Result[1][1] = v.y;
+		Result[2][2] = v.z;
+		return m * Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> lookAtRH(vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up)
+	{
+		vec<3, T, Q> const f(normalize(center - eye));
+		vec<3, T, Q> const s(normalize(cross(f, up)));
+		vec<3, T, Q> const u(cross(s, f));
+
+		mat<4, 4, T, Q> Result(1);
+		Result[0][0] = s.x;
+		Result[1][0] = s.y;
+		Result[2][0] = s.z;
+		Result[0][1] = u.x;
+		Result[1][1] = u.y;
+		Result[2][1] = u.z;
+		Result[0][2] =-f.x;
+		Result[1][2] =-f.y;
+		Result[2][2] =-f.z;
+		Result[3][0] =-dot(s, eye);
+		Result[3][1] =-dot(u, eye);
+		Result[3][2] = dot(f, eye);
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> lookAtLH(vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up)
+	{
+		vec<3, T, Q> const f(normalize(center - eye));
+		vec<3, T, Q> const s(normalize(cross(up, f)));
+		vec<3, T, Q> const u(cross(f, s));
+
+		mat<4, 4, T, Q> Result(1);
+		Result[0][0] = s.x;
+		Result[1][0] = s.y;
+		Result[2][0] = s.z;
+		Result[0][1] = u.x;
+		Result[1][1] = u.y;
+		Result[2][1] = u.z;
+		Result[0][2] = f.x;
+		Result[1][2] = f.y;
+		Result[2][2] = f.z;
+		Result[3][0] = -dot(s, eye);
+		Result[3][1] = -dot(u, eye);
+		Result[3][2] = -dot(f, eye);
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> lookAt(vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up)
+	{
+		GLM_IF_CONSTEXPR(GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT)
+			return lookAtLH(eye, center, up);
+		else
+			return lookAtRH(eye, center, up);
+	}
+}//namespace glm
+
+	// ---------- "../ext/vector_relational.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_relational extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_relational
+	/// @{
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	/// True if this expression is satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point or integer scalar types
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T epsilon);
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	/// True if this expression is satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point or integer scalar types
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& epsilon);
+
+	/// Returns the component-wise comparison of |x - y| >= epsilon.
+	/// True if this expression is not satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point or integer scalar types
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T epsilon);
+
+	/// Returns the component-wise comparison of |x - y| >= epsilon.
+	/// True if this expression is not satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point or integer scalar types
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& epsilon);
+
+	/// Returns the component-wise comparison between two vectors in term of ULPs.
+	/// True if this expression is satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, int ULPs);
+
+	/// Returns the component-wise comparison between two vectors in term of ULPs.
+	/// True if this expression is satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, int, Q> const& ULPs);
+
+	/// Returns the component-wise comparison between two vectors in term of ULPs.
+	/// True if this expression is not satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, int ULPs);
+
+	/// Returns the component-wise comparison between two vectors in term of ULPs.
+	/// True if this expression is not satisfied.
+	///
+	/// @tparam L Integer between 1 and 4 included that qualify the dimension of the vector
+	/// @tparam T Floating-point
+	/// @tparam Q Value from qualifier enum
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, int, Q> const& ULPs);
+
+	/// @}
+}//namespace glm
+
+
+namespace glm
+{
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T Epsilon)
+	{
+		return equal(x, y, vec<L, T, Q>(Epsilon));
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& Epsilon)
+	{
+		return lessThanEqual(abs(x - y), Epsilon);
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T Epsilon)
+	{
+		return notEqual(x, y, vec<L, T, Q>(Epsilon));
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& Epsilon)
+	{
+		return greaterThan(abs(x - y), Epsilon);
+	}
+
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, int MaxULPs)
+	{
+		return equal(x, y, vec<L, int, Q>(MaxULPs));
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, int, Q> const& MaxULPs)
+	{
+		vec<L, bool, Q> Result(false);
+		for(length_t i = 0; i < L; ++i)
+		{
+			detail::float_t<T> const a(x[i]);
+			detail::float_t<T> const b(y[i]);
+
+			// Different signs means they do not match.
+			if(a.negative() != b.negative())
+			{
+				// Check for equality to make sure +0==-0
+				Result[i] = a.mantissa() == b.mantissa() && a.exponent() == b.exponent();
+			}
+			else
+			{
+				// Find the difference in ULPs.
+				typename detail::float_t<T>::int_type const DiffULPs = abs(a.i - b.i);
+				Result[i] = DiffULPs <= MaxULPs[i];
+			}
+		}
+		return Result;
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, int MaxULPs)
+	{
+		return notEqual(x, y, vec<L, int, Q>(MaxULPs));
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> notEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, int, Q> const& MaxULPs)
+	{
+		return not_(equal(x, y, MaxULPs));
+	}
+}//namespace glm
+
+
+
+	// ---------- "../ext/quaternion_common.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_geometric extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_geometric
+	/// @{
+
+	/// Returns the norm of a quaternions
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_geometric
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL T length(qua<T, Q> const& q);
+
+	/// Returns the normalized quaternion.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_geometric
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> normalize(qua<T, Q> const& q);
+
+	/// Returns dot product of q1 and q2, i.e., q1[0] * q2[0] + q1[1] * q2[1] + ...
+	///
+	/// @tparam T Floating-point scalar types.
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_geometric
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL T dot(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Compute a cross product.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_geometric
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> cross(qua<T, Q> const& q1, qua<T, Q> const& q2);
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T dot(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'dot' accepts only floating-point inputs");
+		return detail::compute_dot<qua<T, Q>, T, detail::is_aligned<Q>::value>::call(x, y);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T length(qua<T, Q> const& q)
+	{
+		return glm::sqrt(dot(q, q));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> normalize(qua<T, Q> const& q)
+	{
+		T len = length(q);
+		if(len <= static_cast<T>(0)) // Problem
+			return qua<T, Q>(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0));
+		T oneOverLen = static_cast<T>(1) / len;
+		return qua<T, Q>(q.w * oneOverLen, q.x * oneOverLen, q.y * oneOverLen, q.z * oneOverLen);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> cross(qua<T, Q> const& q1, qua<T, Q> const& q2)
+	{
+		return qua<T, Q>(
+			q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+			q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+			q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z,
+			q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x);
+	}
+}//namespace glm
+
+
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_common extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_common
+	/// @{
+
+	/// Spherical linear interpolation of two quaternions.
+	/// The interpolation is oriented and the rotation is performed at constant speed.
+	/// For short path spherical linear interpolation, use the slerp function.
+	///
+	/// @param x A quaternion
+	/// @param y A quaternion
+	/// @param a Interpolation factor. The interpolation is defined beyond the range [0, 1].
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	///
+	/// @see - slerp(qua<T, Q> const& x, qua<T, Q> const& y, T const& a)
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> mix(qua<T, Q> const& x, qua<T, Q> const& y, T a);
+
+	/// Linear interpolation of two quaternions.
+	/// The interpolation is oriented.
+	///
+	/// @param x A quaternion
+	/// @param y A quaternion
+	/// @param a Interpolation factor. The interpolation is defined in the range [0, 1].
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> lerp(qua<T, Q> const& x, qua<T, Q> const& y, T a);
+
+	/// Spherical linear interpolation of two quaternions.
+	/// The interpolation always take the short path and the rotation is performed at constant speed.
+	///
+	/// @param x A quaternion
+	/// @param y A quaternion
+	/// @param a Interpolation factor. The interpolation is defined beyond the range [0, 1].
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> slerp(qua<T, Q> const& x, qua<T, Q> const& y, T a);
+
+    /// Spherical linear interpolation of two quaternions with multiple spins over rotation axis.
+    /// The interpolation always take the short path when the spin count is positive and long path
+    /// when count is negative. Rotation is performed at constant speed.
+    ///
+    /// @param x A quaternion
+    /// @param y A quaternion
+    /// @param a Interpolation factor. The interpolation is defined beyond the range [0, 1].
+    /// @param k Additional spin count. If Value is negative interpolation will be on "long" path.
+    ///
+    /// @tparam T A floating-point scalar type
+    /// @tparam S An integer scalar type
+    /// @tparam Q A value from qualifier enum
+    template<typename T, typename S, qualifier Q>
+    GLM_FUNC_DECL qua<T, Q> slerp(qua<T, Q> const& x, qua<T, Q> const& y, T a, S k);
+
+	/// Returns the q conjugate.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> conjugate(qua<T, Q> const& q);
+
+	/// Returns the q inverse.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> inverse(qua<T, Q> const& q);
+
+	/// Returns true if x holds a NaN (not a number)
+	/// representation in the underlying implementation's set of
+	/// floating point representations. Returns false otherwise,
+	/// including for implementations with no NaN
+	/// representations.
+	///
+	/// /!\ When using compiler fast math, this function may fail.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> isnan(qua<T, Q> const& x);
+
+	/// Returns true if x holds a positive infinity or negative
+	/// infinity representation in the underlying implementation's
+	/// set of floating point representations. Returns false
+	/// otherwise, including for implementations with no infinity
+	/// representations.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> isinf(qua<T, Q> const& x);
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> mix(qua<T, Q> const& x, qua<T, Q> const& y, T a)
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'mix' only accept floating-point inputs");
+
+		T const cosTheta = dot(x, y);
+
+		// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
+		if(cosTheta > static_cast<T>(1) - epsilon<T>())
+		{
+			// Linear interpolation
+			return qua<T, Q>(
+				mix(x.w, y.w, a),
+				mix(x.x, y.x, a),
+				mix(x.y, y.y, a),
+				mix(x.z, y.z, a));
+		}
+		else
+		{
+			// Essential Mathematics, page 467
+			T angle = acos(cosTheta);
+			return (sin((static_cast<T>(1) - a) * angle) * x + sin(a * angle) * y) / sin(angle);
+		}
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> lerp(qua<T, Q> const& x, qua<T, Q> const& y, T a)
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'lerp' only accept floating-point inputs");
+
+		// Lerp is only defined in [0, 1]
+		assert(a >= static_cast<T>(0));
+		assert(a <= static_cast<T>(1));
+
+		return x * (static_cast<T>(1) - a) + (y * a);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> slerp(qua<T, Q> const& x, qua<T, Q> const& y, T a)
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'slerp' only accept floating-point inputs");
+
+		qua<T, Q> z = y;
+
+		T cosTheta = dot(x, y);
+
+		// If cosTheta < 0, the interpolation will take the long way around the sphere.
+		// To fix this, one quat must be negated.
+		if(cosTheta < static_cast<T>(0))
+		{
+			z = -y;
+			cosTheta = -cosTheta;
+		}
+
+		// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
+		if(cosTheta > static_cast<T>(1) - epsilon<T>())
+		{
+			// Linear interpolation
+			return qua<T, Q>(
+				mix(x.w, z.w, a),
+				mix(x.x, z.x, a),
+				mix(x.y, z.y, a),
+				mix(x.z, z.z, a));
+		}
+		else
+		{
+			// Essential Mathematics, page 467
+			T angle = acos(cosTheta);
+			return (sin((static_cast<T>(1) - a) * angle) * x + sin(a * angle) * z) / sin(angle);
+		}
+	}
+
+    template<typename T, typename S, qualifier Q>
+    GLM_FUNC_QUALIFIER qua<T, Q> slerp(qua<T, Q> const& x, qua<T, Q> const& y, T a, S k)
+    {
+        GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'slerp' only accept floating-point inputs");
+        GLM_STATIC_ASSERT(std::numeric_limits<S>::is_integer, "'slerp' only accept integer for spin count");
+
+        qua<T, Q> z = y;
+
+        T cosTheta = dot(x, y);
+
+        // If cosTheta < 0, the interpolation will take the long way around the sphere.
+        // To fix this, one quat must be negated.
+        if (cosTheta < static_cast<T>(0))
+        {
+            z = -y;
+            cosTheta = -cosTheta;
+        }
+
+        // Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
+        if (cosTheta > static_cast<T>(1) - epsilon<T>())
+        {
+            // Linear interpolation
+            return qua<T, Q>(
+                mix(x.w, z.w, a),
+                mix(x.x, z.x, a),
+                mix(x.y, z.y, a),
+                mix(x.z, z.z, a));
+        }
+        else
+        {
+            // Graphics Gems III, page 96
+            T angle = acos(cosTheta);
+            T phi = angle + k * glm::pi<T>();
+            return (sin(angle - a * phi)* x + sin(a * phi) * z) / sin(angle);
+        }
+    }
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> conjugate(qua<T, Q> const& q)
+	{
+		return qua<T, Q>(q.w, -q.x, -q.y, -q.z);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> inverse(qua<T, Q> const& q)
+	{
+		return conjugate(q) / dot(q, q);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> isnan(qua<T, Q> const& q)
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'isnan' only accept floating-point inputs");
+
+		return vec<4, bool, Q>(isnan(q.x), isnan(q.y), isnan(q.z), isnan(q.w));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> isinf(qua<T, Q> const& q)
+	{
+		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'isinf' only accept floating-point inputs");
+
+		return vec<4, bool, Q>(isinf(q.x), isinf(q.y), isinf(q.z), isinf(q.w));
+	}
+}//namespace glm
+
+#if GLM_CONFIG_SIMD == GLM_ENABLE
+#	include "ext/quaternion_common_simd.inl"
+#endif
+
+
+
+
+	// ---------- "../ext/quaternion_float.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_relational extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_relational
+	/// @{
+
+	/// Returns the component-wise comparison of result x == y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
+
+	/// Returns the component-wise comparison of result x != y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of |x - y| >= epsilon.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] == y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon)
+	{
+		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
+		return lessThan(abs(v), vec<4, T, Q>(epsilon));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] != y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon)
+	{
+		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
+		return greaterThanEqual(abs(v), vec<4, T, Q>(epsilon));
+	}
+}//namespace glm
+
+
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	struct qua
+	{
+		// -- Implementation detail --
+
+		typedef qua<T, Q> type;
+		typedef T value_type;
+
+		// -- Data --
+
+#		if GLM_SILENT_WARNINGS == GLM_ENABLE
+#			if GLM_COMPILER & GLM_COMPILER_GCC
+#				pragma GCC diagnostic push
+#				pragma GCC diagnostic ignored "-Wpedantic"
+#			elif GLM_COMPILER & GLM_COMPILER_CLANG
+#				pragma clang diagnostic push
+#				pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
+#				pragma clang diagnostic ignored "-Wnested-anon-types"
+#			elif GLM_COMPILER & GLM_COMPILER_VC
+#				pragma warning(push)
+#				pragma warning(disable: 4201)  // nonstandard extension used : nameless struct/union
+#			endif
+#		endif
+
+#		if GLM_LANG & GLM_LANG_CXXMS_FLAG
+			union
+			{
+#				ifdef GLM_FORCE_QUAT_DATA_WXYZ
+					struct { T w, x, y, z; };
+#				else
+					struct { T x, y, z, w; };
+#				endif
+
+				typename detail::storage<4, T, detail::is_aligned<Q>::value>::type data;
+			};
+#		else
+#			ifdef GLM_FORCE_QUAT_DATA_WXYZ
+				T w, x, y, z;
+#			else
+				T x, y, z, w;
+#			endif
+#		endif
+
+#		if GLM_SILENT_WARNINGS == GLM_ENABLE
+#			if GLM_COMPILER & GLM_COMPILER_CLANG
+#				pragma clang diagnostic pop
+#			elif GLM_COMPILER & GLM_COMPILER_GCC
+#				pragma GCC diagnostic pop
+#			elif GLM_COMPILER & GLM_COMPILER_VC
+#				pragma warning(pop)
+#			endif
+#		endif
+
+		// -- Component accesses --
+
+		typedef length_t length_type;
+
+		/// Return the count of components of a quaternion
+		GLM_FUNC_DECL static GLM_CONSTEXPR length_type length(){return 4;}
+
+		GLM_FUNC_DECL GLM_CONSTEXPR T & operator[](length_type i);
+		GLM_FUNC_DECL GLM_CONSTEXPR T const& operator[](length_type i) const;
+
+		// -- Implicit basic constructors --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR qua() GLM_DEFAULT;
+		GLM_FUNC_DECL GLM_CONSTEXPR qua(qua<T, Q> const& q) GLM_DEFAULT;
+		template<qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua(qua<T, P> const& q);
+
+		// -- Explicit basic constructors --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR qua(T s, vec<3, T, Q> const& v);
+		GLM_FUNC_DECL GLM_CONSTEXPR qua(T w, T x, T y, T z);
+
+		// -- Conversion constructors --
+
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT qua(qua<U, P> const& q);
+
+		/// Explicit conversion operators
+#		if GLM_HAS_EXPLICIT_CONVERSION_OPERATORS
+			GLM_FUNC_DECL explicit operator mat<3, 3, T, Q>() const;
+			GLM_FUNC_DECL explicit operator mat<4, 4, T, Q>() const;
+#		endif
+
+		/// Create a quaternion from two normalized axis
+		///
+		/// @param u A first normalized axis
+		/// @param v A second normalized axis
+		/// @see gtc_quaternion
+		/// @see http://lolengine.net/blog/2013/09/18/beautiful-maths-quaternion-from-vectors
+		GLM_FUNC_DECL qua(vec<3, T, Q> const& u, vec<3, T, Q> const& v);
+
+		/// Build a quaternion from euler angles (pitch, yaw, roll), in radians.
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT qua(vec<3, T, Q> const& eulerAngles);
+		GLM_FUNC_DECL GLM_EXPLICIT qua(mat<3, 3, T, Q> const& q);
+		GLM_FUNC_DECL GLM_EXPLICIT qua(mat<4, 4, T, Q> const& q);
+
+		// -- Unary arithmetic operators --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator=(qua<T, Q> const& q) GLM_DEFAULT;
+
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator=(qua<U, Q> const& q);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator+=(qua<U, Q> const& q);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator-=(qua<U, Q> const& q);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator*=(qua<U, Q> const& q);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator*=(U s);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q>& operator/=(U s);
+	};
+
+	// -- Unary bit operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator+(qua<T, Q> const& q);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator-(qua<T, Q> const& q);
+
+	// -- Binary operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator+(qua<T, Q> const& q, qua<T, Q> const& p);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator-(qua<T, Q> const& q, qua<T, Q> const& p);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator*(qua<T, Q> const& q, qua<T, Q> const& p);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<3, T, Q> operator*(qua<T, Q> const& q, vec<3, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<3, T, Q> operator*(vec<3, T, Q> const& v, qua<T, Q> const& q);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<4, T, Q> operator*(qua<T, Q> const& q, vec<4, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<4, T, Q> operator*(vec<4, T, Q> const& v, qua<T, Q> const& q);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator*(qua<T, Q> const& q, T const& s);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator*(T const& s, qua<T, Q> const& q);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR qua<T, Q> operator/(qua<T, Q> const& q, T const& s);
+
+	// -- Boolean operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR bool operator==(qua<T, Q> const& q1, qua<T, Q> const& q2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR bool operator!=(qua<T, Q> const& q1, qua<T, Q> const& q2);
+} //namespace glm
+
+#ifndef GLM_EXTERNAL_TEMPLATE
+
+namespace glm{
+namespace detail
+{
+	template <typename T>
+	struct genTypeTrait<qua<T> >
+	{
+		static const genTypeEnum GENTYPE = GENTYPE_QUAT;
+	};
+
+	template<typename T, qualifier Q, bool Aligned>
+	struct compute_dot<qua<T, Q>, T, Aligned>
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static T call(qua<T, Q> const& a, qua<T, Q> const& b)
+		{
+			vec<4, T, Q> tmp(a.w * b.w, a.x * b.x, a.y * b.y, a.z * b.z);
+			return (tmp.x + tmp.y) + (tmp.z + tmp.w);
+		}
+	};
+
+	template<typename T, qualifier Q, bool Aligned>
+	struct compute_quat_add
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static qua<T, Q> call(qua<T, Q> const& q, qua<T, Q> const& p)
+		{
+			return qua<T, Q>(q.w + p.w, q.x + p.x, q.y + p.y, q.z + p.z);
+		}
+	};
+
+	template<typename T, qualifier Q, bool Aligned>
+	struct compute_quat_sub
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static qua<T, Q> call(qua<T, Q> const& q, qua<T, Q> const& p)
+		{
+			return qua<T, Q>(q.w - p.w, q.x - p.x, q.y - p.y, q.z - p.z);
+		}
+	};
+
+	template<typename T, qualifier Q, bool Aligned>
+	struct compute_quat_mul_scalar
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static qua<T, Q> call(qua<T, Q> const& q, T s)
+		{
+			return qua<T, Q>(q.w * s, q.x * s, q.y * s, q.z * s);
+		}
+	};
+
+	template<typename T, qualifier Q, bool Aligned>
+	struct compute_quat_div_scalar
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static qua<T, Q> call(qua<T, Q> const& q, T s)
+		{
+			return qua<T, Q>(q.w / s, q.x / s, q.y / s, q.z / s);
+		}
+	};
+
+	template<typename T, qualifier Q, bool Aligned>
+	struct compute_quat_mul_vec4
+	{
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<4, T, Q> call(qua<T, Q> const& q, vec<4, T, Q> const& v)
+		{
+			return vec<4, T, Q>(q * vec<3, T, Q>(v), v.w);
+		}
+	};
+}//namespace detail
+
+	// -- Component accesses --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T & qua<T, Q>::operator[](typename qua<T, Q>::length_type i)
+	{
+		assert(i >= 0 && i < this->length());
+#		ifdef GLM_FORCE_QUAT_DATA_WXYZ
+			return (&w)[i];
+#		else
+			return (&x)[i];
+#		endif
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T const& qua<T, Q>::operator[](typename qua<T, Q>::length_type i) const
+	{
+		assert(i >= 0 && i < this->length());
+#		ifdef GLM_FORCE_QUAT_DATA_WXYZ
+			return (&w)[i];
+#		else
+			return (&x)[i];
+#		endif
+	}
+
+	// -- Implicit basic constructors --
+
+#	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua()
+#			if GLM_CONFIG_CTOR_INIT != GLM_CTOR_INIT_DISABLE
+#				ifdef GLM_FORCE_QUAT_DATA_WXYZ
+					: w(1), x(0), y(0), z(0)
+#				else
+					: x(0), y(0), z(0), w(1)
+#				endif
+#			endif
+		{}
+
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(qua<T, Q> const& q)
+#			ifdef GLM_FORCE_QUAT_DATA_WXYZ
+				: w(q.w), x(q.x), y(q.y), z(q.z)
+#			else
+				: x(q.x), y(q.y), z(q.z), w(q.w)
+#			endif
+		{}
+#	endif
+
+	template<typename T, qualifier Q>
+	template<qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(qua<T, P> const& q)
+#		ifdef GLM_FORCE_QUAT_DATA_WXYZ
+			: w(q.w), x(q.x), y(q.y), z(q.z)
+#		else
+			: x(q.x), y(q.y), z(q.z), w(q.w)
+#		endif
+	{}
+
+	// -- Explicit basic constructors --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(T s, vec<3, T, Q> const& v)
+#		ifdef GLM_FORCE_QUAT_DATA_WXYZ
+			: w(s), x(v.x), y(v.y), z(v.z)
+#		else
+			: x(v.x), y(v.y), z(v.z), w(s)
+#		endif
+	{}
+
+	template <typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(T _w, T _x, T _y, T _z)
+#		ifdef GLM_FORCE_QUAT_DATA_WXYZ
+			: w(_w), x(_x), y(_y), z(_z)
+#		else
+			: x(_x), y(_y), z(_z), w(_w)
+#		endif
+	{}
+
+	// -- Conversion constructors --
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(qua<U, P> const& q)
+#		ifdef GLM_FORCE_QUAT_DATA_WXYZ
+			: w(static_cast<T>(q.w)), x(static_cast<T>(q.x)), y(static_cast<T>(q.y)), z(static_cast<T>(q.z))
+#		else
+			: x(static_cast<T>(q.x)), y(static_cast<T>(q.y)), z(static_cast<T>(q.z)), w(static_cast<T>(q.w))
+#		endif
+	{}
+
+	//template<typename valType>
+	//GLM_FUNC_QUALIFIER qua<valType>::qua
+	//(
+	//	valType const& pitch,
+	//	valType const& yaw,
+	//	valType const& roll
+	//)
+	//{
+	//	vec<3, valType> eulerAngle(pitch * valType(0.5), yaw * valType(0.5), roll * valType(0.5));
+	//	vec<3, valType> c = glm::cos(eulerAngle * valType(0.5));
+	//	vec<3, valType> s = glm::sin(eulerAngle * valType(0.5));
+	//
+	//	this->w = c.x * c.y * c.z + s.x * s.y * s.z;
+	//	this->x = s.x * c.y * c.z - c.x * s.y * s.z;
+	//	this->y = c.x * s.y * c.z + s.x * c.y * s.z;
+	//	this->z = c.x * c.y * s.z - s.x * s.y * c.z;
+	//}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q>::qua(vec<3, T, Q> const& u, vec<3, T, Q> const& v)
+	{
+		T norm_u_norm_v = sqrt(dot(u, u) * dot(v, v));
+		T real_part = norm_u_norm_v + dot(u, v);
+		vec<3, T, Q> t;
+
+		if(real_part < static_cast<T>(1.e-6f) * norm_u_norm_v)
+		{
+			// If u and v are exactly opposite, rotate 180 degrees
+			// around an arbitrary orthogonal axis. Axis normalisation
+			// can happen later, when we normalise the quaternion.
+			real_part = static_cast<T>(0);
+			t = abs(u.x) > abs(u.z) ? vec<3, T, Q>(-u.y, u.x, static_cast<T>(0)) : vec<3, T, Q>(static_cast<T>(0), -u.z, u.y);
+		}
+		else
+		{
+			// Otherwise, build quaternion the standard way.
+			t = cross(u, v);
+		}
+
+		*this = normalize(qua<T, Q>(real_part, t.x, t.y, t.z));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(vec<3, T, Q> const& eulerAngle)
+	{
+		vec<3, T, Q> c = glm::cos(eulerAngle * T(0.5));
+		vec<3, T, Q> s = glm::sin(eulerAngle * T(0.5));
+
+		this->w = c.x * c.y * c.z + s.x * s.y * s.z;
+		this->x = s.x * c.y * c.z - c.x * s.y * s.z;
+		this->y = c.x * s.y * c.z + s.x * c.y * s.z;
+		this->z = c.x * c.y * s.z - s.x * s.y * c.z;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q>::qua(mat<3, 3, T, Q> const& m)
+	{
+		*this = quat_cast(m);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q>::qua(mat<4, 4, T, Q> const& m)
+	{
+		*this = quat_cast(m);
+	}
+
+#	if GLM_HAS_EXPLICIT_CONVERSION_OPERATORS
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q>::operator mat<3, 3, T, Q>() const
+	{
+		return mat3_cast(*this);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q>::operator mat<4, 4, T, Q>() const
+	{
+		return mat4_cast(*this);
+	}
+#	endif//GLM_HAS_EXPLICIT_CONVERSION_OPERATORS
+
+	// -- Unary arithmetic operators --
+
+#	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator=(qua<T, Q> const& q)
+		{
+			this->w = q.w;
+			this->x = q.x;
+			this->y = q.y;
+			this->z = q.z;
+			return *this;
+		}
+#	endif
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator=(qua<U, Q> const& q)
+	{
+		this->w = static_cast<T>(q.w);
+		this->x = static_cast<T>(q.x);
+		this->y = static_cast<T>(q.y);
+		this->z = static_cast<T>(q.z);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator+=(qua<U, Q> const& q)
+	{
+		return (*this = detail::compute_quat_add<T, Q, detail::is_aligned<Q>::value>::call(*this, qua<T, Q>(q)));
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator-=(qua<U, Q> const& q)
+	{
+		return (*this = detail::compute_quat_sub<T, Q, detail::is_aligned<Q>::value>::call(*this, qua<T, Q>(q)));
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator*=(qua<U, Q> const& r)
+	{
+		qua<T, Q> const p(*this);
+		qua<T, Q> const q(r);
+
+		this->w = p.w * q.w - p.x * q.x - p.y * q.y - p.z * q.z;
+		this->x = p.w * q.x + p.x * q.w + p.y * q.z - p.z * q.y;
+		this->y = p.w * q.y + p.y * q.w + p.z * q.x - p.x * q.z;
+		this->z = p.w * q.z + p.z * q.w + p.x * q.y - p.y * q.x;
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator*=(U s)
+	{
+		return (*this = detail::compute_quat_mul_scalar<T, Q, detail::is_aligned<Q>::value>::call(*this, static_cast<U>(s)));
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> & qua<T, Q>::operator/=(U s)
+	{
+		return (*this = detail::compute_quat_div_scalar<T, Q, detail::is_aligned<Q>::value>::call(*this, static_cast<U>(s)));
+	}
+
+	// -- Unary bit operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator+(qua<T, Q> const& q)
+	{
+		return q;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator-(qua<T, Q> const& q)
+	{
+		return qua<T, Q>(-q.w, -q.x, -q.y, -q.z);
+	}
+
+	// -- Binary operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator+(qua<T, Q> const& q, qua<T, Q> const& p)
+	{
+		return qua<T, Q>(q) += p;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator-(qua<T, Q> const& q, qua<T, Q> const& p)
+	{
+		return qua<T, Q>(q) -= p;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator*(qua<T, Q> const& q, qua<T, Q> const& p)
+	{
+		return qua<T, Q>(q) *= p;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<3, T, Q> operator*(qua<T, Q> const& q, vec<3, T, Q> const& v)
+	{
+		vec<3, T, Q> const QuatVector(q.x, q.y, q.z);
+		vec<3, T, Q> const uv(glm::cross(QuatVector, v));
+		vec<3, T, Q> const uuv(glm::cross(QuatVector, uv));
+
+		return v + ((uv * q.w) + uuv) * static_cast<T>(2);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<3, T, Q> operator*(vec<3, T, Q> const& v, qua<T, Q> const& q)
+	{
+		return glm::inverse(q) * v;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q> operator*(qua<T, Q> const& q, vec<4, T, Q> const& v)
+	{
+		return detail::compute_quat_mul_vec4<T, Q, detail::is_aligned<Q>::value>::call(q, v);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q> operator*(vec<4, T, Q> const& v, qua<T, Q> const& q)
+	{
+		return glm::inverse(q) * v;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator*(qua<T, Q> const& q, T const& s)
+	{
+		return qua<T, Q>(
+			q.w * s, q.x * s, q.y * s, q.z * s);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator*(T const& s, qua<T, Q> const& q)
+	{
+		return q * s;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> operator/(qua<T, Q> const& q, T const& s)
+	{
+		return qua<T, Q>(
+			q.w / s, q.x / s, q.y / s, q.z / s);
+	}
+
+	// -- Boolean operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(qua<T, Q> const& q1, qua<T, Q> const& q2)
+	{
+		return q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator!=(qua<T, Q> const& q1, qua<T, Q> const& q2)
+	{
+		return q1.x != q2.x || q1.y != q2.y || q1.z != q2.z || q1.w != q2.w;
+	}
+}//namespace glm
+
+#if GLM_CONFIG_SIMD == GLM_ENABLE
+#	include "detail/type_quat_simd.inl"
+#endif
+
+
+
+#endif//GLM_EXTERNAL_TEMPLATE
+
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_float extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_float
+	/// @{
+
+	/// Quaternion of single-precision floating-point numbers.
+	typedef qua<float, defaultp>		quat;
+
+	/// @}
+} //namespace glm
+
+
+
+	// ---------- "../ext/quaternion_float_precision.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_float_precision extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_float_precision
+	/// @{
+
+	/// Quaternion of single-precision floating-point numbers using high precision arithmetic in term of ULPs.
+	typedef qua<float, lowp>		lowp_quat;
+
+	/// Quaternion of single-precision floating-point numbers using high precision arithmetic in term of ULPs.
+	typedef qua<float, mediump>		mediump_quat;
+
+	/// Quaternion of single-precision floating-point numbers using high precision arithmetic in term of ULPs.
+	typedef qua<float, highp>		highp_quat;
+
+	/// @}
+} //namespace glm
+
+
+
+	// ---------- "../ext/quaternion_double.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_double extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_double
+	/// @{
+
+	/// Quaternion of double-precision floating-point numbers.
+	typedef qua<double, defaultp>		dquat;
+
+	/// @}
+} //namespace glm
+
+
+
+	// ---------- "../ext/quaternion_double_precision.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_double_precision extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_double_precision
+	/// @{
+
+	/// Quaternion of double-precision floating-point numbers using high precision arithmetic in term of ULPs.
+	///
+	/// @see ext_quaternion_double_precision
+	typedef qua<double, lowp>		lowp_dquat;
+
+	/// Quaternion of medium double-qualifier floating-point numbers using high precision arithmetic in term of ULPs.
+	///
+	/// @see ext_quaternion_double_precision
+	typedef qua<double, mediump>	mediump_dquat;
+
+	/// Quaternion of high double-qualifier floating-point numbers using high precision arithmetic in term of ULPs.
+	///
+	/// @see ext_quaternion_double_precision
+	typedef qua<double, highp>		highp_dquat;
+
+	/// @}
+} //namespace glm
+
+
+	// ---------- "../ext/quaternion_relational.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_relational extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_relational
+	/// @{
+
+	/// Returns the component-wise comparison of result x == y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
+
+	/// Returns the component-wise comparison of result x != y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of |x - y| >= epsilon.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] == y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon)
+	{
+		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
+		return lessThan(abs(v), vec<4, T, Q>(epsilon));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] != y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon)
+	{
+		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
+		return greaterThanEqual(abs(v), vec<4, T, Q>(epsilon));
+	}
+}//namespace glm
+
+
+
+
+	// ---------- "../ext/quaternion_trigonometric.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_trigonometric extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_trigonometric
+	/// @{
+
+	/// Returns the quaternion rotation angle.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL T angle(qua<T, Q> const& x);
+
+	/// Returns the q rotation axis.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> axis(qua<T, Q> const& x);
+
+	/// Build a quaternion from an angle and a normalized axis.
+	///
+	/// @param angle Angle expressed in radians.
+	/// @param axis Axis of the quaternion, must be normalized.
+	///
+	/// @tparam T A floating-point scalar type
+	/// @tparam Q A value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& axis);
+
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T angle(qua<T, Q> const& x)
+	{
+		if (abs(x.w) > cos_one_over_two<T>())
+		{
+			return asin(sqrt(x.x * x.x + x.y * x.y + x.z * x.z)) * static_cast<T>(2);
+		}
+
+		return acos(x.w) * static_cast<T>(2);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> axis(qua<T, Q> const& x)
+	{
+		T const tmp1 = static_cast<T>(1) - x.w * x.w;
+		if(tmp1 <= static_cast<T>(0))
+			return vec<3, T, Q>(0, 0, 1);
+		T const tmp2 = static_cast<T>(1) / sqrt(tmp1);
+		return vec<3, T, Q>(x.x * tmp2, x.y * tmp2, x.z * tmp2);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& v)
+	{
+		T const a(angle);
+		T const s = glm::sin(a * static_cast<T>(0.5));
+
+		return qua<T, Q>(glm::cos(a * static_cast<T>(0.5)), v * s);
+	}
+}//namespace glm
+
+
+
+	// ---------- "../ext/quaternion_transform.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_quaternion_transform extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_quaternion_transform
+	/// @{
+
+	/// Rotates a quaternion from a vector of 3 components axis and an angle.
+	///
+	/// @param q Source orientation
+	/// @param angle Angle expressed in radians.
+	/// @param axis Axis of the rotation
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> rotate(qua<T, Q> const& q, T const& angle, vec<3, T, Q> const& axis);
+	/// @}
+} //namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> rotate(qua<T, Q> const& q, T const& angle, vec<3, T, Q> const& v)
+	{
+		vec<3, T, Q> Tmp = v;
+
+		// Axis of rotation must be normalised
+		T len = glm::length(Tmp);
+		if(abs(len - static_cast<T>(1)) > static_cast<T>(0.001))
+		{
+			T oneOverLen = static_cast<T>(1) / len;
+			Tmp.x *= oneOverLen;
+			Tmp.y *= oneOverLen;
+			Tmp.z *= oneOverLen;
+		}
+
+		T const AngleRad(angle);
+		T const Sin = sin(AngleRad * static_cast<T>(0.5));
+
+		return q * qua<T, Q>(cos(AngleRad * static_cast<T>(0.5)), Tmp.x * Sin, Tmp.y * Sin, Tmp.z * Sin);
+	}
+}//namespace glm
+
+
+
+// ----------------------------------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_GTC_quaternion extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup gtc_quaternion
+	/// @{
+
+	/// Returns euler angles, pitch as x, yaw as y, roll as z.
+	/// The result is expressed in radians.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> eulerAngles(qua<T, Q> const& x);
+
+	/// Returns roll value of euler angles expressed in radians.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL T roll(qua<T, Q> const& x);
+
+	/// Returns pitch value of euler angles expressed in radians.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL T pitch(qua<T, Q> const& x);
+
+	/// Returns yaw value of euler angles expressed in radians.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL T yaw(qua<T, Q> const& x);
+
+	/// Converts a quaternion to a 3 * 3 matrix.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<3, 3, T, Q> mat3_cast(qua<T, Q> const& x);
+
+	/// Converts a quaternion to a 4 * 4 matrix.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> mat4_cast(qua<T, Q> const& x);
+
+	/// Converts a pure rotation 3 * 3 matrix to a quaternion.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> quat_cast(mat<3, 3, T, Q> const& x);
+
+	/// Converts a pure rotation 4 * 4 matrix to a quaternion.
+	///
+	/// @tparam T Floating-point scalar types.
+	///
+	/// @see gtc_quaternion
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> quat_cast(mat<4, 4, T, Q> const& x);
+
+	/// Returns the component-wise comparison result of x < y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_relational
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> lessThan(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of result x <= y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_relational
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> lessThanEqual(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of result x > y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_relational
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> greaterThan(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Returns the component-wise comparison of result x >= y.
+	///
+	/// @tparam T Floating-point scalar types
+	/// @tparam Q Value from qualifier enum
+	///
+	/// @see ext_quaternion_relational
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, bool, Q> greaterThanEqual(qua<T, Q> const& x, qua<T, Q> const& y);
+
+	/// Build a look at quaternion based on the default handedness.
+	///
+	/// @param direction Desired forward direction. Needs to be normalized.
+	/// @param up Up vector, how the camera is oriented. Typically (0, 1, 0).
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> quatLookAt(
+		vec<3, T, Q> const& direction,
+		vec<3, T, Q> const& up);
+
+	/// Build a right-handed look at quaternion.
+	///
+	/// @param direction Desired forward direction onto which the -z-axis gets mapped. Needs to be normalized.
+	/// @param up Up vector, how the camera is oriented. Typically (0, 1, 0).
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> quatLookAtRH(
+		vec<3, T, Q> const& direction,
+		vec<3, T, Q> const& up);
+
+	/// Build a left-handed look at quaternion.
+	///
+	/// @param direction Desired forward direction onto which the +z-axis gets mapped. Needs to be normalized.
+	/// @param up Up vector, how the camera is oriented. Typically (0, 1, 0).
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL qua<T, Q> quatLookAtLH(
+		vec<3, T, Q> const& direction,
+		vec<3, T, Q> const& up);
+	/// @}
+} //namespace glm
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_GTC_epsilon extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup gtc_epsilon
+	/// @{
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	/// True if this expression is satisfied.
+	///
+	/// @see gtc_epsilon
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL vec<L, bool, Q> epsilonEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T const& epsilon);
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	/// True if this expression is satisfied.
+	///
+	/// @see gtc_epsilon
+	template<typename genType>
+	GLM_FUNC_DECL bool epsilonEqual(genType const& x, genType const& y, genType const& epsilon);
+
+	/// Returns the component-wise comparison of |x - y| < epsilon.
+	/// True if this expression is not satisfied.
+	///
+	/// @see gtc_epsilon
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_DECL vec<L, bool, Q> epsilonNotEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T const& epsilon);
+
+	/// Returns the component-wise comparison of |x - y| >= epsilon.
+	/// True if this expression is not satisfied.
+	///
+	/// @see gtc_epsilon
+	template<typename genType>
+	GLM_FUNC_DECL bool epsilonNotEqual(genType const& x, genType const& y, genType const& epsilon);
+
+	/// @}
+}//namespace glm
+
+namespace glm
+{
+	template<>
+	GLM_FUNC_QUALIFIER bool epsilonEqual
+	(
+		float const& x,
+		float const& y,
+		float const& epsilon
+	)
+	{
+		return abs(x - y) < epsilon;
+	}
+
+	template<>
+	GLM_FUNC_QUALIFIER bool epsilonEqual
+	(
+		double const& x,
+		double const& y,
+		double const& epsilon
+	)
+	{
+		return abs(x - y) < epsilon;
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<L, bool, Q> epsilonEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T const& epsilon)
+	{
+		return lessThan(abs(x - y), vec<L, T, Q>(epsilon));
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<L, bool, Q> epsilonEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& epsilon)
+	{
+		return lessThan(abs(x - y), vec<L, T, Q>(epsilon));
+	}
+
+	template<>
+	GLM_FUNC_QUALIFIER bool epsilonNotEqual(float const& x, float const& y, float const& epsilon)
+	{
+		return abs(x - y) >= epsilon;
+	}
+
+	template<>
+	GLM_FUNC_QUALIFIER bool epsilonNotEqual(double const& x, double const& y, double const& epsilon)
+	{
+		return abs(x - y) >= epsilon;
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<L, bool, Q> epsilonNotEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T const& epsilon)
+	{
+		return greaterThanEqual(abs(x - y), vec<L, T, Q>(epsilon));
+	}
+
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<L, bool, Q> epsilonNotEqual(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& epsilon)
+	{
+		return greaterThanEqual(abs(x - y), vec<L, T, Q>(epsilon));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> epsilonEqual(qua<T, Q> const& x, qua<T, Q> const& y, T const& epsilon)
+	{
+		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
+		return lessThan(abs(v), vec<4, T, Q>(epsilon));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> epsilonNotEqual(qua<T, Q> const& x, qua<T, Q> const& y, T const& epsilon)
+	{
+		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
+		return greaterThanEqual(abs(v), vec<4, T, Q>(epsilon));
+	}
+}//namespace glm
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<3, T, Q> eulerAngles(qua<T, Q> const& x)
+	{
+		return vec<3, T, Q>(pitch(x), yaw(x), roll(x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T roll(qua<T, Q> const& q)
+	{
+		return static_cast<T>(atan(static_cast<T>(2) * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T pitch(qua<T, Q> const& q)
+	{
+		//return T(atan(T(2) * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z));
+		T const y = static_cast<T>(2) * (q.y * q.z + q.w * q.x);
+		T const x = q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z;
+
+		if(all(equal(vec<2, T, Q>(x, y), vec<2, T, Q>(0), epsilon<T>()))) //avoid atan2(0,0) - handle singularity - Matiis
+			return static_cast<T>(static_cast<T>(2) * atan(q.x, q.w));
+
+		return static_cast<T>(atan(y, x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T yaw(qua<T, Q> const& q)
+	{
+		return asin(clamp(static_cast<T>(-2) * (q.x * q.z - q.w * q.y), static_cast<T>(-1), static_cast<T>(1)));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<3, 3, T, Q> mat3_cast(qua<T, Q> const& q)
+	{
+		mat<3, 3, T, Q> Result(T(1));
+		T qxx(q.x * q.x);
+		T qyy(q.y * q.y);
+		T qzz(q.z * q.z);
+		T qxz(q.x * q.z);
+		T qxy(q.x * q.y);
+		T qyz(q.y * q.z);
+		T qwx(q.w * q.x);
+		T qwy(q.w * q.y);
+		T qwz(q.w * q.z);
+
+		Result[0][0] = T(1) - T(2) * (qyy +  qzz);
+		Result[0][1] = T(2) * (qxy + qwz);
+		Result[0][2] = T(2) * (qxz - qwy);
+
+		Result[1][0] = T(2) * (qxy - qwz);
+		Result[1][1] = T(1) - T(2) * (qxx +  qzz);
+		Result[1][2] = T(2) * (qyz + qwx);
+
+		Result[2][0] = T(2) * (qxz + qwy);
+		Result[2][1] = T(2) * (qyz - qwx);
+		Result[2][2] = T(1) - T(2) * (qxx +  qyy);
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> mat4_cast(qua<T, Q> const& q)
+	{
+		return mat<4, 4, T, Q>(mat3_cast(q));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> quat_cast(mat<3, 3, T, Q> const& m)
+	{
+		T fourXSquaredMinus1 = m[0][0] - m[1][1] - m[2][2];
+		T fourYSquaredMinus1 = m[1][1] - m[0][0] - m[2][2];
+		T fourZSquaredMinus1 = m[2][2] - m[0][0] - m[1][1];
+		T fourWSquaredMinus1 = m[0][0] + m[1][1] + m[2][2];
+
+		int biggestIndex = 0;
+		T fourBiggestSquaredMinus1 = fourWSquaredMinus1;
+		if(fourXSquaredMinus1 > fourBiggestSquaredMinus1)
+		{
+			fourBiggestSquaredMinus1 = fourXSquaredMinus1;
+			biggestIndex = 1;
+		}
+		if(fourYSquaredMinus1 > fourBiggestSquaredMinus1)
+		{
+			fourBiggestSquaredMinus1 = fourYSquaredMinus1;
+			biggestIndex = 2;
+		}
+		if(fourZSquaredMinus1 > fourBiggestSquaredMinus1)
+		{
+			fourBiggestSquaredMinus1 = fourZSquaredMinus1;
+			biggestIndex = 3;
+		}
+
+		T biggestVal = sqrt(fourBiggestSquaredMinus1 + static_cast<T>(1)) * static_cast<T>(0.5);
+		T mult = static_cast<T>(0.25) / biggestVal;
+
+		switch(biggestIndex)
+		{
+		case 0:
+			return qua<T, Q>(biggestVal, (m[1][2] - m[2][1]) * mult, (m[2][0] - m[0][2]) * mult, (m[0][1] - m[1][0]) * mult);
+		case 1:
+			return qua<T, Q>((m[1][2] - m[2][1]) * mult, biggestVal, (m[0][1] + m[1][0]) * mult, (m[2][0] + m[0][2]) * mult);
+		case 2:
+			return qua<T, Q>((m[2][0] - m[0][2]) * mult, (m[0][1] + m[1][0]) * mult, biggestVal, (m[1][2] + m[2][1]) * mult);
+		case 3:
+			return qua<T, Q>((m[0][1] - m[1][0]) * mult, (m[2][0] + m[0][2]) * mult, (m[1][2] + m[2][1]) * mult, biggestVal);
+		default: // Silence a -Wswitch-default warning in GCC. Should never actually get here. Assert is just for sanity.
+			assert(false);
+			return qua<T, Q>(1, 0, 0, 0);
+		}
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> quat_cast(mat<4, 4, T, Q> const& m4)
+	{
+		return quat_cast(mat<3, 3, T, Q>(m4));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> lessThan(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] < y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> lessThanEqual(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] <= y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> greaterThan(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] > y[i];
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER vec<4, bool, Q> greaterThanEqual(qua<T, Q> const& x, qua<T, Q> const& y)
+	{
+		vec<4, bool, Q> Result;
+		for(length_t i = 0; i < x.length(); ++i)
+			Result[i] = x[i] >= y[i];
+		return Result;
+	}
+
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> quatLookAt(vec<3, T, Q> const& direction, vec<3, T, Q> const& up)
+	{
+#		if GLM_CONFIG_CLIP_CONTROL & GLM_CLIP_CONTROL_LH_BIT
+			return quatLookAtLH(direction, up);
+#		else
+			return quatLookAtRH(direction, up);
+# 		endif
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> quatLookAtRH(vec<3, T, Q> const& direction, vec<3, T, Q> const& up)
+	{
+		mat<3, 3, T, Q> Result;
+
+		Result[2] = -direction;
+		vec<3, T, Q> const& Right = cross(up, Result[2]);
+		Result[0] = Right * inversesqrt(max(static_cast<T>(0.00001), dot(Right, Right)));
+		Result[1] = cross(Result[2], Result[0]);
+
+		return quat_cast(Result);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER qua<T, Q> quatLookAtLH(vec<3, T, Q> const& direction, vec<3, T, Q> const& up)
+	{
+		mat<3, 3, T, Q> Result;
+
+		Result[2] = direction;
+		vec<3, T, Q> const& Right = cross(up, Result[2]);
+		Result[0] = Right * inversesqrt(max(static_cast<T>(0.00001), dot(Right, Right)));
+		Result[1] = cross(Result[2], Result[0]);
+
+		return quat_cast(Result);
+	}
+}//namespace glm
+
+#if GLM_CONFIG_SIMD == GLM_ENABLE
+#	include "gtc/quaternion_simd.inl"
+#endif
+
+
+
+// ---------- "../gtc/vec1.hpp" ----------
+
+	// ---------- "../ext/vector_bool1.hpp" ----------
+
+	#if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+#	include "_swizzle.hpp"
+#elif GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_FUNCTION
+#	include "_swizzle_func.hpp"
+#endif
+#include <cstddef>
+
+namespace glm
+{
+	template<typename T, qualifier Q>
+	struct vec<1, T, Q>
+	{
+		// -- Implementation detail --
+
+		typedef T value_type;
+		typedef vec<1, T, Q> type;
+		typedef vec<1, bool, Q> bool_type;
+
+		// -- Data --
+
+#		if GLM_SILENT_WARNINGS == GLM_ENABLE
+#			if GLM_COMPILER & GLM_COMPILER_GCC
+#				pragma GCC diagnostic push
+#				pragma GCC diagnostic ignored "-Wpedantic"
+#			elif GLM_COMPILER & GLM_COMPILER_CLANG
+#				pragma clang diagnostic push
+#				pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
+#				pragma clang diagnostic ignored "-Wnested-anon-types"
+#			elif GLM_COMPILER & GLM_COMPILER_VC
+#				pragma warning(push)
+#				pragma warning(disable: 4201)  // nonstandard extension used : nameless struct/union
+#			endif
+#		endif
+
+#		if GLM_CONFIG_XYZW_ONLY
+			T x;
+#		elif GLM_CONFIG_ANONYMOUS_STRUCT == GLM_ENABLE
+			union
+			{
+				T x;
+				T r;
+				T s;
+
+				typename detail::storage<1, T, detail::is_aligned<Q>::value>::type data;
+/*
+#				if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+					_GLM_SWIZZLE1_2_MEMBERS(T, Q, x)
+					_GLM_SWIZZLE1_2_MEMBERS(T, Q, r)
+					_GLM_SWIZZLE1_2_MEMBERS(T, Q, s)
+					_GLM_SWIZZLE1_3_MEMBERS(T, Q, x)
+					_GLM_SWIZZLE1_3_MEMBERS(T, Q, r)
+					_GLM_SWIZZLE1_3_MEMBERS(T, Q, s)
+					_GLM_SWIZZLE1_4_MEMBERS(T, Q, x)
+					_GLM_SWIZZLE1_4_MEMBERS(T, Q, r)
+					_GLM_SWIZZLE1_4_MEMBERS(T, Q, s)
+#				endif
+*/
+			};
+#		else
+			union {T x, r, s;};
+/*
+#			if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_FUNCTION
+				GLM_SWIZZLE_GEN_VEC_FROM_VEC1(T, Q)
+#			endif
+*/
+#		endif
+
+#		if GLM_SILENT_WARNINGS == GLM_ENABLE
+#			if GLM_COMPILER & GLM_COMPILER_CLANG
+#				pragma clang diagnostic pop
+#			elif GLM_COMPILER & GLM_COMPILER_GCC
+#				pragma GCC diagnostic pop
+#			elif GLM_COMPILER & GLM_COMPILER_VC
+#				pragma warning(pop)
+#			endif
+#		endif
+
+		// -- Component accesses --
+
+		/// Return the count of components of the vector
+		typedef length_t length_type;
+		GLM_FUNC_DECL static GLM_CONSTEXPR length_type length(){return 1;}
+
+		GLM_FUNC_DECL GLM_CONSTEXPR T & operator[](length_type i);
+		GLM_FUNC_DECL GLM_CONSTEXPR T const& operator[](length_type i) const;
+
+		// -- Implicit basic constructors --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR vec() GLM_DEFAULT;
+		GLM_FUNC_DECL GLM_CONSTEXPR vec(vec const& v) GLM_DEFAULT;
+		template<qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec(vec<1, T, P> const& v);
+
+		// -- Explicit basic constructors --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR explicit vec(T scalar);
+
+		// -- Conversion vector constructors --
+
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<2, U, P> const& v);
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<3, U, P> const& v);
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<4, U, P> const& v);
+
+		/// Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+		template<typename U, qualifier P>
+		GLM_FUNC_DECL GLM_CONSTEXPR GLM_EXPLICIT vec(vec<1, U, P> const& v);
+
+		// -- Swizzle constructors --
+/*
+#		if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+			template<int E0>
+			GLM_FUNC_DECL GLM_CONSTEXPR vec(detail::_swizzle<1, T, Q, E0, -1,-2,-3> const& that)
+			{
+				*this = that();
+			}
+#		endif//GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+*/
+		// -- Unary arithmetic operators --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator=(vec const& v) GLM_DEFAULT;
+
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator+=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator+=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator-=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator-=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator*=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator*=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator/=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator/=(vec<1, U, Q> const& v);
+
+		// -- Increment and decrement operators --
+
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator++();
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator--();
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator++(int);
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator--(int);
+
+		// -- Unary bit operators --
+
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator%=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator%=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator&=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator&=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator|=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator|=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator^=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator^=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator<<=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator<<=(vec<1, U, Q> const& v);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator>>=(U scalar);
+		template<typename U>
+		GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> & operator>>=(vec<1, U, Q> const& v);
+	};
+
+	// -- Unary operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v);
+
+	// -- Binary operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator*(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator/(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator%(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator&(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator|(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator^(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator<<(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v, T scalar);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator>>(T scalar, vec<1, T, Q> const& v);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, T, Q> operator~(vec<1, T, Q> const& v);
+
+	// -- Boolean operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR bool operator==(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR bool operator!=(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2);
+
+	template<qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, bool, Q> operator&&(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2);
+
+	template<qualifier Q>
+	GLM_FUNC_DECL GLM_CONSTEXPR vec<1, bool, Q> operator||(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2);
+}//namespace glm
+
+#ifndef GLM_EXTERNAL_TEMPLATE
+
+namespace glm
+{
+	// -- Implicit basic constructors --
+
+#	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec()
+#			if GLM_CONFIG_CTOR_INIT != GLM_CTOR_INIT_DISABLE
+				: x(0)
+#			endif
+		{}
+
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<1, T, Q> const& v)
+			: x(v.x)
+		{}
+#	endif
+
+	template<typename T, qualifier Q>
+	template<qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<1, T, P> const& v)
+		: x(v.x)
+	{}
+
+	// -- Explicit basic constructors --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(T scalar)
+		: x(scalar)
+	{}
+
+	// -- Conversion vector constructors --
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<1, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<2, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<3, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	template<typename T, qualifier Q>
+	template<typename U, qualifier P>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q>::vec(vec<4, U, P> const& v)
+		: x(static_cast<T>(v.x))
+	{}
+
+	// -- Component accesses --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T & vec<1, T, Q>::operator[](typename vec<1, T, Q>::length_type)
+	{
+		return x;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T const& vec<1, T, Q>::operator[](typename vec<1, T, Q>::length_type) const
+	{
+		return x;
+	}
+
+	// -- Unary arithmetic operators --
+
+#	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
+		template<typename T, qualifier Q>
+		GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator=(vec<1, T, Q> const& v)
+		{
+			this->x = v.x;
+			return *this;
+		}
+#	endif
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator=(vec<1, U, Q> const& v)
+	{
+		this->x = static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator+=(U scalar)
+	{
+		this->x += static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator+=(vec<1, U, Q> const& v)
+	{
+		this->x += static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator-=(U scalar)
+	{
+		this->x -= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator-=(vec<1, U, Q> const& v)
+	{
+		this->x -= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator*=(U scalar)
+	{
+		this->x *= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator*=(vec<1, U, Q> const& v)
+	{
+		this->x *= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator/=(U scalar)
+	{
+		this->x /= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator/=(vec<1, U, Q> const& v)
+	{
+		this->x /= static_cast<T>(v.x);
+		return *this;
+	}
+
+	// -- Increment and decrement operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator++()
+	{
+		++this->x;
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator--()
+	{
+		--this->x;
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> vec<1, T, Q>::operator++(int)
+	{
+		vec<1, T, Q> Result(*this);
+		++*this;
+		return Result;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> vec<1, T, Q>::operator--(int)
+	{
+		vec<1, T, Q> Result(*this);
+		--*this;
+		return Result;
+	}
+
+	// -- Unary bit operators --
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator%=(U scalar)
+	{
+		this->x %= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator%=(vec<1, U, Q> const& v)
+	{
+		this->x %= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator&=(U scalar)
+	{
+		this->x &= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator&=(vec<1, U, Q> const& v)
+	{
+		this->x &= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator|=(U scalar)
+	{
+		this->x |= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator|=(vec<1, U, Q> const& v)
+	{
+		this->x |= U(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator^=(U scalar)
+	{
+		this->x ^= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator^=(vec<1, U, Q> const& v)
+	{
+		this->x ^= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator<<=(U scalar)
+	{
+		this->x <<= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator<<=(vec<1, U, Q> const& v)
+	{
+		this->x <<= static_cast<T>(v.x);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator>>=(U scalar)
+	{
+		this->x >>= static_cast<T>(scalar);
+		return *this;
+	}
+
+	template<typename T, qualifier Q>
+	template<typename U>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> & vec<1, T, Q>::operator>>=(vec<1, U, Q> const& v)
+	{
+		this->x >>= static_cast<T>(v.x);
+		return *this;
+	}
+
+	// -- Unary constant operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v)
+	{
+		return v;
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			-v.x);
+	}
+
+	// -- Binary arithmetic operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x + scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar + v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator+(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x + v2.x);
+	}
+
+	//operator-
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x - scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar - v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator-(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x - v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x * scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator*(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar * v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator*(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x * v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x / scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator/(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar / v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator/(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x / v2.x);
+	}
+
+	// -- Binary bit operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x % scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator%(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar % v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator%(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x % v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x & scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator&(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar & v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator&(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x & v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x | scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator|(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar | v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator|(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x | v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			v.x ^ scalar);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator^(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			scalar ^ v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator^(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			v1.x ^ v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v.x << scalar));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator<<(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(scalar << v.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator<<(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v1.x << v2.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v, T scalar)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v.x >> scalar));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator>>(T scalar, vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(scalar >> v.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator>>(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return vec<1, T, Q>(
+			static_cast<T>(v1.x >> v2.x));
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, T, Q> operator~(vec<1, T, Q> const& v)
+	{
+		return vec<1, T, Q>(
+			~v.x);
+	}
+
+	// -- Boolean operators --
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return detail::compute_equal<T, std::numeric_limits<T>::is_iec559>::call(v1.x, v2.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator!=(vec<1, T, Q> const& v1, vec<1, T, Q> const& v2)
+	{
+		return !(v1 == v2);
+	}
+
+	template<qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, bool, Q> operator&&(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2)
+	{
+		return vec<1, bool, Q>(v1.x && v2.x);
+	}
+
+	template<qualifier Q>
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<1, bool, Q> operator||(vec<1, bool, Q> const& v1, vec<1, bool, Q> const& v2)
+	{
+		return vec<1, bool, Q>(v1.x || v2.x);
+	}
+}//namespace glm
+
+
+#endif//GLM_EXTERNAL_TEMPLATE
+
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_bool1 extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_bool1
+	/// @{
+
+	/// 1 components vector of boolean.
+	typedef vec<1, bool, defaultp>		bvec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_bool1_precision.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_bool1_precision extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_bool1_precision
+	/// @{
+
+	/// 1 component vector of bool values.
+	typedef vec<1, bool, highp>			highp_bvec1;
+
+	/// 1 component vector of bool values.
+	typedef vec<1, bool, mediump>		mediump_bvec1;
+
+	/// 1 component vector of bool values.
+	typedef vec<1, bool, lowp>			lowp_bvec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_float1.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_float1 extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_float1
+	/// @{
+
+	/// 1 components vector of single-precision floating-point numbers.
+	typedef vec<1, float, defaultp>		vec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_float1_precision.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_float1_precision extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_float1_precision
+	/// @{
+
+	/// 1 component vector of single-precision floating-point numbers using high precision arithmetic in term of ULPs.
+	typedef vec<1, float, highp>		highp_vec1;
+
+	/// 1 component vector of single-precision floating-point numbers using medium precision arithmetic in term of ULPs.
+	typedef vec<1, float, mediump>		mediump_vec1;
+
+	/// 1 component vector of single-precision floating-point numbers using low precision arithmetic in term of ULPs.
+	typedef vec<1, float, lowp>			lowp_vec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_double1.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_double1 extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_double1
+	/// @{
+
+	/// 1 components vector of double-precision floating-point numbers.
+	typedef vec<1, double, defaultp>		dvec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_double1_precision.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_double1_precision extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_double1_precision
+	/// @{
+
+	/// 1 component vector of double-precision floating-point numbers using high precision arithmetic in term of ULPs.
+	typedef vec<1, double, highp>		highp_dvec1;
+
+	/// 1 component vector of double-precision floating-point numbers using medium precision arithmetic in term of ULPs.
+	typedef vec<1, double, mediump>		mediump_dvec1;
+
+	/// 1 component vector of double-precision floating-point numbers using low precision arithmetic in term of ULPs.
+	typedef vec<1, double, lowp>		lowp_dvec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_int1.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_int1 extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_int1
+	/// @{
+
+	/// 1 component vector of signed integer numbers.
+	typedef vec<1, int, defaultp>			ivec1;
+
+	/// @}
+}//namespace glm
+
+
+
+	// ---------- "../ext/vector_int1_sized.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_scalar_int_sized extension included")
+#endif
+
+namespace glm{
+namespace detail
+{
+#	if GLM_HAS_EXTENDED_INTEGER_TYPE
+		typedef std::int8_t			int8;
+		typedef std::int16_t		int16;
+		typedef std::int32_t		int32;
+#	else
+		typedef signed char			int8;
+		typedef signed short		int16;
+		typedef signed int			int32;
+#endif//
+
+	template<>
+	struct is_int<int8>
+	{
+		enum test {value = ~0};
+	};
+
+	template<>
+	struct is_int<int16>
+	{
+		enum test {value = ~0};
+	};
+
+	template<>
+	struct is_int<int64>
+	{
+		enum test {value = ~0};
+	};
+}//namespace detail
+
+
+	/// @addtogroup ext_scalar_int_sized
+	/// @{
+
+	/// 8 bit signed integer type.
+	typedef detail::int8		int8;
+
+	/// 16 bit signed integer type.
+	typedef detail::int16		int16;
+
+	/// 32 bit signed integer type.
+	typedef detail::int32		int32;
+
+	/// 64 bit signed integer type.
+	typedef detail::int64		int64;
+
+	/// @}
+}//namespace glm
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_int1_sized extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_int1_sized
+	/// @{
+
+	/// 8 bit signed integer vector of 1 component type.
+	///
+	/// @see ext_vector_int1_sized
+	typedef vec<1, int8, defaultp>	i8vec1;
+
+	/// 16 bit signed integer vector of 1 component type.
+	///
+	/// @see ext_vector_int1_sized
+	typedef vec<1, int16, defaultp>	i16vec1;
+
+	/// 32 bit signed integer vector of 1 component type.
+	///
+	/// @see ext_vector_int1_sized
+	typedef vec<1, int32, defaultp>	i32vec1;
+
+	/// 64 bit signed integer vector of 1 component type.
+	///
+	/// @see ext_vector_int1_sized
+	typedef vec<1, int64, defaultp>	i64vec1;
+
+	/// @}
+}//namespace glm
+
+
+	// ---------- "../ext/vector_uint1.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_uint1 extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_uint1
+	/// @{
+
+	/// 1 component vector of unsigned integer numbers.
+	typedef vec<1, unsigned int, defaultp>			uvec1;
+
+	/// @}
+}//namespace glm
+
+
+
+	// ---------- "../ext/vector_uint1_sized.hpp" ----------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_scalar_uint_sized extension included")
+#endif
+
+namespace glm{
+namespace detail
+{
+#	if GLM_HAS_EXTENDED_INTEGER_TYPE
+		typedef std::uint8_t		uint8;
+		typedef std::uint16_t		uint16;
+		typedef std::uint32_t		uint32;
+#	else
+		typedef unsigned char		uint8;
+		typedef unsigned short		uint16;
+		typedef unsigned int		uint32;
+#endif
+
+	template<>
+	struct is_int<uint8>
+	{
+		enum test {value = ~0};
+	};
+
+	template<>
+	struct is_int<uint16>
+	{
+		enum test {value = ~0};
+	};
+
+	template<>
+	struct is_int<uint64>
+	{
+		enum test {value = ~0};
+	};
+}//namespace detail
+
+
+	/// @addtogroup ext_scalar_uint_sized
+	/// @{
+
+	/// 8 bit unsigned integer type.
+	typedef detail::uint8		uint8;
+
+	/// 16 bit unsigned integer type.
+	typedef detail::uint16		uint16;
+
+	/// 32 bit unsigned integer type.
+	typedef detail::uint32		uint32;
+
+	/// 64 bit unsigned integer type.
+	typedef detail::uint64		uint64;
+
+	/// @}
+}//namespace glm
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_EXT_vector_uint1_sized extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup ext_vector_uint1_sized
+	/// @{
+
+	/// 8 bit unsigned integer vector of 1 component type.
+	///
+	/// @see ext_vector_uint1_sized
+	typedef vec<1, uint8, defaultp>		u8vec1;
+
+	/// 16 bit unsigned integer vector of 1 component type.
+	///
+	/// @see ext_vector_uint1_sized
+	typedef vec<1, uint16, defaultp>	u16vec1;
+
+	/// 32 bit unsigned integer vector of 1 component type.
+	///
+	/// @see ext_vector_uint1_sized
+	typedef vec<1, uint32, defaultp>	u32vec1;
+
+	/// 64 bit unsigned integer vector of 1 component type.
+	///
+	/// @see ext_vector_uint1_sized
+	typedef vec<1, uint64, defaultp>	u64vec1;
+
+	/// @}
+}//namespace glm
+
+	// -----------------------------------------------------
+
+// ---------------------------------------
+
+#if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
+#	pragma message("GLM: GLM_GTC_type_ptr extension included")
+#endif
+
+namespace glm
+{
+	/// @addtogroup gtc_type_ptr
+	/// @{
+
+	/// Return the constant address to the data of the input parameter.
+	/// @see gtc_type_ptr
+	template<typename genType>
+	GLM_FUNC_DECL typename genType::value_type const * value_ptr(genType const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<1, T, Q> make_vec1(vec<1, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<1, T, Q> make_vec1(vec<2, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<1, T, Q> make_vec1(vec<3, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<1, T, Q> make_vec1(vec<4, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<2, T, Q> make_vec2(vec<1, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<2, T, Q> make_vec2(vec<2, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<2, T, Q> make_vec2(vec<3, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<2, T, Q> make_vec2(vec<4, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> make_vec3(vec<1, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> make_vec3(vec<2, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> make_vec3(vec<3, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<3, T, Q> make_vec3(vec<4, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, T, Q> make_vec4(vec<1, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, T, Q> make_vec4(vec<2, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, T, Q> make_vec4(vec<3, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template <typename T, qualifier Q>
+	GLM_FUNC_DECL vec<4, T, Q> make_vec4(vec<4, T, Q> const& v);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL vec<2, T, defaultp> make_vec2(T const * const ptr);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL vec<3, T, defaultp> make_vec3(T const * const ptr);
+
+	/// Build a vector from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL vec<4, T, defaultp> make_vec4(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<2, 2, T, defaultp> make_mat2x2(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<2, 3, T, defaultp> make_mat2x3(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<2, 4, T, defaultp> make_mat2x4(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<3, 2, T, defaultp> make_mat3x2(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<3, 3, T, defaultp> make_mat3x3(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<3, 4, T, defaultp> make_mat3x4(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 2, T, defaultp> make_mat4x2(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 3, T, defaultp> make_mat4x3(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> make_mat4x4(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<2, 2, T, defaultp> make_mat2(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<3, 3, T, defaultp> make_mat3(T const * const ptr);
+
+	/// Build a matrix from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL mat<4, 4, T, defaultp> make_mat4(T const * const ptr);
+
+	/// Build a quaternion from a pointer.
+	/// @see gtc_type_ptr
+	template<typename T>
+	GLM_FUNC_DECL qua<T, defaultp> make_quat(T const * const ptr);
+
+	/// @}
+}//namespace glm
+
+namespace glm
+{
+	/// @addtogroup gtc_type_ptr
+	/// @{
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(vec<2, T, Q> const& v)
+	{
+		return &(v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(vec<2, T, Q>& v)
+	{
+		return &(v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const * value_ptr(vec<3, T, Q> const& v)
+	{
+		return &(v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(vec<3, T, Q>& v)
+	{
+		return &(v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(vec<4, T, Q> const& v)
+	{
+		return &(v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(vec<4, T, Q>& v)
+	{
+		return &(v.x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<2, 2, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<2, 2, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<3, 3, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<3, 3, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<4, 4, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<4, 4, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<2, 3, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<2, 3, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<3, 2, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<3, 2, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<2, 4, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<2, 4, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<4, 2, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<4, 2, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<3, 4, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(mat<3, 4, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const* value_ptr(mat<4, 3, T, Q> const& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T * value_ptr(mat<4, 3, T, Q>& m)
+	{
+		return &(m[0].x);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T const * value_ptr(qua<T, Q> const& q)
+	{
+		return &(q[0]);
+	}
+
+	template<typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER T* value_ptr(qua<T, Q>& q)
+	{
+		return &(q[0]);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<1, T, Q> make_vec1(vec<1, T, Q> const& v)
+	{
+		return v;
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<1, T, Q> make_vec1(vec<2, T, Q> const& v)
+	{
+		return vec<1, T, Q>(v);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<1, T, Q> make_vec1(vec<3, T, Q> const& v)
+	{
+		return vec<1, T, Q>(v);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<1, T, Q> make_vec1(vec<4, T, Q> const& v)
+	{
+		return vec<1, T, Q>(v);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<2, T, Q> make_vec2(vec<1, T, Q> const& v)
+	{
+		return vec<2, T, Q>(v.x, static_cast<T>(0));
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<2, T, Q> make_vec2(vec<2, T, Q> const& v)
+	{
+		return v;
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<2, T, Q> make_vec2(vec<3, T, Q> const& v)
+	{
+		return vec<2, T, Q>(v);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<2, T, Q> make_vec2(vec<4, T, Q> const& v)
+	{
+		return vec<2, T, Q>(v);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<3, T, Q> make_vec3(vec<1, T, Q> const& v)
+	{
+		return vec<3, T, Q>(v.x, static_cast<T>(0), static_cast<T>(0));
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<3, T, Q> make_vec3(vec<2, T, Q> const& v)
+	{
+		return vec<3, T, Q>(v.x, v.y, static_cast<T>(0));
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<3, T, Q> make_vec3(vec<3, T, Q> const& v)
+	{
+		return v;
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<3, T, Q> make_vec3(vec<4, T, Q> const& v)
+	{
+		return vec<3, T, Q>(v);
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<4, T, Q> make_vec4(vec<1, T, Q> const& v)
+	{
+		return vec<4, T, Q>(v.x, static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<4, T, Q> make_vec4(vec<2, T, Q> const& v)
+	{
+		return vec<4, T, Q>(v.x, v.y, static_cast<T>(0), static_cast<T>(1));
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<4, T, Q> make_vec4(vec<3, T, Q> const& v)
+	{
+		return vec<4, T, Q>(v.x, v.y, v.z, static_cast<T>(1));
+	}
+
+	template <typename T, qualifier Q>
+	inline vec<4, T, Q> make_vec4(vec<4, T, Q> const& v)
+	{
+		return v;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER vec<2, T, defaultp> make_vec2(T const *const ptr)
+	{
+		vec<2, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(vec<2, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER vec<3, T, defaultp> make_vec3(T const *const ptr)
+	{
+		vec<3, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(vec<3, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER vec<4, T, defaultp> make_vec4(T const *const ptr)
+	{
+		vec<4, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(vec<4, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<2, 2, T, defaultp> make_mat2x2(T const *const ptr)
+	{
+		mat<2, 2, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<2, 2, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<2, 3, T, defaultp> make_mat2x3(T const *const ptr)
+	{
+		mat<2, 3, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<2, 3, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<2, 4, T, defaultp> make_mat2x4(T const *const ptr)
+	{
+		mat<2, 4, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<2, 4, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<3, 2, T, defaultp> make_mat3x2(T const *const ptr)
+	{
+		mat<3, 2, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<3, 2, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<3, 3, T, defaultp> make_mat3x3(T const *const ptr)
+	{
+		mat<3, 3, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<3, 3, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<3, 4, T, defaultp> make_mat3x4(T const *const ptr)
+	{
+		mat<3, 4, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<3, 4, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 2, T, defaultp> make_mat4x2(T const *const ptr)
+	{
+		mat<4, 2, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<4, 2, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 3, T, defaultp> make_mat4x3(T const *const ptr)
+	{
+		mat<4, 3, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<4, 3, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> make_mat4x4(T const *const ptr)
+	{
+		mat<4, 4, T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(mat<4, 4, T, defaultp>));
+		return Result;
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<2, 2, T, defaultp> make_mat2(T const *const ptr)
+	{
+		return make_mat2x2(ptr);
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<3, 3, T, defaultp> make_mat3(T const *const ptr)
+	{
+		return make_mat3x3(ptr);
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> make_mat4(T const *const ptr)
+	{
+		return make_mat4x4(ptr);
+	}
+
+	template<typename T>
+	GLM_FUNC_QUALIFIER qua<T, defaultp> make_quat(T const *const ptr)
+	{
+		qua<T, defaultp> Result;
+		memcpy(value_ptr(Result), ptr, sizeof(qua<T, defaultp>));
+		return Result;
+	}
+
+	/// @}
+}//namespace glm
+
+
+
+// ----------------------------------
+
+
+// ----------  ----------
+// -----------------------
 
