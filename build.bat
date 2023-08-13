@@ -98,6 +98,8 @@ set search_words=
 
 popd
 
+echo "GLFW Build Complete"
+
 @REM --------- End of GLFW Build ------------
 
 
@@ -139,6 +141,8 @@ popd
 copy "libglew32mx.dll" "../build/vendor"
 
 popd
+
+echo "GLEW Build Complete"
 
 @REM --------- End of GLEW Build ------------
 
@@ -202,6 +206,8 @@ popd @REM "lib/"
 
 popd @REM "imgui/"
 
+echo "DearImGui Build Complete"
+
 @REM --------- End of ImGui Build ------------
 
 
@@ -216,13 +222,13 @@ if exist "include/GLM/glm/glm.h.gch" (
 
 echo "Building GLM"
 
-@REM todo consider moving all the glm headers in glm.h directly into it so that we don't have to worry about the precompiled header is actually working
-
 pushd "include/GLM/glm/"
 
 g++ -g -DUNICODE -D_UNICODE -std=c++17 glm.h -o glm.h.gch
 
 popd @REM "include/GLM/glm/"
+
+echo "GLM Build Complete"
 
 @REM --------- End of GLM Build ------------
 
