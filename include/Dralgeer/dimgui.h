@@ -34,7 +34,7 @@ namespace Dralgeer {
             ImGui::PopStyleColor(3);
 
             ImGui::SameLine();
-            ImGui::DragFloat("%.2fx", &values.x, 0.1f);
+            ImGui::DragFloat("##x", &values.x, 0.1f);
             ImGui::PopItemWidth();
 
             ImGui::SameLine();
@@ -48,7 +48,7 @@ namespace Dralgeer {
             ImGui::PopStyleColor(3);
 
             ImGui::SameLine();
-            ImGui::DragFloat("%.2fy", &values.y, 0.1f);
+            ImGui::DragFloat("##y", &values.y, 0.1f);
             ImGui::PopItemWidth();
 
             ImGui::NextColumn();
@@ -66,7 +66,7 @@ namespace Dralgeer {
             ImGui::Text(label.c_str());
             ImGui::NextColumn();
 
-            ImGui::DragFloat("%.2fdragFloat", &value, 0.1f);
+            ImGui::DragFloat("##dragFloat", &value, 0.1f);
 
             ImGui::Columns(1);
             ImGui::PopID();
@@ -81,7 +81,7 @@ namespace Dralgeer {
             ImGui::NextColumn();
 
             // todo may cause issues (consult java implementation if this does happen)
-            ImGui::DragInt("dragInt", &value, 0.1f);
+            ImGui::DragInt("##dragInt", &value, 0.1f);
 
             ImGui::Columns(1);
             ImGui::PopID();
