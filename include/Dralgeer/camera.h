@@ -1,7 +1,6 @@
 #pragma once
 
-#include <GLM/glm/glm.hpp>
-#include <GLM/glm/gtc/matrix_transform.hpp>
+#include <GLM/glm/glm.h>
 
 namespace Dralgeer {
     // Model a camera. You must specify the position before using it.
