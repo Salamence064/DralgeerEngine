@@ -35,6 +35,8 @@ namespace Dralgeer {
             MouseControls mouseControls;
             GizmoSystem gizmoSystem;
 
+            Renderer renderer;
+
 
             // * ====================
             // * Helper Functions
@@ -87,7 +89,7 @@ namespace Dralgeer {
             inline void start() {
                 for (int i = 0; i < numObjects; ++i) {
                     gameObjects[i]->start();
-                    Renderer::add(gameObjects[i]->sprite);
+                    renderer.add(gameObjects[i]->sprite);
                 }
 
                 running = 1;
@@ -98,7 +100,7 @@ namespace Dralgeer {
                 
                 if (running) {
                     go->start();
-                    Renderer::add(go->sprite);
+                    renderer.add(go->sprite);
                 }
             };
 
@@ -112,6 +114,6 @@ namespace Dralgeer {
             };
 
             void update(float dt, bool wantCapture);
-            inline void render(Shader const &currShader) { Renderer::render(currShader, camera); };
+            inline void render(Shader const &currShader) { renderer.render(currShader, camera); };
     };
 }

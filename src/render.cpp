@@ -230,8 +230,8 @@ namespace Dralgeer {
 
     // * ===============================================
 
-    namespace Renderer {
-        RenderBatch batches[MAX_RENDER_BATCHES];
-        int numBatches = 0;
-    }
+    // namespace Renderer {
+    //     RenderBatch batches[MAX_RENDER_BATCHES];
+    //     int numBatches = 0;
+    // }
 }

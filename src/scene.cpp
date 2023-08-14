@@ -21,7 +21,7 @@ namespace Dralgeer {
             gameObjects[i]->update();
 
             if (gameObjects[i]->dead) {
-                Renderer::destroy(gameObjects[i]->sprite);
+                renderer.destroy(gameObjects[i]->sprite);
                 delete gameObjects[i];
                 for (int j = i; j < numObjects - 1; ++j) { gameObjects[j] = gameObjects[j + 1]; }
                 numObjects--;
