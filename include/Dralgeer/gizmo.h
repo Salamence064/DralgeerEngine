@@ -43,6 +43,14 @@ namespace Dralgeer {
             inline void setActive() {
                 xSprite->color = xColor;
                 ySprite->color = yColor;
+
+                if (xSprite->transform.pos != activeObject->sprite->transform.pos) {
+                    xSprite->transform.pos = activeObject->sprite->transform.pos + xOffset;
+                    ySprite->transform.pos = activeObject->sprite->transform.pos + yOffset;
+
+                    xSprite->isDirty = 1;
+                    ySprite->isDirty = 1;
+                }
             };
 
             // Is the mouse hovered over the gizmo's xObject?
@@ -115,10 +123,10 @@ namespace Dralgeer {
             void init(Sprite spr, GizmoType gType);
 
             inline void start() {
-                xObject->transform.rotation = 90.0f;
-                yObject->transform.rotation = 180.0f;
-                xObject->transform.zIndex = 1000;
-                yObject->transform.zIndex = 1000;
+                xObject->sprite->transform.rotation = 90.0f;
+                yObject->sprite->transform.rotation = 180.0f;
+                xObject->sprite->transform.zIndex = 10;
+                yObject->sprite->transform.zIndex = 10;
             };
 
             void update();

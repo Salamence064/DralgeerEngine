@@ -50,7 +50,7 @@ namespace Dralgeer {
 
     class Renderer {
         private:
-            RenderBatch batches[MAX_RENDER_BATCHES];
+            RenderBatch batches[MAX_RENDER_BATCHES]; // todo refactor this to be a dynamic array and just place the batches in terms of zIndices
             int numBatches = 1;
 
         public:

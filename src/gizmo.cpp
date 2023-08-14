@@ -2,6 +2,8 @@
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/window.h>
 
+// todo figure out why the gizmo objects are not loading
+
 namespace Dralgeer {
     GizmoSystem::GizmoSystem(GizmoSystem const &gs) {
         gizmoSprites = gs.gizmoSprites; // This is okay as the AssetPool is the one that does the job of storing and deleting these
@@ -180,8 +182,5 @@ namespace Dralgeer {
             xActive = 0;
             yActive = 0;
         }
-
-        xObject->transform.pos += xOffset;
-        yObject->transform.pos += yOffset;
     };
 }
