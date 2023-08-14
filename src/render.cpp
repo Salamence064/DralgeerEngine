@@ -36,6 +36,8 @@ namespace Dralgeer {
     inline void RenderBatch::loadVertexProperties(int index) { // todo for some reason, this is not being ran when the button is clicked and the sprite is added to the scene
         int offset = index * 4 * VERTEX_SIZE;
 
+        std::cout << "Hello?\n";
+
         // Texture ID
         int texID = -1;
         if (sprites[index]->sprite.texture) {
@@ -93,9 +95,7 @@ namespace Dralgeer {
         }
     };
 
-    void RenderBatch::start(int zIndex) {
-        this->zIndex = zIndex;
-
+    void RenderBatch::start() {
         // generate and bind a vertex array object
         glGenVertexArrays(1, &vaoID);
         glBindVertexArray(vaoID);

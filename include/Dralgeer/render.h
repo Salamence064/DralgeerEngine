@@ -2,9 +2,6 @@
 
 #include "component.h"
 
-// todo add functions for GameObjects and take the sprite renderers from those.
-// todo probably make the Renderer namespace into a class.
-
 namespace Dralgeer {
     class RenderBatch {
         private:
@@ -20,7 +17,6 @@ namespace Dralgeer {
             inline void loadElementIndices(int index);
 
         public:
-            int zIndex; // zIndex of the RenderBatch
             int numSprites = 0;
             int numTextures = 0;
 
@@ -43,7 +39,7 @@ namespace Dralgeer {
             // * Normal Functions
             // * ===================
 
-            void start(int zIndex);
+            void start();
             void render(Shader const &currShader, Camera const &cam);
 
             // * Returns true if the SpriteRenderer is successfully destroyed and false if it doesn't exist.
@@ -55,80 +51,20 @@ namespace Dralgeer {
     class Renderer {
         private:
             RenderBatch batches[MAX_RENDER_BATCHES];
-            int numBatches = 0;
+            int numBatches = 1;
 
         public:
+            inline void start() { batches[0].start(); };
+
             inline void add(SpriteRenderer* spr) {
-                if (!spr) { return; }
+                if (!spr) { return; } // todo when I add the custom made logger macros, send out a debug message from here
 
-                for (int i = 0; i < numBatches; ++i) {
-                    if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->transform.zIndex) { 
-                        batches[i].addSprite(spr);
-                        return;
-                    }
-                }
+                int n = numBatches - 1;
+                if (batches[n].numSprites < MAX_RENDER_BATCH_SIZE) { batches[n].addSprite(spr); return; }
+                if (numBatches == MAX_RENDER_BATCHES) { return; } // todo debug output from here
 
-                if (numBatches >= MAX_RENDER_BATCHES) { // cannot exceed the max number of render batches
-                    std::cout << "[INFO] SpriteRenderer could not be added as the max number of RenderBatches has been reached.\n";
-                    return;
-                }
-
-                if (!numBatches) {
-                    batches[numBatches].start(spr->transform.zIndex);
-                    batches[numBatches++].addSprite(spr);
-                    return;
-                }
-
-                // determine the spot to put the new render batch in so that batches are sorted based on zIndex
-                // this uses a modified binary search
-                int min = 0, max = numBatches;
-                int index = numBatches/2;
-
-                // todo OR WE COULD make the equals operator functional and just not delete anything and inform users to not use the
-                // todo  assignment operator for RenderBatches (in fact, the users shouldn't be using RenderBatches in their code in the first place)
-                for(;;) { // todo solution is either the vbo thing or we could make it using a dynamic array
-                    if (spr->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
-                        max = index - 1;
-
-                        if (min == max) { // check if we have determined where to place the RenderBatch
-                            int j;                    
-                            if (spr->transform.zIndex < batches[min].zIndex) { j = min; }
-                            else { j = min + 1; }
-
-                            for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-                            batches[j].start(spr->transform.zIndex);
-                            batches[j].addSprite(spr);
-                            break;
-                        }
-
-                        index = (max + min)/2;
-
-                    } else if (spr->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
-                        min = index + 1;
-
-                        if (min == max) { // check if we have determined where to place the RenderBatch
-                            int j;                    
-                            if (spr->transform.zIndex < batches[min].zIndex) { j = min; }
-                            else { j = min + 1; }
-
-                            for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-                            batches[j].start(spr->transform.zIndex);
-                            batches[j].addSprite(spr);
-                            break;
-                        }
-
-                        index = (max + min)/2;
-
-                    } else { // add it to the index + 1 spot as they are the same zIndex
-                        for (int i = numBatches; i > index + 1; --i) { batches[i] = batches[i - 1]; }
-                        index++;
-                        batches[index].start(spr->transform.zIndex);
-                        batches[index].addSprite(spr);
-                        break;
-                    }
-                }
-
-                numBatches++;
+                batches[numBatches].start();
+                batches[numBatches++].addSprite(spr);
             };
 
             inline void add(GameObject const &go) { if (go.sprite) { add(go.sprite); }};
@@ -145,96 +81,4 @@ namespace Dralgeer {
                 for (int i = 0; i < numBatches; ++i) { batches[i].render(currShader, cam); }
             };
     };
-
-    // namespace Renderer { // todo probs make this a class in the end
-    //     extern RenderBatch batches[MAX_RENDER_BATCHES];
-    //     extern int numBatches;
-
-    //     inline void add(SpriteRenderer* spr) {
-    //         if (!spr) { return; }
-
-    //         for (int i = 0; i < numBatches; ++i) {
-    //             if (batches[i].numSprites < MAX_RENDER_BATCH_SIZE && batches[i].zIndex == spr->transform.zIndex) { 
-    //                 batches[i].addSprite(spr);
-    //                 return;
-    //             }
-    //         }
-
-    //         if (numBatches >= MAX_RENDER_BATCHES) { // cannot exceed the max number of render batches
-    //             std::cout << "[INFO] SpriteRenderer could not be added as the max number of RenderBatches has been reached.\n";
-    //             return;
-    //         }
-
-    //         if (!numBatches) {
-    //             batches[numBatches].start(spr->transform.zIndex);
-    //             batches[numBatches++].addSprite(spr);
-    //             return;
-    //         }
-
-    //         // determine the spot to put the new render batch in so that batches are sorted based on zIndex
-    //         // this uses a modified binary search
-    //         int min = 0, max = numBatches;
-    //         int index = numBatches/2;
-
-    //         // todo OR WE COULD make the equals operator functional and just not delete anything and inform users to not use the
-    //         // todo  assignment operator for RenderBatches (in fact, the users shouldn't be using RenderBatches in their code in the first place)
-    //         for(;;) { // todo solution is either the vbo thing or we could make it using a dynamic array
-    //             if (spr->transform.zIndex < batches[index].zIndex) { // shift to look through lower half
-    //                 max = index - 1;
-
-    //                 if (min == max) { // check if we have determined where to place the RenderBatch
-    //                     int j;                    
-    //                     if (spr->transform.zIndex < batches[min].zIndex) { j = min; }
-    //                     else { j = min + 1; }
-
-    //                     for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-    //                     batches[j].start(spr->transform.zIndex);
-    //                     batches[j].addSprite(spr);
-    //                     break;
-    //                 }
-
-    //                 index = (max + min)/2;
-
-    //             } else if (spr->transform.zIndex > batches[index].zIndex) { // shift to look through upper half
-    //                 min = index + 1;
-
-    //                 if (min == max) { // check if we have determined where to place the RenderBatch
-    //                     int j;                    
-    //                     if (spr->transform.zIndex < batches[min].zIndex) { j = min; }
-    //                     else { j = min + 1; }
-
-    //                     for (int i = numBatches; i > j; --i) { batches[i] = batches[i - 1]; }
-    //                     batches[j].start(spr->transform.zIndex);
-    //                     batches[j].addSprite(spr);
-    //                     break;
-    //                 }
-
-    //                 index = (max + min)/2;
-
-    //             } else { // add it to the index + 1 spot as they are the same zIndex
-    //                 for (int i = numBatches; i > index + 1; --i) { batches[i] = batches[i - 1]; }
-    //                 index++;
-    //                 batches[index].start(spr->transform.zIndex);
-    //                 batches[index].addSprite(spr);
-    //                 break;
-    //             }
-    //         }
-
-    //         numBatches++;
-    //     };
-
-    //     inline void add(GameObject const &go) { if (go.sprite) { add(go.sprite); }};
-
-    //     // destroy a sprite renderer contained in the renderer
-    //     // returns 1 if it successfully found and destroyed it and 0 otherwise
-    //     inline bool destroy(SpriteRenderer* spr) {
-    //         for (int i = 0; i < numBatches; ++i) { if (batches[i].destroyIfExists(spr)) { return 1; }}
-    //         return 0;
-    //     };
-
-    //     // render each batch
-    //     inline void render(Shader const &currShader, Camera const &cam) {
-    //         for (int i = 0; i < numBatches; ++i) { batches[i].render(currShader, cam); }
-    //     };
-    // }
 }
