@@ -30,12 +30,12 @@
 #define MAX_RENDER_INDICES_LIST_SIZE 1200
 #define MAX_TEXTURES 16
 
-#define COLOR_OFFSET (2 * sizeof(float))
-#define TEX_COORDS_OFFSET (6 * sizeof(float))
-#define TEX_ID_OFFSET (8 * sizeof(float))
-#define ENTITY_ID_OFFSET (9 * sizeof(float))
+#define COLOR_OFFSET (3 * sizeof(float))
+#define TEX_COORDS_OFFSET (7 * sizeof(float))
+#define TEX_ID_OFFSET (9 * sizeof(float))
+#define ENTITY_ID_OFFSET (10 * sizeof(float))
 
-#define VERTEX_SIZE 10
+#define VERTEX_SIZE 11
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
 
 // editor camera

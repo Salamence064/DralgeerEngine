@@ -2,11 +2,7 @@
 #include <Zeta2D/zmath2D.h>
 #include <Dralgeer/window.h>
 
-// todo change the match batch size to 1000 again and buffer sub data multiple times in smaller chunks
-
-// todo do the z-index based on a z-coordinate passed using the VBO and just make it progressively more positive as the z-index increases
-
-// todo maybe just make a rebuffer field bool to make it so we don't have to do the for loop check every frame
+// todo for zIndices find a way to make sure it appears within the field of vision even with massive zIndex values
 
 namespace Dralgeer {
     // * ===============================================
@@ -33,10 +29,8 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     };
 
-    inline void RenderBatch::loadVertexProperties(int index) { // todo for some reason, this is not being ran when the button is clicked and the sprite is added to the scene
+    inline void RenderBatch::loadVertexProperties(int index) {
         int offset = index * 4 * VERTEX_SIZE;
-
-        std::cout << "Hello?\n";
 
         // Texture ID
         int texID = -1;
@@ -74,22 +68,22 @@ namespace Dralgeer {
             // load position
             vertices[offset] = currPos.x;
             vertices[offset + 1] = currPos.y;
-            // todo try passing the zIndex for the z position and checking if we can do that instead of a list of renderbatches
+            vertices[offset + 2] = sprites[index]->transform.zIndex;
 
             // load color
-            vertices[offset + 2] = sprites[index]->color.x;
-            vertices[offset + 3] = sprites[index]->color.y;
-            vertices[offset + 4] = sprites[index]->color.z;
-            vertices[offset + 5] = sprites[index]->color.w;
+            vertices[offset + 3] = sprites[index]->color.x;
+            vertices[offset + 4] = sprites[index]->color.y;
+            vertices[offset + 5] = sprites[index]->color.z;
+            vertices[offset + 6] = sprites[index]->color.w;
 
             // load texture coords
-            vertices[offset + 6] = sprites[index]->sprite.texCoords[i].x;
-            vertices[offset + 7] = sprites[index]->sprite.texCoords[i].y;
+            vertices[offset + 7] = sprites[index]->sprite.texCoords[i].x;
+            vertices[offset + 8] = sprites[index]->sprite.texCoords[i].y;
             // load texture IDs
-            vertices[offset + 8] = texID;
+            vertices[offset + 9] = texID;
 
             // load entity IDs
-            vertices[offset + 9] = sprites[index]->entityID;
+            vertices[offset + 10] = sprites[index]->entityID;
 
             offset += VERTEX_SIZE;
         }
@@ -127,7 +121,7 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
         glVertexAttribPointer(1, 4, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) COLOR_OFFSET);
         glVertexAttribPointer(2, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_COORDS_OFFSET);
         glVertexAttribPointer(3, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
@@ -152,7 +146,6 @@ namespace Dralgeer {
 
         // rebuffer data if any of the sprites are dirty
         if (rebuffer) {
-            // todo maybe could use an offset + an equation to determine the size for slightly greater efficiency
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -229,9 +222,4 @@ namespace Dralgeer {
     };
 
     // * ===============================================
-
-    // namespace Renderer {
-    //     RenderBatch batches[MAX_RENDER_BATCHES];
-    //     int numBatches = 0;
-    // }
 }
