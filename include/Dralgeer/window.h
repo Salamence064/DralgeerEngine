@@ -69,7 +69,7 @@ namespace Dralgeer {
         // static bool initGamepadState = 1;
         // static GLFWgamepadstate gamepadState;
 
-        static bool runtimePlaying = 0; // Is the scene being played?
+        static bool runtimePlaying = 0; // Is the scene being played? (i.e. are physics active)
 
         inline static void changeScene(SceneType scene) {
             switch(scene) {
@@ -180,7 +180,7 @@ namespace Dralgeer {
                         LevelEditorScene* activeScene = (LevelEditorScene*) currScene.scene;
 
                         // update the scene
-                        activeScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse());
+                        activeScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse(), runtimePlaying);
 
                         // render picking texture
                         glDisable(GL_BLEND);

@@ -9,13 +9,18 @@ namespace Dralgeer {
     // * ================================================
     // * Level Editor Class
 
-    void LevelEditorScene::update(float dt, bool wantCapture) {
+    void LevelEditorScene::update(float &dt, bool wantCapture, bool physicsUpdate) {
         camera.adjustProjection();
 
-        editorCamera.update(dt, wantCapture);
-        gridLines.update(camera);
-        mouseControls.update();
-        gizmoSystem.update();
+        if (physicsUpdate) {
+            physicsHandler.update(dt); // todo test to make sure dt gets subtracted from with the double pass by reference
+
+        } else {
+            editorCamera.update(dt, wantCapture);
+            gridLines.update(camera);
+            mouseControls.update();
+            gizmoSystem.update();
+        }
 
         for (int i = numObjects - 1; i >= 0; --i) {
             gameObjects[i]->update();

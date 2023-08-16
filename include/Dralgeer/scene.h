@@ -2,6 +2,7 @@
 
 #include "gizmo.h"
 #include "render.h"
+#include <Zeta2D/physicshandler.h>
 
 namespace Dralgeer {
     enum SceneType {
@@ -21,11 +22,10 @@ namespace Dralgeer {
             // * ==============
 
             GameObject** gameObjects = nullptr;
-            int capacity = 8; // default capacity of 8 // todo probs will up in the future
+            int capacity = 64; // default capacity of 64 // todo probs will adjust in the future
             int numObjects = 0;
 
-            bool running = 0;
-            // todo add physics handler here.
+            bool running = 0; // is the scene running (not physics related)
 
             SpriteSheet* sprites = nullptr;
             bool imGuiSetup = 1; // ! DO NOT serialize
@@ -36,6 +36,7 @@ namespace Dralgeer {
             GizmoSystem gizmoSystem;
 
             Renderer renderer;
+            Zeta::Handler physicsHandler/*(ZMath::Vec2D())*/;
 
 
             // * ====================
@@ -113,7 +114,7 @@ namespace Dralgeer {
                 return nullptr;
             };
 
-            void update(float dt, bool wantCapture);
+            void update(float &dt, bool wantCapture, bool physicsUpdate);
             inline void render(Shader const &currShader) { renderer.render(currShader, camera); };
     };
 }

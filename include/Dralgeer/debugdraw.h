@@ -123,7 +123,7 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
         inline void destroy() { delete lines; };
 
         // * Note: Make the lifetime negative to indicate it should never be removed
-        inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.8824f, 0.0039f, 0.0039f), int lifetime = -1) {
+        inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.8824f, 0.0039f, 0.0039f), int lifetime = 1) {
             if (numLines >= MAX_DEBUG_LINES) { return; }
 
             if (numLines == capacity) {
@@ -135,9 +135,6 @@ namespace Dralgeer { // todo set it up to use -1 to indicate infinite lifetime
                 delete lines;
                 lines = temp;
             }
-
-            // todo for some reason adding lines inside component.cpp doesnt work
-            // todo like wtf is this shit. I am getting annoyed with all these damn bugs
 
             rebuffer = 1;
             lines[numLines++] = {start, end, color, lifetime};
