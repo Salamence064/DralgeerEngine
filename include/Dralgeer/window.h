@@ -23,10 +23,6 @@
 // todo artifacts occur when placing sprites on top of each other (actually placing them on top of each other could be useful)
 // todo later will add a feature to filter out specific sprite types from being placed on top but others can be placed on top
 
-// todo Remove the abstract classes in favor of void* + enum values
-
-// todo create a header that stores macros for debug, info, warning, and error messages
-
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -46,7 +42,6 @@
 // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
 // - make a scene selector in the level editor scene
 // - go through the rest of the 2D engine series and see what final things I need to add
-// - organize the headers
 // ===================================================================
 
 #include "event.h"
@@ -62,7 +57,7 @@ namespace Dralgeer {
     };
 
     // Model a window
-    namespace Window { // todo because this shit is static it can't be accessed by outside .cpp files -- maybe change the currScene one if I find it to be necessary
+    namespace Window {
         static WindowData data;
         static GLFWwindow* window;
         static Scene currScene;
@@ -170,21 +165,6 @@ namespace Dralgeer {
             float dt = 0.0f;
 
             DebugDraw::start();
-
-            // DebugDraw::addLine2D(glm::vec2(10, 10), glm::vec2(300, 10), glm::vec3(0, 0, 1), 250);
-            // DebugDraw::addLine2D(glm::vec2(10, 100), glm::vec2(300, 100), glm::vec3(0.8824f, 0.0039f, 0.0039f), 250);
-
-            // DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(0, 32), glm::vec3(0.5, 1, 0));
-            // DebugDraw::addLine2D(glm::vec2(0, 0), glm::vec2(32, 0), glm::vec3(0.5, 1, 0));
-            // DebugDraw::addLine2D(glm::vec2(32, 0), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
-            // DebugDraw::addLine2D(glm::vec2(0, 32), glm::vec2(32, 32), glm::vec3(0.5, 1, 0));
-
-            // DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(32, 64), glm::vec3(0.5, 1, 0));
-            // DebugDraw::addLine2D(glm::vec2(32, 32), glm::vec2(64, 32), glm::vec3(0.5, 1, 0));
-            // DebugDraw::addLine2D(glm::vec2(64, 32), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
-            // DebugDraw::addLine2D(glm::vec2(32, 64), glm::vec2(64, 64), glm::vec3(0.5, 1, 0));
-
-            DebugDraw::addLine2D(glm::vec2(736, 416), glm::vec2(736, 438), glm::vec3(0.5f, 1, 0.0f));
 
             Shader defaultShader = *(AssetPool::getShader("../../assets/shaders/default.glsl"));
             Shader pickingShader = *(AssetPool::getShader("../../assets/shaders/pickingShader.glsl"));
