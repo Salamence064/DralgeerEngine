@@ -36,11 +36,7 @@ namespace Dralgeer {
             GizmoSystem gizmoSystem;
 
             Renderer renderer;
-            Zeta::Handler physicsHandler = Zeta::Handler(ZMath::Vec2D(0.0f, -9.8f), FPS_30);
-
-            // ! temp rbs stored for debug code
-            Primitives::RigidBody2D* rb = nullptr;
-            Primitives::StaticBody2D* sb = nullptr;
+            Zeta::Handler physicsHandler;
 
 
             // * ====================

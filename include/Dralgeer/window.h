@@ -70,7 +70,7 @@ namespace Dralgeer {
         // static GLFWgamepadstate gamepadState;
 
         // ! should start in 0, starting it in 1 is for debugging
-        static bool runtimePlaying = 1; // Is the scene being played? (i.e. are physics active)
+        static bool runtimePlaying = 0; // Is the scene being played? (i.e. are physics active)
 
         inline static void changeScene(SceneType scene) {
             switch(scene) {

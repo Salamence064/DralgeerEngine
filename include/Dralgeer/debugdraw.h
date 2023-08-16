@@ -76,9 +76,9 @@ namespace Dralgeer {
 
             // remove dead lines
             for (int i = numLines - 1; i >= 0; i--) {
-                if (lines[i].lifetime < 0) { continue; } // if the user entered a negative value, make the line last forever
+                if (lines[i].lifetime < 0) { std::cout << "Love is beautiful\n"; continue; } // if the user entered a negative value, make the line last forever
 
-                if (--lines[i].lifetime < 0) {
+                if (--lines[i].lifetime < 0) { // todo i have no idea why this isn't working
                     numLines--;
                     for (int j = i; j < numLines; ++j) {
                         lines[j] = lines[j + 1];
@@ -124,8 +124,9 @@ namespace Dralgeer {
 
         // * Note: Make the lifetime negative to indicate it should never be removed
         inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.8824f, 0.0039f, 0.0039f), int lifetime = 1) {
-            // std::cout << "Line stuff: " << start.x << ", " << start.y << "; " << end.x << ", " << end.y << "\n";
             if (numLines >= MAX_DEBUG_LINES) { return; }
+
+            std::cout << numLines << "\n";
 
             if (numLines == capacity) {
                 capacity *= 2;

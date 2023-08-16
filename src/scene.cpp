@@ -16,17 +16,7 @@ namespace Dralgeer {
         camera.adjustProjection();
 
         if (physicsUpdate) {
-            // todo for some reason the original lines are sticking around
-            float DT = dt;
-
             physicsHandler.update(dt);
-
-            std::cout << rb->pos.x - 25 << ", " << rb->pos.y - 25 << "\n";
-
-            DebugDraw::addLine2D(glm::vec2(rb->pos.x - 25, rb->pos.y - 25), glm::vec2(rb->pos.x - 25, rb->pos.y + 25));
-            DebugDraw::addLine2D(glm::vec2(rb->pos.x - 25, rb->pos.y - 25), glm::vec2(rb->pos.x + 25, rb->pos.y - 25));
-            DebugDraw::addLine2D(glm::vec2(rb->pos.x + 25, rb->pos.y - 25), glm::vec2(rb->pos.x + 25, rb->pos.y + 25));
-            DebugDraw::addLine2D(glm::vec2(rb->pos.x - 25, rb->pos.y + 25), glm::vec2(rb->pos.x + 25, rb->pos.y + 25));
 
         } else {
             editorCamera.update(dt, wantCapture);
@@ -198,14 +188,6 @@ namespace Dralgeer {
         addGameObject(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject);
         addGameObject(gizmoSystem.gizmos[SCALE_GIZMO].xObject);
         addGameObject(gizmoSystem.gizmos[SCALE_GIZMO].yObject);
-
-        // ! ----- Debug Stuff for Physics System -----
-
-        Primitives::AABB* aabb1 = new Primitives::AABB(ZMath::Vec2D(75.0f, 475.0f), ZMath::Vec2D(125.0f, 525.0f));
-        rb = new Primitives::RigidBody2D(ZMath::Vec2D(100.0f, 500.0f), 50.0f, 0.9f, 1.0f, Primitives::RIGID_AABB_COLLIDER, aabb1);
-        physicsHandler.addRigidBody(rb);
-
-        // ! ------------------------------------------
     };
 
 

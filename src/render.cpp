@@ -145,7 +145,7 @@ namespace Dralgeer {
         }
 
         // rebuffer data if any of the sprites are dirty
-        if (rebuffer) {
+        if (rebuffer) { // todo do this with a rebuffer bool that just gets set to true any time we add or update data again (removes the loop)
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
