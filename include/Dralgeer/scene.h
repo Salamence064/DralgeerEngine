@@ -38,6 +38,10 @@ namespace Dralgeer {
             Renderer renderer;
             Zeta::Handler physicsHandler/*(ZMath::Vec2D())*/;
 
+            // ! temp rbs stored for debug code
+            Primitives::RigidBody2D* rb = nullptr;
+            Primitives::StaticBody2D* sb = nullptr;
+            
 
             // * ====================
             // * Helper Functions

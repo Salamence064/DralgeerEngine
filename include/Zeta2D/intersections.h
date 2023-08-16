@@ -605,7 +605,7 @@ namespace Collisions {
     // Check for intersection and return the collision normal.
     // If there is not an intersection, the normal will be a junk value.
     // The normal will point towards B away from A.
-    bool Box2DAndBox2D(Primitives::Box2D const &box1, Primitives::Box2D const &box2, ZMath::Vec2D &normal) {
+    inline bool Box2DAndBox2D(Primitives::Box2D const &box1, Primitives::Box2D const &box2, ZMath::Vec2D &normal) {
         // ? Use the separating axis theorem to determine if there is an intersection between the Box2Ds.
 
         // half size of Box2D a and b respectively

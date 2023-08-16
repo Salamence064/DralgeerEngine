@@ -5,6 +5,9 @@
 #include <Dralgeer/assetpool.h>
 #include <Dralgeer/gizmo.h>
 
+// ! for testing
+#include <Dralgeer/debugdraw.h>
+
 namespace Dralgeer {
     // * ================================================
     // * Level Editor Class
@@ -13,6 +16,11 @@ namespace Dralgeer {
         camera.adjustProjection();
 
         if (physicsUpdate) {
+            DebugDraw::addLine2D(glm::vec2(rb->pos.x - 25, rb->pos.y - 25), glm::vec2(rb->pos.x - 25, rb->pos.y + 25));
+            DebugDraw::addLine2D(glm::vec2(rb->pos.x - 25, rb->pos.y - 25), glm::vec2(rb->pos.x + 25, rb->pos.y - 25));
+            DebugDraw::addLine2D(glm::vec2(rb->pos.x + 25, rb->pos.y - 25), glm::vec2(rb->pos.x + 25, rb->pos.y + 25));
+            DebugDraw::addLine2D(glm::vec2(rb->pos.x - 25, rb->pos.y + 25), glm::vec2(rb->pos.x + 25, rb->pos.y + 25));
+
             physicsHandler.update(dt); // todo test to make sure dt gets subtracted from with the double pass by reference
 
         } else {
@@ -185,6 +193,14 @@ namespace Dralgeer {
         addGameObject(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject);
         addGameObject(gizmoSystem.gizmos[SCALE_GIZMO].xObject);
         addGameObject(gizmoSystem.gizmos[SCALE_GIZMO].yObject);
+
+        // ! ----- Debug Stuff for Physics System -----
+
+        Primitives::AABB* aabb1 = new Primitives::AABB(ZMath::Vec2D(75.0f, 75.0f), ZMath::Vec2D(125.0f, 125.0f));
+        rb = new Primitives::RigidBody2D(ZMath::Vec2D(100.0f, 100.0f), 50.0f, 0.9f, 1.0f, Primitives::RIGID_AABB_COLLIDER, aabb1);
+        physicsHandler.addRigidBody(rb);
+
+        // ! ------------------------------------------
     };
 
 

@@ -78,10 +78,8 @@ namespace Dralgeer {
 
         debounce -= dt;
 
+        // todo add a check for mouse dragging to ensure it doesnt select from that
         if (MouseListener::mButtonPressed[GLFW_MOUSE_BUTTON_LEFT] && debounce < 0.0f) {
-            // todo try isolating stuff about the coordinate system
-            // todo maybe attach the picking texture's framebuffer to a separate ImGui window to see what's actually happening
-
             int x = (int) MouseListener::mWorldX;
             int y = (int) MouseListener::mWorldY;
 
