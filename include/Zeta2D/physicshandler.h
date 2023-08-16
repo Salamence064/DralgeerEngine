@@ -3,8 +3,6 @@
 #include "collisions.h"
 #include <stdexcept>
 
-// todo add Kinematic body handling to here
-
 namespace Zeta {
     // * ====================================
     // * Common Framerates for Handler
@@ -417,7 +415,7 @@ namespace Zeta {
              * @param timeStep (float) The amount of time in seconds that must pass before the handler updates physics.
              *    Default speed of 60FPS. Anything above 60FPS is not recommended as it can cause lag in lower end hardware.
              */
-            Handler(ZMath::Vec2D const &g = ZMath::Vec2D(0, -9.8f), float timeStep = FPS_60) : g(g), updateStep(timeStep) {
+            inline Handler(ZMath::Vec2D const &g = ZMath::Vec2D(0, -9.8f), float timeStep = FPS_60) : g(g), updateStep(timeStep) {
                 if (updateStep < FPS_60) { updateStep = FPS_60; } // hard cap at 60 FPS
 
                 // * Bodies
@@ -467,14 +465,14 @@ namespace Zeta {
             };
 
             // Do not allow for construction from an existing physics handler.
-            Handler(Handler const &handler) { throw std::runtime_error("PhysicsHandler object CANNOT be constructed from another PhysicsHandler."); };
-            Handler(Handler&& handler) { throw std::runtime_error("PhysicsHandler object CANNOT be constructed from another PhysicsHandler."); };
+            inline Handler(Handler const &handler) { throw std::runtime_error("PhysicsHandler object CANNOT be constructed from another PhysicsHandler."); };
+            inline Handler(Handler&& handler) { throw std::runtime_error("PhysicsHandler object CANNOT be constructed from another PhysicsHandler."); };
 
             // The physics handler cannot be reassigned.
-            Handler& operator = (Handler const &handler) { throw std::runtime_error("PhysicsHandler object CANNOT be reassigned to another PhysicsHandler."); };
-            Handler& operator = (Handler&& handler) { throw std::runtime_error("PhysicsHandler object CANNOT be reassigned to another PhysicsHandler."); };
+            inline Handler& operator = (Handler const &handler) { throw std::runtime_error("PhysicsHandler object CANNOT be reassigned to another PhysicsHandler."); };
+            inline Handler& operator = (Handler&& handler) { throw std::runtime_error("PhysicsHandler object CANNOT be reassigned to another PhysicsHandler."); };
 
-            ~Handler() {
+            inline ~Handler() {
                 // If one of the pointers is not NULL, none of them are.
                 if (rbs.rigidBodies) {
                     // * Bodies

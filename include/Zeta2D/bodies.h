@@ -1,6 +1,7 @@
 #pragma once
 
 #include "primitives.h"
+#include <iostream> // ! purely for debugging purposes
 
 namespace Primitives {
     enum RigidBodyCollider {
