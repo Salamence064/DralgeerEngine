@@ -247,7 +247,7 @@ namespace Dralgeer {
         sprite->imGui();
     };
 
-    void GameObject::importGameObject(std::string const &text) {
+    GameObject* GameObject::importGameObject(std::string const &src) {
         
     };
 

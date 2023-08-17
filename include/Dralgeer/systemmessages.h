@@ -28,6 +28,7 @@
 #define INFO_MESSAGE(objectType, name, description) \
 ({ \
     std::cout << "[INFO] " << objectType << " " << name << ":\n\t" << description << "\n"; \
+    1; \
 })
 
 #define WARNING_MESSAGE(objectType, name, warningType, description, warningCode) \

@@ -5,6 +5,7 @@
 #include <Dralgeer/assetpool.h>
 #include <Dralgeer/gizmo.h>
 #include <fstream>
+#include <Dralgeer/systemmessages.h>
 
 // ! for testing
 #include <Dralgeer/debugdraw.h>
@@ -254,9 +255,14 @@ namespace Dralgeer {
 
     #pragma GCC diagnostic pop
 
-    void LevelEditorScene::exportScene() {
+    void LevelEditorScene::exportScene() { // todo maybe count the number of serialized objects instead of total
+        int objects = 0;
+
+        // count the number of serializable GameObjects
+        for (int i = 0; i < numObjects; ++i) { if (gameObjects[i]->serialize) { ++objects; }}
+
         std::ofstream f("../scenes/levelEditor.scene");
-        f << "numObjects: " << numObjects << "\ncapacity: " << capacity << "\n\n";
+        f << "serializedObjects: " << objects << ";\n\n";
         f.close();
 
         for (int i = 0; i < numObjects; ++i) {
@@ -265,7 +271,40 @@ namespace Dralgeer {
     };
 
     void LevelEditorScene::importScene() {
-        
+        std::fstream f("levelEditor.scene");
+        if (!f.is_open()) { return; } // todo when I get it to work, add an info message here
+
+        try {
+            std::string line, src;
+            int addedObjects = 0;
+
+            // determine the number of serialized objects
+            std::getline(f, line);
+            int i = line.find(" ") + 1;
+            int serializedObjects = std::stoi(line.substr(i, line.find(";") - i));
+            int objects = serializedObjects + numObjects;
+
+            // determine the capacity of gameObjects
+            if (objects > capacity) {
+                do { capacity *= 2; } while (objects > capacity);
+
+                GameObject** temp = new GameObject*[capacity];
+                for (int i = 0; i < numObjects; ++i) { temp[i] = gameObjects[i]; }
+                delete[] gameObjects;
+
+                gameObjects = temp;
+            }
+
+            numObjects = objects;
+
+            // add each serialized gameObject
+            while(addedObjects < serializedObjects && std::getline(f, line)) {
+                
+            }
+
+        } catch (...) {
+            throw std::runtime_error("");
+        }
     };
 
     // * ================================================
