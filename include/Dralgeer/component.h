@@ -105,12 +105,6 @@ namespace Dralgeer {
             inline void update() { sprite->update(); transform = sprite->transform; };
             void imGui();
             void exportGameObject(std::string const &filepath);
-
-            // src is the serialized text from the file storing the game object's attributes
-            inline static GameObject* importGameObject(std::string const &src) {
-
-                return nullptr;
-            };
     };
 
 

@@ -275,14 +275,14 @@ namespace Dralgeer {
         if (!f.is_open()) { return; } // todo when I get it to work, add an info message here
 
         try {
-            std::string line, src;
+            std::string line;
             bool addToSrc = 0;
-            int addedObjects = 0;
+            int addedObjects = 0, compAdded = 0;
 
             // determine the number of serialized objects
             std::getline(f, line);
-            int i = line.find(" ") + 1;
-            int serializedObjects = std::stoi(line.substr(i, line.find(";") - i));
+            int k = line.find(" ") + 1;
+            int serializedObjects = std::stoi(line.substr(k, line.find(";") - k));
             int objects = serializedObjects + numObjects;
 
             // determine the capacity of gameObjects
@@ -290,7 +290,7 @@ namespace Dralgeer {
                 do { capacity *= 2; } while (objects > capacity);
 
                 GameObject** temp = new GameObject*[capacity];
-                for (int i = 0; i < numObjects; ++i) { temp[i] = gameObjects[i]; }
+                for (int j = 0; j < numObjects; ++j) { temp[j] = gameObjects[j]; }
                 delete[] gameObjects;
 
                 gameObjects = temp;
@@ -298,20 +298,178 @@ namespace Dralgeer {
 
             // add each serialized gameObject
             while(addedObjects < serializedObjects && std::getline(f, line)) {
-                if (addToSrc) {
-                    src += line;
+                if (addToSrc) { // parse the GameObject
+                    switch(compAdded) {
+                        case 0: { // name
+                            int i = line.find("name:");
+                            if (i != std::string::npos) {
+                                int index = i + 6;
+                                gameObjects[numObjects]->name = line.substr(index, line.find(",") - index);
+                                ++compAdded;
+                                continue;
+                            }
 
-                    if (line.find("},")) {
-                        // parse the game object
-                        gameObjects[numObjects++] = GameObject::importGameObject(src);
+                            break;
+                        }
 
-                        // prepare for the next game object
-                        src.clear();
-                        addToSrc = 0;
+                        // ----- SpriteRenderer stuff -----
+                        case 1: { // color
+                            // color
+                            int i = line.find("color:");
+                            if (i != std::string::npos) {
+                                int index = i + 7;
+                                int c1 = line.find(","), c11 = c1 + 2;
+                                int c2 = line.find(",", c11), c22 = c2 + 2;
+                                int c3 = line.find(",", c22), c33 = c3 + 2;
+
+                                gameObjects[numObjects]->sprite->color.x = std::stof(line.substr(index, c1 - index));
+                                gameObjects[numObjects]->sprite->color.y = std::stof(line.substr(c11, c2 - c11));
+                                gameObjects[numObjects]->sprite->color.z = std::stof(line.substr(c22, c3 - c22));
+                                gameObjects[numObjects]->sprite->color.w = std::stof(line.substr(c33, line.find(",", c33) - c33));
+
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        // ----- Sprite stuff -----
+                        case 2: { // width
+                            int i = line.find("width:");
+                            if (i != std::string::npos) {
+                                int index = i + 7;
+                                gameObjects[numObjects]->sprite->sprite.width = std::stof(line.substr(index, line.find(",") - index));
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        case 3: { // height
+                            int i = line.find("height:");
+                            if (i != std::string::npos) {
+                                int index = i + 8;
+                                gameObjects[numObjects]->sprite->sprite.height = std::stof(line.substr(index, line.find(",") - index));
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        // ----- Texture stuff -----
+
+                        case 4: { // filepath
+                            int i = line.find("filepath:");
+                            if (i != std::string::npos) {
+                                int index = i + 10;
+                                gameObjects[numObjects]->sprite->sprite.texture = AssetPool::getTexture(line.substr(index, line.find(",") - index));
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        // -------------------------
+
+                        case 5: { // texCoords
+                            int i = line.find("texCoords:");
+                            if (i != std::string::npos) {
+                                int index = i + 11;
+                                int c1 = line.find(",", index), sc1 = line.find(";", c1), c11 = c1 + 2, sc11 = sc1 + 2;
+                                int c2 = line.find(",", sc11), sc2 = line.find(";", c2), c22 = c2 + 2, sc22 = sc2 + 2;
+                                int c3 = line.find(",", sc22), sc3 = line.find(";", c3), c33 = c3 + 2, sc33 = sc3 + 2;
+                                int c4 = line.find(",", sc33), c44 = c4 + 2;
+
+                                gameObjects[numObjects]->sprite->sprite.texCoords[0].x = std::stof(line.substr(index, c1 - index));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[0].y = std::stof(line.substr(c11, sc1 - c11));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[1].x = std::stof(line.substr(sc11, c2 - sc11));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[1].y = std::stof(line.substr(c22, sc2 - c22));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[2].x = std::stof(line.substr(sc22, c3 - sc22));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[2].y = std::stof(line.substr(c33, sc3 - c33));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[3].x = std::stof(line.substr(sc33, c4 - sc33));
+                                gameObjects[numObjects]->sprite->sprite.texCoords[3].y = std::stof(line.substr(c44, line.find(",", c44) - c44));
+
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        // ------------------------
+                        // --------------------------------
+
+                        // ----- Transform Stuff -----
+
+                        case 6: { // pos
+                            int i = line.find("pos:");
+                            if (i != std::string::npos) {
+                                int index = i + 5, c1 = line.find(",", index), c11 = c1 + 2;
+
+                                gameObjects[numObjects]->sprite->transform.pos.x = std::stof(line.substr(index, c1 - index));
+                                gameObjects[numObjects]->sprite->transform.pos.y = std::stof(line.substr(c11, line.find(",", c11) - c11));
+
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        case 7: { // scale
+                            int i = line.find("scale:");
+                            if (i != std::string::npos) {
+                                int index = i + 7, c1 = line.find(",", index), c11 = c1 + 2;
+
+                                gameObjects[numObjects]->sprite->transform.scale.x = std::stof(line.substr(index, c1 - index));
+                                gameObjects[numObjects]->sprite->transform.scale.y = std::stof(line.substr(c11, line.find(",", c11) - c11));
+
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        case 8: { // zIndex
+                            int i = line.find("zIndex:");
+                            if (i != std::string::npos) {
+                                int index = i + 8;
+                                gameObjects[numObjects]->sprite->transform.zIndex = std::stoi(line.substr(index, line.find(",") - index));
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        case 9: { // rotation
+                            int i = line.find("rotation:");
+                            if (i != std::string::npos) {
+                                int index = i + 10;
+                                gameObjects[numObjects]->sprite->transform.rotation = std::stof(line.substr(index, line.find(",") - index));
+                                ++compAdded;
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        // ---------------------------
+
+                        case 10: { // End of GameObject
+                            addToSrc = 0;
+                            compAdded = 0;
+                            ++addedObjects;
+                            ++numObjects;
+                        }
                     }
 
-                } else if (line.find("GameObject:")) {
-                    src += line;
+                } else if (line.find("GameObject:") != std::string::npos) {
                     addToSrc = 1;
                 }
             }
