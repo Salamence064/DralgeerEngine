@@ -271,11 +271,12 @@ namespace Dralgeer {
     };
 
     void LevelEditorScene::importScene() {
-        std::fstream f("levelEditor.scene");
+        std::fstream f("../scenes/levelEditor.scene");
         if (!f.is_open()) { return; } // todo when I get it to work, add an info message here
 
         try {
             std::string line, src;
+            bool addToSrc = 0;
             int addedObjects = 0;
 
             // determine the number of serialized objects
@@ -295,15 +296,28 @@ namespace Dralgeer {
                 gameObjects = temp;
             }
 
-            numObjects = objects;
-
             // add each serialized gameObject
             while(addedObjects < serializedObjects && std::getline(f, line)) {
-                
+                if (addToSrc) {
+                    src += line;
+
+                    if (line.find("},")) {
+                        // parse the game object
+                        gameObjects[numObjects++] = GameObject::importGameObject(src);
+
+                        // prepare for the next game object
+                        src.clear();
+                        addToSrc = 0;
+                    }
+
+                } else if (line.find("GameObject:")) {
+                    src += line;
+                    addToSrc = 1;
+                }
             }
 
         } catch (...) {
-            throw std::runtime_error("");
+            std::cout << "Fun error\n"; // todo add error message from systemmessages.h
         }
     };
 

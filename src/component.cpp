@@ -247,10 +247,6 @@ namespace Dralgeer {
         sprite->imGui();
     };
 
-    GameObject* GameObject::importGameObject(std::string const &src) {
-        
-    };
-
     void GameObject::exportGameObject(std::string const &filepath) {
         std::fstream f(filepath, std::fstream::app);
 

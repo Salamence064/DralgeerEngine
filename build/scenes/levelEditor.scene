@@ -1,0 +1,54 @@
+serializedObjects: 2;
+
+GameObject: {
+	ID: 5,
+	name: SpriteObjectGen,
+	sprite: [
+		color: 1, 1, 1, 1,
+		sprite: [
+			width: 16,
+			height: 16,
+			texture: [
+				filepath: ../../assets/images/spritesheets/decorationsAndBlocks.png,
+				width: 112,
+				height: 192
+			],
+
+			texCoords: 0.571429, 0.833333; 0.571429, 0.75; 0.428571, 0.75; 0.428571, 0.833333,
+		],
+	],
+
+	transform: [
+		pos: 64, 64,
+		scale: 32, 32,
+		zIndex: 0,
+		rotation: 0
+	]
+},
+
+GameObject: {
+	ID: 6,
+	name: SpriteObjectGen,
+	sprite: [
+		color: 0.882353, 0.00392157, 0.00392157, 1,
+		sprite: [
+			width: 16,
+			height: 16,
+			texture: [
+				filepath: ../../assets/images/spritesheets/decorationsAndBlocks.png,
+				width: 112,
+				height: 192
+			],
+
+			texCoords: 0.571429, 0.833333; 0.571429, 0.75; 0.428571, 0.75; 0.428571, 0.833333,
+		],
+	],
+
+	transform: [
+		pos: 163.4, 176.1,
+		scale: 69.2, 67.5,
+		zIndex: 15,
+		rotation: 25
+	]
+},
+
