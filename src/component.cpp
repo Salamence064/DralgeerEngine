@@ -250,7 +250,7 @@ namespace Dralgeer {
     void GameObject::exportGameObject(std::string const &filepath) {
         std::fstream f(filepath, std::fstream::app);
 
-        f << "GameObject: {\n\tID: " << id << ",\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
+        f << "GameObject: {\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
         f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t\t";
         f << "sprite: [\n\t\t\twidth: " << sprite->sprite.width << ",\n\t\t\theight: " << sprite->sprite.height << ",\n\t\t\ttexture: [\n\t\t\t\tfilepath: ";
         f << sprite->sprite.texture->filepath << ",\n\t\t\t\twidth: " << sprite->sprite.texture->width << ",\n\t\t\t\theight: " << sprite->sprite.texture->height;
