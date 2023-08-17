@@ -117,5 +117,6 @@ namespace Dralgeer {
             void update(float &dt, bool wantCapture, bool physicsUpdate);
             inline void render(Shader const &currShader) { renderer.render(currShader, camera); };
             void exportScene();
+            void importScene();
     };
 }

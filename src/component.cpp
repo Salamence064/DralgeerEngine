@@ -247,8 +247,12 @@ namespace Dralgeer {
         sprite->imGui();
     };
 
+    void GameObject::importGameObject(std::string const &text) {
+        
+    };
+
     void GameObject::exportGameObject(std::string const &filepath) {
-        std::ofstream f(filepath);
+        std::fstream f(filepath, std::fstream::app);
 
         f << "GameObject: {\n\tID: " << id << ",\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
         f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t\t";

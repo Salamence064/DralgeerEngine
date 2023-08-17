@@ -255,9 +255,17 @@ namespace Dralgeer {
     #pragma GCC diagnostic pop
 
     void LevelEditorScene::exportScene() {
+        std::ofstream f("../scenes/levelEditor.scene");
+        f << "numObjects: " << numObjects << "\ncapacity: " << capacity << "\n\n";
+        f.close();
+
         for (int i = 0; i < numObjects; ++i) {
             if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditor.scene"); }
         }
+    };
+
+    void LevelEditorScene::importScene() {
+        
     };
 
     // * ================================================
