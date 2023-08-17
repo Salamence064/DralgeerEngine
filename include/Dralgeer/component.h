@@ -73,7 +73,7 @@ namespace Dralgeer {
             int id;
             std::string name;
             SpriteRenderer* sprite = nullptr; // todo maybe could make a standard object and take references to it when passing it to the renderer
-            Transform transform; // ! DO NOT serialize
+            Transform transform; // ! DO NOT serialize // todo not so sure what this is used for
 
             bool serialize = 1; // ! DO NOT serialize
             bool dead = 0; // ! DO NOT serialize
@@ -104,6 +104,7 @@ namespace Dralgeer {
             inline void start() { sprite->start(); sprite->entityID = id; };
             inline void update() { sprite->update(); transform = sprite->transform; };
             void imGui();
+            void exportGameObject(std::string const &filepath);
     };
 
 

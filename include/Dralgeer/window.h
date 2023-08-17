@@ -33,7 +33,7 @@
 // // - Add a drag click feature
 // // - PickingTexture stuff for the properties window
 // // - port over gizmos
-// - setup physics (update Zeta2D, too)
+// // - setup physics (update Zeta2D, too)
 // - setup serialization
 // - port over the ImGui stuff to fully furnish the properties window
 // // - port over the event system
@@ -180,9 +180,6 @@ namespace Dralgeer {
                     case LEVEL_EDITOR_SCENE: {
                         LevelEditorScene* activeScene = (LevelEditorScene*) currScene.scene;
 
-                        // update the scene
-                        activeScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse(), runtimePlaying);
-
                         // render picking texture
                         glDisable(GL_BLEND);
                         pickingTexture->enableWriting();
@@ -204,9 +201,13 @@ namespace Dralgeer {
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                         glEnable(GL_DEPTH_TEST);
 
-                        // todo put this segment in the dt loop when I set it up -------------------
+                        // draw the scene
                         DebugDraw::draw(activeScene->camera);
                         activeScene->render(defaultShader);
+
+                        // todo put this segment in the dt loop when I set it up -------------------
+                        // update the scene
+                        activeScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse(), runtimePlaying);
                         // -------------------------------------------------------------------------
 
                         glDisable(GL_DEPTH_TEST);

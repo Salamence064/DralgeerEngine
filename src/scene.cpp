@@ -4,6 +4,7 @@
 #include <Dralgeer/prefabs.h>
 #include <Dralgeer/assetpool.h>
 #include <Dralgeer/gizmo.h>
+#include <fstream>
 
 // ! for testing
 #include <Dralgeer/debugdraw.h>
@@ -252,6 +253,12 @@ namespace Dralgeer {
     };
 
     #pragma GCC diagnostic pop
+
+    void LevelEditorScene::exportScene() {
+        for (int i = 0; i < numObjects; ++i) {
+            if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditorScene.scene"); }
+        }
+    };
 
     // * ================================================
 }

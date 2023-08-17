@@ -7,6 +7,7 @@
 #include <Dralgeer/listeners.h>
 #include <Dralgeer/debugdraw.h>
 #include <Dralgeer/prefabs.h>
+#include <fstream>
 
 namespace Dralgeer {
     // * =====================================================================
@@ -244,6 +245,22 @@ namespace Dralgeer {
 
         // sprite
         sprite->imGui();
+    };
+
+    void GameObject::exportGameObject(std::string const &filepath) {
+        std::ofstream f(filepath);
+
+        f << "GameObject: {\n\tID: " << id << ",\n\tname: " << name << ",\n\tsprite: [\n\tcolor: ";
+        f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t";
+        f << "sprite: [\n\twidth: " << sprite->sprite.width << ",\n\theight: " << sprite->sprite.height << ",\n\ttexture: [\n\tfilepath: ";
+        f << sprite->sprite.texture->filepath << ",\n\twidth: " << sprite->sprite.texture->width << ",\n\theight: " << sprite->sprite.texture->height;
+        f << "\n\t],\n\ttexCoords: " << sprite->sprite.texCoords[0].x << ", " << sprite->sprite.texCoords[0].y << "; ";
+        f << sprite->sprite.texCoords[1].x << ", " << sprite->sprite.texCoords[1].y << "; " << sprite->sprite.texCoords[2].x << ", ";
+        f << sprite->sprite.texCoords[2].y << "; " << sprite->sprite.texCoords[3].x << ", " << sprite->sprite.texCoords[3].y << ",\n\t],\n\t],\n\t";
+        f << "transform: [\n\tpos: " << transform.pos.x << ", " << transform.pos.y << ",\n\tscale: " << transform.scale.x << ", " << transform.scale.y << ",\n\t";
+        f << "zIndex: " << transform.zIndex << ",\n\trotation: " << transform.rotation << "\n\t]\n},";
+        
+        f.close();
     };
 
     // * =====================================================================
