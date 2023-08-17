@@ -126,7 +126,7 @@ namespace Dralgeer {
         inline void addLine2D(glm::vec2 const &start, glm::vec2 const &end, glm::vec3 const &color = glm::vec3(0.8824f, 0.0039f, 0.0039f), int lifetime = 1) {
             if (numLines >= MAX_DEBUG_LINES) { return; }
 
-            std::cout << numLines << "\n";
+            // std::cout << numLines << "\n";
 
             if (numLines == capacity) {
                 capacity *= 2;

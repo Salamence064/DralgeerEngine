@@ -250,15 +250,15 @@ namespace Dralgeer {
     void GameObject::exportGameObject(std::string const &filepath) {
         std::ofstream f(filepath);
 
-        f << "GameObject: {\n\tID: " << id << ",\n\tname: " << name << ",\n\tsprite: [\n\tcolor: ";
-        f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t";
-        f << "sprite: [\n\twidth: " << sprite->sprite.width << ",\n\theight: " << sprite->sprite.height << ",\n\ttexture: [\n\tfilepath: ";
-        f << sprite->sprite.texture->filepath << ",\n\twidth: " << sprite->sprite.texture->width << ",\n\theight: " << sprite->sprite.texture->height;
-        f << "\n\t],\n\ttexCoords: " << sprite->sprite.texCoords[0].x << ", " << sprite->sprite.texCoords[0].y << "; ";
+        f << "GameObject: {\n\tID: " << id << ",\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
+        f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t\t";
+        f << "sprite: [\n\t\t\twidth: " << sprite->sprite.width << ",\n\t\t\theight: " << sprite->sprite.height << ",\n\t\t\ttexture: [\n\t\t\t\tfilepath: ";
+        f << sprite->sprite.texture->filepath << ",\n\t\t\t\twidth: " << sprite->sprite.texture->width << ",\n\t\t\t\theight: " << sprite->sprite.texture->height;
+        f << "\n\t\t\t],\n\n\t\t\ttexCoords: " << sprite->sprite.texCoords[0].x << ", " << sprite->sprite.texCoords[0].y << "; ";
         f << sprite->sprite.texCoords[1].x << ", " << sprite->sprite.texCoords[1].y << "; " << sprite->sprite.texCoords[2].x << ", ";
-        f << sprite->sprite.texCoords[2].y << "; " << sprite->sprite.texCoords[3].x << ", " << sprite->sprite.texCoords[3].y << ",\n\t],\n\t],\n\t";
-        f << "transform: [\n\tpos: " << transform.pos.x << ", " << transform.pos.y << ",\n\tscale: " << transform.scale.x << ", " << transform.scale.y << ",\n\t";
-        f << "zIndex: " << transform.zIndex << ",\n\trotation: " << transform.rotation << "\n\t]\n},";
+        f << sprite->sprite.texCoords[2].y << "; " << sprite->sprite.texCoords[3].x << ", " << sprite->sprite.texCoords[3].y << ",\n\t\t],\n\t],\n\n\t";
+        f << "transform: [\n\t\tpos: " << transform.pos.x << ", " << transform.pos.y << ",\n\t\tscale: " << transform.scale.x << ", " << transform.scale.y << ",\n\t\t";
+        f << "zIndex: " << transform.zIndex << ",\n\t\trotation: " << transform.rotation << "\n\t]\n},\n\n";
         
         f.close();
     };

@@ -256,7 +256,7 @@ namespace Dralgeer {
 
     void LevelEditorScene::exportScene() {
         for (int i = 0; i < numObjects; ++i) {
-            if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditorScene.scene"); }
+            if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditor.scene"); }
         }
     };
 

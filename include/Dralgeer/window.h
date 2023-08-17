@@ -255,17 +255,17 @@ namespace Dralgeer {
         };
 
         inline static void destroy() {
+            // free the memory of the scene // todo currently for testing -- move back to the bottom
+            switch(currScene.type) {
+                case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); delete (LevelEditorScene*) currScene.scene; break; }
+            }
+
             DebugDraw::destroy();
             AssetPool::destroy();
             imGuiLayer.dispose();
             glfwDestroyWindow(window);
             glfwSetErrorCallback(NULL);
             glfwTerminate();
-            
-            // free the memory of the scene
-            switch(currScene.type) {
-                case LEVEL_EDITOR_SCENE: { delete (LevelEditorScene*) currScene.scene; break; }
-            }
         };
 
         // todo potentially add onNotify functions to PropertiesWindow and scenes that this will call when notified
