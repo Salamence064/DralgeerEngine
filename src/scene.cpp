@@ -7,9 +7,6 @@
 #include <fstream>
 #include <Dralgeer/systemmessages.h>
 
-// ! for testing
-#include <Dralgeer/debugdraw.h>
-
 namespace Dralgeer {
     // * ================================================
     // * Level Editor Class
