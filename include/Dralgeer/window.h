@@ -76,8 +76,8 @@ namespace Dralgeer {
             switch(scene) {
                 case LEVEL_EDITOR_SCENE: {
                     LevelEditorScene* newScene = new LevelEditorScene();
-                    // newScene->load();
                     newScene->init();
+                    newScene->importScene();
                     newScene->start();
 
                     // free the memory of the old scene
@@ -154,8 +154,8 @@ namespace Dralgeer {
 
             // initialize scene
             LevelEditorScene* scene = new LevelEditorScene();
-            // scene->load();
             scene->init();
+            scene->importScene();
             scene->start();
             currScene.scene = scene;
             currScene.type = LEVEL_EDITOR_SCENE;

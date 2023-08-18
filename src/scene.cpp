@@ -301,6 +301,7 @@ namespace Dralgeer {
                             int i = line.find("name:");
                             if (i != std::string::npos) {
                                 int index = i + 6;
+                                gameObjects[numObjects] = new GameObject();
                                 gameObjects[numObjects]->name = line.substr(index, line.find(",") - index);
                                 ++compAdded;
                                 continue;
@@ -319,6 +320,7 @@ namespace Dralgeer {
                                 int c2 = line.find(",", c11), c22 = c2 + 2;
                                 int c3 = line.find(",", c22), c33 = c3 + 2;
 
+                                gameObjects[numObjects]->sprite = new SpriteRenderer();
                                 gameObjects[numObjects]->sprite->color.x = std::stof(line.substr(index, c1 - index));
                                 gameObjects[numObjects]->sprite->color.y = std::stof(line.substr(c11, c2 - c11));
                                 gameObjects[numObjects]->sprite->color.z = std::stof(line.substr(c22, c3 - c22));
