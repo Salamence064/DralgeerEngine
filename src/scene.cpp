@@ -168,8 +168,6 @@ namespace Dralgeer {
     };
 
     void LevelEditorScene::init() {
-        renderer.start();
-
         camera.pos = glm::vec2(0.0f, 0.0f);
         camera.adjustProjection();
         camera.adjustView();

@@ -48,23 +48,38 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    class Renderer {
+    class Renderer { // todo setup rule of 5 (and make all bu destructor not work)
         private:
-            RenderBatch batches[MAX_RENDER_BATCHES]; // todo refactor this to be a dynamic array and just place the batches in terms of zIndices
-            int numBatches = 1;
+            RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
+            int* indices = nullptr; // batches that contain sprites
+            int count = 0; // count for indices
+            int capacity = 8; // capacity for indices // todo adjust later
 
         public:
-            inline void start() { batches[0].start(); };
+            inline Renderer() { indices = new int[capacity]; };
 
             inline void add(SpriteRenderer* spr) {
-                if (!spr) { return; } // todo when I add the custom made logger macros, send out a debug message from here
+                if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
 
-                int n = numBatches - 1;
-                if (batches[n].numSprites < MAX_RENDER_BATCH_SIZE) { batches[n].addSprite(spr); return; }
-                if (numBatches == MAX_RENDER_BATCHES) { return; } // todo debug output from here
+                int n = spr->transform.zIndex + 1000;
+                if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
-                batches[numBatches].start();
-                batches[numBatches++].addSprite(spr);
+                if (batches[n].numSprites == 0) {
+                    if (count == capacity) {
+                        capacity *= 2;
+                        int* temp = new int[capacity];
+                        
+                        for (int i = 0; i < count; ++i) { temp[i] = indices[i]; }
+
+                        delete[] indices;
+                        indices = temp;
+                    }
+
+                    indices[count++] = n;
+                    batches[n].start();
+                }
+
+                batches[n].addSprite(spr);
             };
 
             inline void add(GameObject const &go) { if (go.sprite) { add(go.sprite); }};
@@ -72,13 +87,13 @@ namespace Dralgeer {
             // destroy a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
             inline bool destroy(SpriteRenderer* spr) {
-                for (int i = 0; i < numBatches; ++i) { if (batches[i].destroyIfExists(spr)) { return 1; }}
+                for (int i = 0; i < count; ++i) { if (batches[indices[i]].destroyIfExists(spr)) { return 1; }}
                 return 0;
             };
 
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
-                for (int i = 0; i < numBatches; ++i) { batches[i].render(currShader, cam); }
+                for (int i = 0; i < count; ++i) { batches[indices[i]].render(currShader, cam); }
             };
     };
 }

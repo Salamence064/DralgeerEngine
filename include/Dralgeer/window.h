@@ -23,6 +23,8 @@
 // todo artifacts occur when placing sprites on top of each other (actually placing them on top of each other could be useful)
 // todo later will add a feature to filter out specific sprite types from being placed on top but others can be placed on top
 
+// todo it feels as if there's a leak somewhere, especially noticeable with large number of GameObjects
+
 // ===================================================================
 // List of what to fix
 // // - Framebuffer causes screen tearing
@@ -34,7 +36,7 @@
 // // - PickingTexture stuff for the properties window
 // // - port over gizmos
 // // - setup physics (update Zeta2D, too)
-// - setup serialization
+// // - setup serialization
 // - port over the ImGui stuff to fully furnish the properties window
 // // - port over the event system
 // // - make the stuff void* with an enum

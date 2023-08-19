@@ -2,8 +2,6 @@
 #include <Zeta2D/zmath2D.h>
 #include <Dralgeer/window.h>
 
-// todo for zIndices find a way to make sure it appears within the field of vision even with massive zIndex values
-
 namespace Dralgeer {
     // * ===============================================
     // * RenderBatch Stuff
@@ -68,22 +66,21 @@ namespace Dralgeer {
             // load position
             vertices[offset] = currPos.x;
             vertices[offset + 1] = currPos.y;
-            vertices[offset + 2] = sprites[index]->transform.zIndex;
 
             // load color
-            vertices[offset + 3] = sprites[index]->color.x;
-            vertices[offset + 4] = sprites[index]->color.y;
-            vertices[offset + 5] = sprites[index]->color.z;
-            vertices[offset + 6] = sprites[index]->color.w;
+            vertices[offset + 2] = sprites[index]->color.x;
+            vertices[offset + 3] = sprites[index]->color.y;
+            vertices[offset + 4] = sprites[index]->color.z;
+            vertices[offset + 5] = sprites[index]->color.w;
 
             // load texture coords
-            vertices[offset + 7] = sprites[index]->sprite.texCoords[i].x;
-            vertices[offset + 8] = sprites[index]->sprite.texCoords[i].y;
+            vertices[offset + 6] = sprites[index]->sprite.texCoords[i].x;
+            vertices[offset + 7] = sprites[index]->sprite.texCoords[i].y;
             // load texture IDs
-            vertices[offset + 9] = texID;
+            vertices[offset + 8] = texID;
 
             // load entity IDs
-            vertices[offset + 10] = sprites[index]->entityID;
+            vertices[offset + 9] = sprites[index]->entityID;
 
             offset += VERTEX_SIZE;
         }
@@ -121,7 +118,7 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
         glVertexAttribPointer(1, 4, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) COLOR_OFFSET);
         glVertexAttribPointer(2, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_COORDS_OFFSET);
         glVertexAttribPointer(3, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);

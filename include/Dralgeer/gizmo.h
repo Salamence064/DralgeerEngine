@@ -125,8 +125,8 @@ namespace Dralgeer {
             inline void start() {
                 xObject->sprite->transform.rotation = 90.0f;
                 yObject->sprite->transform.rotation = 180.0f;
-                xObject->sprite->transform.zIndex = 10;
-                yObject->sprite->transform.zIndex = 10;
+                xObject->sprite->transform.zIndex = 1499;
+                yObject->sprite->transform.zIndex = 1499;
             };
 
             void update();
