@@ -51,12 +51,11 @@ namespace Dralgeer {
     class Renderer { // todo setup rule of 5 (and make all bu destructor not work)
         private:
             RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
-            int* indices = nullptr; // batches that contain sprites
-            int count = 0; // count for indices
-            int capacity = 8; // capacity for indices // todo adjust later
+            int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
+            int numIndices = 0; // the number of batches that cointain sprites
 
         public:
-            inline Renderer() { indices = new int[capacity]; };
+            inline Renderer() {};
 
             inline void add(SpriteRenderer* spr) {
                 if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
@@ -65,18 +64,39 @@ namespace Dralgeer {
                 if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
                 if (batches[n].numSprites == 0) {
-                    if (count == capacity) {
-                        capacity *= 2;
-                        int* temp = new int[capacity];
-                        
-                        for (int i = 0; i < count; ++i) { temp[i] = indices[i]; }
+                    // determine the spot to put the index in using a modified binary search
+                    int min = 0, max = numIndices;
+                    int index = numIndices/2;
 
-                        delete[] indices;
-                        indices = temp;
+                    for(;;) {
+                        if (n < indices[index]) { // look through lower half
+                            max = index - 1;
+
+                            if (min == max) {
+                                for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
+                                indices[min] = n;
+                                break;
+
+                            }
+
+                            index = (max + min)/2;
+
+                        } else { // look through upper half
+                            min = index + 1;
+
+                            if (min == max) {
+                                for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
+                                indices[min] = n;
+                                break;
+                            }
+
+                            index = (max + min)/2;
+
+                        } // ? We do not have to consider the case that they are equal as this system guarentees that cannot happen
                     }
-
-                    indices[count++] = n;
+                    
                     batches[n].start();
+                    ++numIndices;
                 }
 
                 batches[n].addSprite(spr);
@@ -87,13 +107,13 @@ namespace Dralgeer {
             // destroy a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
             inline bool destroy(SpriteRenderer* spr) {
-                for (int i = 0; i < count; ++i) { if (batches[indices[i]].destroyIfExists(spr)) { return 1; }}
+                for (int i = 0; i < numIndices; ++i) { if (batches[indices[i]].destroyIfExists(spr)) { return 1; }}
                 return 0;
             };
 
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
-                for (int i = 0; i < count; ++i) { batches[indices[i]].render(currShader, cam); }
+                for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
             };
     };
 }
