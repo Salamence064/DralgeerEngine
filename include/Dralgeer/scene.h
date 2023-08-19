@@ -2,6 +2,7 @@
 
 #include "gizmo.h"
 #include "render.h"
+#include "event.h"
 #include <Zeta2D/physicshandler.h>
 
 namespace Dralgeer {
@@ -116,6 +117,8 @@ namespace Dralgeer {
 
             void update(float &dt, bool wantCapture, bool physicsUpdate);
             inline void render(Shader const &currShader) { renderer.render(currShader, camera); };
+
+            void onNotify(EventType event, GameObject* go);
             void exportScene();
             void importScene();
     };

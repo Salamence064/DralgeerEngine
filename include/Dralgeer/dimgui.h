@@ -80,7 +80,6 @@ namespace Dralgeer {
             ImGui::Text(label.c_str());
             ImGui::NextColumn();
 
-            // todo may cause issues (consult java implementation if this does happen)
             ImGui::DragInt("##dragInt", &value, 0.1f);
 
             ImGui::Columns(1);

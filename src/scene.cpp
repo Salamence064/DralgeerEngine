@@ -250,6 +250,12 @@ namespace Dralgeer {
 
     #pragma GCC diagnostic pop
 
+    void LevelEditorScene::onNotify(EventType event, GameObject* go) {
+        switch(event) {
+            case Z_INDEX_UPDATE: { renderer.updateZIndex(); }
+        }
+    };
+
     void LevelEditorScene::exportScene() { // todo maybe count the number of serialized objects instead of total
         int objects = 0;
 

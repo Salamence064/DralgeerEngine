@@ -303,6 +303,14 @@ namespace Dralgeer {
 
                     break;
                 }
+
+                case Z_INDEX_UPDATE: {
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->onNotify(Z_INDEX_UPDATE, go); break; }
+                    }
+
+                    break;
+                }
             }
         };
 

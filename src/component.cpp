@@ -2,12 +2,13 @@
 
 #include <Zeta2D/zmath2D.h>
 #include <utility>
+#include <fstream>
 #include <Dralgeer/dimgui.h>
 #include <Dralgeer/editor.h>
 #include <Dralgeer/listeners.h>
 #include <Dralgeer/debugdraw.h>
 #include <Dralgeer/prefabs.h>
-#include <fstream>
+#include <Dralgeer/event.h>
 
 namespace Dralgeer {
     // * =====================================================================
@@ -242,6 +243,9 @@ namespace Dralgeer {
         DImGui::drawVec2Control("Scale", sprite->transform.scale);
         DImGui::dragFloat("Rotation", sprite->transform.rotation);
         DImGui::dragInt("Z-Index", sprite->transform.zIndex);
+
+        // if the zIndex is changed, update the render batch it's in
+        if (transform.zIndex != sprite->transform.zIndex) { EventSystem::notify(Z_INDEX_UPDATE, nullptr); }
 
         // sprite
         sprite->imGui();

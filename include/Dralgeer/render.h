@@ -63,6 +63,12 @@ namespace Dralgeer {
                 int n = spr->transform.zIndex + 1000;
                 if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
+                if (numIndices == 0) {
+                    indices[0] = n;
+                    batches[n].addSprite(spr);
+                    return;
+                }
+
                 if (batches[n].numSprites == 0) {
                     // determine the spot to put the index in using a modified binary search
                     int min = 0, max = numIndices;
@@ -114,6 +120,11 @@ namespace Dralgeer {
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
+            };
+
+            // update the list of zIndices when called
+            inline void updateZIndex() {
+                
             };
     };
 }
