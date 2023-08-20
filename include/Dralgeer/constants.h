@@ -23,9 +23,8 @@
 #define DEBUG_COLOR_OFFSET (2 * sizeof(float))
 
 // renderer
-// todo probably up the max batch size to 1000 and buffer the data in segments
 #define MAX_RENDER_BATCHES 2500
-#define MAX_RENDER_BATCH_SIZE 200
+#define MAX_RENDER_BATCH_SIZE 1000
 #define MAX_RENDER_VERTICES_LIST_SIZE 8000
 #define MAX_RENDER_INDICES_LIST_SIZE 1200
 #define MAX_TEXTURES 16
