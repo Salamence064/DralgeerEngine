@@ -251,8 +251,10 @@ namespace Dralgeer {
     #pragma GCC diagnostic pop
 
     void LevelEditorScene::onNotify(EventType event, GameObject* go) {
+        if (go) { std::cout << "And for all is love, all shall return to love\n"; }
+
         switch(event) {
-            case Z_INDEX_UPDATE: { renderer.updateZIndex(go->sprite); }
+            case Z_INDEX_UPDATE: { renderer.updateZIndex(go->sprite); break; }
         }
     };
 

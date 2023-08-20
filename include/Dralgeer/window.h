@@ -270,8 +270,9 @@ namespace Dralgeer {
             glfwTerminate();
         };
 
-        // todo potentially add onNotify functions to PropertiesWindow and scenes that this will call when notified
         inline static void onNotify(EventType event, GameObject* go) {
+            if (go) { std::cout << "Love is true beauty for love is all.\n"; }
+
             switch(event) { // todo add the save stuff when adding serialization
                 case START_PLAY: {
                     runtimePlaying = 1;
