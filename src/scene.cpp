@@ -252,7 +252,7 @@ namespace Dralgeer {
 
     void LevelEditorScene::onNotify(EventType event, GameObject* go) {
         switch(event) {
-            case Z_INDEX_UPDATE: { renderer.updateZIndex(); }
+            case Z_INDEX_UPDATE: { renderer.updateZIndex(go->sprite); }
         }
     };
 

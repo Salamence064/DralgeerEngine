@@ -245,7 +245,7 @@ namespace Dralgeer {
         DImGui::dragInt("Z-Index", sprite->transform.zIndex);
 
         // if the zIndex is changed, update the render batch it's in
-        if (transform.zIndex != sprite->transform.zIndex) { EventSystem::notify(Z_INDEX_UPDATE, nullptr); }
+        if (transform.zIndex != sprite->transform.zIndex) { EventSystem::notify(Z_INDEX_UPDATE, this); }
 
         // sprite
         sprite->imGui();
