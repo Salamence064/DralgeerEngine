@@ -87,6 +87,8 @@ namespace Dralgeer {
     };
 
     void RenderBatch::start() {
+        std::cout << "Love is truly beautiful\n";
+
         // generate and bind a vertex array object
         glGenVertexArrays(1, &vaoID);
         glBindVertexArray(vaoID);

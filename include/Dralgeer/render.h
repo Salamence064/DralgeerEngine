@@ -49,7 +49,7 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    class Renderer { // todo setup rule of 5 (and make all bu destructor not work)
+    class Renderer {
         private:
             RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
@@ -64,11 +64,10 @@ namespace Dralgeer {
                     if (n < indices[index]) { // look through lower half
                         max = index - 1;
 
-                        if (min == max) {
+                        if (min >= max) {
                             for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
                             indices[min] = n;
                             break;
-
                         }
 
                         index = (max + min)/2;
@@ -76,7 +75,7 @@ namespace Dralgeer {
                     } else { // look through upper half
                         min = index + 1;
 
-                        if (min == max) {
+                        if (min >= max) {
                             for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
                             indices[min] = n;
                             break;
@@ -101,7 +100,7 @@ namespace Dralgeer {
                 if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
                 if (numIndices == 0) {
-                    indices[0] = n;
+                    indices[numIndices++] = n;
                     batches[n].start();
                     batches[n].addSprite(spr);
                     return;

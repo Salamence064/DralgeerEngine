@@ -256,7 +256,7 @@ namespace Dralgeer {
         }
     };
 
-    void LevelEditorScene::exportScene() { // todo maybe count the number of serialized objects instead of total
+    void LevelEditorScene::exportScene() {
         int objects = 0;
 
         // count the number of serializable GameObjects
