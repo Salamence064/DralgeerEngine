@@ -253,6 +253,8 @@ namespace Dralgeer {
     void LevelEditorScene::onNotify(EventType event, GameObject* go) {
         if (go) { std::cout << "And for all is love, all shall return to love\n"; }
 
+        // std::cout << renderer.numIndices << "\n";
+
         switch(event) {
             case Z_INDEX_UPDATE: { renderer.updateZIndex(go->sprite); break; }
         }

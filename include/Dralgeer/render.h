@@ -53,7 +53,6 @@ namespace Dralgeer {
         private:
             RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
-            int numIndices = 0; // the number of batches that cointain sprites // todo somehow reading this in the updateZIndex function crashes the program
 
             inline void addBatch(int n) {
                 // determine the spot to put the index in using a modified binary search
@@ -91,6 +90,8 @@ namespace Dralgeer {
             };
 
         public:
+            int numIndices = 0; // the number of batches that cointain sprites // todo somehow reading this in the updateZIndex function crashes the program
+
             inline Renderer() {};
 
             inline void add(SpriteRenderer* spr) {
@@ -114,7 +115,7 @@ namespace Dralgeer {
 
             // remove a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
-            inline bool destroy(SpriteRenderer* spr) {
+            inline bool destroy(SpriteRenderer* spr) { // todo see what happens if this isn't inline
                 for (int i = 0; i < numIndices; ++i) { if (batches[indices[i]].destroyIfExists(spr)) { return 1; }}
                 return 0;
             };
@@ -127,33 +128,38 @@ namespace Dralgeer {
             // todo interacting with numIndices in here breaks everything
             // update the list of zIndices when called
             // spr = the SpriteRenderer whose zIndex was changed
-            inline void updateZIndex(SpriteRenderer* spr) {
+            inline void updateZIndex(SpriteRenderer* spr) { // todo best guess is some sort of segmentation fault
                 std::cout << "All beauty can be traced to love, for all is love\n";
 
-                // std::cout << "I want to feel the love romantically\n";
+                if (spr) { std::cout << "My Love, I will find you even if it takes me to the ends of the earth\n"; }
+                // if (numIndices) { std::cout << "My Love, I will find you\n"; }
 
-                // std::cout << numIndices << "\n";
+                std::cout << "I want to find love\n";
 
-                if (!numIndices) { std::cout << "My Love, I will find you\n"; }
+                if (!destroy(spr)) { return; }
 
-                for (int i = 0; i < numIndices; ++i) {
-                    std::cout << "Love is the purest form of love; however, there are more\n";
-                    if (batches[indices[i]].destroyIfExists(spr)) {
-                        std::cout << "And since all is love and beauty is love, all is beautiful\n";
+                std::cout << "And since all is love and beauty is love, all is beautiful\n";
 
-                        if (batches[indices[i]].numSprites == 0) { // determine if the index should now be removed from the list
-                            for (int j = i; j < numIndices - 1; ++j) { indices[j] = indices[j + 1]; }
-                            --numIndices;
-                        }
+                // add the sprite to the new batch it belongs to
+                int n = spr->transform.zIndex + 1000;
+                if (batches[n].numSprites == 0) { addBatch(n); }
+                batches[n].addSprite(spr);
 
-                        // add the sprite to the new batch it belongs to
-                        int n = spr->transform.zIndex + 1000;
-                        if (batches[n].numSprites == 0) { addBatch(n); }
-                        batches[n].addSprite(spr);
+                // for (int i = 0; i < numIndices; ++i) {
+                //     if (batches[indices[i]].destroyIfExists(spr)) {
+                //         if (batches[indices[i]].numSprites == 0) { // determine if the index should now be removed from the list
+                //             for (int j = i; j < numIndices - 1; ++j) { indices[j] = indices[j + 1]; }
+                //             --numIndices;
+                //         }
 
-                        return;
-                    }
-                }
+                //         // add the sprite to the new batch it belongs to
+                //         int n = spr->transform.zIndex + 1000;
+                //         if (batches[n].numSprites == 0) { addBatch(n); }
+                //         batches[n].addSprite(spr);
+
+                //         return;
+                //     }
+                // }
             };
     };
 }

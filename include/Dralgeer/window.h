@@ -163,7 +163,7 @@ namespace Dralgeer {
             currScene.type = LEVEL_EDITOR_SCENE;
         };
 
-        inline static void run() {
+        inline static void run() { // todo see where the stuff gets called from in here and try to see if there are any strange instances in it that would cause one to work but not the other
             float startTime = (float) glfwGetTime(), endTime;
             float dt = 0.0f;
 
@@ -270,7 +270,7 @@ namespace Dralgeer {
             glfwTerminate();
         };
 
-        inline static void onNotify(EventType event, GameObject* go) {
+        inline void onNotify(EventType event, GameObject* go) {
             if (go) { std::cout << "Love is true beauty for love is all.\n"; }
 
             switch(event) { // todo add the save stuff when adding serialization
@@ -307,7 +307,12 @@ namespace Dralgeer {
 
                 case Z_INDEX_UPDATE: {
                     switch(currScene.type) {
-                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->onNotify(Z_INDEX_UPDATE, go); break; }
+                        case LEVEL_EDITOR_SCENE: {
+                            LevelEditorScene* l = (LevelEditorScene*) currScene.scene;
+                            // std::cout << l->renderer.numIndices << "\n";
+                            l->onNotify(Z_INDEX_UPDATE, go);
+                            break;
+                        }
                     }
 
                     break;
