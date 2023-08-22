@@ -38,10 +38,11 @@
 // // - setup physics (update Zeta2D, too)
 // // - setup serialization
 // - port over the ImGui stuff to fully furnish the properties window
+// - fix the transparent portions displaying on top of non-transparent portions of other sprites
 // // - port over the event system
 // // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
-// - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
+// // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
 // - make a scene selector in the level editor scene
 // - go through the rest of the 2D engine series and see what final things I need to add
 // ===================================================================
