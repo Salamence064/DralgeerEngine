@@ -245,8 +245,10 @@ namespace Dralgeer {
         DImGui::dragInt("Z-Index", sprite->transform.zIndex);
 
         // if the zIndex is changed, update the render batch it's in
-        if (transform.zIndex != sprite->transform.zIndex) { sprite->rebufferZIndex = 1; }
-        // if (transform.zIndex != sprite->transform.zIndex) { EventSystem::notify(Z_INDEX_UPDATE, this); }
+        if (transform.zIndex != sprite->transform.zIndex) {
+            sprite->transform.zIndex = ZMath::clamp(sprite->transform.zIndex, -1000, 1499); // enure the zIndex is within a valid range
+            sprite->rebufferZIndex = 1;
+        }
 
         // sprite
         sprite->imGui();

@@ -113,7 +113,17 @@ namespace Dralgeer {
             // remove a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
             inline bool destroy(SpriteRenderer* spr) {
-                for (int i = 0; i < numIndices; ++i) { if (batches[indices[i]].destroyIfExists(spr)) { return 1; }}
+                for (int i = 0; i < numIndices; ++i) {
+                    if (batches[indices[i]].destroyIfExists(spr)) {
+                        if (batches[indices[i]].numSprites == 0) {
+                            for (int j = i; j < numIndices - 1; ++j) { indices[j] = indices[j + 1]; }
+                            --numIndices;
+                        }
+
+                        return 1;
+                    }
+                }
+
                 return 0;
             };
 
@@ -131,22 +141,6 @@ namespace Dralgeer {
                 int n = spr->transform.zIndex + 1000;
                 if (batches[n].numSprites == 0) { addBatch(n); }
                 batches[n].addSprite(spr);
-
-                // for (int i = 0; i < numIndices; ++i) {
-                //     if (batches[indices[i]].destroyIfExists(spr)) {
-                //         if (batches[indices[i]].numSprites == 0) { // determine if the index should now be removed from the list
-                //             for (int j = i; j < numIndices - 1; ++j) { indices[j] = indices[j + 1]; }
-                //             --numIndices;
-                //         }
-
-                //         // add the sprite to the new batch it belongs to
-                //         int n = spr->transform.zIndex + 1000;
-                //         if (batches[n].numSprites == 0) { addBatch(n); }
-                //         batches[n].addSprite(spr);
-
-                //         return;
-                //     }
-                // }
             };
     };
 }
