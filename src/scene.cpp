@@ -11,6 +11,7 @@ namespace Dralgeer {
     // * ================================================
     // * Level Editor Class
 
+    // todo update for the rebufferZIndex bool
     void LevelEditorScene::update(float &dt, bool wantCapture, bool physicsUpdate) {
         camera.adjustProjection();
 
@@ -22,6 +23,10 @@ namespace Dralgeer {
             gridLines.update(camera);
             mouseControls.update();
             gizmoSystem.update();
+
+            for (int i = 0; i < numObjects; ++i) {
+                if (gameObjects[i]->sprite && gameObjects[i]->sprite->rebufferZIndex) { renderer.updateZIndex(gameObjects[i]->sprite); }
+            }
         }
 
         for (int i = numObjects - 1; i >= 0; --i) {
@@ -250,11 +255,11 @@ namespace Dralgeer {
 
     #pragma GCC diagnostic pop
 
-    void LevelEditorScene::onNotify(EventType event, GameObject* go) {
-        switch(event) {
-            case Z_INDEX_UPDATE: { renderer.updateZIndex(go->sprite); break; }
-        }
-    };
+    // void LevelEditorScene::onNotify(EventType event, GameObject* go) {
+    //     switch(event) {
+    //         case Z_INDEX_UPDATE: { renderer.updateZIndex(go->sprite); break; }
+    //     }
+    // };
 
     void LevelEditorScene::exportScene() {
         int objects = 0;

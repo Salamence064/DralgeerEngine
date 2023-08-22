@@ -26,7 +26,7 @@ namespace Dralgeer {
     // * Remember to set isDirty to true if you change either the sprite or the color.
     class SpriteRenderer {
         private:
-            bool imGuiSetup = 1; // ! DO NOT serialize
+            bool imGuiSetup = 1;
 
         public:
             // * ==============
@@ -40,8 +40,9 @@ namespace Dralgeer {
             glm::vec4 color = glm::vec4(1, 1, 1, 1); // for some reason it doesn't work unless I have the equals
             Sprite sprite;
 
-            Transform transform, lastTransform; // ! DO NOT serialize
-            bool isDirty = 1; // ! DO NOT serialize
+            Transform transform, lastTransform;
+            bool isDirty = 1;
+            bool rebufferZIndex = 0;
 
             // * ==========================================================
 
@@ -73,10 +74,10 @@ namespace Dralgeer {
             int id;
             std::string name;
             SpriteRenderer* sprite = nullptr; // todo maybe could make a standard object and take references to it when passing it to the renderer
-            Transform transform; // ! DO NOT serialize // todo not so sure what this is used for
+            Transform transform;
 
-            bool serialize = 1; // ! DO NOT serialize
-            bool dead = 0; // ! DO NOT serialize
+            bool serialize = 1;
+            bool dead = 0;
             bool pickable = 1;
             
             // * ===============================================

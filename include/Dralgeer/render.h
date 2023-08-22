@@ -53,8 +53,7 @@ namespace Dralgeer {
         private:
             RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
-            int numIndices = 0; // the number of batches that cointain sprites // todo somehow reading this in the updateZIndex function crashes the program
-
+            int numIndices = 0; // the number of batches that cointain sprites
 
             inline void addBatch(int n) {
                 // determine the spot to put the index in using a modified binary search
@@ -111,8 +110,6 @@ namespace Dralgeer {
                 batches[n].addSprite(spr);
             };
 
-            inline void add(GameObject const &go) { if (go.sprite) { add(go.sprite); }};
-
             // remove a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
             inline bool destroy(SpriteRenderer* spr) {
@@ -125,13 +122,10 @@ namespace Dralgeer {
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
             };
 
-            // todo best guess is somehow it's some sort of segmentation fault
-
-            // todo interacting with numIndices in here breaks everything
             // update the list of zIndices when called
             // spr = the SpriteRenderer whose zIndex was changed
             inline void updateZIndex(SpriteRenderer* spr) {
-                if (!destroy(spr)) { return; } // ! numIndices is read in here and causes the crash (still crashed with the implementation directly in here)
+                if (!destroy(spr)) { return; }
 
                 // add the sprite to the new batch it belongs to
                 int n = spr->transform.zIndex + 1000;
