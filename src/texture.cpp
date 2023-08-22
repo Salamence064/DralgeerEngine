@@ -31,6 +31,8 @@ namespace Dralgeer {
                 glGenerateMipmap(GL_TEXTURE_2D);
 
             } else if (channels == 4) { // RGBA
+                // std::cout << filepath << "\n";
+                
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
                 glGenerateMipmap(GL_TEXTURE_2D);
 

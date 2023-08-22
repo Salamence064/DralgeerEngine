@@ -249,10 +249,10 @@ namespace Dralgeer {
 
                 // * Check for errors to make it easier to debug
                 // ! this will be removed in the final build
-                // GLenum err;
-                // while((err = glGetError()) != GL_NO_ERROR) {
-                //     std::cout << "[Error] " << err << "\n";
-                // }
+                GLenum err;
+                while((err = glGetError()) != GL_NO_ERROR) {
+                    std::cout << "[Error] " << err << "\n";
+                }
             }
         };
 

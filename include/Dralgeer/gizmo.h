@@ -9,7 +9,8 @@ namespace Dralgeer {
         SCALE_GIZMO
     };
 
-    // todo probably end up doing the editor update system (maybe)
+    // todo add a custom shader here for gizmos to use and render with it in use after all the normal sprites are
+    // todo this will probably have some code in a gizmo.render call or something (maybe pass the gizmos to the renderer through the scene)
 
     class Gizmo { // todo add rule of 5 later
         private:
@@ -57,8 +58,8 @@ namespace Dralgeer {
             inline bool xHoverState() {
                 if (MouseListener::mWorldX <= xObject->transform.pos.x &&
                     MouseListener::mWorldX >= xObject->transform.pos.x - gizmoHeight &&
-                    MouseListener::mWorldY >= yObject->transform.pos.y &&
-                    MouseListener::mWorldY <= yObject->transform.pos.y + gizmoWidth)
+                    MouseListener::mWorldY >= xObject->transform.pos.y &&
+                    MouseListener::mWorldY <= xObject->transform.pos.y + gizmoWidth)
                 {
                     xSprite->color = xHoverColor;
                     return 1;
