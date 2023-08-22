@@ -61,7 +61,7 @@ namespace Dralgeer {
                 int index = numIndices/2;
 
                 for(;;) {
-                    if (n < indices[index]) { // look through lower half
+                    if (n > indices[index]) { // look through lower half
                         max = index;
 
                         if (min >= max) {
@@ -129,10 +129,7 @@ namespace Dralgeer {
 
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
-                for (int i = 0; i < numIndices; ++i) {
-                    std::cout << "Index: " << indices[i] << "\n";
-                    batches[indices[i]].render(currShader, cam);
-                }
+                for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
             };
 
             // update the list of zIndices when called
