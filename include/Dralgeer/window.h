@@ -271,8 +271,6 @@ namespace Dralgeer {
         };
 
         inline void onNotify(EventType event, GameObject* go) {
-            if (go) { std::cout << "Love is true beauty for love is all.\n"; }
-
             switch(event) { // todo add the save stuff when adding serialization
                 case START_PLAY: {
                     runtimePlaying = 1;
@@ -307,12 +305,7 @@ namespace Dralgeer {
 
                 case Z_INDEX_UPDATE: {
                     switch(currScene.type) {
-                        case LEVEL_EDITOR_SCENE: {
-                            LevelEditorScene* l = (LevelEditorScene*) currScene.scene;
-                            // std::cout << l->renderer.numIndices << "\n";
-                            l->onNotify(Z_INDEX_UPDATE, go);
-                            break;
-                        }
+                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->onNotify(Z_INDEX_UPDATE, go); break; }
                     }
 
                     break;

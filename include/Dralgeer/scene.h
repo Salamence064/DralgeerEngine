@@ -36,6 +36,7 @@ namespace Dralgeer {
             MouseControls mouseControls;
             GizmoSystem gizmoSystem;
 
+            Renderer renderer;
             Zeta::Handler physicsHandler;
 
 
@@ -60,8 +61,6 @@ namespace Dralgeer {
             inline void loadResources();
 
         public:
-            Renderer renderer;
-
             // * ==============
             // * Attributes
             // * ==============
