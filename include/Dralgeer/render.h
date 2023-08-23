@@ -8,9 +8,8 @@ namespace Dralgeer {
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE] = {0};
             Texture* textures[MAX_TEXTURES];
-            int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+            int texSlots[17] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
             unsigned int vaoID, vboID, eboID;
-            Shader* gizmoShader;
 
             // todo this should not compile with the inline functions being declared this way and defined in the header
             // * Helper to just make the code easier to read and debug.
@@ -22,7 +21,7 @@ namespace Dralgeer {
             int numSprites = 0;
             int numTextures = 0;
 
-            RenderBatch();
+            inline RenderBatch() {};
 
             // * ===================
             // * Rule of 5 Stuff
@@ -48,6 +47,42 @@ namespace Dralgeer {
             bool destroyIfExists(SpriteRenderer* spr);
             void addSprite(SpriteRenderer* spr);
             bool hasTexture(Texture* tex) const;
+    };
+
+    class GizmoBatch {
+        private:
+            Shader* gizmoShader; // Note: we do not need to delete this as the AssetPool will handle this for us.
+            SpriteRenderer* gizmos[GIZMO_BATCH_SIZE];
+            float vertices[GIZMO_BATCH_VERTICES_SIZE] = {0};
+            Texture* gizmoTexture; // We will store this texture at slot 16 on the GPU
+            int texSlots[17] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+            unsigned int vaoID, vboID, eboID;
+            int numGizmos = 0;
+
+        public:
+            GizmoBatch();
+
+            GizmoBatch(GizmoBatch const &gb);
+            GizmoBatch(GizmoBatch &&gb);
+            GizmoBatch& operator = (GizmoBatch const &gb);
+            GizmoBatch& operator = (GizmoBatch &&gb);
+            ~GizmoBatch();
+
+            inline void addGizmo(SpriteRenderer* spr) {
+                if (numGizmos == GIZMO_BATCH_SIZE) { return; } // todo print a system debug message if this actually occurs
+
+                gizmos[numGizmos] = spr;
+                gizmos[numGizmos]->isDirty = 1;
+
+                // load the vertex array data
+                int offset = numGizmos * 4 * VERTEX_SIZE;
+
+                
+            };
+
+            // call before adding any gizmos
+            void init(Texture* gizmoTexture); // ? probably do this for the parameter????
+            void render();
     };
 
     class Renderer {
@@ -92,10 +127,6 @@ namespace Dralgeer {
             };
 
         public:
-            // these are to be renderer after the other sprites with the gizmoShader
-            SpriteRenderer* xGizmoSpr = nullptr;
-            SpriteRenderer* yGizmoSpr = nullptr;
-
             inline Renderer() {};
 
             inline void add(SpriteRenderer* spr) {
