@@ -1,11 +1,13 @@
 #include <Dralgeer/render.h>
 #include <Zeta2D/zmath2D.h>
 #include <Dralgeer/window.h>
+#include <Dralgeer/assetpool.h>
 
 namespace Dralgeer {
     // * ===============================================
     // * RenderBatch Stuff
 
+    RenderBatch::RenderBatch() { gizmoShader = AssetPool::getShader("../../assets/shaders/gizmoShader.glsl"); };
     RenderBatch::RenderBatch(RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
     RenderBatch::RenderBatch(RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
     RenderBatch& RenderBatch::operator = (RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
