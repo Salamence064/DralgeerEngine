@@ -11,6 +11,10 @@ namespace Dralgeer {
             int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
             unsigned int vaoID, vboID, eboID;
 
+            // these are to be renderer after the other sprites with the gizmoShader
+            SpriteRenderer* xGizmoSpr = nullptr;
+            SpriteRenderer* yGizmoSpr = nullptr;
+
             // todo this should not compile with the inline functions being declared this way and defined in the header
             // * Helper to just make the code easier to read and debug.
             // * Will probs be moved directly into the code in the end.

@@ -161,6 +161,6 @@ namespace Dralgeer {
                 activeGizmo = TRANSLATE_GIZMO;
             };
 
-            void update();            
+            void update();
     };
 }
