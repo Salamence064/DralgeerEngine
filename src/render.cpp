@@ -77,6 +77,7 @@ namespace Dralgeer {
             // load texture coords
             vertices[offset + 6] = sprites[index]->sprite.texCoords[i].x;
             vertices[offset + 7] = sprites[index]->sprite.texCoords[i].y;
+            
             // load texture IDs
             vertices[offset + 8] = texID;
 
@@ -220,4 +221,58 @@ namespace Dralgeer {
     };
 
     // * ===============================================
+
+    void GizmoBatch::addGizmo(SpriteRenderer* spr) {
+        if (numGizmos == GIZMO_BATCH_SIZE) { return; } // todo print a system debug message if this actually occurs
+
+        gizmos[numGizmos] = spr;
+        gizmos[numGizmos]->isDirty = 1;
+
+        // load the vertex array data
+        int offset = numGizmos * 4 * VERTEX_SIZE;
+
+        glm::mat4 transformMat(1);
+        Transform t = gizmos[numGizmos]->transform;
+
+        if (!ZMath::compare(t.rotation, 0.0f)) {
+            transformMat = glm::translate(transformMat, glm::vec3(t.pos.x, t.pos.y, 0.0f));
+            transformMat = glm::rotate(transformMat, (float) glm::radians(t.rotation), glm::vec3(0, 0, 1));
+            transformMat = glm::scale(transformMat, glm::vec3(t.scale.x, t.scale.y, 1.0f));
+        }
+
+        float xAdd = 1.0f, yAdd = 1.0f;
+
+        for (int i = 0; i < 4; ++i) {
+            // account for each vertex
+            // account for each vertex
+            if (i == 1) { yAdd = 0.0f; }
+            else if (i == 2) { xAdd = 0.0f; }
+            else if (i == 3) { yAdd = 1.0f; }
+
+            glm::vec4 currPos(t.pos.x + (xAdd * t.scale.x), t.pos.y + (yAdd * t.scale.y), 0.0f, 1.0f);
+            if (!ZMath::compare(t.rotation, 0.0f)) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); }
+
+            // load position
+            vertices[offset] = currPos.x;
+            vertices[offset + 1] = currPos.y;
+
+            // load color
+            vertices[offset + 2] = gizmos[numGizmos]->color.x;
+            vertices[offset + 3] = gizmos[numGizmos]->color.y;
+            vertices[offset + 4] = gizmos[numGizmos]->color.z;
+            vertices[offset + 5] = gizmos[numGizmos]->color.w;
+
+            // load texture coords
+            vertices[offset + 6] = gizmos[numGizmos]->sprite.texCoords[i].x;
+            vertices[offset + 7] = gizmos[numGizmos]->sprite.texCoords[i].y;
+            
+            // load texture IDs
+            vertices[offset + 8] = 16;
+
+            // load entity IDs
+            vertices[offset + 9] = gizmos[numGizmos]->entityID;
+
+            offset += VERTEX_SIZE;
+        }
+    };
 }
