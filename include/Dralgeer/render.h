@@ -65,7 +65,9 @@ namespace Dralgeer {
             GizmoBatch(GizmoBatch &&gb);
             GizmoBatch& operator = (GizmoBatch const &gb);
             GizmoBatch& operator = (GizmoBatch &&gb);
-            ~GizmoBatch();
+            
+            // Note: we do not need a destructor as the scene and AssetPool will clean up all the memory allocated here
+            // todo in the future maybe add a destructor for this shader and texture as the AssetPool won't clean it up till the very end
 
             void addGizmo(SpriteRenderer* spr);
 

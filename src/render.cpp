@@ -222,6 +222,18 @@ namespace Dralgeer {
 
     // * ===============================================
 
+    // * Normal Constructor
+
+    GizmoBatch::GizmoBatch() { gizmoShader = AssetPool::getShader("../../assets/shader/gizmoShader.glsl"); };
+
+
+    // * Rule of 5 stuff
+
+    GizmoBatch::GizmoBatch(GizmoBatch const &gb) { throw std::runtime_error("[ERROR] Cannot constructor a GizmoBatch from another GizmoBatch."); };
+    GizmoBatch::GizmoBatch(GizmoBatch &&gb) { throw std::runtime_error("[ERROR] Cannot constructor a GizmoBatch from another GizmoBatch."); };
+    GizmoBatch& GizmoBatch::operator = (GizmoBatch const &gb) { throw std::runtime_error("[ERROR] Cannot reassign a GizmoBatch object. Do NOT use the '=' operator."); };
+    GizmoBatch& GizmoBatch::operator = (GizmoBatch &&gb) { throw std::runtime_error("[ERROR] Cannot reassign a GizmoBatch object. Do NOT use the '=' operator."); };
+
     void GizmoBatch::addGizmo(SpriteRenderer* spr) {
         if (numGizmos == GIZMO_BATCH_SIZE) { return; } // todo print a system debug message if this actually occurs
 
