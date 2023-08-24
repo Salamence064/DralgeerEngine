@@ -9,7 +9,7 @@ namespace Dralgeer {
         SAVE_LEVEL,
         LOAD_LEVEL,
         ADD_GAMEOBJECT_TO_SCENE,
-        REBUFFER,
+        // REBUFFER,
         USER_EVENT
     };
 

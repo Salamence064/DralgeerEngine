@@ -259,7 +259,7 @@ namespace Dralgeer {
         };
 
         inline static void destroy() {
-            // free the memory of the scene // todo currently for testing -- move back to the bottom
+            // free the memory of the scene
             switch(currScene.type) {
                 case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); delete (LevelEditorScene*) currScene.scene; break; }
             }
@@ -309,14 +309,6 @@ namespace Dralgeer {
 
                     break;
                 }
-
-                // case Z_INDEX_UPDATE: {
-                //     switch(currScene.type) {
-                //         case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->onNotify(Z_INDEX_UPDATE, go); break; }
-                //     }
-
-                //     break;
-                // }
             }
         };
 

@@ -36,13 +36,27 @@ namespace Dralgeer {
     #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 
     void GameViewWindow::imGui(unsigned int frameBufferTexID) {
-        ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Game Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_MenuBar);
 
         if (imGuiSetup) {
             ImGui::SetWindowPos(ImVec2(800.0f, 500.0f));
             ImGui::SetWindowSize(ImVec2(720.0f, 520.0f));
             imGuiSetup = 0;
         }
+
+        ImGui::BeginMenuBar();
+
+        if (ImGui::MenuItem("Play", "", isPlaying, !isPlaying)) {
+            isPlaying = 1;
+            EventSystem::notify(START_PLAY);
+        }
+
+        if (ImGui::MenuItem("Stop", "", !isPlaying, isPlaying)) {
+            isPlaying = 1;
+            EventSystem::notify(STOP_PLAY);
+        }
+
+        ImGui::EndMenuBar();
 
         ImVec2 windowSize = getLargestSize();
         ImVec2 windowPos = getCenteredPos(windowSize);

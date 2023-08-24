@@ -9,7 +9,7 @@ namespace Dralgeer {
         private:
             float leftX, rightX, topY, bottomY;
             bool imGuiSetup = 1;
-            // bool isPlaying = 0; // todo add in when I add in events
+            bool isPlaying = 0;
 
             inline ImVec2 getLargestSize() const;
             inline ImVec2 getCenteredPos(ImVec2 const &size) const;
