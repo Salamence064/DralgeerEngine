@@ -46,6 +46,7 @@
 // - go through the rest of the 2D engine series and see what final things I need to add
 // - make a scene selector in the level editor scene
 // - add observers
+// - make it so the scene can be scrolled through with the mouse and zoomed in and out of (only if needed)
 // ===================================================================
 
 #include "event.h"
@@ -250,10 +251,10 @@ namespace Dralgeer {
 
                 // * Check for errors to make it easier to debug
                 // ! this will be removed in the final build
-                GLenum err;
-                while((err = glGetError()) != GL_NO_ERROR) {
-                    std::cout << "[Error] " << err << "\n";
-                }
+                // GLenum err;
+                // while((err = glGetError()) != GL_NO_ERROR) {
+                //     std::cout << "[Error] " << err << "\n";
+                // }
             }
         };
 
@@ -272,11 +273,13 @@ namespace Dralgeer {
         };
 
         inline void onNotify(EventType event, GameObject* go) {
-            switch(event) { // todo add the save stuff when adding serialization
+            switch(event) {
                 case START_PLAY: {
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); break; }
+                    }
+
                     runtimePlaying = 1;
-                    // currScene->save();
-                    changeScene(LEVEL_EDITOR_SCENE); // ! I dont think this is necessary
                     break;
                 }
 
@@ -292,7 +295,10 @@ namespace Dralgeer {
                 }
 
                 case SAVE_LEVEL: {
-                    // currScene->save();
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); break; }
+                    }
+
                     break;
                 }
 

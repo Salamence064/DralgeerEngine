@@ -9,12 +9,9 @@ namespace Dralgeer {
         SCALE_GIZMO
     };
 
-    // todo add a custom shader here for gizmos to use and render with it in use after all the normal sprites are
-    // todo this will probably have some code in a gizmo.render call or something (maybe pass the gizmos to the renderer through the scene)
-
-    class Gizmo { // todo add rule of 5 later
+    class Gizmo {
         private:
-            GizmoType gizmoType; // ! Do NOT serialize
+            GizmoType gizmoType;
 
             glm::vec4 xColor = glm::vec4(0.8824f, 0.3039f, 0.3039f, 1.0f);
             glm::vec4 xHoverColor = glm::vec4(0.8824f, 0.0039f, 0.0039f, 1.0f);
@@ -25,9 +22,9 @@ namespace Dralgeer {
 
             // ! unsure if these should just be handled by a mixture of the scene and renderer, but since atm this doesnt communicate with either, we will take care of it here for now
             // Note: activeObject is guarenteed to be contained in the scene. Therefore, we do not need to bother with memory management for it.
-            GameObject* activeObject = nullptr; // ! Do NOT serialize
-            SpriteRenderer* xSprite = nullptr; // ! Do NOT serialize
-            SpriteRenderer* ySprite = nullptr; // ! Do NOT serialize
+            GameObject* activeObject = nullptr;
+            SpriteRenderer* xSprite = nullptr;
+            SpriteRenderer* ySprite = nullptr;
 
             glm::vec2 xOffset = glm::vec2(64, -5), yOffset = glm::vec2(16, 61);
             int gizmoWidth = 16, gizmoHeight = 48;
@@ -86,8 +83,8 @@ namespace Dralgeer {
 
         public:
             bool inUse = 0; // Remember to call setInactive after setting this to 0.
-            GameObject* xObject = nullptr; // ! Do NOT serialize
-            GameObject* yObject = nullptr; // ! Do NOT serialize
+            GameObject* xObject = nullptr;
+            GameObject* yObject = nullptr;
 
             // * ====================
             // * Helper Function
