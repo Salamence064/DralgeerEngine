@@ -237,6 +237,23 @@ namespace Dralgeer {
     GizmoBatch& GizmoBatch::operator = (GizmoBatch const &gb) { throw std::runtime_error("[ERROR] Cannot reassign a GizmoBatch object. Do NOT use the '=' operator."); };
     GizmoBatch& GizmoBatch::operator = (GizmoBatch &&gb) { throw std::runtime_error("[ERROR] Cannot reassign a GizmoBatch object. Do NOT use the '=' operator."); };
 
+    GizmoBatch::~GizmoBatch() {
+        // delete the sprites, texture, and shader
+        for (int i = 0; i < numGizmos; ++i) { delete gizmos[i]; }
+        delete gizmoTexture;
+        delete gizmoShader;
+
+        // delete the vao. vbo, and ebo
+        glDeleteVertexArrays(1, &vaoID);
+        glDeleteBuffers(1, &vboID);
+        glDeleteBuffers(1, &eboID);
+
+        // unbind everything
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    };
+
 
     // * Normal functions
 

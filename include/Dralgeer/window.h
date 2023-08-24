@@ -43,8 +43,9 @@
 // // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
 // // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
-// - make a scene selector in the level editor scene
 // - go through the rest of the 2D engine series and see what final things I need to add
+// - make a scene selector in the level editor scene
+// - add observers
 // ===================================================================
 
 #include "event.h"
