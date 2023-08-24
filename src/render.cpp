@@ -234,17 +234,14 @@ namespace Dralgeer {
     GizmoBatch& GizmoBatch::operator = (GizmoBatch const &gb) { throw std::runtime_error("[ERROR] Cannot reassign a GizmoBatch object. Do NOT use the '=' operator."); };
     GizmoBatch& GizmoBatch::operator = (GizmoBatch &&gb) { throw std::runtime_error("[ERROR] Cannot reassign a GizmoBatch object. Do NOT use the '=' operator."); };
 
-    void GizmoBatch::addGizmo(SpriteRenderer* spr) {
-        if (numGizmos == GIZMO_BATCH_SIZE) { return; } // todo print a system debug message if this actually occurs
 
-        gizmos[numGizmos] = spr;
-        gizmos[numGizmos]->isDirty = 1;
+    // * Normal functions
 
-        // load the vertex array data
-        int offset = numGizmos * 4 * VERTEX_SIZE;
+    void GizmoBatch::loadVertexProperties(int index) {
+        int offset = index * 4 * VERTEX_SIZE;
 
         glm::mat4 transformMat(1);
-        Transform t = gizmos[numGizmos]->transform;
+        Transform t = gizmos[index]->transform;
 
         if (!ZMath::compare(t.rotation, 0.0f)) {
             transformMat = glm::translate(transformMat, glm::vec3(t.pos.x, t.pos.y, 0.0f));
@@ -269,23 +266,33 @@ namespace Dralgeer {
             vertices[offset + 1] = currPos.y;
 
             // load color
-            vertices[offset + 2] = gizmos[numGizmos]->color.x;
-            vertices[offset + 3] = gizmos[numGizmos]->color.y;
-            vertices[offset + 4] = gizmos[numGizmos]->color.z;
-            vertices[offset + 5] = gizmos[numGizmos]->color.w;
+            vertices[offset + 2] = gizmos[index]->color.x;
+            vertices[offset + 3] = gizmos[index]->color.y;
+            vertices[offset + 4] = gizmos[index]->color.z;
+            vertices[offset + 5] = gizmos[index]->color.w;
 
             // load texture coords
-            vertices[offset + 6] = gizmos[numGizmos]->sprite.texCoords[i].x;
-            vertices[offset + 7] = gizmos[numGizmos]->sprite.texCoords[i].y;
+            vertices[offset + 6] = gizmos[index]->sprite.texCoords[i].x;
+            vertices[offset + 7] = gizmos[index]->sprite.texCoords[i].y;
             
             // load texture IDs
             vertices[offset + 8] = 16;
 
             // load entity IDs
-            vertices[offset + 9] = gizmos[numGizmos]->entityID;
+            vertices[offset + 9] = gizmos[index]->entityID;
 
             offset += VERTEX_SIZE;
         }
+    };
+
+    void GizmoBatch::addGizmo(SpriteRenderer* spr) {
+        if (numGizmos == GIZMO_BATCH_SIZE) { return; } // todo print a system debug message if this actually occurs
+
+        gizmos[numGizmos] = spr;
+        gizmos[numGizmos]->isDirty = 1;
+
+        // load the vertex array data
+        loadVertexProperties(numGizmos++);
     };
 
     void GizmoBatch::init(Texture* gizmoSprite) {
@@ -334,7 +341,47 @@ namespace Dralgeer {
         glEnableVertexAttribArray(4);
     };
 
-    void GizmoBatch::render() {
+    void GizmoBatch::render(Camera const &cam) {
+        bool rebuffer = 0;
 
+        for (int i = 0; i < numGizmos; ++i) {
+            if (gizmos[i]->isDirty) {
+                loadVertexProperties(i);
+                gizmos[i]->isDirty = 0;
+                rebuffer = 1;
+            }
+        }
+
+        // rebuffer data if any of the sprites are dirty
+        if (rebuffer) {
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        // bind everything
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+
+        // use shader
+        gizmoShader->use();
+        gizmoShader->uploadMat4("uProjection", cam.proj);
+        gizmoShader->uploadMat4("uView", cam.view);
+
+        // bind texture
+        glActiveTexture(GL_TEXTURE16);
+        gizmoTexture->bind();
+
+        gizmoShader->uploadInt("uTexture", 16);
+
+        glDrawElements(GL_TRIANGLES, 6*numGizmos, GL_UNSIGNED_INT, 0);
+
+        gizmoShader->detach();
+
+        // unbind everything
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glBindVertexArray(0);
     };
 }

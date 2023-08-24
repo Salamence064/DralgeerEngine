@@ -58,6 +58,8 @@ namespace Dralgeer {
             unsigned int vaoID, vboID, eboID;
             int numGizmos = 0;
 
+            void loadVertexProperties(int index);
+
         public:
             GizmoBatch();
 
@@ -73,7 +75,7 @@ namespace Dralgeer {
 
             // call before adding any gizmos
             void init(Texture* gizmoTexture); // ? probably do this for the parameter????
-            void render();
+            void render(Camera const &cam);
     };
 
     class Renderer {

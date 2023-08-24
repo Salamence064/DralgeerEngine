@@ -23,7 +23,7 @@ void main() {
 #type fragment
 #version 330 core
 
-uniform sampler2D uTexture[16]; // todo at some point use openGL to get the total number of slots available
+uniform sampler2D uTexture;
 
 in vec4 fColor;
 in vec2 fTextCoords;
@@ -33,8 +33,7 @@ out vec4 FragColor;
 
 void main() {
     if (fTexId >= 0) {
-        int id  = int (fTexId);
-        FragColor = fColor * texture(uTexture[id], fTextCoords);
+        FragColor = fColor * texture(uTexture, fTextCoords);
 
     } else {
         FragColor = fColor;
