@@ -290,9 +290,6 @@ namespace Dralgeer {
 
         gizmos[numGizmos] = spr;
         gizmos[numGizmos]->isDirty = 1;
-
-        // load the vertex array data
-        loadVertexProperties(numGizmos++);
     };
 
     void GizmoBatch::init(Texture* gizmoSprite) {
