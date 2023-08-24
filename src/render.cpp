@@ -287,4 +287,54 @@ namespace Dralgeer {
             offset += VERTEX_SIZE;
         }
     };
+
+    void GizmoBatch::init(Texture* gizmoSprite) {
+        gizmoTexture = gizmoSprite;
+
+        // generate and bind the gizmo VAO
+        glGenVertexArrays(1, &vaoID);
+        glBindVertexArray(vaoID);
+
+        // allocate space for the vertices
+        glGenBuffers(1, &vboID);
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+        // Generate the Indices
+
+        unsigned int indices[GIZMO_BATCH_INDICES_SIZE];
+        int offset = 0;
+
+        for (int i = 0; i < GIZMO_BATCH_INDICES_SIZE; i += 6) {
+            indices[i] = offset;
+            indices[i + 1] = offset + 1;
+            indices[i + 2] = offset + 2;
+            
+            indices[i + 3] = offset + 2;
+            indices[i + 4] = offset + 3;
+            indices[i + 5] = offset;
+
+            offset += 4;
+        }
+
+        // Generate the EBO and pass it to the GPU
+        glGenBuffers(1, &eboID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
+        glVertexAttribPointer(1, 4, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) COLOR_OFFSET);
+        glVertexAttribPointer(2, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_COORDS_OFFSET);
+        glVertexAttribPointer(3, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
+        glVertexAttribPointer(4, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) ENTITY_ID_OFFSET);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+        glEnableVertexAttribArray(4);
+    };
+
+    void GizmoBatch::render() {
+
+    };
 }

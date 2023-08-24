@@ -26,7 +26,7 @@
 #define MAX_RENDER_BATCHES 2500
 #define MAX_RENDER_BATCH_SIZE 1000
 #define MAX_RENDER_VERTICES_LIST_SIZE (10000 * sizeof(float))
-#define MAX_RENDER_INDICES_LIST_SIZE 1200
+#define MAX_RENDER_INDICES_LIST_SIZE 6000
 #define MAX_TEXTURES 16
 
 #define COLOR_OFFSET (2 * sizeof(float))
@@ -40,6 +40,7 @@
 // gizmo batch specifics
 #define GIZMO_BATCH_SIZE 4
 #define GIZMO_BATCH_VERTICES_SIZE (40 * sizeof(float))
+#define GIZMO_BATCH_INDICES_SIZE 24
 
 // editor camera
 #define EDITOR_DRAG_SENSITIVITY 30.0f
