@@ -135,12 +135,12 @@ namespace Dralgeer {
 
     class GizmoSystem {
         private:
-            SpriteSheet* gizmoSprites; // ! Do NOT serialize
-            GizmoType activeGizmo; // ! Do NOT serialize
+            SpriteSheet* gizmoSprites;
+            GizmoType activeGizmo;
 
         public:
             int id;
-            Gizmo gizmos[2]; // ! Do NOT serialize
+            Gizmo gizmos[2];
 
             inline GizmoSystem() { id = IDCounter::componentID++; };
 

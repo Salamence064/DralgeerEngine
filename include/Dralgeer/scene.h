@@ -29,7 +29,7 @@ namespace Dralgeer {
             bool running = 0; // is the scene running (not physics related)
 
             SpriteSheet* sprites = nullptr;
-            bool imGuiSetup = 1; // ! DO NOT serialize
+            bool imGuiSetup = 1;
 
             EditorCamera editorCamera;
             GridLines gridLines;
