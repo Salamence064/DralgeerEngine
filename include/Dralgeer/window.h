@@ -66,7 +66,7 @@ namespace Dralgeer {
     namespace Window {
         static WindowData data;
         static GLFWwindow* window;
-        static Scene currScene;
+        extern Scene currScene;
 
         extern ImGuiLayer imGuiLayer;
         static FrameBuffer frameBuffer;
@@ -75,9 +75,9 @@ namespace Dralgeer {
         // static bool initGamepadState = 1;
         // static GLFWgamepadstate gamepadState;
 
-        static bool runtimePlaying = 0; // Is the scene being played? (i.e. are physics active)
+        extern bool runtimePlaying; // Is the scene being played? (i.e. are physics active)
 
-        inline static void changeScene(SceneType scene) {
+        inline void changeScene(SceneType scene) {
             switch(scene) {
                 case LEVEL_EDITOR_SCENE: {
                     LevelEditorScene* newScene = new LevelEditorScene();
@@ -274,7 +274,6 @@ namespace Dralgeer {
         };
 
         inline void onNotify(EventType event, GameObject* go) { // todo onNotify function called through EventSystem causes consistent crashing when it comes to other objects
-            std::cout << "hello\n";
             switch(event) {
                 case START_PLAY: {
                     switch(currScene.type) {
@@ -312,8 +311,6 @@ namespace Dralgeer {
                     break;
                 }
             }
-
-            std::cout << "greetings\n";
         };
 
         inline GameObject* getActiveObject() { return imGuiLayer.propertiesWindow.activeGameObject; };
