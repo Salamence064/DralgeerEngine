@@ -37,6 +37,7 @@
 // // - port over gizmos
 // // - setup physics (update Zeta2D, too)
 // // - setup serialization
+// - fix the EventSystem from causing crashes
 // - port over the ImGui stuff to fully furnish the properties window
 // - fix the transparent portions displaying on top of non-transparent portions of other sprites
 // // - port over the event system
@@ -272,7 +273,8 @@ namespace Dralgeer {
             glfwTerminate();
         };
 
-        inline void onNotify(EventType event, GameObject* go) {
+        inline void onNotify(EventType event, GameObject* go) { // todo onNotify function called through EventSystem causes consistent crashing when it comes to other objects
+            std::cout << "hello\n";
             switch(event) {
                 case START_PLAY: {
                     switch(currScene.type) {
@@ -310,6 +312,8 @@ namespace Dralgeer {
                     break;
                 }
             }
+
+            std::cout << "greetings\n";
         };
 
         inline GameObject* getActiveObject() { return imGuiLayer.propertiesWindow.activeGameObject; };
