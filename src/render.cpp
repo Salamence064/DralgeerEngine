@@ -224,7 +224,10 @@ namespace Dralgeer {
 
     // * Normal Constructor
 
-    GizmoBatch::GizmoBatch() { gizmoShader = AssetPool::getShader("../../assets/shader/gizmoShader.glsl"); };
+    GizmoBatch::GizmoBatch() {
+        gizmoShader = AssetPool::getShader("../../assets/shaders/gizmoShader.glsl");
+        gizmoTexture = AssetPool::getTexture("../../assets/images/gizmos.png");
+    };
 
 
     // * Rule of 5 stuff
@@ -292,9 +295,7 @@ namespace Dralgeer {
         gizmos[numGizmos]->isDirty = 1;
     };
 
-    void GizmoBatch::init(Texture* gizmoSprite) {
-        gizmoTexture = gizmoSprite;
-
+    void GizmoBatch::init() {
         // generate and bind the gizmo VAO
         glGenVertexArrays(1, &vaoID);
         glBindVertexArray(vaoID);

@@ -74,7 +74,7 @@ namespace Dralgeer {
             void addGizmo(SpriteRenderer* spr);
 
             // call before adding any gizmos
-            void init(Texture* gizmoTexture); // ? probably do this for the parameter????
+            void init();
             void render(Camera const &cam);
     };
 
@@ -83,6 +83,7 @@ namespace Dralgeer {
             RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
+            GizmoBatch gizmoBatch;
 
             inline void addBatch(int n) {
                 // determine the spot to put the index in using a modified binary search
@@ -122,6 +123,8 @@ namespace Dralgeer {
         public:
             inline Renderer() {};
 
+            inline void init() { gizmoBatch.init(); };
+
             inline void add(SpriteRenderer* spr) {
                 if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
 
@@ -159,6 +162,7 @@ namespace Dralgeer {
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
+                gizmoBatch.render(cam);
             };
 
             // update the list of zIndices when called
