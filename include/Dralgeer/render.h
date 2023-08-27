@@ -54,7 +54,7 @@ namespace Dralgeer {
             Shader* gizmoShader; // Note: we do not need to delete this as the AssetPool will handle this for us.
             SpriteRenderer* gizmos[GIZMO_BATCH_SIZE];
             float vertices[GIZMO_BATCH_VERTICES_SIZE] = {0};
-            Texture* gizmoTexture; // We will store this texture at slot 16 on the GPU
+            Texture* gizmoTexture; // We will store this texture at slot 16 on the GPU (AssetPool will delete it for us)
             unsigned int vaoID, vboID, eboID;
             int numGizmos = 0;
 
@@ -160,7 +160,7 @@ namespace Dralgeer {
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
-                gizmoBatch.render(cam);
+                // gizmoBatch.render(cam);
             };
 
             // update the list of zIndices when called

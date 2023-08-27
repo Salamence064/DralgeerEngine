@@ -240,8 +240,6 @@ namespace Dralgeer {
     GizmoBatch::~GizmoBatch() {
         // delete the sprites, texture, and shader
         for (int i = 0; i < numGizmos; ++i) { delete gizmos[i]; }
-        delete gizmoTexture;
-        delete gizmoShader;
 
         // delete the vao. vbo, and ebo
         glDeleteVertexArrays(1, &vaoID);

@@ -238,6 +238,7 @@ if exist "include/GLM/glm/glm.hpp.gch" (
 pushd "build"
 
 @REM Compiling with g++
+@REM todo for final build remove -g and add -O3
 g++ -g -DUNICODE -D_UNICODE -std=c++17 ../src/*.cpp -o main -I../include -L../lib -l:libglfw3.a -l:libglew32.a -l:libglew32.dll.a -l:libglew32mx.a -l:libglew32mx.dll.a -l:libimgui.a -lOpengl32 -lGdi32
 
 popd

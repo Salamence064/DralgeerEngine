@@ -11,12 +11,12 @@ namespace Dralgeer {
     // * ================================================
     // * Level Editor Class
 
-    // todo update for the rebufferZIndex bool
+    // todo need to update dt even when physicsUpdate isn't true
     void LevelEditorScene::update(float &dt, bool wantCapture, bool physicsUpdate) {
         camera.adjustProjection();
 
         if (physicsUpdate) {
-            physicsHandler.update(dt);
+            // physicsHandler.update(dt);
 
         } else {
             editorCamera.update(dt, wantCapture);
@@ -167,13 +167,10 @@ namespace Dralgeer {
         return *this;
     };
 
-    LevelEditorScene::~LevelEditorScene() { // todo destructor causes a crash despite reaching end
-        if (gameObjects) { std::cout << "amazing\n"; }
-
-        for (int i = 0; i < numObjects; ++i) { std::cout << "wtf\n"; delete gameObjects[i]; }
+    // todo the Zeta::Handler and adding gizmos to the GizmoBatch both cause crashing when calling the LevelEditorScene's destructor
+    LevelEditorScene::~LevelEditorScene() {
+        for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
         delete[] gameObjects;
-
-        std::cout << "hmmm\n";
     };
 
     void LevelEditorScene::init() {
@@ -190,10 +187,10 @@ namespace Dralgeer {
         gizmoSystem.init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
         gizmoSystem.start();
 
-        renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
-        renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
-        renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
-        renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].yObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].yObject->sprite);
     };
 
 
