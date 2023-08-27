@@ -473,6 +473,8 @@ namespace Zeta {
             inline Handler& operator = (Handler&& handler) { throw std::runtime_error("PhysicsHandler object CANNOT be reassigned to another PhysicsHandler."); };
 
             inline ~Handler() {
+                std::cout << "howdy\n";
+
                 // If one of the pointers is not NULL, none of them are.
                 if (rbs.rigidBodies) {
                     // * Bodies
@@ -529,6 +531,8 @@ namespace Zeta {
                     for (int i = 0; i < kColWrapper.count; ++i) { delete[] kColWrapper.manifolds[i].contactPoints; }
                     delete[] kColWrapper.manifolds;
                 }
+
+                std::cout << "Howdy once more\n";
             };
 
 

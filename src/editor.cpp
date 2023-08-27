@@ -52,7 +52,7 @@ namespace Dralgeer {
         }
 
         if (ImGui::MenuItem("Stop", "", !isPlaying, isPlaying)) {
-            isPlaying = 1;
+            isPlaying = 0;
             EventSystem::notify(STOP_PLAY);
         }
 

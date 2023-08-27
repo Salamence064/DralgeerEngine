@@ -67,7 +67,7 @@ namespace Dralgeer {
 
             Camera camera;
 
-            inline LevelEditorScene() { gameObjects = new GameObject*[capacity]; }; // todo maybe move this to the init function
+            inline LevelEditorScene() { gameObjects = new GameObject*[capacity]; };
 
 
             // * ===================

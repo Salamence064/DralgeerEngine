@@ -40,6 +40,7 @@
 // - fix the EventSystem from causing crashes
 // - port over the ImGui stuff to fully furnish the properties window
 // - fix the transparent portions displaying on top of non-transparent portions of other sprites
+// - add a check to see if there are 0 objects, if so, do not create a .scene file
 // // - port over the event system
 // // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
@@ -64,13 +65,13 @@ namespace Dralgeer {
 
     // Model a window
     namespace Window {
-        static WindowData data;
-        static GLFWwindow* window;
+        extern WindowData data;
+        extern GLFWwindow* window;
         extern Scene currScene;
 
         extern ImGuiLayer imGuiLayer;
-        static FrameBuffer frameBuffer;
-        static PickingTexture* pickingTexture;
+        extern FrameBuffer frameBuffer;
+        extern PickingTexture* pickingTexture;
 
         // static bool initGamepadState = 1;
         // static GLFWgamepadstate gamepadState;
@@ -85,20 +86,28 @@ namespace Dralgeer {
                     newScene->importScene();
                     newScene->start();
 
+                    std::cout << "Hi there\n";
+
                     // free the memory of the old scene
-                    switch(currScene.type) {
-                        case LEVEL_EDITOR_SCENE: { delete (LevelEditorScene*) currScene.scene; break; }
-                    }
+                    // switch(currScene.type) { // todo for some reason does not progress passed the delete call (but it finishes the delete call)
+                    //     case LEVEL_EDITOR_SCENE: { delete ((LevelEditorScene*) currScene.scene); std::cout << "ha\n"; break; }
+                    // }
+
+                    // todo when we run the destructor it causes a crash
+
+                    std::cout << "haha\n";
 
                     currScene.scene = newScene;
                     currScene.type = LEVEL_EDITOR_SCENE;
 
                     break;
                 }
+
+                std::cout << "??\n";
             }
         };
 
-        inline static void init(uint16_t width, uint16_t height, std::string const &title) {
+        inline void init(uint16_t width, uint16_t height, std::string const &title) {
             data = {width, height, title};
 
             // error callback
@@ -162,11 +171,22 @@ namespace Dralgeer {
             scene->init();
             scene->importScene();
             scene->start();
-            currScene.scene = scene;
+            // currScene.scene = scene;
             currScene.type = LEVEL_EDITOR_SCENE;
+
+            // ! debug
+            std::cout << "heehee\n";
+            delete scene;
+            // delete ((LevelEditorScene*) currScene.scene);
+            std::cout << "Bahaha\n";
+            scene = new LevelEditorScene();
+            scene->init();
+            scene->importScene();
+            scene->start();
+            currScene.scene = scene;
         };
 
-        inline static void run() { // todo see where the stuff gets called from in here and try to see if there are any strange instances in it that would cause one to work but not the other
+        inline void run() {
             float startTime = (float) glfwGetTime(), endTime;
             float dt = 0.0f;
 
@@ -276,9 +296,9 @@ namespace Dralgeer {
         inline void onNotify(EventType event, GameObject* go) { // todo onNotify function called through EventSystem causes consistent crashing when it comes to other objects
             switch(event) {
                 case START_PLAY: {
-                    switch(currScene.type) {
-                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); break; }
-                    }
+                    // switch(currScene.type) {
+                    //     case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); break; }
+                    // }
 
                     runtimePlaying = 1;
                     break;
@@ -286,6 +306,15 @@ namespace Dralgeer {
 
                 case STOP_PLAY: {
                     runtimePlaying = 0;
+
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { // todo regardless of where we do it, deleting the currScene.scene pointer crashes the program
+                            LevelEditorScene* scene = ((LevelEditorScene*) currScene.scene);
+                            delete scene;
+                            break;
+                        }
+                    }
+
                     changeScene(LEVEL_EDITOR_SCENE);
                     break;
                 }
@@ -302,6 +331,8 @@ namespace Dralgeer {
 
                     break;
                 }
+
+                // todo could add a zIndex update thing here
 
                 case ADD_GAMEOBJECT_TO_SCENE: {
                     switch(currScene.type) {

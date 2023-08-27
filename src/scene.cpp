@@ -167,9 +167,13 @@ namespace Dralgeer {
         return *this;
     };
 
-    LevelEditorScene::~LevelEditorScene() {
-        for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
+    LevelEditorScene::~LevelEditorScene() { // todo destructor causes a crash despite reaching end
+        if (gameObjects) { std::cout << "amazing\n"; }
+
+        for (int i = 0; i < numObjects; ++i) { std::cout << "wtf\n"; delete gameObjects[i]; }
         delete[] gameObjects;
+
+        std::cout << "hmmm\n";
     };
 
     void LevelEditorScene::init() {
