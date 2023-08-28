@@ -14,12 +14,9 @@ namespace Dralgeer {
     
     // Do not have to delete the textures as the sprites should take care of that for us.
     RenderBatch::~RenderBatch() {
-        
-
         for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }
-        for (int i = 0; i < numTextures; ++i) { delete textures[i]; }
 
-        // delete the vao. vbo, and ebo
+        // delete the vao, vbo, and ebo
         glDeleteVertexArrays(1, &vaoID);
         glDeleteBuffers(1, &vboID);
         glDeleteBuffers(1, &eboID);
