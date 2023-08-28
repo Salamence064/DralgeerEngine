@@ -168,6 +168,9 @@ namespace Dralgeer {
     };
 
     // todo the Zeta::Handler and adding gizmos to the GizmoBatch both cause crashing when calling the LevelEditorScene's destructor
+    
+    // todo when there are sprites added to the scene, it causes a crash on destruction
+    // todo in other words, when there are sprites for a RenderBatch or GizmoBatch to handle, it causes a crash
     LevelEditorScene::~LevelEditorScene() {
         for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
         delete[] gameObjects;
