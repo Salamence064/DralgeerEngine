@@ -86,24 +86,19 @@ namespace Dralgeer {
                     newScene->importScene();
                     newScene->start();
 
-                    std::cout << "Hi there\n";
+                    std::cout << "Remember to fix the LevelEditorScene destructor\n";
 
+                    // todo this causes a problem still
                     // free the memory of the old scene
                     // switch(currScene.type) { // todo for some reason does not progress passed the delete call (but it finishes the delete call)
-                    //     case LEVEL_EDITOR_SCENE: { delete ((LevelEditorScene*) currScene.scene); std::cout << "ha\n"; break; }
+                    //     case LEVEL_EDITOR_SCENE: { delete ((LevelEditorScene*) currScene.scene); break; }
                     // }
-
-                    // todo when we run the destructor it causes a crash
-
-                    std::cout << "haha\n";
 
                     currScene.scene = newScene;
                     currScene.type = LEVEL_EDITOR_SCENE;
 
                     break;
                 }
-
-                std::cout << "??\n";
             }
         };
 
@@ -271,7 +266,7 @@ namespace Dralgeer {
         inline static void destroy() {
             // free the memory of the scene
             switch(currScene.type) {
-                case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); delete (LevelEditorScene*) currScene.scene; break; }
+                case LEVEL_EDITOR_SCENE: { delete (LevelEditorScene*) currScene.scene; break; }
             }
 
             DebugDraw::destroy();
@@ -297,7 +292,7 @@ namespace Dralgeer {
                     runtimePlaying = 0;
 
                     switch(currScene.type) {
-                        case LEVEL_EDITOR_SCENE: { // todo regardless of where we do it, deleting the currScene.scene pointer crashes the program
+                        case LEVEL_EDITOR_SCENE: {
                             LevelEditorScene* scene = ((LevelEditorScene*) currScene.scene);
                             delete scene;
                             break;
