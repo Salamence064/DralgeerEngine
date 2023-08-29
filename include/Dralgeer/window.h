@@ -282,12 +282,12 @@ namespace Dralgeer {
             glfwTerminate();
         };
 
-        inline void onNotify(EventType event, GameObject* go) { // todo onNotify function called through EventSystem causes consistent crashing when it comes to other objects
+        inline void onNotify(EventType event, GameObject* go) {
             switch(event) {
                 case START_PLAY: {
-                    // switch(currScene.type) {
-                    //     case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); break; }
-                    // }
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { ((LevelEditorScene*) currScene.scene)->exportScene(); break; }
+                    }
 
                     runtimePlaying = 1;
                     break;
