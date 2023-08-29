@@ -86,13 +86,10 @@ namespace Dralgeer {
                     newScene->importScene();
                     newScene->start();
 
-                    std::cout << "Remember to fix the LevelEditorScene destructor\n";
-
-                    // todo this causes a problem still
                     // free the memory of the old scene
-                    // switch(currScene.type) { // todo for some reason does not progress passed the delete call (but it finishes the delete call)
-                    //     case LEVEL_EDITOR_SCENE: { delete ((LevelEditorScene*) currScene.scene); break; }
-                    // }
+                    switch(currScene.type) {
+                        case LEVEL_EDITOR_SCENE: { delete ((LevelEditorScene*) currScene.scene); break; }
+                    }
 
                     currScene.scene = newScene;
                     currScene.type = LEVEL_EDITOR_SCENE;
@@ -290,15 +287,6 @@ namespace Dralgeer {
 
                 case STOP_PLAY: {
                     runtimePlaying = 0;
-
-                    switch(currScene.type) {
-                        case LEVEL_EDITOR_SCENE: {
-                            LevelEditorScene* scene = ((LevelEditorScene*) currScene.scene);
-                            delete scene;
-                            break;
-                        }
-                    }
-
                     changeScene(LEVEL_EDITOR_SCENE);
                     break;
                 }
