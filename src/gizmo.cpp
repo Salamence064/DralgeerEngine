@@ -147,6 +147,9 @@ namespace Dralgeer {
     void Gizmo::update() {
         if (!inUse) { return; }
 
+        xObject->update();
+        yObject->update();
+
         if (activeObject) {
             switch (gizmoType) {
                 case SCALE_GIZMO: {
