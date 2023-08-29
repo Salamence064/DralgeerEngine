@@ -140,6 +140,8 @@ namespace Dralgeer {
                 batches[n].addSprite(spr);
             };
 
+            inline void addGizmo(SpriteRenderer* spr) { gizmoBatch.addGizmo(spr); };
+
             // remove a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
             inline bool destroy(SpriteRenderer* spr) {

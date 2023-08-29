@@ -173,16 +173,6 @@ namespace Dralgeer {
             scene->start();
             currScene.scene = scene;
             currScene.type = LEVEL_EDITOR_SCENE;
-
-            // ! debug
-            std::cout << "heehee\n";
-            delete ((LevelEditorScene*) currScene.scene);
-            std::cout << "Bahaha\n";
-            scene = new LevelEditorScene();
-            scene->init();
-            scene->importScene();
-            scene->start();
-            currScene.scene = scene;
         };
 
         inline void run() {

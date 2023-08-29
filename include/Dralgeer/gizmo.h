@@ -83,6 +83,7 @@ namespace Dralgeer {
 
         public:
             bool inUse = 0; // Remember to call setInactive after setting this to 0.
+            // todo consider removing the GameObjects entirely and just doing the SpriteRenderer
             GameObject* xObject = nullptr;
             GameObject* yObject = nullptr;
 
