@@ -149,14 +149,14 @@ namespace Dralgeer {
 
         if (activeObject) {
             switch (gizmoType) {
-                case SCALE_GIZMO: { // todo can probs remove the !yActive part of the check
-                    if (xActive && !yActive) { activeObject->transform.scale.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
+                case SCALE_GIZMO: {
+                    if (xActive) { activeObject->transform.scale.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
                     else if (yActive) { activeObject->transform.scale.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }
                     break;
                 }
 
                 case TRANSLATE_GIZMO: {
-                    if (xActive && !yActive) { activeObject->transform.pos.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
+                    if (xActive) { activeObject->transform.pos.x -= MouseListener::mLastWorldX - MouseListener::mWorldX; }
                     else if (yActive) { activeObject->transform.pos.y -= MouseListener::mLastWorldY - MouseListener::mWorldY; }
                     break;
                 }

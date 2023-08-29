@@ -49,39 +49,11 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    class GizmoBatch {
-        private:
-            Shader* gizmoShader; // Note: we do not need to delete this as the AssetPool will handle this for us.
-            SpriteRenderer* gizmos[GIZMO_BATCH_SIZE];
-            float vertices[GIZMO_BATCH_VERTICES_SIZE] = {0};
-            Texture* gizmoTexture; // We will store this texture at slot 16 on the GPU (AssetPool will delete it for us)
-            unsigned int vaoID, vboID, eboID;
-            int numGizmos = 0;
-
-            void loadVertexProperties(int index);
-
-        public:
-            GizmoBatch();
-
-            GizmoBatch(GizmoBatch const &gb);
-            GizmoBatch(GizmoBatch &&gb);
-            GizmoBatch& operator = (GizmoBatch const &gb);
-            GizmoBatch& operator = (GizmoBatch &&gb);
-            ~GizmoBatch();
-            
-            void addGizmo(SpriteRenderer* spr);
-
-            // call before adding any gizmos
-            void init();
-            void render(Camera const &cam);
-    };
-
     class Renderer {
         private:
             RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
-            GizmoBatch gizmoBatch;
 
             inline void addBatch(int n) {
                 // determine the spot to put the index in using a modified binary search
@@ -121,8 +93,6 @@ namespace Dralgeer {
         public:
             inline Renderer() {};
 
-            inline void init() { gizmoBatch.init(); };
-
             inline void add(SpriteRenderer* spr) {
                 if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
 
@@ -139,8 +109,6 @@ namespace Dralgeer {
                 if (batches[n].numSprites == 0) { addBatch(n); }
                 batches[n].addSprite(spr);
             };
-
-            inline void addGizmo(SpriteRenderer* spr) { gizmoBatch.addGizmo(spr); };
 
             // remove a sprite renderer contained in the renderer
             // returns 1 if it successfully found and destroyed it and 0 otherwise
@@ -162,7 +130,7 @@ namespace Dralgeer {
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
-                gizmoBatch.render(cam);
+                // gizmoBatch.render(cam);
             };
 
             // update the list of zIndices when called

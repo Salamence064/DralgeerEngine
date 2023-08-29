@@ -37,16 +37,17 @@
 // // - port over gizmos
 // // - setup physics (update Zeta2D, too)
 // // - setup serialization
-// - fix the EventSystem from causing crashes
+// // - fix the EventSystem from causing crashes
 // - port over the ImGui stuff to fully furnish the properties window
 // - fix the transparent portions displaying on top of non-transparent portions of other sprites
 // - add a check to see if there are 0 objects, if so, do not create a .scene file
+// - add shortcuts for Saving and Loading scenes
 // // - port over the event system
 // // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
 // // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
 // - go through the rest of the 2D engine series and see what final things I need to add
-// - make a scene selector in the level editor scene
+// - make a scene selector in the level editor scene (flesh out scene selector and saver basically)
 // - add observers
 // - make it so the scene can be scrolled through with the mouse and zoomed in and out of (only if needed)
 // ===================================================================
@@ -99,7 +100,7 @@ namespace Dralgeer {
             }
         };
 
-        inline void init(uint16_t width, uint16_t height, std::string const &title) {
+        inline void init(int width, int height, std::string const &title) {
             data = {width, height, title};
 
             // error callback

@@ -39,9 +39,6 @@ namespace Dralgeer {
             // * ====================
 
             inline void setActive() {
-                xSprite->color = xColor;
-                ySprite->color = yColor;
-
                 if (xSprite->transform.pos != activeObject->sprite->transform.pos) {
                     xSprite->transform.pos = activeObject->sprite->transform.pos + xOffset;
                     ySprite->transform.pos = activeObject->sprite->transform.pos + yOffset;
@@ -83,7 +80,6 @@ namespace Dralgeer {
 
         public:
             bool inUse = 0; // Remember to call setInactive after setting this to 0.
-            // todo consider removing the GameObjects entirely and just doing the SpriteRenderer
             GameObject* xObject = nullptr;
             GameObject* yObject = nullptr;
 
@@ -101,7 +97,6 @@ namespace Dralgeer {
             // * Constructors
             // * ====================
 
-            // todo current gizmo system is not ideal but fairly good. Will improve later
             Gizmo() {};
 
             // * Note, components attached to both of the GameObjects attached to mc will not be attached to the GameObjects contained in this.

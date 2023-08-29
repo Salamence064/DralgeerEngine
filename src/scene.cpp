@@ -190,12 +190,10 @@ namespace Dralgeer {
         gizmoSystem.init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
         gizmoSystem.start();
 
-        renderer.init();
-
-        renderer.addGizmo(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
-        renderer.addGizmo(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
-        renderer.addGizmo(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
-        renderer.addGizmo(gizmoSystem.gizmos[SCALE_GIZMO].yObject->sprite);
+        renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
+        renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
+        renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
+        renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].yObject->sprite);
     };
 
 
