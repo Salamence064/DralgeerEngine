@@ -85,6 +85,27 @@ namespace Dralgeer {
         propertiesWindow.update(dt, currScene, sceneType, gameViewWindow.getWantCaptureMouse());
         propertiesWindow.imGui();
 
+        // * ------ Display the MenuBar ------
+
+        ImGui::BeginMainMenuBar();
+
+        // todo make the hotkeys work later
+        if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Save", "Ctrl+S")) {
+                EventSystem::notify(SAVE_LEVEL);
+            }
+
+            if (ImGui::MenuItem("Load", "Ctrl+O")) {
+                EventSystem::notify(LOAD_LEVEL);
+            }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+
+        // * ---------------------------------
+
         ImGui::End();
         ImGui::Render();
 
