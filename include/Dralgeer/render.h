@@ -162,7 +162,7 @@ namespace Dralgeer {
             // render each batch
             inline void render(Shader const &currShader, Camera const &cam) {
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
-                // gizmoBatch.render(cam);
+                gizmoBatch.render(cam);
             };
 
             // update the list of zIndices when called

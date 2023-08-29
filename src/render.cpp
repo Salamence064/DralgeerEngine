@@ -353,7 +353,7 @@ namespace Dralgeer {
         glEnableVertexAttribArray(4);
     };
 
-    void GizmoBatch::render(Camera const &cam) {
+    void GizmoBatch::render(Camera const &cam) { // todo honestly might get rid of the stupid GizmoBatch system
         bool rebuffer = 0;
 
         for (int i = 0; i < numGizmos; ++i) {

@@ -37,7 +37,7 @@ namespace Dralgeer {
             GizmoSystem gizmoSystem;
 
             Renderer renderer;
-            // Zeta::Handler physicsHandler;
+            Zeta::Handler physicsHandler;
 
 
             // * ====================
