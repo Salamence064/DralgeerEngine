@@ -215,6 +215,21 @@ namespace Dralgeer {
                         // todo put this segment in the dt loop when I set it up -------------------
                         // update the scene
                         activeScene->update(dt, imGuiLayer.gameViewWindow.getWantCaptureMouse(), runtimePlaying);
+
+                        // todo add stuff for actually navigating a file system to select different scene
+                        // check for hotkeys pressed
+                        if ((KeyListener::keyPressed[GLFW_KEY_LEFT_CONTROL] || KeyListener::keyPressed[GLFW_KEY_RIGHT_CONTROL]) &&
+                                KeyListener::keyPressed[GLFW_KEY_S])
+                        { // save hotkey
+                            activeScene->exportScene();
+
+                        } else if ((KeyListener::keyPressed[GLFW_KEY_LEFT_CONTROL] || KeyListener::keyPressed[GLFW_KEY_RIGHT_CONTROL]) &&
+                                KeyListener::keyPressed[GLFW_KEY_O])
+                        { // load scene hotkey
+                            // todo issue with crashing when this hotkey is used
+                            changeScene(LEVEL_EDITOR_SCENE);
+                        }
+
                         // -------------------------------------------------------------------------
 
                         glDisable(GL_DEPTH_TEST);

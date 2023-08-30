@@ -167,10 +167,7 @@ namespace Dralgeer {
         return *this;
     };
 
-    // todo the Zeta::Handler and adding gizmos to the GizmoBatch both cause crashing when calling the LevelEditorScene's destructor
-    
-    // todo when there are sprites added to the scene, it causes a crash on destruction
-    // todo in other words, when there are sprites for a RenderBatch or GizmoBatch to handle, it causes a crash
+    // todo crashes when the gizmoObjects are added to the scene
     LevelEditorScene::~LevelEditorScene() {
         for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
         delete[] gameObjects;
@@ -190,10 +187,12 @@ namespace Dralgeer {
         gizmoSystem.init(AssetPool::getSpriteSheet("../../assets/images/gizmos.png"));
         gizmoSystem.start();
 
-        renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
-        renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
-        renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
-        renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].yObject->sprite);
+        std::cout << "Remember to uncomment the gizmos and fix the bug with them\n";
+
+        // renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
+        // renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].yObject->sprite);
     };
 
 
