@@ -166,7 +166,7 @@ namespace Dralgeer {
             }
         }
 
-        activeObject = Window::getActiveObject();
+        activeObject = Window::getActiveObject(); // todo instead ping the event system to get the active object
         if (!activeObject) { setInactive(); return; }
         setActive();
 

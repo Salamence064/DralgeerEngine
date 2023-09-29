@@ -26,7 +26,7 @@
 // todo it feels as if there's a leak somewhere, especially noticeable with large number of GameObjects
 
 // ===================================================================
-// List of what to fix
+// List of what to do
 // // - Framebuffer causes screen tearing
 // // - ImGui docking space
 // // - Get GridLines to draw in the gameview window (this will be accomplished when the framebuffer works to properly draw to the gameview window)
@@ -39,17 +39,32 @@
 // // - setup serialization
 // // - fix the EventSystem from causing crashes
 // - port over the ImGui stuff to fully furnish the properties window
-// - fix the transparent portions displaying on top of non-transparent portions of other sprites
+// - fix the transparent portions displaying on top of non-transparent portions of other sprites (ahhhhhhhhh)
 // - add a check to see if there are 0 objects, if so, do not create a .scene file
-// - add shortcuts for Saving and Loading scenes
+// - add shortcuts for Saving and Loading scenes (kinda added but bugged)
 // // - port over the event system
 // // - make the stuff void* with an enum
 // - fix the rule of 5 operators for the classes I have them for
 // // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
+// - optimize my serialization format
 // - go through the rest of the 2D engine series and see what final things I need to add
 // - make a scene selector in the level editor scene (flesh out scene selector and saver basically)
 // - add observers
 // - make it so the scene can be scrolled through with the mouse and zoomed in and out of (only if needed)
+// ===================================================================
+
+// ===================================================================
+// Some fun bugs to fix -- yayyyyyy :(
+// - picking texture framebuffer requires multiplication by 2 in glReadPixel call when this shouldn't be necessary
+//      - It still doesnt fully work for clicks sufficient far enough top-right
+//      - This bug stumped me for a good 2-3 weeks before I just called it quits
+//      - Try to fix at your own sanity's risk
+// - ctrl + O load scene hotkey crashes the program -- likely a null pointer or trying to read deleted data
+// - gizmos can cause crashing sometimes when added to the levelEditorScene (uncomment to try to fix)
+// - transparent part of gizmos displays on top of the non-transparent parts of other sprites
+// - likely some memory leaks somewhere
+// - rule of 5 operators for some classes are fucked (will fix when not feeling too lazy)
+// - likely some graphical memory leaks somewhere (look for stuff still bound or undeleted by the time they are out of scope)
 // ===================================================================
 
 #include "event.h"
@@ -227,6 +242,7 @@ namespace Dralgeer {
                                 KeyListener::keyPressed[GLFW_KEY_O])
                         { // load scene hotkey
                             // todo issue with crashing when this hotkey is used
+                            // todo this only fails when the LevelEditorScene destructor is called
                             changeScene(LEVEL_EDITOR_SCENE);
                         }
 

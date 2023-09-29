@@ -16,7 +16,7 @@ namespace Dralgeer {
         camera.adjustProjection();
 
         if (physicsUpdate) {
-            // physicsHandler.update(dt);
+            physicsHandler.update(dt);
 
         } else {
             editorCamera.update(dt, wantCapture);
@@ -189,6 +189,8 @@ namespace Dralgeer {
 
         std::cout << "Remember to uncomment the gizmos and fix the bug with them\n";
 
+        // todo do I even need gizmos?
+
         // renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].xObject->sprite);
         // renderer.add(gizmoSystem.gizmos[TRANSLATE_GIZMO].yObject->sprite);
         // renderer.add(gizmoSystem.gizmos[SCALE_GIZMO].xObject->sprite);
@@ -265,6 +267,10 @@ namespace Dralgeer {
     // };
 
     void LevelEditorScene::exportScene() {
+        using u32 = uint32_t;
+        using u16 = uint16_t;
+        using u8 = uint8_t;
+
         int objects = 0;
 
         // count the number of serializable GameObjects
