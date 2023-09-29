@@ -2,6 +2,9 @@
 
 #pragma once
 
+// determine if the architecture is little or big endian
+#define IS_BIG_ENDIAN (*(uint16_t *)"\0\xff" < 0x100)
+
 // Width and height of a grid tile in pixels
 #define GRID_WIDTH 32
 #define GRID_HEIGHT 32

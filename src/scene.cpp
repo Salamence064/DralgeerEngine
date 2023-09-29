@@ -7,6 +7,8 @@
 #include <fstream>
 #include <Dralgeer/systemmessages.h>
 
+// todo force gameObject positions and transforms to be uint16s
+
 namespace Dralgeer {
     // * ================================================
     // * Level Editor Class
@@ -271,7 +273,7 @@ namespace Dralgeer {
         using u16 = uint16_t;
         using u8 = uint8_t;
 
-        int objects = 0;
+        u16 objects = 0;
 
         // count the number of serializable GameObjects
         for (int i = 0; i < numObjects; ++i) { if (gameObjects[i]->serialize) { ++objects; }}

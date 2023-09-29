@@ -255,7 +255,41 @@ namespace Dralgeer {
     };
 
     void GameObject::exportGameObject(std::string const &filepath) {
-        std::fstream f(filepath, std::fstream::app);
+        using u32 = uint32_t;
+        using u16 = uint16_t;
+        using u8 = uint8_t;
+
+        // convert the color values to u8
+        u8 r = (u8) (sprite->color.x * 255);
+        u8 g = (u8) (sprite->color.y * 255);
+        u8 b = (u8) (sprite->color.z * 255);
+        u8 a = (u8) (sprite->color.w * 255);
+
+        // color and sprite dimensions bitmaps
+        u32 colorMap = r<<24|g<<16|b<<8|a;
+        u32 whMap = (u16) (sprite->sprite.width) << 16|(u16) (sprite->sprite.height);
+
+        // convert the strings to c-strings
+        const char* nameC = name.c_str();
+        const char* filepathC = sprite->sprite.texture->filepath.c_str();
+
+        std::fstream f(filepath, std::ios::out | std::ios::binary | std::fstream::app);
+
+        f.write(nameC, sizeof(nameC));
+        f.write((const char*) &colorMap, sizeof(colorMap));
+        f.write((const char*) &whMap, sizeof(whMap));
+        f.write(filepathC, sizeof(filepathC));
+
+        // todo figure out a way to store the floats efficiently
+        // todo we could choose a certain level of precision to retain
+
+        // todo for zIndex we can choose to add 1000 to the value then store it as a 12bit number.
+        // todo This leaves us with 20bits to work with for our rotation value
+        // todo For rotation value: we can store it as a 9 bit number ([0, 360]) and convert any angles outside that range to within that range
+        // todo we can then use additional bits to store decimal values.
+        // todo If we take 1 decimal point of precision for the rotation and both positions, we could store it as a 3 digit number with each digit
+        // todo corresponding to a decimal. This ends up requiring 10bits of precision. We do not need the last bit for anything
+
 
         f << "GameObject: {\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
         f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t\t";
