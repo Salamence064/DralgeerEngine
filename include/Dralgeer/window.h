@@ -67,6 +67,8 @@
 // - likely some graphical memory leaks somewhere (look for stuff still bound or undeleted by the time they are out of scope)
 // ===================================================================
 
+// todo will need to ensure limits for zIndex, positions, and scale values are enforced
+
 #include "event.h"
 #include "imguilayer.h"
 #include "listeners.h"

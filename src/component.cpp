@@ -255,19 +255,28 @@ namespace Dralgeer {
     };
 
     void GameObject::exportGameObject(std::string const &filepath) {
-        using u32 = uint32_t;
-        using u16 = uint16_t;
-        using u8 = uint8_t;
+        // bitmaps for serializing
+        uint32_t colorMap = ((uint8_t) (sprite->color.x * 255) << 24)|((uint8_t) (sprite->color.y * 255) << 16)|
+                            ((uint8_t) (sprite->color.z * 255) << 8)|((uint8_t) (sprite->color.w * 255));
+        uint32_t whMap = ((uint16_t) (sprite->sprite.width) << 16)|((uint16_t) (sprite->sprite.height));
 
-        // convert the color values to u8
-        u8 r = (u8) (sprite->color.x * 255);
-        u8 g = (u8) (sprite->color.y * 255);
-        u8 b = (u8) (sprite->color.z * 255);
-        u8 a = (u8) (sprite->color.w * 255);
+        // todo for pos store a bit to indicate if it's negative or not, too
+        uint32_t posMap = ((uint16_t) (transform.pos.x) << 16)|((uint16_t) (transform.pos.y));
+        uint32_t scaleMap = ((uint16_t) (transform.scale.x) << 16)|((uint16_t) (transform.scale.y));
 
-        // color and sprite dimensions bitmaps
-        u32 colorMap = r<<24|g<<16|b<<8|a;
-        u32 whMap = (u16) (sprite->sprite.width) << 16|(u16) (sprite->sprite.height);
+        // for this bitmap, we first store store the zIndex, then we store the rotation without any decimals
+        //  (ensuring it to be on [0, 360]), and then we store the one decimal precision for both positions 
+        //  and the rotation as a 3-digit number. Finally, we put all of the values into zrdMap
+
+        // todo try to find a better way to calculate dMask. Considering how frequently this is ran, it's not terrible,
+        //  todo but it's also kinda slow
+        uint16_t zMask = transform.zIndex + 1000;
+        uint16_t rMask = (uint16_t) (transform.rotation - std::floorf(transform.rotation/360.0f) * 360) << 7;
+        uint16_t dMask = ((((uint16_t) (transform.pos.x * 10)%10)*100) + (((uint16_t) (transform.pos.y * 10)%10)*10) + 
+                        ((uint16_t) (transform.rotation * 10)%10)) << 6;
+
+        uint32_t zrdMap = zMask<<19|rMask<<10|dMask; // more efficient to put the unused bit at the front
+
 
         // convert the strings to c-strings
         const char* nameC = name.c_str();
@@ -280,15 +289,15 @@ namespace Dralgeer {
         f.write((const char*) &whMap, sizeof(whMap));
         f.write(filepathC, sizeof(filepathC));
 
+        // todo textureCoords
+
+        f.write((const char*) &posMap, sizeof(posMap));
+        f.write((const char*) &scaleMap, sizeof(scaleMap));
+        f.write((const char*) &zrdMap, sizeof(zrdMap));
+
         // todo figure out a way to store the floats efficiently
         // todo we could choose a certain level of precision to retain
-
-        // todo for zIndex we can choose to add 1000 to the value then store it as a 12bit number.
-        // todo This leaves us with 20bits to work with for our rotation value
-        // todo For rotation value: we can store it as a 9 bit number ([0, 360]) and convert any angles outside that range to within that range
-        // todo we can then use additional bits to store decimal values.
-        // todo If we take 1 decimal point of precision for the rotation and both positions, we could store it as a 3 digit number with each digit
-        // todo corresponding to a decimal. This ends up requiring 10bits of precision. We do not need the last bit for anything
+        // todo figure out a reasonable level of precision for texture coordinates
 
 
         f << "GameObject: {\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
