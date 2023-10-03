@@ -4,6 +4,8 @@
 #include "prefabs.h"
 
 namespace Dralgeer {
+    // todo for gizmos we could just store the xSprite and the ySprite instead of also storing gameObjects for both
+
     enum GizmoType {
         TRANSLATE_GIZMO = 0,
         SCALE_GIZMO

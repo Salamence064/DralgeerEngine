@@ -47,10 +47,19 @@
 // - fix the rule of 5 operators for the classes I have them for
 // // - fix the renderer thing by making it a class and adding the zIndex stuff (test to see if buffering greater than the max buffer size causes an error)
 // - optimize my serialization format
-// - go through the rest of the 2D engine series and see what final things I need to add
-// - make a scene selector in the level editor scene (flesh out scene selector and saver basically)
+// - Font Renderer
+// - Scene Hierarchy (allow for scene progression and for subscenes if one was to enter a subarea for instance)
+// - Scene Panel which implies we make a scene selector in the level editor scene (flesh out scene selector and saver basically)
+// - Update the level editor to only allow for the import of root scenes (root scenes can store additional scenes and would not be imported by any other scene)
+// - For the scene hierarchy, allow for the root scenes to be placed in order for game progression (and insert nodes in the main part that would trigger scene hierarchy progression)
+// - Animations
+// - Sounds with OpenAL
+// - player controls + kinematic bodies
+// - pillbox collider for player to make for smoother edges on collisions
+// - add in effects to make player movement feel more crisp
 // - add observers
-// - make it so the scene can be scrolled through with the mouse and zoomed in and out of (only if needed)
+// - game specific stuff (enemy AI, items, spells, discovery thing, pre-loading rooms, runes, etc)
+// - Optimize stuff
 // ===================================================================
 
 // ===================================================================

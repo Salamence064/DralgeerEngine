@@ -256,49 +256,50 @@ namespace Dralgeer {
 
     void GameObject::exportGameObject(std::string const &filepath) {
         // bitmaps for serializing
-        uint32_t colorMap = ((uint8_t) (sprite->color.x * 255) << 24)|((uint8_t) (sprite->color.y * 255) << 16)|
-                            ((uint8_t) (sprite->color.z * 255) << 8)|((uint8_t) (sprite->color.w * 255));
-        uint32_t whMap = ((uint16_t) (sprite->sprite.width) << 16)|((uint16_t) (sprite->sprite.height));
+        // uint32_t colorMap = ((uint8_t) (sprite->color.x * 255) << 24)|((uint8_t) (sprite->color.y * 255) << 16)|
+        //                     ((uint8_t) (sprite->color.z * 255) << 8)|((uint8_t) (sprite->color.w * 255));
+        // uint32_t whMap = ((uint16_t) (sprite->sprite.width) << 16)|((uint16_t) (sprite->sprite.height));
 
-        // todo for pos store a bit to indicate if it's negative or not, too
-        uint32_t posMap = ((uint16_t) (transform.pos.x) << 16)|((uint16_t) (transform.pos.y));
-        uint32_t scaleMap = ((uint16_t) (transform.scale.x) << 16)|((uint16_t) (transform.scale.y));
+        // // todo for pos store a bit to indicate if it's negative or not, too
+        // uint32_t posMap = ((uint16_t) (transform.pos.x) << 16)|((uint16_t) (transform.pos.y));
+        // uint32_t scaleMap = ((uint16_t) (transform.scale.x) << 16)|((uint16_t) (transform.scale.y));
 
-        // for this bitmap, we first store store the zIndex, then we store the rotation without any decimals
-        //  (ensuring it to be on [0, 360]), and then we store the one decimal precision for both positions 
-        //  and the rotation as a 3-digit number. Finally, we put all of the values into zrdMap
+        // // for this bitmap, we first store store the zIndex, then we store the rotation without any decimals
+        // //  (ensuring it to be on [0, 360]), and then we store the one decimal precision for both positions 
+        // //  and the rotation as a 3-digit number. Finally, we put all of the values into zrdMap
 
-        // todo try to find a better way to calculate dMask. Considering how frequently this is ran, it's not terrible,
-        //  todo but it's also kinda slow
-        uint16_t zMask = transform.zIndex + 1000;
-        uint16_t rMask = (uint16_t) (transform.rotation - std::floorf(transform.rotation/360.0f) * 360) << 7;
-        uint16_t dMask = ((((uint16_t) (transform.pos.x * 10)%10)*100) + (((uint16_t) (transform.pos.y * 10)%10)*10) + 
-                        ((uint16_t) (transform.rotation * 10)%10)) << 6;
+        // // todo try to find a better way to calculate dMask. Considering how frequently this is ran, it's not terrible,
+        // //  todo but it's also kinda slow
+        // uint16_t zMask = transform.zIndex + 1000;
+        // uint16_t rMask = (uint16_t) (transform.rotation - std::floorf(transform.rotation/360.0f) * 360) << 7;
+        // uint16_t dMask = ((((uint16_t) (transform.pos.x * 10)%10)*100) + (((uint16_t) (transform.pos.y * 10)%10)*10) + 
+        //                 ((uint16_t) (transform.rotation * 10)%10)) << 6;
 
-        uint32_t zrdMap = zMask<<19|rMask<<10|dMask; // more efficient to put the unused bit at the front
+        // uint32_t zrdMap = zMask<<19|rMask<<10|dMask; // more efficient to put the unused bit at the front
 
 
-        // convert the strings to c-strings
-        const char* nameC = name.c_str();
-        const char* filepathC = sprite->sprite.texture->filepath.c_str();
+        // // convert the strings to c-strings
+        // const char* nameC = name.c_str();
+        // const char* filepathC = sprite->sprite.texture->filepath.c_str();
 
-        std::fstream f(filepath, std::ios::out | std::ios::binary | std::fstream::app);
+        // std::fstream f(filepath, std::ios::out | std::ios::binary | std::fstream::app);
 
-        f.write(nameC, sizeof(nameC));
-        f.write((const char*) &colorMap, sizeof(colorMap));
-        f.write((const char*) &whMap, sizeof(whMap));
-        f.write(filepathC, sizeof(filepathC));
+        // f.write(nameC, sizeof(nameC));
+        // f.write((const char*) &colorMap, sizeof(colorMap));
+        // f.write((const char*) &whMap, sizeof(whMap));
+        // f.write(filepathC, sizeof(filepathC));
 
-        // todo textureCoords
+        // // todo textureCoords
 
-        f.write((const char*) &posMap, sizeof(posMap));
-        f.write((const char*) &scaleMap, sizeof(scaleMap));
-        f.write((const char*) &zrdMap, sizeof(zrdMap));
+        // f.write((const char*) &posMap, sizeof(posMap));
+        // f.write((const char*) &scaleMap, sizeof(scaleMap));
+        // f.write((const char*) &zrdMap, sizeof(zrdMap));
 
         // todo figure out a way to store the floats efficiently
         // todo we could choose a certain level of precision to retain
         // todo figure out a reasonable level of precision for texture coordinates
 
+        std::fstream f(filepath, std::ios::app);
 
         f << "GameObject: {\n\tname: " << name << ",\n\tsprite: [\n\t\tcolor: ";
         f << sprite->color.x << ", " << sprite->color.y << ", " << sprite->color.z << ", " << sprite->color.w << ",\n\t\t";

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <cmath>
 
 namespace Dralgeer {
     namespace Serializer {
@@ -29,12 +28,8 @@ namespace Dralgeer {
         };
 
         inline void serializeFloat(unsigned char* buffer, size_t &bufferSize, float n) {
-            int exp;
-            float mantissa = std::frexpf(n, &exp);
-
             // todo not sure how you use this to convert the mantissa to a non-float
-            // todo  representation is m * 2^(exp) with m = mantissa
-            
+            // todo  representation is (sign * 2^(exponent-127) * 1.mantissa)
         };
     }
 }
