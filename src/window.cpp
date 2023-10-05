@@ -5,6 +5,7 @@ namespace Dralgeer {
         WindowData data;
         GLFWwindow* window;
         Scene currScene;
+        Stack<RootScenes> sceneController(9);
 
         ImGuiLayer imGuiLayer;
         FrameBuffer frameBuffer;

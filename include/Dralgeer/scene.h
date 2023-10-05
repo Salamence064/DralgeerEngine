@@ -6,6 +6,21 @@
 #include <Zeta2D/physicshandler.h>
 
 namespace Dralgeer {
+    // todo root scenes
+    // todo subscenes
+
+    enum RootScenes {
+        FLOOR1,
+        FLOOR2,
+        FLOOR3,
+        FLOOR4,
+        FLOOR5,
+        FLOOR6,
+        FLOOR7,
+        FLOOR8,
+        FLOOR9
+    };
+
     enum SceneType {
         LEVEL_EDITOR_SCENE
     };

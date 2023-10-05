@@ -90,6 +90,7 @@
 #include "listeners.h"
 #include "render.h"
 #include "debugdraw.h"
+#include "utilities.h"
 
 namespace Dralgeer {
     struct WindowData {
@@ -97,11 +98,12 @@ namespace Dralgeer {
         std::string title;
     };
 
-    // Model a window
+    // Model a window // todo probs make into a class tbh
     namespace Window {
         extern WindowData data;
         extern GLFWwindow* window;
         extern Scene currScene;
+        extern Stack<RootScenes> sceneController;
 
         extern ImGuiLayer imGuiLayer;
         extern FrameBuffer frameBuffer;
@@ -135,6 +137,9 @@ namespace Dralgeer {
 
         inline void init(int width, int height, std::string const &title) {
             data = {width, height, title};
+
+            RootScenes rootScenes[9] = {FLOOR9, FLOOR8, FLOOR7, FLOOR6, FLOOR5, FLOOR4, FLOOR3, FLOOR2, FLOOR1};
+            sceneController.push(rootScenes, 9);
 
             // error callback
             glfwSetErrorCallback(ErrorListener::errorCallback);
