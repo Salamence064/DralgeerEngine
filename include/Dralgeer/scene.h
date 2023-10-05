@@ -6,8 +6,11 @@
 #include <Zeta2D/physicshandler.h>
 
 namespace Dralgeer {
+    // todo this will only be added later after editor stuff is done since each will be custom made
     // todo root scenes
     // todo subscenes
+
+    // todo basically the editor will be used to create the rooms then the rooms will be put into each of the root scenes as subscenes
 
     enum RootScenes {
         FLOOR1,
@@ -18,16 +21,22 @@ namespace Dralgeer {
         FLOOR6,
         FLOOR7,
         FLOOR8,
-        FLOOR9
+        FLOOR9,
+        LEVEL_EDITOR_SCENE
     };
 
-    enum SceneType {
-        LEVEL_EDITOR_SCENE
+    // todo probably use a graph inside of the root scene to determine which subscene to switch to
+
+    // A scene contained within a root scene.
+    // These will be used to represent different rooms or subareas.
+    // The root scene should change subscenes when appropriate.
+    class SubScene {
+        
     };
 
     struct Scene {
         void* scene;
-        SceneType type;
+        RootScenes type;
     };
 
     // todo add a removeGameObject function

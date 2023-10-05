@@ -114,7 +114,7 @@ namespace Dralgeer {
 
         extern bool runtimePlaying; // Is the scene being played? (i.e. are physics active)
 
-        inline void changeScene(SceneType scene) {
+        inline void changeScene(RootScenes scene) {
             switch(scene) {
                 case LEVEL_EDITOR_SCENE: {
                     LevelEditorScene* newScene = new LevelEditorScene();

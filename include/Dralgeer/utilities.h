@@ -107,6 +107,6 @@ namespace Dralgeer {
             };
 
             // pop the top element of the stack
-            inline void pop() { return stack[--count]; };
+            inline void pop() { return std::move(stack[--count]); };
     };
 }
