@@ -38,7 +38,7 @@
 // // - setup physics (update Zeta2D, too)
 // // - setup serialization
 // // - fix the EventSystem from causing crashes
-// - port over the ImGui stuff to fully furnish the properties window
+// // - port over the ImGui stuff to fully furnish the properties window
 // - fix the transparent portions displaying on top of non-transparent portions of other sprites (ahhhhhhhhh)
 // - add a check to see if there are 0 objects, if so, do not create a .scene file
 // - add shortcuts for Saving and Loading scenes (kinda added but bugged)
@@ -53,6 +53,11 @@
 // - Update the level editor to only allow for the import of root scenes (root scenes can store additional scenes and would not be imported by any other scene)
 // - For the scene hierarchy, allow for the root scenes to be placed in order for game progression (and insert nodes in the main part that would trigger scene hierarchy progression)
 // - Animations
+// - Erase mode
+// - copy mode
+// - Select mode
+// - Add something to allow for physics to be added (can reference Java engine for this)
+// - Fill mode
 // - Sounds with OpenAL
 // - player controls + kinematic bodies
 // - pillbox collider for player to make for smoother edges on collisions
