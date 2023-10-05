@@ -1,0 +1,13 @@
+For pre-loading rooms:
+ * render each room to a framebuffer with a single pass when a new root scene is swithced to
+ * Have the root scene control which framebuffer is active
+ * For non-loaded rooms we can wait until the user enters to load dynamic gameobjects
+ * We can load the static walls as just sprites with a single static body encompassing the entire group
+ * We can also represent items or collectables as just the sprite with a collider
+
+TODO (based exclusively on stuff in here):
+ * Update the engine to have a scene be able to store just purely sprites
+ * The engine should also tell, depending on which sprite atlas is active, the type of the sprite
+ * This way, if the sprite atlas for tiles/walls is active, we can treat them as static sprites
+ * If the atlas for enemy sprites is instead selected, we can know we need to store them as objects
+ * This also reduces the space required for serialization as it allows us to store sprites in batches of similar (or identical) sprites

@@ -31,5 +31,8 @@ namespace Dralgeer {
             // todo not sure how you use this to convert the mantissa to a non-float
             // todo  representation is (sign * 2^(exponent-127) * 1.mantissa)
         };
+
+        // todo can just serialize the filename (without extension) of each scene since they will all be stored in the same directory
+        // todo  (since directory will be dependent on type: root or sub)
     }
 }

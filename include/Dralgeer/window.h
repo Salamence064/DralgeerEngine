@@ -57,10 +57,12 @@
 // - player controls + kinematic bodies
 // - pillbox collider for player to make for smoother edges on collisions
 // - add in effects to make player movement feel more crisp
-// - add observers
-// - game specific stuff (enemy AI, items, spells, discovery thing, pre-loading rooms, runes, etc)
+// - add observers (for events)
+// - game specific stuff (enemy AI, items, spells, discovery thing, pre-loading rooms, runes, random room generation, etc.)
 // - Optimize stuff
 // ===================================================================
+
+// todo I think I will begin working on the scene selector, scene hierarchy, and root scenes
 
 // ===================================================================
 // Some fun bugs to fix -- yayyyyyy :(
