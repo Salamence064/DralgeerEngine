@@ -61,6 +61,18 @@ namespace Dralgeer {
     };
 
 
+    // * =====================
+    // * SpriteArea Struct
+    // * =====================
+
+    // Store a sprite and the static area it will occupy.
+    // Used to reduce the memory the engine uses.
+    struct SpriteArea {
+        SpriteRenderer* spr;
+        glm::vec2 min, max;
+    };
+
+
     // * ====================
     // * Game Object Stuff
     // * ====================

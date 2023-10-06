@@ -31,7 +31,7 @@ namespace Dralgeer {
 
             PropertiesWindow() {};
             inline void init(PickingTexture* pickingTexture) { this->pickingTexture = pickingTexture; };
-            void update(float dt, void* currScene, SceneType sceneType, bool wantCapture);
+            void update(float dt, void* currScene, RootScene sceneType, bool wantCapture);
             void imGui() const;
     };
 }

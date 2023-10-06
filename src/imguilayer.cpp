@@ -70,7 +70,7 @@ namespace Dralgeer {
 
     // todo alternatively could make separate overloaded functions for the different scene classes
     // ! for now will do it like this though
-    void ImGuiLayer::update(float dt, void* currScene, SceneType sceneType, unsigned int frameBufferTexID, int windowWidth, int windowHeight) {
+    void ImGuiLayer::update(float dt, void* currScene, RootScene sceneType, unsigned int frameBufferTexID, int windowWidth, int windowHeight) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

@@ -269,7 +269,7 @@ namespace Dralgeer {
     // };
 
     void LevelEditorScene::exportScene() {
-        uint16_t objects = 0;
+        int objects = 0; // todo change to uint_16 when updating the serializer
 
         // count the number of serializable GameObjects
         for (int i = 0; i < numObjects; ++i) { if (gameObjects[i]->serialize) { ++objects; }}

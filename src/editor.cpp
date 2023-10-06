@@ -87,7 +87,7 @@ namespace Dralgeer {
     // * ======================================================
     // * PropertiesWindow Stuff
 
-    void PropertiesWindow::update(float dt, void* currScene, SceneType sceneType, bool wantCapture) {
+    void PropertiesWindow::update(float dt, void* currScene, RootScene sceneType, bool wantCapture) {
         if (!wantCapture) { return; }
 
         debounce -= dt;

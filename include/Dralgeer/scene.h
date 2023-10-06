@@ -13,7 +13,7 @@ namespace Dralgeer {
 
     // todo basically the editor will be used to create the rooms then the rooms will be put into each of the root scenes as subscenes
 
-    enum RootScenes {
+    enum RootScene {
         FLOOR1,
         FLOOR2,
         FLOOR3,
@@ -33,6 +33,7 @@ namespace Dralgeer {
     // The root scene should change subscenes when appropriate.
     class SubScene {
         private:
+            Renderer renderer;
             Zeta::Handler physicsHandler;
 
             SpriteRenderer** sprites = nullptr;
@@ -42,30 +43,38 @@ namespace Dralgeer {
             GameObject** gameObjects = nullptr;
             int gCount = 0;
             int gCapacity;
-            // todo add list of areas + sprites for the static sprites
+            
+            SpriteArea* sa = nullptr;
+            int saCount = 0;
+            int saCapacity;
 
         public:
             FrameBuffer frameBuffer;
+            Camera camera;
 
-            SubScene(int width, int height, int sCapacity, int gCapacity, ZMath::Vec2D const &g = ZMath::Vec2D(0.0f), float timeStep = FPS_60) {
+            inline SubScene(int width, int height, int sCapacity, int gCapacity, int saCapacity,
+                    ZMath::Vec2D const &g = ZMath::Vec2D(0.0f), float timeStep = FPS_60)
+            {
                 frameBuffer.init(width, height);
                 physicsHandler = Zeta::Handler(g, timeStep);
 
                 this->sCapacity = sCapacity;
                 this->gCapacity = gCapacity;
+                this->saCapacity = saCapacity;
                 sprites = new SpriteRenderer*[sCapacity];
                 gameObjects = new GameObject*[gCapacity];
+                sa = new SpriteArea[saCapacity];
             };
 
             // * Do not allow for construction of a SubScene from another SubScene
-            SubScene(SubScene const &ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
-            SubScene(SubScene &&ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
+            inline SubScene(SubScene const &ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
+            inline SubScene(SubScene &&ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
 
             // * Do not allow for reassignment of a SubScene
-            SubScene(SubScene const &ss) { throw std::runtime_error("You cannot reassign a SubScene object."); };
-            SubScene(SubScene &&ss) { throw std::runtime_error("You cannot reassign a SubScene object."); };
+            inline SubScene& operator = (SubScene const &ss) { throw std::runtime_error("You cannot reassign a SubScene object."); };
+            inline SubScene& operator = (SubScene &&ss) { throw std::runtime_error("You cannot reassign a SubScene object."); };
 
-            ~SubScene() {
+            inline ~SubScene() {
                 for (int i = 0; i < sCount; ++i) { delete sprites[i]; }
                 delete[] sprites;
 
@@ -79,7 +88,7 @@ namespace Dralgeer {
             // * ===================
 
             // add a sprite renderer to the subscene
-            void addSprite(SpriteRenderer* spr) {
+            inline void addSprite(SpriteRenderer* spr) {
                 if (sCount == sCapacity) {
                     sCapacity *= 2;
                     SpriteRenderer** temp = new SpriteRenderer*[sCapacity];
@@ -94,7 +103,7 @@ namespace Dralgeer {
             };
 
             // add a game object to the subscene
-            void addGameObject(GameObject* go) {
+            inline void addGameObject(GameObject* go) {
                 if (gCount == gCapacity) {
                     gCapacity *= 2;
                     GameObject** temp = new GameObject*[gCapacity];
@@ -109,7 +118,7 @@ namespace Dralgeer {
             };
 
             // add multiple sprite renderers to the subscene
-            void addSprites(SpriteRenderer** spr, int size) {
+            inline void addSprites(SpriteRenderer** spr, int size) {
                 if (sCount - 1 + size >= sCapacity) {
                     sCapacity += size;
                     SpriteRenderer** temp = new SpriteRenderer*[sCapacity];
@@ -124,7 +133,7 @@ namespace Dralgeer {
             };
 
             // add multiple game objects to the subscene
-            void addSprites(GameObject** go, int size) {
+            inline void addSprites(GameObject** go, int size) {
                 if (gCount - 1 + size >= gCapacity) {
                     gCapacity += size;
                     GameObject** temp = new GameObject*[gCapacity];
@@ -141,7 +150,7 @@ namespace Dralgeer {
 
     struct Scene {
         void* scene;
-        RootScenes type;
+        RootScene type;
     };
 
     // todo add a removeGameObject function
