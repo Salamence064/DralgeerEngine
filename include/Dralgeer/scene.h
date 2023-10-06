@@ -1,5 +1,6 @@
 #pragma once
 
+#include "framebuffer.h"
 #include "gizmo.h"
 #include "render.h"
 #include "event.h"
@@ -31,7 +32,111 @@ namespace Dralgeer {
     // These will be used to represent different rooms or subareas.
     // The root scene should change subscenes when appropriate.
     class SubScene {
-        
+        private:
+            Zeta::Handler physicsHandler;
+
+            SpriteRenderer** sprites = nullptr;
+            int sCount = 0;
+            int sCapacity;
+
+            GameObject** gameObjects = nullptr;
+            int gCount = 0;
+            int gCapacity;
+            // todo add list of areas + sprites for the static sprites
+
+        public:
+            FrameBuffer frameBuffer;
+
+            SubScene(int width, int height, int sCapacity, int gCapacity, ZMath::Vec2D const &g = ZMath::Vec2D(0.0f), float timeStep = FPS_60) {
+                frameBuffer.init(width, height);
+                physicsHandler = Zeta::Handler(g, timeStep);
+
+                this->sCapacity = sCapacity;
+                this->gCapacity = gCapacity;
+                sprites = new SpriteRenderer*[sCapacity];
+                gameObjects = new GameObject*[gCapacity];
+            };
+
+            // * Do not allow for construction of a SubScene from another SubScene
+            SubScene(SubScene const &ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
+            SubScene(SubScene &&ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
+
+            // * Do not allow for reassignment of a SubScene
+            SubScene(SubScene const &ss) { throw std::runtime_error("You cannot reassign a SubScene object."); };
+            SubScene(SubScene &&ss) { throw std::runtime_error("You cannot reassign a SubScene object."); };
+
+            ~SubScene() {
+                for (int i = 0; i < sCount; ++i) { delete sprites[i]; }
+                delete[] sprites;
+
+                for (int i = 0; i < gCount; ++i) { delete gameObjects[i]; }
+                delete[] gameObjects;
+            };
+
+
+            // * ===================
+            // * Normal Functions
+            // * ===================
+
+            // add a sprite renderer to the subscene
+            void addSprite(SpriteRenderer* spr) {
+                if (sCount == sCapacity) {
+                    sCapacity *= 2;
+                    SpriteRenderer** temp = new SpriteRenderer*[sCapacity];
+
+                    for (int i = 0; i < sCount; ++i) { temp[i] = sprites[i]; }
+
+                    delete[] sprites;
+                    sprites = temp;
+                }
+
+                sprites[sCount++] = spr;
+            };
+
+            // add a game object to the subscene
+            void addGameObject(GameObject* go) {
+                if (gCount == gCapacity) {
+                    gCapacity *= 2;
+                    GameObject** temp = new GameObject*[gCapacity];
+
+                    for (int i = 0; i < gCount; ++i) { temp[i] = gameObjects[i]; }
+
+                    delete[] gameObjects;
+                    gameObjects = temp;
+                }
+
+                gameObjects[gCount++] = go;
+            };
+
+            // add multiple sprite renderers to the subscene
+            void addSprites(SpriteRenderer** spr, int size) {
+                if (sCount - 1 + size >= sCapacity) {
+                    sCapacity += size;
+                    SpriteRenderer** temp = new SpriteRenderer*[sCapacity];
+
+                    for (int i = 0; i < sCount; ++i) { temp[i] = sprites[i]; }
+
+                    delete[] sprites;
+                    sprites = temp;
+                }
+
+                for (int i = 0; i < size; ++i) { sprites[sCount++] = spr[i]; }
+            };
+
+            // add multiple game objects to the subscene
+            void addSprites(GameObject** go, int size) {
+                if (gCount - 1 + size >= gCapacity) {
+                    gCapacity += size;
+                    GameObject** temp = new GameObject*[gCapacity];
+
+                    for (int i = 0; i < gCount; ++i) { temp[i] = gameObjects[i]; }
+
+                    delete[] gameObjects;
+                    gameObjects = temp;
+                }
+
+                for (int i = 0; i < size; ++i) { gameObjects[gCount++] = go[i]; }
+            };
     };
 
     struct Scene {

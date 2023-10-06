@@ -93,7 +93,7 @@ namespace Dralgeer {
             // push multiple elements onto the stack
             // do not try to access the elements from the original list after pushing them onto the stack
             inline void push(T* vals, int size) {
-                if (count - 1 + size == capacity) {
+                if (count - 1 + size >= capacity) {
                     capacity += size;
                     T* temp = new T[capacity];
 

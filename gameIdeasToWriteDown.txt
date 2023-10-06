@@ -1,0 +1,11 @@
+// gravity based enemies (note none of them are affected by their own gravity swaps)
+gravits
+    - A gravit is a basic gravity manipulation enemy.
+    - It can only do it in one direction and for a little bit of time before it has to rest.
+    - They cannot damage you much on their own, but when paired with flying enemies can be quite tricky to deal with.
+gravitors
+    - A gravitor could be closer to a boss or a higher room enemy (or maybe modified to make it strong enough to be a boss)
+    - It would be able to switch gravity in any direction and would have rocks that it can throw in that will damage the player (also affected by the gravity swaps)
+    - It could also have some type of melee weapon or a stone arm that it could use to attack if the player gets close
+gravitas
+graviathan
