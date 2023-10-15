@@ -127,51 +127,29 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    // todo will need to make a custom Renderer for level editor scene
+    // General use Renderer.
+    class Renderer {
 
+    };
+
+    // Renderer specific to the level editor.
     class EditorRenderer {
         private:
             EditorBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
 
-            inline void addBatch(int n) {
-                // determine the spot to put the index in using a modified binary search
-                int min = 0, max = numIndices;
-                int index = numIndices/2;
-
-                for(;;) {
-                    if (n > indices[index]) { // look through lower half
-                        max = index;
-
-                        if (min >= max) {
-                            for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
-                            indices[min] = n;
-                            break;
-                        }
-
-                        index = (max + min)/2;
-
-                    } else { // look through upper half
-                        min = index + 1;
-
-                        if (min >= max) {
-                            for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
-                            indices[min] = n;
-                            break;
-                        }
-
-                        index = (max + min)/2;
-
-                    } // ? We do not have to consider the case that they are equal as this system guarentees that cannot happen
-                }
-                
-                batches[n].start();
-                ++numIndices;
-            };
+            void addBatch(int n);
 
         public:
             inline EditorRenderer() {};
+
+            // ? Do not allow for reassignment or construction of an EditorRenderer from another EditorRenderer
+
+            inline EditorRenderer(EditorRenderer const &renderer) { throw std::runtime_error("[ERROR] Cannot constructor a EditorRenderer from another EditorRenderer."); };
+            inline EditorRenderer(EditorRenderer &&renderer) { throw std::runtime_error("[ERROR] Cannot constructor a EditorRenderer from another EditorRenderer."); };
+            inline EditorRenderer& operator = (EditorRenderer const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorRenderer object. Do NOT use the '=' operator."); };
+            inline EditorRenderer& operator = (EditorRenderer &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorRenderer object. Do NOT use the '=' operator."); };
 
             inline void add(SpriteRenderer* spr) {
                 if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that

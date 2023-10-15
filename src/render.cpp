@@ -603,4 +603,47 @@ namespace Dralgeer {
         for (int i = 0; i < numTextures; ++i) { if (textures[i] == tex) { return 1; }}
         return 0;
     };
+
+    // * ===============================================
+    // * Renderer Stuff
+
+    
+
+    // * ===============================================
+    // * EditorRenderer Stuff
+
+    void EditorRenderer::addBatch(int n) {
+        // determine the spot to put the index in using a modified binary search
+        int min = 0, max = numIndices;
+        int index = numIndices/2;
+
+        for(;;) {
+            if (n > indices[index]) { // look through lower half
+                max = index;
+
+                if (min >= max) {
+                    for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
+                    indices[min] = n;
+                    break;
+                }
+
+                index = (max + min)/2;
+
+            } else { // look through upper half
+                min = index + 1;
+
+                if (min >= max) {
+                    for (int i = numIndices; i > min; --i) { indices[i] = indices[i - 1]; }
+                    indices[min] = n;
+                    break;
+                }
+
+                index = (max + min)/2;
+
+            } // ? We do not have to consider the case that they are equal as this system guarentees that cannot happen
+        }
+        
+        batches[n].start();
+        ++numIndices;
+    };
 }
