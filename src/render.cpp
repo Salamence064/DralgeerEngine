@@ -390,15 +390,15 @@ namespace Dralgeer {
     };
 
     // * ===============================================
-    // * RenderBatch Stuff
+    // * EditorBatch Stuff
 
-    RenderBatch::RenderBatch(RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
-    RenderBatch::RenderBatch(RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
-    RenderBatch& RenderBatch::operator = (RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
-    RenderBatch& RenderBatch::operator = (RenderBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a RenderBatch object. Do NOT use the '=' operator."); };
+    EditorBatch::EditorBatch(EditorBatch const &batch) { throw std::runtime_error("[ERROR] Cannot constructor a EditorBatch from another EditorBatch."); };
+    EditorBatch::EditorBatch(EditorBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a EditorBatch from another EditorBatch."); };
+    EditorBatch& EditorBatch::operator = (EditorBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorBatch object. Do NOT use the '=' operator."); };
+    EditorBatch& EditorBatch::operator = (EditorBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorBatch object. Do NOT use the '=' operator."); };
     
     // Do not have to delete the textures as the sprites should take care of that for us.
-    RenderBatch::~RenderBatch() {
+    EditorBatch::~EditorBatch() {
         for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }
 
         // delete the vao, vbo, and ebo
@@ -412,7 +412,7 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     };
 
-    void RenderBatch::loadVertexProperties(int index) {
+    void EditorBatch::loadVertexProperties(int index) {
         int offset = index * SPRITE_SIZE;
 
         // Texture ID
@@ -472,7 +472,7 @@ namespace Dralgeer {
         }
     };
 
-    void RenderBatch::start() {
+    void EditorBatch::start() {
         // generate and bind a vertex array object
         glGenVertexArrays(1, &vaoID);
         glBindVertexArray(vaoID);
@@ -516,7 +516,7 @@ namespace Dralgeer {
         glEnableVertexAttribArray(4);
     };
 
-    void RenderBatch::render(Shader const &currShader, Camera const &cam) {
+    void EditorBatch::render(Shader const &currShader, Camera const &cam) {
         bool rebuffer = 0;
 
         for (int i = 0; i < numSprites; ++i) {
@@ -562,7 +562,7 @@ namespace Dralgeer {
         glBindVertexArray(0);
     };
 
-     bool RenderBatch::destroyIfExists(SpriteRenderer* spr) {
+     bool EditorBatch::destroyIfExists(SpriteRenderer* spr) {
         for (int i = 0; i < numSprites; ++i) {
             if (sprites[i] == spr) {
                 for (int j = i; j < numSprites - 1; ++j) {
@@ -578,7 +578,7 @@ namespace Dralgeer {
         return 0;
     };
 
-    void RenderBatch::addSprite(SpriteRenderer* spr) {
+    void EditorBatch::addSprite(SpriteRenderer* spr) {
         if (numSprites < MAX_RENDER_BATCH_SIZE) {
             sprites[numSprites] = spr;
             sprites[numSprites]->isDirty = 1;
@@ -598,7 +598,7 @@ namespace Dralgeer {
         }
     };
 
-    bool RenderBatch::hasTexture(Texture* tex) const {
+    bool EditorBatch::hasTexture(Texture* tex) const {
         if (!tex) { return 0; }
         for (int i = 0; i < numTextures; ++i) { if (textures[i] == tex) { return 1; }}
         return 0;

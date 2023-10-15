@@ -28,6 +28,8 @@ namespace Dralgeer {
 
     // todo probably use a graph inside of the root scene to determine which subscene to switch to
 
+    // todo probably move some of the inline stuff into functions in the .cpp files
+
     // A scene contained within a root scene.
     // These will be used to represent different rooms or subareas.
     // The root scene should change subscenes when appropriate.
@@ -174,7 +176,7 @@ namespace Dralgeer {
             MouseControls mouseControls;
             GizmoSystem gizmoSystem;
 
-            Renderer renderer;
+            EditorRenderer renderer;
             Zeta::Handler physicsHandler;
 
 

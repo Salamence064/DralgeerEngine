@@ -84,7 +84,7 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    class RenderBatch { // todo add an addSprites method
+    class EditorBatch { // todo add an addSprites method
         private:
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE] = {0};
@@ -99,20 +99,20 @@ namespace Dralgeer {
             int numSprites = 0;
             int numTextures = 0;
 
-            inline RenderBatch() {};
+            inline EditorBatch() {};
 
             // * ===================
             // * Rule of 5 Stuff
             // * ===================
 
             // ? These are all designed to throw errors with the exception of the destructor.
-            // ? RenderBatches should NOT be reassigned or constructed from another.
+            // ? EditorBatches should NOT be reassigned or constructed from another.
 
-            RenderBatch(RenderBatch const &batch);
-            RenderBatch(RenderBatch &&batch);
-            RenderBatch& operator = (RenderBatch const &batch);
-            RenderBatch& operator = (RenderBatch &&batch);
-            ~RenderBatch();
+            EditorBatch(EditorBatch const &batch);
+            EditorBatch(EditorBatch &&batch);
+            EditorBatch& operator = (EditorBatch const &batch);
+            EditorBatch& operator = (EditorBatch &&batch);
+            ~EditorBatch();
 
             // * ===================
             // * Normal Functions
@@ -127,9 +127,11 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
-    class Renderer {
+    // todo will need to make a custom Renderer for level editor scene
+
+    class EditorRenderer {
         private:
-            RenderBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
+            EditorBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
 
@@ -169,7 +171,7 @@ namespace Dralgeer {
             };
 
         public:
-            inline Renderer() {};
+            inline EditorRenderer() {};
 
             inline void add(SpriteRenderer* spr) {
                 if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
