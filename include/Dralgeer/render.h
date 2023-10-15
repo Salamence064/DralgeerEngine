@@ -165,7 +165,7 @@ namespace Dralgeer {
             bool destroy(SpriteRenderer* spr);
             
             // todo could also rely on making a separate shader for the static sprites which displays them at like z = -1 instead of z = 0
-            inline void Render(Shader const &currShader, Camera const &cam) { // todo make sure they're renderered in the right order
+            inline void render(Shader const &currShader, Camera const &cam) { // todo make sure they're renderered in the right order
                 staticBatch.render(currShader, cam);
                 for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
             };

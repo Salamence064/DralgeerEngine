@@ -26,8 +26,7 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     };
 
-    void StaticBatch::init(SpriteRenderer** spr, int size) { // todo make sure that what I do with vertices and indices doesnt cause a memory leak
-        // todo use like valgrind or something
+    void StaticBatch::init(SpriteRenderer** spr, int size) {
         float* vertices = new float[size*SPRITE_SIZE];
         unsigned int* indices = new unsigned int[size*6];
         numSprites = size;
@@ -141,6 +140,10 @@ namespace Dralgeer {
         glEnableVertexAttribArray(2);
         glEnableVertexAttribArray(3);
         glEnableVertexAttribArray(4);
+
+        // free the memory
+        delete[] vertices;
+        delete[] indices;
     };
 
     void StaticBatch::render(Shader const &currShader, Camera const &cam) {

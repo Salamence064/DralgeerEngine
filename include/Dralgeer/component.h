@@ -43,6 +43,7 @@ namespace Dralgeer {
             Transform transform, lastTransform;
             bool isDirty = 1;
             bool rebufferZIndex = 0;
+            bool dead = 0;
 
             // * ==========================================================
 
@@ -77,7 +78,7 @@ namespace Dralgeer {
     // * Game Object Stuff
     // * ====================
 
-    class GameObject {
+    class GameObject { // todo we may be able to simplify this class greatly or just not use it in general (currently only used for level editor)
         public:
             // * ==============
             // * Attributes

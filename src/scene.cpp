@@ -11,6 +11,35 @@
 
 namespace Dralgeer {
     // * ================================================
+    // * SubScene Stuff
+
+    void SubScene::init(int width, int height, int capacity, SpriteRenderer** spr, int size,
+                    ZMath::Vec2D const &g = ZMath::Vec2D(0.0f), float timeStep = FPS_60)
+    {
+        frameBuffer.init(width, height);
+        renderer.init(spr, size);
+        physicsHandler = Zeta::Handler(g, timeStep);
+
+        this->capacity = capacity;
+        sprites = new SpriteRenderer*[capacity];
+    };
+
+    void SubScene::update(float &dt) {
+        camera.adjustProjection();
+        physicsHandler.update(dt);
+
+        // remove dead dynamic sprites
+        for (int i = numSprites - 1; i >= 0; --i) {
+            if (sprites[i]->dead) {
+                renderer.destroy(sprites[i]);
+                delete sprites[i];
+                --numSprites;
+                for (int j = i; j < numSprites; ++j) { sprites[j] = sprites[j + 1]; }
+            }
+        }
+    };
+
+    // * ================================================
     // * Level Editor Class
 
     // todo need to update dt even when physicsUpdate isn't true
@@ -37,8 +66,8 @@ namespace Dralgeer {
             if (gameObjects[i]->dead) {
                 renderer.destroy(gameObjects[i]->sprite);
                 delete gameObjects[i];
-                for (int j = i; j < numObjects - 1; ++j) { gameObjects[j] = gameObjects[j + 1]; }
-                numObjects--;
+                --numObjects;
+                for (int j = i; j < numObjects; ++j) { gameObjects[j] = gameObjects[j + 1]; }
             }
         }
     };
