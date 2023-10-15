@@ -3,9 +3,7 @@
 #include "component.h"
 
 namespace Dralgeer {
-    // todo make it so there's a special renderer for the main game and a separate LevelEditor renderer since that one will need to account for
-    // todo  the movement of static bojects (via editing)
-    // todo main one static walls will never move so we can split it up into 2 renderers: one which handles dynamic sprites and one which handles static sprites
+    // todo fine tune the constants for StaticBatch and for DynamicBatch (one for level editor's is fine)
 
     namespace TexSlots { static int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; }
 
@@ -41,16 +39,56 @@ namespace Dralgeer {
             void render(Shader const &currShader, Camera const &cam);
     };
 
+    // A batch of purely dynamic sprites. These sprites will be updated (freqently).
     class DynamicBatch {
+        private:
+            SpriteRenderer* sprites[MAX_DYNAMIC_BATCH_SIZE];
+            float vertices[MAX_DYNAMIC_VERTICES_SIZE] = {0};
+            Texture* textures[MAX_TEXTURES];
+            unsigned int vaoID, vboID, eboID;
+
+            // * Helper to just make the code easier to read and debug.
+            // * Will probs be moved directly into the code in the end.
+            void loadVertexProperties(int index);
         
+        public:
+            int numSprites = 0;
+            int numTextures = 0;
+
+            inline DynamicBatch() {};
+
+            // * ===================
+            // * Rule of 5 Stuff
+            // * ===================
+
+            // ? These are all designed to throw errors with the exception of the destructor.
+            // ? DynamicBatches should NOT be reassigned or constructed from another.
+
+            DynamicBatch(DynamicBatch const &batch);
+            DynamicBatch(DynamicBatch &&batch);
+            DynamicBatch& operator = (DynamicBatch const &batch);
+            DynamicBatch& operator = (DynamicBatch &&batch);
+            ~DynamicBatch();
+
+            // * ===================
+            // * Normal Functions
+            // * ===================
+
+            void start();
+            void render(Shader const &currShader, Camera const &cam);
+
+            // * Returns true if the SpriteRenderer is successfully removed and false if it doesn't exist.
+            bool destroyIfExists(SpriteRenderer* spr);
+            void addSprite(SpriteRenderer* spr);
+            void addSprites(SpriteRenderer** spr, int size);
+            bool hasTexture(Texture* tex) const;
     };
 
-    class RenderBatch {
+    class RenderBatch { // todo add an addSprites method
         private:
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
             float vertices[MAX_RENDER_VERTICES_LIST_SIZE] = {0};
             Texture* textures[MAX_TEXTURES];
-            int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
             unsigned int vaoID, vboID, eboID;
 
             // * Helper to just make the code easier to read and debug.

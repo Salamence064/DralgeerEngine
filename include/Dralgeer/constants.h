@@ -48,6 +48,9 @@
 #define MAX_STATIC_INDICES_SIZE 6000
 
 // dynamic batch
+#define MAX_DYNAMIC_BATCH_SIZE 100
+#define MAX_DYNAMIC_VERTICES_SIZE 4000
+#define MAX_DYNAMIC_INDICES_SIZE 600
 
 // // gizmo batch specifics
 // #define GIZMO_BATCH_SIZE 4
