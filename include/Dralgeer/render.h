@@ -139,7 +139,7 @@ namespace Dralgeer {
     class Renderer {
         private:
             StaticBatch staticBatch; // static batch for each of the static objects in a subscene
-            DynamicBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -999 to 1000 are permitted
+            DynamicBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -499 to 500 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of dynamic batches that cointain sprites
 
@@ -178,7 +178,7 @@ namespace Dralgeer {
     // Renderer specific to the level editor.
     class EditorRenderer {
         private:
-            EditorBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -999 to 1000 are permitted
+            EditorBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -499 to 500 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
 
@@ -196,9 +196,9 @@ namespace Dralgeer {
             inline EditorRenderer& operator = (EditorRenderer &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorRenderer object. Do NOT use the '=' operator."); };
 
             inline void add(SpriteRenderer* spr) {
-                if (!spr || spr->transform.zIndex < -999 || spr->transform.zIndex > 1000) { return; } // todo use an appropriate logger message when I fix that
+                if (!spr || spr->transform.zIndex < -499 || spr->transform.zIndex > 500) { return; } // todo use an appropriate logger message when I fix that
 
-                int n = spr->transform.zIndex + 999;
+                int n = spr->transform.zIndex + 499;
                 if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
                 if (numIndices == 0) {
@@ -241,7 +241,7 @@ namespace Dralgeer {
                 if (!destroy(spr)) { return; }
 
                 // add the sprite to the new batch it belongs to
-                int n = spr->transform.zIndex + 1000;
+                int n = spr->transform.zIndex + 499;
                 if (batches[n].numSprites == 0) { addBatch(n); }
                 batches[n].addSprite(spr);
             };

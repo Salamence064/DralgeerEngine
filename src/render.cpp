@@ -643,9 +643,9 @@ namespace Dralgeer {
     };
 
     void Renderer::add(SpriteRenderer* spr) {
-        if (!spr || spr->transform.zIndex < -999 || spr->transform.zIndex > 1000) { return; } // todo use an appropriate logger message when I fix that
+        if (!spr || spr->transform.zIndex < -499 || spr->transform.zIndex > 500) { return; } // todo use an appropriate logger message when I fix that
 
-        int n = spr->transform.zIndex + 999;
+        int n = spr->transform.zIndex + 499;
         if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
         if (numIndices == 0) {
@@ -678,7 +678,7 @@ namespace Dralgeer {
         if (!destroy(spr)) { return; }
 
         // add the sprite to the new batch it belongs to
-        int n = spr->transform.zIndex + 1000;
+        int n = spr->transform.zIndex + 499;
         if (batches[n].numSprites == 0) { addBatch(n); }
         batches[n].addSprite(spr);
     };
