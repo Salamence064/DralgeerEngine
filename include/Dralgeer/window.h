@@ -58,7 +58,7 @@
 // - Select mode
 // - Add something to allow for physics to be added (can reference Java engine for this)
 // - Fill mode
-// - Add decals as a built-in type
+// - Add decals as a built-in type (and make it so you can have different layers for the decals that will be passed to the shader)
 // - Sounds with OpenAL
 // - player controls + kinematic bodies
 // - pillbox collider for player to make for smoother edges on collisions

@@ -131,20 +131,19 @@ namespace Dralgeer {
     // todo  probs make it 1000 and limit z-index accordingly
     // todo  otherwise it will eat up too much RAM
     // todo  might have to find a better method either way since this takes up a lot of storage
+    // todo  might have to reduce it to less than 1000 as well
+
+    // todo make a shader specific for static sprites
 
     // General use Renderer.
     class Renderer {
         private:
-            StaticBatch sBatches[MAX_RENDER_BATCHES];
-            int sIndices[MAX_RENDER_BATCHES];
-            int sNumIndices = 0; // the number of static batches that cointain sprites
+            StaticBatch staticBatch;
+            DynamicBatch batches[MAX_RENDER_BATCHES];
+            int indices[MAX_RENDER_BATCHES];
+            int numIndices = 0; // the number of dynamic batches that cointain sprites
 
-            DynamicBatch dBatches[MAX_RENDER_BATCHES];
-            int dIndices[MAX_RENDER_BATCHES];
-            int dNumIndices = 0; // the number of dynamic batches that cointain sprites
-
-            void addStaticBatch();
-            void addDynamicBatch();
+            void addBatch(int n);
 
         public:
             inline Renderer() {};
@@ -161,13 +160,14 @@ namespace Dralgeer {
             // * Normal Functions
             // * ====================
 
-            void init(SpriteRenderer** spr, int size);
-            void add(SpriteRenderer*);
-            bool destroy(SpriteRenderer*);
+            inline void init(SpriteRenderer** spr, int size) { staticBatch.init(spr, size); };
+            void add(SpriteRenderer* spr);
+            bool destroy(SpriteRenderer* spr);
             
+            // todo could also rely on making a separate shader for the static sprites which displays them at like z = -1 instead of z = 0
             inline void Render(Shader const &currShader, Camera const &cam) { // todo make sure they're renderered in the right order
-                for (int i = 0; i < sNumIndices; ++i) { sBatches[sIndices[i]].render(currShader, cam); }
-                for (int i = 0; i < dNumIndices; ++i) { dBatches[dIndices[i]].render(currShader, cam); }
+                staticBatch.render(currShader, cam);
+                for (int i = 0; i < numIndices; ++i) { batches[indices[i]].render(currShader, cam); }
             };
 
             // update the list of zIndices when called
@@ -182,6 +182,7 @@ namespace Dralgeer {
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
 
+            // Helper function to add a dynamic batch.
             void addBatch(int n);
 
         public:
