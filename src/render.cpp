@@ -30,6 +30,7 @@ namespace Dralgeer {
         // todo use like valgrind or something
         float* vertices = new float[size*SPRITE_SIZE];
         unsigned int* indices = new unsigned int[size*6];
+        numSprites = size;
 
         // generate and bind a vertex array object
         glGenVertexArrays(1, &vaoID);
@@ -143,7 +144,32 @@ namespace Dralgeer {
     };
 
     void StaticBatch::render(Shader const &currShader, Camera const &cam) {
+        // bind everything
+        glBindVertexArray(vaoID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
+        // use shader
+        currShader.use();
+        currShader.uploadMat4("uProjection", cam.proj);
+        currShader.uploadMat4("uView", cam.view);
+
+        // bind textures
+        for (int i = 0; i < numTextures; ++i) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            textures[i]->bind();
+        }
+
+        currShader.uploadIntArr("uTexture", TexSlots::texSlots, 16);
+
+        glDrawElements(GL_TRIANGLES, 6*numSprites, GL_UNSIGNED_INT, 0);
+
+        currShader.detach();
+
+        // unbind everything
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glBindVertexArray(0);
     };
 
     // * ===============================================

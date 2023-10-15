@@ -7,13 +7,14 @@ namespace Dralgeer {
     // todo  the movement of static bojects (via editing)
     // todo main one static walls will never move so we can split it up into 2 renderers: one which handles dynamic sprites and one which handles static sprites
 
-    namespace TexSlots { static const int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; }
+    namespace TexSlots { static int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; }
 
     // A render batch of completely static elements. Once this is initialized, it cannot be changed.
     class StaticBatch {
         private:
             Texture* textures[MAX_TEXTURES];
             int numTextures = 0;
+            int numSprites;
             unsigned int vaoID, vboID, eboID;
 
         public:
