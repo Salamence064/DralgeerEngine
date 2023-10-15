@@ -109,4 +109,48 @@ namespace Dralgeer {
             // pop the top element of the stack
             inline void pop() { return std::move(stack[--count]); };
     };
+
+    // static graph used for linking SubScenes together
+    // specialized graph which only stores the adjacency matrix as SubScenes can be denoted by their corresponding number
+    // all edges for this graph are bidirectional
+    class Graph {
+        private:
+            bool** adjacencyMat;
+            int numNodes; // 
+            int maxAdj; // max number of adjacent nodes allowed for any given node
+
+        public:
+            inline Graph() : adjacencyMat(nullptr), numNodes(0) {};
+
+            /**
+             * @brief Create a graph for linking SubScenes together.
+             * 
+             * @param edges The SubScenes that form an edge with each other. Each inner array must be length 2.
+             * @param numEdges The number of edges passed into the graph.
+             * @param numNodes The number of nodes the graph will handler.
+             * @param maxAdj The max number of adjacent nodes allowed for any given node.
+             */
+            Graph(int** edges, int numEdges, int numNodes, int maxAdj = 4);
+
+
+            // * ==================
+            // * Rule of 5 Stuff
+            // * ==================
+
+            Graph(Graph const &graph);
+            Graph(Graph &&graph);
+            Graph& operator = (Graph const &graph);
+            Graph& operator = (Graph &&graph);
+            ~Graph();
+
+
+            // * ==================
+            // * Normal Functions
+            // * ==================
+
+            // returns a list of SubScene nodes adjacent to a given SubScene node
+            // numAdj will be updated to equal the number of adjacent SubScene nodes
+            // remember to use delete[] after you finish using this list
+            int* adjacentNodes(int node, int &numAdj);
+    };
 }

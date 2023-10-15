@@ -18,7 +18,7 @@ namespace Dralgeer {
     {
         frameBuffer.init(width, height);
         renderer.init(spr, size);
-        physicsHandler = Zeta::Handler(g, timeStep);
+        physicsHandler = Zeta::Handler(g, timeStep); // todo this will probs cause an error
 
         this->capacity = capacity;
         sprites = new SpriteRenderer*[capacity];

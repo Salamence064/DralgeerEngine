@@ -65,6 +65,8 @@
 // - add in effects to make player movement feel more crisp
 // - add observers (for events)
 // - game specific stuff (enemy AI, items, spells, discovery thing, pre-loading rooms, runes, random room generation, etc.)
+// - also note: for random room generation we will pre-generate all the rooms for the floor and link them together randomly, too
+//               this allows for us to use static graphs instead of requiring we add to them
 // - Optimize stuff
 // ===================================================================
 
