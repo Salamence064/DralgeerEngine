@@ -127,9 +127,52 @@ namespace Dralgeer {
             bool hasTexture(Texture* tex) const;
     };
 
+    // todo update the constant for the max number of batches
+    // todo  probs make it 1000 and limit z-index accordingly
+    // todo  otherwise it will eat up too much RAM
+    // todo  might have to find a better method either way since this takes up a lot of storage
+
     // General use Renderer.
     class Renderer {
+        private:
+            StaticBatch sBatches[MAX_RENDER_BATCHES];
+            int sIndices[MAX_RENDER_BATCHES];
+            int sNumIndices = 0; // the number of static batches that cointain sprites
 
+            DynamicBatch dBatches[MAX_RENDER_BATCHES];
+            int dIndices[MAX_RENDER_BATCHES];
+            int dNumIndices = 0; // the number of dynamic batches that cointain sprites
+
+            void addStaticBatch();
+            void addDynamicBatch();
+
+        public:
+            inline Renderer() {};
+
+            // ? Do not allow for reassignment or construction of an Renderer from another Renderer
+
+            inline Renderer(Renderer const &renderer) { throw std::runtime_error("[ERROR] Cannot constructor a Renderer from another Renderer."); };
+            inline Renderer(Renderer &&renderer) { throw std::runtime_error("[ERROR] Cannot constructor a Renderer from another Renderer."); };
+            inline Renderer& operator = (Renderer const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a Renderer object. Do NOT use the '=' operator."); };
+            inline Renderer& operator = (Renderer &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a Renderer object. Do NOT use the '=' operator."); };
+
+
+            // * ====================
+            // * Normal Functions
+            // * ====================
+
+            void init(SpriteRenderer** spr, int size);
+            void add(SpriteRenderer*);
+            bool destroy(SpriteRenderer*);
+            
+            inline void Render(Shader const &currShader, Camera const &cam) { // todo make sure they're renderered in the right order
+                for (int i = 0; i < sNumIndices; ++i) { sBatches[sIndices[i]].render(currShader, cam); }
+                for (int i = 0; i < dNumIndices; ++i) { dBatches[dIndices[i]].render(currShader, cam); }
+            };
+
+            // update the list of zIndices when called
+            // spr = the SpriteRenderer whose zIndex was changed
+            void updateZIndex(SpriteRenderer* spr);
     };
 
     // Renderer specific to the level editor.
