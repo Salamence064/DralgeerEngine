@@ -381,7 +381,7 @@ namespace Dralgeer {
         }
     };
 
-    void DynamicBatch::addSprites(SpriteRenderer** spr, int size) {};
+    // void DynamicBatch::addSprites(SpriteRenderer** spr, int size) {};
 
     bool DynamicBatch::hasTexture(Texture* tex) const {
         if (!tex) { return 0; }

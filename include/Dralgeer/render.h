@@ -40,7 +40,7 @@ namespace Dralgeer {
     };
 
     // A batch of purely dynamic sprites. These sprites will be updated (freqently).
-    class DynamicBatch {
+    class DynamicBatch { // todo add add sprites method here, too
         private:
             SpriteRenderer* sprites[MAX_DYNAMIC_BATCH_SIZE];
             float vertices[MAX_DYNAMIC_VERTICES_SIZE] = {0};
@@ -80,7 +80,7 @@ namespace Dralgeer {
             // * Returns true if the SpriteRenderer is successfully removed and false if it doesn't exist.
             bool destroyIfExists(SpriteRenderer* spr);
             void addSprite(SpriteRenderer* spr);
-            void addSprites(SpriteRenderer** spr, int size);
+            // void addSprites(SpriteRenderer** spr, int size);
             bool hasTexture(Texture* tex) const;
     };
 
