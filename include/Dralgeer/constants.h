@@ -28,7 +28,7 @@
 // renderer
 #define MAX_RENDER_BATCHES 2500
 #define MAX_RENDER_BATCH_SIZE 1000
-#define MAX_RENDER_VERTICES_LIST_SIZE (10000 * sizeof(float))
+#define MAX_RENDER_VERTICES_LIST_SIZE 40000
 #define MAX_RENDER_INDICES_LIST_SIZE 6000
 #define MAX_TEXTURES 16
 
@@ -38,12 +38,21 @@
 #define ENTITY_ID_OFFSET (9 * sizeof(float))
 
 #define VERTEX_SIZE 10
+#define SPRITE_SIZE 40
 #define VERTEX_SIZE_BYTES (VERTEX_SIZE * sizeof(float))
+#define SPRITE_SIZE_BYTES (SPRITE_SIZE * sizeof(float))
 
-// gizmo batch specifics
-#define GIZMO_BATCH_SIZE 4
-#define GIZMO_BATCH_VERTICES_SIZE (40 * sizeof(float))
-#define GIZMO_BATCH_INDICES_SIZE 24
+// static batch
+#define MAX_STATIC_BATCH_SIZE 1000
+#define MAX_STATIC_VERTICES_SIZE 40000
+#define MAX_STATIC_INDICES_SIZE 6000
+
+// dynamic batch
+
+// // gizmo batch specifics
+// #define GIZMO_BATCH_SIZE 4
+// #define GIZMO_BATCH_VERTICES_SIZE (40 * sizeof(float))
+// #define GIZMO_BATCH_INDICES_SIZE 24
 
 // editor camera
 #define EDITOR_DRAG_SENSITIVITY 30.0f

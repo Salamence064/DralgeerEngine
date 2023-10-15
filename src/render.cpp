@@ -5,6 +5,148 @@
 
 namespace Dralgeer {
     // * ===============================================
+    // * StaticBatch Stuff
+
+    StaticBatch::StaticBatch(StaticBatch const &batch) { throw std::runtime_error("[ERROR] Cannot constructor a StaticBatch from another StaticBatch."); };
+    StaticBatch::StaticBatch(StaticBatch &&batch) { throw std::runtime_error("[ERROR] Cannot constructor a StaticBatch from another StaticBatch."); };
+    StaticBatch& StaticBatch::operator = (StaticBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a StaticBatch object. Do NOT use the '=' operator."); };
+    StaticBatch& StaticBatch::operator = (StaticBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a StaticBatch object. Do NOT use the '=' operator."); };
+
+    // Note we do not need to delete the textures as the AssetPool will take care of that for us.
+
+    StaticBatch::~StaticBatch() {
+        // free the GPU
+        glDeleteVertexArrays(1, &vaoID);
+        glDeleteBuffers(1, &vboID);
+        glDeleteBuffers(1, &eboID);
+
+        // unbind everything
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    };
+
+    void StaticBatch::init(SpriteRenderer** spr, int size) { // todo make sure that what I do with vertices and indices doesnt cause a memory leak
+        // todo use like valgrind or something
+        float* vertices = new float[size*SPRITE_SIZE];
+        unsigned int* indices = new unsigned int[size*6];
+
+        // generate and bind a vertex array object
+        glGenVertexArrays(1, &vaoID);
+        glBindVertexArray(vaoID);
+
+        // populate the vertices and indices lists
+        int offset = 0, iOffset = 0, iIndex = 0;
+
+        for (int i = 0; i < size; ++i) {
+            // Texture ID (add new one if not found)
+            int texID = -1;
+            if (spr[i]->sprite.texture) {
+                for (int j = 0; j < numTextures; ++j) {
+                    if (textures[j] == spr[i]->sprite.texture) {
+                        texID = j;
+                        goto ADDED_TEX;
+                    }
+                }
+
+                if (numTextures < MAX_TEXTURES) {
+                    texID = numTextures;
+                    textures[numTextures++] = spr[i]->sprite.texture;
+
+                } else { // todo later just add an info message when I set up the system messages
+                    throw std::runtime_error("Max number of textures for the StaticBatch reached.");
+                }
+            }
+
+            ADDED_TEX:
+
+            glm::mat4 transformMat(1);
+            Transform t = spr[i]->transform; // for readabiility (will probably remove later)
+
+            if (!ZMath::compare(t.rotation, 0.0f)) {
+                transformMat = glm::translate(transformMat, glm::vec3(t.pos.x, t.pos.y, 0.0f));
+                transformMat = glm::rotate(transformMat, (float) glm::radians(t.rotation), glm::vec3(0, 0, 1));
+                transformMat = glm::scale(transformMat, glm::vec3(t.scale.x, t.scale.y, 1.0f));
+            }
+
+            // add vertices with the appropriate properties
+            // this loop is slightly inefficient compared to just writing out all 4 cases by hand, but I really don't wanna do that
+            float xAdd = 1.0f, yAdd = 1.0f;
+
+            // populate vertices
+            for (int j = 0; j < 4; ++j) {
+                // account for each vertex
+                if (j == 1) { yAdd = 0.0f; }
+                else if (j == 2) { xAdd = 0.0f; }
+                else if (j == 3) { yAdd = 1.0f; }
+
+                glm::vec4 currPos(t.pos.x + (xAdd * t.scale.x), t.pos.y + (yAdd * t.scale.y), 0.0f, 1.0f);
+                if (!ZMath::compare(t.rotation, 0.0f)) { currPos = transformMat * glm::vec4(xAdd, yAdd, 0.0f, 1.0f); }
+
+                // load position
+                vertices[offset] = currPos.x;
+                vertices[offset + 1] = currPos.y;
+
+                // load color
+                vertices[offset + 2] = spr[i]->color.x;
+                vertices[offset + 3] = spr[i]->color.y;
+                vertices[offset + 4] = spr[i]->color.z;
+                vertices[offset + 5] = spr[i]->color.w;
+
+                // load texture coords
+                vertices[offset + 6] = spr[i]->sprite.texCoords[i].x;
+                vertices[offset + 7] = spr[i]->sprite.texCoords[i].y;
+                
+                // load texture IDs
+                vertices[offset + 8] = texID;
+
+                // load entity IDs
+                vertices[offset + 9] = spr[i]->entityID;
+
+                offset += VERTEX_SIZE;
+            }
+        
+            // populate indices
+            indices[iIndex] = iOffset;
+            indices[iIndex + 1] = iOffset + 1;
+            indices[iIndex + 2] = iOffset + 2;
+            
+            indices[iIndex + 3] = iOffset + 2;
+            indices[iIndex+ 4] = iOffset + 3;
+            indices[iIndex + 5] = iOffset;
+
+            iOffset += 4;
+            iIndex += 6;
+        }
+
+        // allocate space for the vertices
+        glGenBuffers(1, &vboID);
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ARRAY_BUFFER, size*SPRITE_SIZE, vertices, GL_STATIC_DRAW);
+
+        // generate the ebo
+        glGenBuffers(1, &eboID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size*6, indices, GL_STATIC_DRAW);
+
+        // set the parameters
+        glVertexAttribPointer(0, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) 0);
+        glVertexAttribPointer(1, 4, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) COLOR_OFFSET);
+        glVertexAttribPointer(2, 2, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_COORDS_OFFSET);
+        glVertexAttribPointer(3, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) TEX_ID_OFFSET);
+        glVertexAttribPointer(4, 1, GL_FLOAT, 0, VERTEX_SIZE_BYTES, (void*) ENTITY_ID_OFFSET);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+        glEnableVertexAttribArray(4);
+    };
+
+    void StaticBatch::render(Shader const &currShader, Camera const &cam) {
+
+    };
+
+    // * ===============================================
     // * RenderBatch Stuff
 
     RenderBatch::RenderBatch(RenderBatch const &batch) { throw std::runtime_error("[ERROR] Cannot constructor a RenderBatch from another RenderBatch."); };
@@ -27,8 +169,8 @@ namespace Dralgeer {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     };
 
-    inline void RenderBatch::loadVertexProperties(int index) {
-        int offset = index * 4 * VERTEX_SIZE;
+    void RenderBatch::loadVertexProperties(int index) {
+        int offset = index * SPRITE_SIZE;
 
         // Texture ID
         int texID = -1;

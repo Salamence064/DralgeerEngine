@@ -3,6 +3,47 @@
 #include "component.h"
 
 namespace Dralgeer {
+    // todo make it so there's a special renderer for the main game and a separate LevelEditor renderer since that one will need to account for
+    // todo  the movement of static bojects (via editing)
+    // todo main one static walls will never move so we can split it up into 2 renderers: one which handles dynamic sprites and one which handles static sprites
+
+    namespace TexSlots { static const int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; }
+
+    // A render batch of completely static elements. Once this is initialized, it cannot be changed.
+    class StaticBatch {
+        private:
+            Texture* textures[MAX_TEXTURES];
+            int numTextures = 0;
+            unsigned int vaoID, vboID, eboID;
+
+        public:
+            inline StaticBatch() {};
+
+            // * ===================
+            // * Rule of 5 Stuff
+            // * ===================
+
+            // ? These are all designed to throw errors with the exception of the destructor.
+            // ? StaticBatches should NOT be reassigned or constructed from another.
+
+            StaticBatch(StaticBatch const &sb);
+            StaticBatch(StaticBatch &&sb);
+            StaticBatch& operator = (StaticBatch const &sb);
+            StaticBatch& operator = (StaticBatch &&sb);
+            ~StaticBatch();
+
+            // * ===================
+            // * Normal Functions
+            // * ===================
+
+            void init(SpriteRenderer** spr, int size);
+            void render(Shader const &currShader, Camera const &cam);
+    };
+
+    class DynamicBatch {
+        
+    };
+
     class RenderBatch {
         private:
             SpriteRenderer* sprites[MAX_RENDER_BATCH_SIZE];
@@ -11,12 +52,10 @@ namespace Dralgeer {
             int texSlots[MAX_TEXTURES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
             unsigned int vaoID, vboID, eboID;
 
-            // todo this should not compile with the inline functions being declared this way and defined in the header
             // * Helper to just make the code easier to read and debug.
             // * Will probs be moved directly into the code in the end.
-            inline void loadVertexProperties(int index);
-            inline void loadElementIndices(int index);
-
+            void loadVertexProperties(int index);
+            
         public:
             int numSprites = 0;
             int numTextures = 0;
