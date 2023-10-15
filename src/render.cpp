@@ -643,9 +643,9 @@ namespace Dralgeer {
     };
 
     void Renderer::add(SpriteRenderer* spr) {
-        if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
+        if (!spr || spr->transform.zIndex < -999 || spr->transform.zIndex > 1000) { return; } // todo use an appropriate logger message when I fix that
 
-        int n = spr->transform.zIndex + 1000;
+        int n = spr->transform.zIndex + 999;
         if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
         if (numIndices == 0) {

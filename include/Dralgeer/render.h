@@ -138,9 +138,9 @@ namespace Dralgeer {
     // General use Renderer.
     class Renderer {
         private:
-            StaticBatch staticBatch;
-            DynamicBatch batches[MAX_RENDER_BATCHES];
-            int indices[MAX_RENDER_BATCHES];
+            StaticBatch staticBatch; // static batch for each of the static objects in a subscene
+            DynamicBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -999 to 1000 are permitted
+            int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of dynamic batches that cointain sprites
 
             void addBatch(int n);
@@ -178,7 +178,7 @@ namespace Dralgeer {
     // Renderer specific to the level editor.
     class EditorRenderer {
         private:
-            EditorBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -1000 to 1499 are permitted
+            EditorBatch batches[MAX_RENDER_BATCHES]; // Note: zIndices from -999 to 1000 are permitted
             int indices[MAX_RENDER_BATCHES]; // batches that contain sprites
             int numIndices = 0; // the number of batches that cointain sprites
 
@@ -196,9 +196,9 @@ namespace Dralgeer {
             inline EditorRenderer& operator = (EditorRenderer &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorRenderer object. Do NOT use the '=' operator."); };
 
             inline void add(SpriteRenderer* spr) {
-                if (!spr || spr->transform.zIndex < -1000 || spr->transform.zIndex > 1499) { return; } // todo use an appropriate logger message when I fix that
+                if (!spr || spr->transform.zIndex < -999 || spr->transform.zIndex > 1000) { return; } // todo use an appropriate logger message when I fix that
 
-                int n = spr->transform.zIndex + 1000;
+                int n = spr->transform.zIndex + 999;
                 if (batches[n].numSprites >= MAX_RENDER_BATCH_SIZE) { return; } // todo use an info message here
 
                 if (numIndices == 0) {
