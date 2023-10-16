@@ -107,7 +107,7 @@ namespace Dralgeer {
             };
 
             // pop the top element of the stack
-            inline void pop() { return std::move(stack[--count]); };
+            inline T pop() { return std::move(stack[--count]); };
     };
 
     // static graph used for linking SubScenes together
@@ -116,7 +116,7 @@ namespace Dralgeer {
     class Graph {
         private:
             bool** adjacencyMat;
-            int numNodes; // 
+            int numNodes; // the number of nodes 
             int maxAdj; // max number of adjacent nodes allowed for any given node
 
         public:
