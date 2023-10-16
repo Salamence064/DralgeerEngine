@@ -106,7 +106,7 @@ namespace Dralgeer {
         extern WindowData data;
         extern GLFWwindow* window;
         extern Scene currScene;
-        extern Stack<RootScene> sceneController;
+        extern Stack<ROOT_SCENE> sceneController;
 
         extern ImGuiLayer imGuiLayer;
         extern FrameBuffer frameBuffer;
@@ -117,7 +117,7 @@ namespace Dralgeer {
 
         extern bool runtimePlaying; // Is the scene being played? (i.e. are physics active)
 
-        inline void changeScene(RootScene scene) {
+        inline void changeScene(ROOT_SCENE scene) {
             switch(scene) {
                 case LEVEL_EDITOR_SCENE: {
                     LevelEditorScene* newScene = new LevelEditorScene();
@@ -141,7 +141,7 @@ namespace Dralgeer {
         inline void init(int width, int height, std::string const &title) {
             data = {width, height, title};
 
-            RootScene rootScenes[9] = {FLOOR9, FLOOR8, FLOOR7, FLOOR6, FLOOR5, FLOOR4, FLOOR3, FLOOR2, FLOOR1};
+            ROOT_SCENE rootScenes[9] = {FLOOR9, FLOOR8, FLOOR7, FLOOR6, FLOOR5, FLOOR4, FLOOR3, FLOOR2, FLOOR1};
             sceneController.push(rootScenes, 9);
 
             // error callback

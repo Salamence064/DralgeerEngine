@@ -111,113 +111,37 @@ namespace Dralgeer {
     };
 
     // static graph used for linking SubScenes together
+    // specialized graph which only stores the adjacency matrix as SubScenes can be denoted by their corresponding number
     // all edges for this graph are bidirectional
-    template <typename T>
     class Graph {
         private:
-            T* nodes; // the nodes of the graph.
-            bool** adjacencyMat; // matrix representing which nodes are adjacent to each other.
-            int numNodes; // the number of nodes.
+            bool** adjacencyMat;
+            int numNodes; // the number of nodes 
             int maxAdj; // max number of adjacent nodes allowed for any given node
 
         public:
-            inline Graph() : nodes(nullptr), adjacencyMat(nullptr), numNodes(0), maxAdj(0) {};
+            inline Graph() : adjacencyMat(nullptr), numNodes(0), maxAdj(0) {};
 
             /**
              * @brief Create a graph for linking SubScenes together.
              * 
-             * @param nodes The SubScenes that make up the graph. This will be set to nullptr after the constructor runs.
              * @param edges The SubScenes that form an edge with each other. Each inner array must be length 2.
              * @param numEdges The number of edges passed into the graph.
              * @param numNodes The number of nodes the graph will handler.
              * @param maxAdj The max number of adjacent nodes allowed for any given node.
              */
-            Graph(T* &nodes, int numNodes, int** edges, int numEdges, int maxAdj = 5) {
-                adjacencyMat = new bool*[numNodes];
-                for (int i = 0; i < numNodes; ++i) { adjacencyMat[i] = new bool[numNodes]; }
-
-                // populate the adjacency matrix
-                for (int i = 0; i < numEdges; ++i) {
-                    adjacencyMat[edges[i][0]][edges[i][1]] = 1;
-                    adjacencyMat[edges[i][1]][edges[i][0]] = 1;
-                }
-
-                this->nodes = nodes;
-                nodes = nullptr;
-            };
+            Graph(int** edges, int numEdges, int numNodes, int maxAdj = 5);
 
 
             // * ==================
             // * Rule of 5 Stuff
             // * ==================
 
-            Graph(Graph const &graph) {
-                numNodes = graph.numNodes;
-                maxAdj = graph.maxAdj;
-                adjacencyMat = new bool*[numNodes];
-                nodes = new T[numNodes];
-
-                for (int i = 0; i < numNodes; ++i) {
-                    for (int j = 0; j < numNodes; ++j) {
-                        adjacencyMat[i][j] = graph.adjacencyMat[i][j];
-                    }
-
-                    nodes[i] = graph.nodes[i];
-                }
-            };
-
-            Graph(Graph &&graph) {
-                maxAdj = graph.maxAdj;
-                numNodes = graph.numNodes;
-                adjacencyMat = graph.adjacencyMat;
-                nodes = graph.nodes;
-
-                graph.adjacencyMat = nullptr;
-                graph.nodes = nullptr;
-            };
-
-            Graph& operator = (Graph const &graph) {
-                if (this != &graph) {
-                    if (adjacencyMat) {
-                        for (int i = 0; i < numNodes; ++i) { delete[] adjacencyMat[i]; }
-                        delete[] adjacencyMat;
-                    }
-
-                    if (nodes) { delete[] nodes; }
-
-                    maxAdj = graph.maxAdj;
-                    numNodes = graph.numNodes;
-                    adjacencyMat = new bool*[numNodes];
-
-                    for (int i = 0; i < numNodes; ++i) {
-                        for (int j = 0; j < numNodes; ++j) {
-                            adjacencyMat[i][j] = graph.adjacencyMat[i][j];
-                        }
-                    }
-                }
-
-                return *this;
-            };
-
-            Graph& operator = (Graph &&graph) {
-                if (this != &graph) {
-                    maxAdj = graph.maxAdj;
-                    numNodes = graph.numNodes;
-                    adjacencyMat = graph.adjacencyMat;
-                    nodes = graph.nodes;
-
-                    graph.adjacencyMat = nullptr;
-                    graph.nodes = nullptr;
-                }
-
-                return *this;
-            };
-
-            ~Graph() {
-                for (int i = 0; i < numNodes; ++i) { delete[] adjacencyMat[i]; }
-                delete[] adjacencyMat;
-                delete[] nodes;
-            };
+            Graph(Graph const &graph);
+            Graph(Graph &&graph);
+            Graph& operator = (Graph const &graph);
+            Graph& operator = (Graph &&graph);
+            ~Graph();
 
 
             // * ==================
@@ -227,13 +151,6 @@ namespace Dralgeer {
             // returns a list of SubScene nodes adjacent to a given SubScene node
             // numAdj will be updated to equal the number of adjacent SubScene nodes
             // remember to use delete[] after you finish using this list
-            T* adjacentNodes(int node, int &numAdj) {
-                numAdj = 0;
-                T* adjNodes = new T[maxAdj];
-
-                for (int i = 0; i < numNodes; ++i) { if (adjacencyMat[node][i]) { adjNodes[numAdj++] = nodes[i]; }}
-
-                return adjNodes;
-            };
+            int* adjacentNodes(int node, int &numAdj);
     };
 }

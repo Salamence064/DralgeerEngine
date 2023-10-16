@@ -13,7 +13,7 @@ namespace Dralgeer {
 
     // todo basically the editor will be used to create the rooms then the rooms will be put into each of the root scenes as subscenes
 
-    enum RootScene {
+    enum ROOT_SCENE {
         FLOOR1,
         FLOOR2,
         FLOOR3,
@@ -24,18 +24,6 @@ namespace Dralgeer {
         FLOOR8,
         FLOOR9,
         LEVEL_EDITOR_SCENE
-    };
-
-    class RootScenes {
-        private:
-            // * ==============
-            // * Attributes
-            // * ==============
-            
-
-        public:
-
-
     };
 
     // todo probably use a graph inside of the root scene to determine which subscene to switch to
@@ -124,9 +112,42 @@ namespace Dralgeer {
             };
     };
 
+    class RootScene {
+        private:
+            // * ==============
+            // * Attributes
+            // * ==============
+
+            SubScene* rooms; // list of rooms
+            Graph adjRooms; // graph storing each of the rooms' adjacencies
+            int numRooms = 0; // number of rooms
+            int activeRoom = 0; // the room that is currently active
+
+        public:
+            inline RootScene() {};
+
+            // * Do not allow for construction of a RootScene from another RootScene
+            inline RootScene(RootScene const &rs) { throw std::runtime_error("Cannot construct a RootScene object from another RootScene object."); };
+            inline RootScene(RootScene &&rs) { throw std::runtime_error("Cannot construct a RootScene object from another RootScene object."); };
+
+            // * Do not allow for reassignment of a RootScene
+            inline RootScene& operator = (RootScene const &rs) { throw std::runtime_error("You cannot reassign a RootScene object."); };
+            inline RootScene& operator = (RootScene &&rs) { throw std::runtime_error("You cannot reassign a RootScene object."); };
+
+            inline ~RootScene() { delete[] rooms; };
+
+
+            // * ===================
+            // * Normal Functions
+            // * ===================
+
+            // initialize the root scene based on which root scene is chosen
+            void init(ROOT_SCENE rootScene);
+    };
+
     struct Scene {
         void* scene;
-        RootScene type;
+        ROOT_SCENE type;
     };
 
     // todo add a removeGameObject function
