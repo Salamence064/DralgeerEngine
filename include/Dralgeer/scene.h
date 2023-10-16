@@ -26,12 +26,29 @@ namespace Dralgeer {
         LEVEL_EDITOR_SCENE
     };
 
+    class RootScenes {
+        private:
+            // * ==============
+            // * Attributes
+            // * ==============
+            
+
+        public:
+
+
+    };
+
     // todo probably use a graph inside of the root scene to determine which subscene to switch to
 
     // todo probably move some of the inline stuff into functions in the .cpp files
 
     // todo update to be serialized sometime. Probs once I roll out my new serialization format
     // todo add an onNotify function when I need it
+
+    // todo next steps:
+    //  - Add root scenes
+    //  - Add graphs inside the root scenes
+    //  - Add the event system stuff to switch between certain root scenes
 
     // A scene contained within a root scene.
     // These will be used to represent different rooms or subareas.

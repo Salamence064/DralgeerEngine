@@ -19,6 +19,8 @@ namespace Dralgeer {
         frameBuffer.init(width, height);
         renderer.init(spr, size);
         physicsHandler = Zeta::Handler(g, timeStep); // todo this will probs cause an error
+        // todo set it up so that we generate and provide the graph a list of connected subscenes
+        // adjScene = std::move(Graph());
 
         this->capacity = capacity;
         sprites = new SpriteRenderer*[capacity];
