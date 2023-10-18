@@ -118,11 +118,46 @@ namespace Dralgeer {
         // * ========================================================================================
         // * SpriteRenderer Serializer
 
+        // Takes in spr as a pointer since the engine stores its SpriteRenderers as pointers in most parts
+        inline void serializeSpriteRenderer(unsigned char* buffer, size_t &bufferSize, SpriteRenderer* spr) {
+            // store the color values
+            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.r));
+            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.g));
+            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.b));
+            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.a));
+
+            // serialize the sprite
+            serializeSprite(buffer, bufferSize, spr->sprite);
+
+            // serialize the transform
+            serializeTransform(buffer, bufferSize, spr->transform);
+        };
+
         // * ========================================================================================
         // * GameObject Serializer
 
+        // GameObjects are stored as pointers in most parts of the engine so it takes in GameObject as a pointer.
+        inline void serializeGameObject(unsigned char* buffer, size_t &bufferSize, GameObject* go) {
+            // store the name
+            serializeString(buffer, bufferSize, go->name.c_str());
+
+            // store the spriteRenderer
+            serializeSpriteRenderer(buffer, bufferSize, go->sprite);
+        };
+
         // * ========================================================================================
         // * SpriteArea Serializer
+
+        inline void serializeSpriteArea(unsigned char* buffer, size_t &bufferSize, SpriteArea const &sa) {
+            // store the SpriteRenderer
+            serializeSpriteRenderer(buffer, bufferSize, sa.spr);
+
+            // store the min and max vectors
+            serializeUint16(buffer, bufferSize, (uint16_t) sa.min.x);
+            serializeUint16(buffer, bufferSize, (uint16_t) sa.min.y);
+            serializeUint16(buffer, bufferSize, (uint16_t) sa.max.x);
+            serializeUint16(buffer, bufferSize, (uint16_t) sa.max.y);
+        };
 
         // * ========================================================================================
     }
