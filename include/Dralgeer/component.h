@@ -62,18 +62,6 @@ namespace Dralgeer {
     };
 
 
-    // * =====================
-    // * SpriteArea Struct
-    // * =====================
-
-    // Store a sprite and the static area it will occupy.
-    // Used to reduce the memory the engine uses.
-    struct SpriteArea {
-        SpriteRenderer* spr;
-        glm::vec2 min, max;
-    };
-
-
     // * ====================
     // * Game Object Stuff
     // * ====================
@@ -92,6 +80,7 @@ namespace Dralgeer {
             bool serialize = 1;
             bool dead = 0;
             bool pickable = 1;
+            bool dynamic = 1; // will be set dependent on the sprite atlas selected when the object is created -- default of dynamic
             
             // * ===============================================
 

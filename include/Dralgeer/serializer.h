@@ -7,7 +7,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Uint Serializers
 
-        inline void serializeUint64(unsigned char* buffer, size_t &bufferSize, uint64_t n) {
+        inline void serializeUint64(char* buffer, size_t &bufferSize, uint64_t n) {
             buffer[bufferSize++] = n >> 56;
             buffer[bufferSize++] = n >> 48;
             buffer[bufferSize++] = n >> 40;
@@ -18,26 +18,26 @@ namespace Dralgeer {
             buffer[bufferSize++] = n;
         };
 
-        inline void serializeUint32(unsigned char* buffer, size_t &bufferSize, uint32_t n) {
+        inline void serializeUint32(char* buffer, size_t &bufferSize, uint32_t n) {
             buffer[bufferSize++] = n >> 24;
             buffer[bufferSize++] = n >> 16;
             buffer[bufferSize++] = n >> 8;
             buffer[bufferSize++] = n;
         };
 
-        inline void serializeUint16(unsigned char* buffer, size_t &bufferSize, uint16_t n) {
+        inline void serializeUint16(char* buffer, size_t &bufferSize, uint16_t n) {
             buffer[bufferSize++] = n >> 8;
             buffer[bufferSize++] = n;
         };
 
-        inline void serializeUint8(unsigned char* buffer, size_t &bufferSize, uint8_t n) {
+        inline void serializeUint8(char* buffer, size_t &bufferSize, uint8_t n) {
             buffer[bufferSize++] = n;
         };
 
         // * ========================================================================================
         // * Float Serializer
 
-        inline void serializeFloat(unsigned char* buffer, size_t &bufferSize, float n) {
+        inline void serializeFloat(char* buffer, size_t &bufferSize, float n) {
             // assume the float size to be 32bits
             uint32_t num = *(uint32_t*) &n;
 
@@ -59,7 +59,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * String Serializer
 
-        inline void serializeString(unsigned char* buffer, size_t &bufferSize, const char* str) {
+        inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
             int n = 0;
             while (str[n] != '\0') { buffer[bufferSize++] = str[n++]; }
             buffer[bufferSize++] = str[n]; // add the null character to the buffer to ensure we know when our string ends for deserializing
@@ -68,7 +68,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Sprite Serializer
 
-        inline void serializeSprite(unsigned char* buffer, size_t &bufferSize, Sprite const &sprite) {
+        inline void serializeSprite(char* buffer, size_t &bufferSize, Sprite const &sprite) {
             // store the width and height
             serializeUint16(buffer, bufferSize, (uint16_t) sprite.width);
             serializeUint16(buffer, bufferSize, (uint16_t) sprite.height);
@@ -91,7 +91,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Transform Serializer
 
-        inline void serializeTransform(unsigned char* buffer, size_t &bufferSize, Transform const &transform) {
+        inline void serializeTransform(char* buffer, size_t &bufferSize, Transform const &transform) {
             // store the position
             serializeUint16(buffer, bufferSize, (uint16_t) transform.pos.x);
             serializeUint16(buffer, bufferSize, (uint16_t) transform.pos.y);
@@ -119,7 +119,7 @@ namespace Dralgeer {
         // * SpriteRenderer Serializer
 
         // Takes in spr as a pointer since the engine stores its SpriteRenderers as pointers in most parts
-        inline void serializeSpriteRenderer(unsigned char* buffer, size_t &bufferSize, SpriteRenderer* spr) {
+        inline void serializeSpriteRenderer(char* buffer, size_t &bufferSize, SpriteRenderer* spr) {
             // store the color values
             serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.r));
             serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.g));
@@ -137,26 +137,12 @@ namespace Dralgeer {
         // * GameObject Serializer
 
         // GameObjects are stored as pointers in most parts of the engine so it takes in GameObject as a pointer.
-        inline void serializeGameObject(unsigned char* buffer, size_t &bufferSize, GameObject* go) {
+        inline void serializeGameObject(char* buffer, size_t &bufferSize, GameObject* go) {
             // store the name
             serializeString(buffer, bufferSize, go->name.c_str());
 
             // store the spriteRenderer
             serializeSpriteRenderer(buffer, bufferSize, go->sprite);
-        };
-
-        // * ========================================================================================
-        // * SpriteArea Serializer
-
-        inline void serializeSpriteArea(unsigned char* buffer, size_t &bufferSize, SpriteArea const &sa) {
-            // store the SpriteRenderer
-            serializeSpriteRenderer(buffer, bufferSize, sa.spr);
-
-            // store the min and max vectors
-            serializeUint16(buffer, bufferSize, (uint16_t) sa.min.x);
-            serializeUint16(buffer, bufferSize, (uint16_t) sa.min.y);
-            serializeUint16(buffer, bufferSize, (uint16_t) sa.max.x);
-            serializeUint16(buffer, bufferSize, (uint16_t) sa.max.y);
         };
 
         // * ========================================================================================

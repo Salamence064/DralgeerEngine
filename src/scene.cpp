@@ -6,6 +6,7 @@
 #include <Dralgeer/gizmo.h>
 #include <fstream>
 #include <Dralgeer/systemmessages.h>
+#include <Dralgeer/serializer.h>
 
 // todo force gameObject positions and transforms to be uint16s
 
@@ -13,9 +14,7 @@ namespace Dralgeer {
     // * ================================================
     // * SubScene Stuff
 
-    void SubScene::init(int width, int height, int capacity, SpriteRenderer** spr, int size,
-                    ZMath::Vec2D const &g = ZMath::Vec2D(0.0f), float timeStep = FPS_60)
-    {
+    void SubScene::init(int width, int height, int capacity, SpriteRenderer** spr, int size, ZMath::Vec2D const &g, float timeStep) {
         frameBuffer.init(width, height);
         renderer.init(spr, size);
         physicsHandler = Zeta::Handler(g, timeStep);
@@ -298,18 +297,65 @@ namespace Dralgeer {
     // };
 
     void LevelEditorScene::exportScene() {
-        int objects = 0; // todo change to uint_16 when updating the serializer
+        char buffer[SERIALIZER_BUFFER_SIZE]; // buffer to write to the file
+        size_t bufferSize = 4; // used entries in the buffer -- start at 4 to reserve the first byte for the numObjects, numSprites, and numAreas
 
-        // count the number of serializable GameObjects
-        for (int i = 0; i < numObjects; ++i) { if (gameObjects[i]->serialize) { ++objects; }}
+        uint16_t objects = 0;
+        uint16_t numSprites = 0;
 
-        std::ofstream f("../scenes/levelEditor.scene");
-        f << "serializedObjects: " << objects << ";\n\n";
+        // todo there's most certainly a more efficient way to do this
+        uint16_t cap = 32;
+        SpriteRenderer** spr = new SpriteRenderer*[32];
+
+        // serialize game objects
+        for (uint16_t i = 0; i < numObjects; ++i) {
+            // yuckk, I hate the nested if statements but we'll try to optimize them away them
+            if (gameObjects[i]->serialize) {
+                if (gameObjects[i]->dynamic) {
+                    ++objects;
+                    Serializer::serializeGameObject(buffer, bufferSize, gameObjects[i]);
+
+                } else {
+                    // check for resizing
+                    if (numSprites == cap) {
+                        cap <<= 1;
+                        SpriteRenderer** temp = new SpriteRenderer*[cap];
+
+                        for (uint16_t j = 0; j < numSprites; ++j) { temp[j] = spr[j]; }
+
+                        delete[] spr;
+                        spr = temp;
+                    }
+
+                    spr[numSprites++] = gameObjects[i]->sprite;
+                }
+            }
+        }
+
+        // serialize the sprites
+        for (uint16_t i = 0; i < numSprites; ++i) { Serializer::serializeSpriteRenderer(buffer, bufferSize, spr[i]); }
+
+        // free memory
+        delete[] spr;
+
+        // serialize the object and sprite renderer counts
+        buffer[0] = objects >> 8;
+        buffer[1] = objects;
+        buffer[2] = numSprites >> 8;
+        buffer[3] = numSprites;
+
+        // write the buffer to the file
+        std::fstream f("../scenes/levelEditor.scene", std::ios::out | std::ios::binary | std::fstream::trunc);
+        f.write(buffer, bufferSize);
         f.close();
 
-        for (int i = 0; i < numObjects; ++i) {
-            if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditor.scene"); }
-        }
+        // std::ofstream f("../scenes/levelEditor.scene");
+        // f << "serializedObjects: " << objects << ";\n\n";
+        // f.close();
+
+        // for (int i = 0; i < numObjects; ++i) {
+        //     if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditor.scene"); }
+        // }
     };
 
     void LevelEditorScene::importScene() {

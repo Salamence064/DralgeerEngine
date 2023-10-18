@@ -2,6 +2,9 @@
 
 #pragma once
 
+// the default buffer size for serialization (currently 512kb, will lower if possible)
+#define SERIALIZER_BUFFER_SIZE 524288
+
 // determine if the architecture is little or big endian
 #define IS_BIG_ENDIAN (*(uint16_t *) "\0\xff" < 0x100)
 
@@ -63,3 +66,7 @@
 
 // editor ImGui stuff
 #define DEFAULT_WIDGET_WIDTH 220.0f
+
+// scene limits
+// #define MAX_GAME_OBJECTS 65535
+// #define MAX_SPRITES 65535

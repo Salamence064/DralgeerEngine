@@ -8,6 +8,8 @@
 #include <Zeta2D/physicshandler.h>
 
 namespace Dralgeer {
+    // todo add in enforcement to the level editor scene of the maximums (same for subscenes, too, but only for game objects that can be added)
+
     // todo this will only be added later after editor stuff is done since each will be custom made
     // todo root scenes
     // todo subscenes
