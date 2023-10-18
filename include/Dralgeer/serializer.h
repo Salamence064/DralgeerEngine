@@ -91,7 +91,29 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Transform Serializer
 
-        
+        inline void serializeTransform(unsigned char* buffer, size_t &bufferSize, Transform const &transform) {
+            // store the position
+            serializeUint16(buffer, bufferSize, (uint16_t) transform.pos.x);
+            serializeUint16(buffer, bufferSize, (uint16_t) transform.pos.y);
+            
+            // store the width and height
+            serializeUint16(buffer, bufferSize, (uint16_t) transform.scale.x);
+            serializeUint16(buffer, bufferSize, (uint16_t) transform.scale.y);
+
+            // store the zIndex
+            serializeUint16(buffer, bufferSize, (uint16_t) (transform.zIndex + 499));
+
+            // pack the rotation data into 16 bits
+            // first 9 bits are the non-decimal values
+            // last 7 bits are the first 2 decimal places of the rotation
+            serializeUint16(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floorf(transform.rotation)))<<7) | 
+                                                ((uint16_t) ((transform.rotation - (int) transform.rotation)*100)));
+            
+            // more readable version of what's happening above
+            // uint16_t n = (uint16_t) (transform.rotation - 360 * (int) std::floorf(transform.rotation));
+            // uint16_t d = (uint16_t) ((transform.rotation - (int) transform.rotation)*100);
+            // uint16_t r = n<<7|d; where r is the value serialized
+        };
 
         // * ========================================================================================
         // * SpriteRenderer Serializer
