@@ -93,7 +93,6 @@
 #include "listeners.h"
 #include "render.h"
 #include "debugdraw.h"
-#include "utilities.h"
 
 namespace Dralgeer {
     struct WindowData {
@@ -370,6 +369,25 @@ namespace Dralgeer {
                     }
 
                     break;
+                }
+
+                case SWITCH_ROOT_SCENE: {
+                    changeScene(sceneController.pop());
+                    break;
+                }
+
+                case SWITCH_SUBSCENE: {
+                    switch(currScene.type) {
+                        case FLOOR1: { /*((Floor1*) currScene.scene)->changeSubscene();*/ break; }
+                        case FLOOR2: { break; }
+                        case FLOOR3: { break; }
+                        case FLOOR4: { break; }
+                        case FLOOR5: { break; }
+                        case FLOOR6: { break; }
+                        case FLOOR7: { break; }
+                        case FLOOR8: { break; }
+                        case FLOOR9: { break; }
+                    }
                 }
             }
         };

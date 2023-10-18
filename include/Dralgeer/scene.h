@@ -1,5 +1,6 @@
 #pragma once
 
+#include "utilities.h"
 #include "framebuffer.h"
 #include "gizmo.h"
 #include "render.h"
@@ -32,11 +33,6 @@ namespace Dralgeer {
 
     // todo update to be serialized sometime. Probs once I roll out my new serialization format
     // todo add an onNotify function when I need it
-
-    // todo next steps:
-    //  - Add root scenes
-    //  - Add graphs inside the root scenes
-    //  - Add the event system stuff to switch between certain root scenes
 
     // A scene contained within a root scene.
     // These will be used to represent different rooms or subareas.
@@ -112,6 +108,7 @@ namespace Dralgeer {
             };
     };
 
+    // todo make it so this is not a RootScene class but instead we have a separate root scene class for each root scene
     class RootScene {
         private:
             // * ==============

@@ -10,6 +10,8 @@ namespace Dralgeer {
         LOAD_LEVEL,
         ADD_GAMEOBJECT_TO_SCENE,
         // REBUFFER,
+        SWITCH_ROOT_SCENE,
+        SWITCH_SUBSCENE,
         USER_EVENT
     };
 
