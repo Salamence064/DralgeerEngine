@@ -1,6 +1,7 @@
 #pragma once
 
 #include "component.h"
+#include "assetpool.h"
 
 namespace Dralgeer {
     // * ===================
@@ -274,6 +275,112 @@ namespace Dralgeer {
             // create a string object
             return std::string(str);
         };
+
+        // * ========================================================================================
+        // * Sprite Deserializer
+
+        inline Sprite deserializeSprite(char* buffer, size_t &currIndex) {
+            Sprite sprite;
+
+            // read in the width and height of the sprite
+            sprite.width = deserializeUint16(buffer, currIndex);
+            sprite.height = deserializeUint16(buffer, currIndex);
+
+            // read in the texture coordinates
+            sprite.texCoords[0].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[0].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[1].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[1].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[2].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[2].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[3].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[3].y = deserializeFloat(buffer, currIndex);
+
+            // read in the texture's filepath and initialize it
+            sprite.texture = AssetPool::getTexture("../../assets/images/spritesheets/" + deserializeString(buffer, currIndex) + ".png");
+            return sprite;
+        };
+
+        inline Sprite deserializeSprite(std::vector<char> const &buffer, size_t &currIndex) {
+            Sprite sprite;
+
+            // read in the width and height of the sprite
+            sprite.width = deserializeUint16(buffer, currIndex);
+            sprite.height = deserializeUint16(buffer, currIndex);
+
+            // read in the texture coordinates
+            sprite.texCoords[0].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[0].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[1].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[1].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[2].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[2].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[3].x = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[3].y = deserializeFloat(buffer, currIndex);
+
+            // read in the texture's filepath and initialize it
+            sprite.texture = AssetPool::getTexture("../../assets/images/spritesheets/" + deserializeString(buffer, currIndex) + ".png");
+            return sprite;
+        };
+
+        // * ========================================================================================
+        // * Transform Deserializer
+
+        inline Transform deserializeTransform(char* buffer, size_t &currIndex) {
+            Transform transform;
+
+            // bit masks
+            const uint16_t nonDecimal = 0b1111111110000000;
+            const uint16_t decimal = 0b0000000001111111;
+
+            // deserialize the position
+            transform.pos.x = deserializeUint16(buffer, currIndex);
+            transform.pos.y = deserializeUint16(buffer, currIndex);
+
+            // deserialize the width and height
+            transform.scale.x = deserializeUint16(buffer, currIndex);
+            transform.scale.y = deserializeUint16(buffer, currIndex);
+
+            // deserialize the zIndex
+            transform.zIndex = (int) deserializeUint16(buffer, currIndex) - 499;
+
+            // deserialize and unpack the rotation
+            uint16_t n = deserializeUint16(buffer, currIndex);
+            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f);
+
+            return transform;
+        };
+
+        inline Transform deserializeTransform(std::vector<char> const &buffer, size_t &currIndex) {
+            Transform transform;
+
+            // bit masks
+            const uint16_t nonDecimal = 0b1111111110000000;
+            const uint16_t decimal = 0b0000000001111111;
+
+            // deserialize the position
+            transform.pos.x = deserializeUint16(buffer, currIndex);
+            transform.pos.y = deserializeUint16(buffer, currIndex);
+
+            // deserialize the width and height
+            transform.scale.x = deserializeUint16(buffer, currIndex);
+            transform.scale.y = deserializeUint16(buffer, currIndex);
+
+            // deserialize the zIndex
+            transform.zIndex = (int) deserializeUint16(buffer, currIndex) - 499;
+
+            // deserialize and unpack the rotation
+            uint16_t n = deserializeUint16(buffer, currIndex);
+            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f);
+
+            return transform;
+        };
+
+        // * ========================================================================================
+        // * SpriteRenderer Deserializer
+
+        // * ========================================================================================
+        // * GameObject Serializer
 
         // * ========================================================================================
     }

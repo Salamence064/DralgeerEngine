@@ -362,25 +362,17 @@ namespace Dralgeer {
         
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});
+        size_t curr = 0; // current index at the buffer
         f.close();
 
         // read in the numObjects and numSprites
-        uint16_t objects = buffer[0]<<8|buffer[1];
-        uint16_t numSprites = buffer[2]<<8|buffer[3];
+        uint16_t objects = Deserializer::deserializeUint16(buffer, curr);
+        uint16_t numSprites = Deserializer::deserializeUint16(buffer, curr);
 
-        size_t curr = 4; // current index at the buffer
         gameObjects = new GameObject*[objects+numSprites];
 
         // read in all of the GameObjects
         for (uint16_t i = 0; i < objects; ++i) {
-            // instantiate the GameObject
-            gameObjects[i] = new GameObject();
-
-            // read in the name
-            gameObjects[i]->name = Deserializer::deserializeString(buffer, curr);
-
-            // read in the sprite renderer attached to the game object
-            
         }
     };
 
