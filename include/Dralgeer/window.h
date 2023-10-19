@@ -70,8 +70,6 @@
 // - Optimize stuff
 // ===================================================================
 
-// todo I think I will begin working on the scene selector, scene hierarchy, and root scenes
-
 // ===================================================================
 // Some fun bugs to fix -- yayyyyyy :(
 // - picking texture framebuffer requires multiplication by 2 in glReadPixel call when this shouldn't be necessary
@@ -87,6 +85,8 @@
 // ===================================================================
 
 // todo will need to ensure limits for zIndex, positions, and scale values are enforced
+// todo run valgrind on this to catch memory leaks
+// todo enforce the max string size for the serializer
 
 #include "event.h"
 #include "imguilayer.h"

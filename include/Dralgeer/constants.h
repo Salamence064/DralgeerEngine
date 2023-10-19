@@ -5,6 +5,9 @@
 // the default buffer size for serialization (currently 512kb, will lower if possible)
 #define SERIALIZER_BUFFER_SIZE 524288
 
+// the maximum string size supported by the serializer
+#define SERIALIZER_MAX_STRING_SIZE 32
+
 // determine if the architecture is little or big endian
 #define IS_BIG_ENDIAN (*(uint16_t *) "\0\xff" < 0x100)
 

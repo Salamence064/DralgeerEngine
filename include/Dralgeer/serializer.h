@@ -83,7 +83,7 @@ namespace Dralgeer {
             serializeFloat(buffer, bufferSize, sprite.texCoords[3].x);
             serializeFloat(buffer, bufferSize, sprite.texCoords[3].y);
 
-            // store the texture's filepath // todo will have to figure out how to get the 
+            // store the texture's filepath
             std::string filepath = sprite.texture->filepath.substr(sprite.texture->filepath.find_last_of('/') + 1, sprite.texture->filepath.find_last_of('.'));
             serializeString(buffer, bufferSize, filepath.c_str());
         };

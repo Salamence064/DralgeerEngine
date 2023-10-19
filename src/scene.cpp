@@ -297,6 +297,9 @@ namespace Dralgeer {
     // };
 
     void LevelEditorScene::exportScene() {
+        // todo swap the order between the game objects and sprite renderers for where they're stored
+        // todo since we expect to have more static sprites, this would help us a lot in the average case
+
         char buffer[SERIALIZER_BUFFER_SIZE]; // buffer to write to the file
         size_t bufferSize = 4; // used entries in the buffer -- start at 4 to reserve the first byte for the numObjects, numSprites, and numAreas
 
@@ -345,227 +348,34 @@ namespace Dralgeer {
         buffer[3] = numSprites;
 
         // write the buffer to the file
-        std::fstream f("../scenes/levelEditor.scene", std::ios::out | std::ios::binary | std::fstream::trunc);
+        std::ofstream f("../scenes/levelEditor.scene", std::ios::binary | std::fstream::trunc);
         f.write(buffer, bufferSize);
         f.close();
-
-        // std::ofstream f("../scenes/levelEditor.scene");
-        // f << "serializedObjects: " << objects << ";\n\n";
-        // f.close();
-
-        // for (int i = 0; i < numObjects; ++i) {
-        //     if (gameObjects[i]->serialize) { gameObjects[i]->exportGameObject("../scenes/levelEditor.scene"); }
-        // }
     };
 
     void LevelEditorScene::importScene() {
-        std::fstream f("../scenes/levelEditor.scene");
-        if (!f.is_open()) { return; } // todo when I get it to work, add an info message here
+        // todo check if there was a scene here previously, and, if so, delete it
 
-        try {
-            std::string line;
-            bool addToSrc = 0;
-            int addedObjects = 0, compAdded = 0;
+        // open the file to read from
+        std::ifstream f("../scenes/levelEdtor.scene", std::ios::binary);
+        
+        // todo maybe rewrite to use a file pointer and do so myself. For now I'll keep it as is though
+        // use some std library tricks to get all the data into a buffer
+        std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});
+        f.close();
 
-            // determine the number of serialized objects
-            std::getline(f, line);
-            int k = line.find(" ") + 1;
-            int serializedObjects = std::stoi(line.substr(k, line.find(";") - k));
-            int objects = serializedObjects + numObjects;
+        // read in the numObjects and numSprites
+        uint16_t objects = buffer[0]<<8|buffer[1];
+        uint16_t numSprites = buffer[2]<<8|buffer[3];
 
-            // determine the capacity of gameObjects
-            if (objects > capacity) {
-                do { capacity *= 2; } while (objects > capacity);
+        size_t curr = 4; // current index at the buffer
+        gameObjects = new GameObject*[objects+numSprites];
 
-                GameObject** temp = new GameObject*[capacity];
-                for (int j = 0; j < numObjects; ++j) { temp[j] = gameObjects[j]; }
-                delete[] gameObjects;
 
-                gameObjects = temp;
-            }
 
-            // add each serialized gameObject
-            while(addedObjects < serializedObjects && std::getline(f, line)) {
-                if (addToSrc) { // parse the GameObject
-                    switch(compAdded) {
-                        case 0: { // name
-                            int i = line.find("name:");
-                            if (i != std::string::npos) {
-                                int index = i + 6;
-                                gameObjects[numObjects] = new GameObject();
-                                gameObjects[numObjects]->name = line.substr(index, line.find(",") - index);
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        // ----- SpriteRenderer stuff -----
-                        case 1: { // color
-                            // color
-                            int i = line.find("color:");
-                            if (i != std::string::npos) {
-                                int index = i + 7;
-                                int c1 = line.find(","), c11 = c1 + 2;
-                                int c2 = line.find(",", c11), c22 = c2 + 2;
-                                int c3 = line.find(",", c22), c33 = c3 + 2;
-
-                                gameObjects[numObjects]->sprite = new SpriteRenderer();
-                                gameObjects[numObjects]->sprite->color.x = std::stof(line.substr(index, c1 - index));
-                                gameObjects[numObjects]->sprite->color.y = std::stof(line.substr(c11, c2 - c11));
-                                gameObjects[numObjects]->sprite->color.z = std::stof(line.substr(c22, c3 - c22));
-                                gameObjects[numObjects]->sprite->color.w = std::stof(line.substr(c33, line.find(",", c33) - c33));
-
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        // ----- Sprite stuff -----
-                        case 2: { // width
-                            int i = line.find("width:");
-                            if (i != std::string::npos) {
-                                int index = i + 7;
-                                gameObjects[numObjects]->sprite->sprite.width = std::stof(line.substr(index, line.find(",") - index));
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        case 3: { // height
-                            int i = line.find("height:");
-                            if (i != std::string::npos) {
-                                int index = i + 8;
-                                gameObjects[numObjects]->sprite->sprite.height = std::stof(line.substr(index, line.find(",") - index));
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        // ----- Texture stuff -----
-
-                        case 4: { // filepath
-                            int i = line.find("filepath:");
-                            if (i != std::string::npos) {
-                                int index = i + 10;
-                                gameObjects[numObjects]->sprite->sprite.texture = AssetPool::getTexture(line.substr(index, line.find(",") - index));
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        // -------------------------
-
-                        case 5: { // texCoords
-                            int i = line.find("texCoords:");
-                            if (i != std::string::npos) {
-                                int index = i + 11;
-                                int c1 = line.find(",", index), sc1 = line.find(";", c1), c11 = c1 + 2, sc11 = sc1 + 2;
-                                int c2 = line.find(",", sc11), sc2 = line.find(";", c2), c22 = c2 + 2, sc22 = sc2 + 2;
-                                int c3 = line.find(",", sc22), sc3 = line.find(";", c3), c33 = c3 + 2, sc33 = sc3 + 2;
-                                int c4 = line.find(",", sc33), c44 = c4 + 2;
-
-                                gameObjects[numObjects]->sprite->sprite.texCoords[0].x = std::stof(line.substr(index, c1 - index));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[0].y = std::stof(line.substr(c11, sc1 - c11));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[1].x = std::stof(line.substr(sc11, c2 - sc11));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[1].y = std::stof(line.substr(c22, sc2 - c22));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[2].x = std::stof(line.substr(sc22, c3 - sc22));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[2].y = std::stof(line.substr(c33, sc3 - c33));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[3].x = std::stof(line.substr(sc33, c4 - sc33));
-                                gameObjects[numObjects]->sprite->sprite.texCoords[3].y = std::stof(line.substr(c44, line.find(",", c44) - c44));
-
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        // ------------------------
-                        // --------------------------------
-
-                        // ----- Transform Stuff -----
-
-                        case 6: { // pos
-                            int i = line.find("pos:");
-                            if (i != std::string::npos) {
-                                int index = i + 5, c1 = line.find(",", index), c11 = c1 + 2;
-
-                                gameObjects[numObjects]->sprite->transform.pos.x = std::stof(line.substr(index, c1 - index));
-                                gameObjects[numObjects]->sprite->transform.pos.y = std::stof(line.substr(c11, line.find(",", c11) - c11));
-
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        case 7: { // scale
-                            int i = line.find("scale:");
-                            if (i != std::string::npos) {
-                                int index = i + 7, c1 = line.find(",", index), c11 = c1 + 2;
-
-                                gameObjects[numObjects]->sprite->transform.scale.x = std::stof(line.substr(index, c1 - index));
-                                gameObjects[numObjects]->sprite->transform.scale.y = std::stof(line.substr(c11, line.find(",", c11) - c11));
-
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        case 8: { // zIndex
-                            int i = line.find("zIndex:");
-                            if (i != std::string::npos) {
-                                int index = i + 8;
-                                gameObjects[numObjects]->sprite->transform.zIndex = std::stoi(line.substr(index, line.find(",") - index));
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        case 9: { // rotation
-                            int i = line.find("rotation:");
-                            if (i != std::string::npos) {
-                                int index = i + 10;
-                                gameObjects[numObjects]->sprite->transform.rotation = std::stof(line.substr(index, line.find(",") - index));
-                                ++compAdded;
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        // ---------------------------
-
-                        case 10: { // End of GameObject
-                            addToSrc = 0;
-                            compAdded = 0;
-                            ++addedObjects;
-                            ++numObjects;
-                        }
-                    }
-
-                } else if (line.find("GameObject:") != std::string::npos) {
-                    addToSrc = 1;
-                }
-            }
-
-        } catch (...) {
-            std::cout << "Fun error\n"; // todo add error message from systemmessages.h
+        // read in all of the GameObjects
+        for (uint16_t i = 0; i < objects; ++i) {
+            
         }
     };
 

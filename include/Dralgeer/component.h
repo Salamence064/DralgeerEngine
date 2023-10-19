@@ -107,7 +107,6 @@ namespace Dralgeer {
             inline void start() { sprite->start(); sprite->entityID = id; };
             inline void update() { sprite->update(); transform = sprite->transform; };
             void imGui();
-            void exportGameObject(std::string const &filepath);
     };
 
 
