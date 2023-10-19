@@ -379,8 +379,74 @@ namespace Dralgeer {
         // * ========================================================================================
         // * SpriteRenderer Deserializer
 
+        inline SpriteRenderer* deserializeSpriteRenderer(char* buffer, size_t &currIndex) {
+            SpriteRenderer* spr = new SpriteRenderer();
+
+            // deserialize the color values
+            spr->color.r = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.g = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.b = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.a = deserializeUint8(buffer, currIndex)/255.0f;
+
+            // deserialize the sprite
+            spr->sprite = deserializeSprite(buffer, currIndex);
+
+            // deserialize the transform
+            spr->transform = deserializeTransform(buffer, currIndex);
+
+            return spr;
+        };
+
+        inline SpriteRenderer* deserializeSpriteRenderer(std::vector<char> const &buffer, size_t &currIndex) {
+            SpriteRenderer* spr = new SpriteRenderer();
+
+            // deserialize the color values
+            spr->color.r = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.g = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.b = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.a = deserializeUint8(buffer, currIndex)/255.0f;
+
+            // deserialize the sprite
+            spr->sprite = deserializeSprite(buffer, currIndex);
+
+            // deserialize the transform
+            spr->transform = deserializeTransform(buffer, currIndex);
+
+            return spr;
+        };
+
         // * ========================================================================================
         // * GameObject Serializer
+
+        inline GameObject* deserializeGameObject(char* buffer, size_t &currIndex) {
+            GameObject* go = new GameObject();
+
+            // deserialize the name
+            go->name = deserializeString(buffer, currIndex);
+
+            // deserialize the sprite renderer
+            go->sprite = deserializeSpriteRenderer(buffer, currIndex);
+
+            // sync the game object's transform with the sprite renderer
+            go->transform = go->sprite->transform;
+
+            return go;
+        };
+
+        inline GameObject* deserializeGameObject(std::vector<char> const &buffer, size_t &currIndex) {
+            GameObject* go = new GameObject();
+
+            // deserialize the name
+            go->name = deserializeString(buffer, currIndex);
+
+            // deserialize the sprite renderer
+            go->sprite = deserializeSpriteRenderer(buffer, currIndex);
+
+            // sync the game object's transform with the sprite renderer
+            go->transform = go->sprite->transform;
+
+            return go;
+        };
 
         // * ========================================================================================
     }
