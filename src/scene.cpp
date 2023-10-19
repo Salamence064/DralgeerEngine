@@ -355,6 +355,7 @@ namespace Dralgeer {
 
     void LevelEditorScene::importScene() {
         // todo check if there was a scene here previously, and, if so, delete it
+        // todo probs create custom functions for these guys
 
         // open the file to read from
         std::ifstream f("../scenes/levelEdtor.scene", std::ios::binary);
@@ -371,10 +372,17 @@ namespace Dralgeer {
         size_t curr = 4; // current index at the buffer
         gameObjects = new GameObject*[objects+numSprites];
 
-
+        char str[SERIALIZER_MAX_STRING_SIZE]; // read the strings into a buffer before exporting them to their fields
+        int strSize = 0;
 
         // read in all of the GameObjects
         for (uint16_t i = 0; i < objects; ++i) {
+            // read in the name
+            while(buffer[curr+strSize]) { str[strSize] = buffer[(curr++)+strSize++]; }
+            str[strSize++] = '\0';
+            ++curr;
+
+            // read in the sprite renderer attached to the game object
             
         }
     };

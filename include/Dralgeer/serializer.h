@@ -4,6 +4,10 @@
 
 namespace Dralgeer {
     namespace Serializer {
+        // * ===================
+        // * Serializer Stuff
+        // * ===================
+
         // * ========================================================================================
         // * Uint Serializers
 
@@ -61,7 +65,7 @@ namespace Dralgeer {
 
         inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
             int n = 0;
-            while (str[n] != '\0') { buffer[bufferSize++] = str[n++]; }
+            while (str[n]) { buffer[bufferSize++] = str[n++]; } // null character = 00000000
             buffer[bufferSize++] = str[n]; // add the null character to the buffer to ensure we know when our string ends for deserializing
         };
 
@@ -144,6 +148,49 @@ namespace Dralgeer {
             // store the spriteRenderer
             serializeSpriteRenderer(buffer, bufferSize, go->sprite);
         };
+
+        // * ========================================================================================
+
+
+        // * =====================
+        // * Deserializer Stuff
+        // * =====================
+
+        // ? Note: The deserializers expect the data at the given buffer index to be valid for the retuned type.
+
+        // * ========================================================================================
+        // * Uint Deserializers
+
+        inline uint64_t deserializeUint64(char* buffer, size_t &currIndex) {
+            return (uint64_t) buffer[currIndex++] << 56
+                    | (uint64_t) buffer[currIndex++] << 48
+                    | (uint64_t) buffer[currIndex++] << 40
+                    | (uint64_t) buffer[currIndex++] << 32
+                    | (uint32_t) buffer[currIndex++] << 24
+                    | (uint32_t) buffer[currIndex++] << 16
+                    | (uint16_t) buffer[currIndex++] << 8
+                    | (uint8_t) buffer[currIndex++];
+        };
+
+        inline uint32_t deserializeUint32(char* buffer, size_t &currIndex) {
+            return (uint32_t) buffer[currIndex++] << 24
+                    | (uint32_t) buffer[currIndex++] << 16
+                    | (uint16_t) buffer[currIndex++] << 8
+                    | (uint8_t) buffer[currIndex++];
+        };
+
+        inline uint16_t deserializeUint16(char* buffer, size_t &currIndex) {
+            return (uint16_t) buffer[currIndex++] << 8
+                    | (uint8_t) buffer[currIndex++];
+        };
+
+        inline uint8_t deserializeUint8(char* buffer, size_t &currIndex) { return (uint8_t) buffer[currIndex++]; };
+
+        // * ========================================================================================
+        // * Float Deserializer
+
+        // * ========================================================================================
+        // * String Deserializer
 
         // * ========================================================================================
     }
