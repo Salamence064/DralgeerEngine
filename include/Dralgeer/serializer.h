@@ -3,11 +3,11 @@
 #include "component.h"
 
 namespace Dralgeer {
-    namespace Serializer {
-        // * ===================
-        // * Serializer Stuff
-        // * ===================
+    // * ===================
+    // * Serializer Stuff
+    // * ===================
 
+    namespace Serializer {
         // * ========================================================================================
         // * Uint Serializers
 
@@ -150,14 +150,15 @@ namespace Dralgeer {
         };
 
         // * ========================================================================================
+    }
 
 
-        // * =====================
-        // * Deserializer Stuff
-        // * =====================
+    // * =====================
+    // * Deserializer Stuff
+    // * =====================
 
-        // ? Note: The deserializers expect the data at the given buffer index to be valid for the retuned type.
-
+    // ? Note: The deserializers expect the data at the given buffer index to be valid for the retuned type.
+    namespace Deserializer {
         // * ========================================================================================
         // * Uint Deserializers
 
@@ -186,11 +187,93 @@ namespace Dralgeer {
 
         inline uint8_t deserializeUint8(char* buffer, size_t &currIndex) { return (uint8_t) buffer[currIndex++]; };
 
+
+        // * =======================
+        // * STD Library Friendly
+        // * =======================
+
+        inline uint64_t deserializeUint64(std::vector<char> const &buffer, size_t &currIndex) {
+            return (uint64_t) buffer[currIndex++] << 56
+                    | (uint64_t) buffer[currIndex++] << 48
+                    | (uint64_t) buffer[currIndex++] << 40
+                    | (uint64_t) buffer[currIndex++] << 32
+                    | (uint32_t) buffer[currIndex++] << 24
+                    | (uint32_t) buffer[currIndex++] << 16
+                    | (uint16_t) buffer[currIndex++] << 8
+                    | (uint8_t) buffer[currIndex++];
+        };
+
+        inline uint32_t deserializeUint32(std::vector<char> const &buffer, size_t &currIndex) {
+            return (uint32_t) buffer[currIndex++] << 24
+                    | (uint32_t) buffer[currIndex++] << 16
+                    | (uint16_t) buffer[currIndex++] << 8
+                    | (uint8_t) buffer[currIndex++];
+        };
+
+        inline uint16_t deserializeUint16(std::vector<char> const &buffer, size_t &currIndex) {
+            return (uint16_t) buffer[currIndex++] << 8
+                    | (uint8_t) buffer[currIndex++];
+        };
+
+        inline uint8_t deserializeUint8(std::vector<char> const &buffer, size_t &currIndex) { return (uint8_t) buffer[currIndex++]; };
+
         // * ========================================================================================
         // * Float Deserializer
 
+        inline float deserializeFloat(char* buffer, size_t &currIndex) {
+            // ? It is assumed that floats are 32bit
+            // ? If your machine is PDP Endian you will not get the proper float value back as it will not have serialized properly
+
+            uint32_t n = deserializeUint32(buffer, currIndex);
+            return *(float*) &n;
+        };
+
+
+        // * =======================
+        // * STD Library Friendly
+        // * =======================
+
+        inline float deserializeFloat(std::vector<char> const &buffer, size_t &currIndex) {
+            // ? It is assumed that floats are 32bit
+            // ? If your machine is PDP Endian you will not get the proper float value back as it will not have serialized properly
+
+            uint32_t n = deserializeUint32(buffer, currIndex);
+            return *(float*) &n;
+        };
+
         // * ========================================================================================
         // * String Deserializer
+
+        inline std::string deserializeString(char* buffer, size_t &currIndex) {
+            char str[SERIALIZER_MAX_STRING_SIZE]; // read characters into a buffer used to instantiate a string
+            int strSize = 0;
+
+            // read in the string
+            while(buffer[currIndex+strSize]) { str[strSize] = buffer[(currIndex++)+strSize++]; }
+            str[strSize] = '\0';
+            ++currIndex;
+
+            // create a string object
+            return std::string(str);
+        };
+
+
+        // * =======================
+        // * STD Library Friendly
+        // * =======================
+
+        inline std::string deserializeString(std::vector<char> const &buffer, size_t &currIndex) {
+            char str[SERIALIZER_MAX_STRING_SIZE]; // read characters into a buffer used to instantiate a string
+            int strSize = 0;
+
+            // read in the string
+            while(buffer[currIndex+strSize]) { str[strSize] = buffer[(currIndex++)+strSize++]; }
+            str[strSize] = '\0';
+            ++currIndex;
+
+            // create a string object
+            return std::string(str);
+        };
 
         // * ========================================================================================
     }

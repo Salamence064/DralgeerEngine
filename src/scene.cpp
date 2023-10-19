@@ -360,7 +360,6 @@ namespace Dralgeer {
         // open the file to read from
         std::ifstream f("../scenes/levelEdtor.scene", std::ios::binary);
         
-        // todo maybe rewrite to use a file pointer and do so myself. For now I'll keep it as is though
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});
         f.close();
@@ -372,15 +371,13 @@ namespace Dralgeer {
         size_t curr = 4; // current index at the buffer
         gameObjects = new GameObject*[objects+numSprites];
 
-        char str[SERIALIZER_MAX_STRING_SIZE]; // read the strings into a buffer before exporting them to their fields
-        int strSize = 0;
-
         // read in all of the GameObjects
         for (uint16_t i = 0; i < objects; ++i) {
+            // instantiate the GameObject
+            gameObjects[i] = new GameObject();
+
             // read in the name
-            while(buffer[curr+strSize]) { str[strSize] = buffer[(curr++)+strSize++]; }
-            str[strSize++] = '\0';
-            ++curr;
+            gameObjects[i]->name = Deserializer::deserializeString(buffer, curr);
 
             // read in the sprite renderer attached to the game object
             
