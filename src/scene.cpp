@@ -348,12 +348,17 @@ namespace Dralgeer {
         buffer[3] = numSprites;
 
         // write the buffer to the file
-        std::ofstream f("../scenes/levelEditor.scene", std::ios::binary | std::fstream::trunc);
+        std::fstream f("../scenes/levelEditor.scene", std::ios::binary | std::ios::out | std::fstream::trunc);
         f.write(buffer, bufferSize);
         f.close();
     };
 
     void LevelEditorScene::importScene() {
+        // open the file to read from
+        std::fstream f("../scenes/levelEditor.scene", std::ios::binary | std::ios::in);
+
+        if (!f.is_open()) { return; } // only read it in if the file exists
+
         // free the scene's memory if previously allocated
         // note: we do not need to delete the sprite sheet as the AssetPool will handle that for us
         if (gameObjects) {
@@ -361,9 +366,9 @@ namespace Dralgeer {
             delete[] gameObjects;
         }
 
-        // open the file to read from
-        std::ifstream f("../scenes/levelEdtor.scene", std::ios::binary);
-        
+        // todo crashes now when loading
+        // todo look at the image I saved tomorrow or the day after
+
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});
         size_t curr = 0; // current index at the buffer

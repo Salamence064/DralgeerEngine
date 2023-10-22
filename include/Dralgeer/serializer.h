@@ -111,7 +111,7 @@ namespace Dralgeer {
             // pack the rotation data into 16 bits
             // first 9 bits are the non-decimal values
             // last 7 bits are the first 2 decimal places of the rotation
-            serializeUint16(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floorf(transform.rotation/360.0f)))<<7) | 
+            serializeUint16(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floor(transform.rotation/360.0f)))<<7) | 
                                                 ((uint16_t) ((transform.rotation - (int) transform.rotation)*100)));
             
             // more readable version of what's happening above
