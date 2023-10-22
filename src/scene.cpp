@@ -354,8 +354,12 @@ namespace Dralgeer {
     };
 
     void LevelEditorScene::importScene() {
-        // todo check if there was a scene here previously, and, if so, delete it
-        // todo probs create custom functions for these guys
+        // free the scene's memory if previously allocated
+        // note: we do not need to delete the sprite sheet as the AssetPool will handle that for us
+        if (gameObjects) {
+            for (int i = 0; i < numObjects; ++i) { delete gameObjects[i]; }
+            delete[] gameObjects;
+        }
 
         // open the file to read from
         std::ifstream f("../scenes/levelEdtor.scene", std::ios::binary);
@@ -372,8 +376,19 @@ namespace Dralgeer {
         gameObjects = new GameObject*[objects+numSprites];
 
         // read in all of the GameObjects
-        for (uint16_t i = 0; i < objects; ++i) {
+        for (uint16_t i = 0; i < objects; ++i) { gameObjects[i] = Deserializer::deserializeGameObject(buffer, curr); }
+
+        // read in all of the SpriteRenderers
+        // since this is the level editor scene we know they all must be dynamic and will turn them into GameObjects
+        for (uint32_t i = objects; i < (uint32_t) objects + (uint32_t) numSprites; ++i) {
+            gameObjects[i] = new GameObject();
+            gameObjects[i]->name = "StaticObject";
+            gameObjects[i]->dynamic = 0;
+            gameObjects[i]->sprite = Deserializer::deserializeSpriteRenderer(buffer, curr);
+            gameObjects[i]->transform = gameObjects[i]->sprite->transform;
         }
+
+        numObjects = objects + numSprites;
     };
 
     // * ================================================

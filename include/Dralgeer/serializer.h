@@ -111,7 +111,7 @@ namespace Dralgeer {
             // pack the rotation data into 16 bits
             // first 9 bits are the non-decimal values
             // last 7 bits are the first 2 decimal places of the rotation
-            serializeUint16(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floorf(transform.rotation)))<<7) | 
+            serializeUint16(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floorf(transform.rotation/360.0f)))<<7) | 
                                                 ((uint16_t) ((transform.rotation - (int) transform.rotation)*100)));
             
             // more readable version of what's happening above
@@ -229,11 +229,6 @@ namespace Dralgeer {
             return *(float*) &n;
         };
 
-
-        // * =======================
-        // * STD Library Friendly
-        // * =======================
-
         inline float deserializeFloat(std::vector<char> const &buffer, size_t &currIndex) {
             // ? It is assumed that floats are 32bit
             // ? If your machine is PDP Endian you will not get the proper float value back as it will not have serialized properly
@@ -257,11 +252,6 @@ namespace Dralgeer {
             // create a string object
             return std::string(str);
         };
-
-
-        // * =======================
-        // * STD Library Friendly
-        // * =======================
 
         inline std::string deserializeString(std::vector<char> const &buffer, size_t &currIndex) {
             char str[SERIALIZER_MAX_STRING_SIZE]; // read characters into a buffer used to instantiate a string
