@@ -366,8 +366,7 @@ namespace Dralgeer {
             delete[] gameObjects;
         }
 
-        // todo crashes now when loading
-        // todo look at the image I saved tomorrow or the day after
+        // todo bugged texture when loading back in
 
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});

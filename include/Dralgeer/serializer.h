@@ -89,7 +89,8 @@ namespace Dralgeer {
             serializeFloat(buffer, bufferSize, sprite.texCoords[3].y);
 
             // store the texture's filepath
-            std::string filepath = sprite.texture->filepath.substr(sprite.texture->filepath.find_last_of('/') + 1, sprite.texture->filepath.find_last_of('.'));
+            size_t n = sprite.texture->filepath.find_last_of('/') + 1;
+            std::string filepath = sprite.texture->filepath.substr(n, sprite.texture->filepath.find_last_of('.') - n);
             serializeString(buffer, bufferSize, filepath.c_str());
         };
 
@@ -258,8 +259,8 @@ namespace Dralgeer {
             int strSize = 0;
 
             // read in the string
-            while(buffer[currIndex+strSize]) { str[strSize] = buffer[(currIndex++)+strSize++]; }
-            str[strSize] = '\0';
+            while(buffer[currIndex]) { str[strSize++] = buffer[currIndex++]; }
+            str[strSize++] = '\0';
             ++currIndex;
 
             // create a string object
@@ -309,7 +310,8 @@ namespace Dralgeer {
             sprite.texCoords[3].y = deserializeFloat(buffer, currIndex);
 
             // read in the texture's filepath and initialize it
-            sprite.texture = AssetPool::getTexture("../../assets/images/spritesheets/" + deserializeString(buffer, currIndex) + ".png");
+            std::string str = deserializeString(buffer, currIndex);
+            sprite.texture = AssetPool::getTexture("../../assets/images/spritesheets/" + str + ".png");
             return sprite;
         };
 
