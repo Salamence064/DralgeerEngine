@@ -310,13 +310,19 @@ namespace Dralgeer {
         uint16_t cap = 32;
         SpriteRenderer** spr = new SpriteRenderer*[32];
 
+        // todo go through and print out the floats stuff to test
+
         // serialize game objects
         for (uint16_t i = 0; i < numObjects; ++i) {
-            // yuckk, I hate the nested if statements but we'll try to optimize them away them
             if (gameObjects[i]->serialize) {
                 if (gameObjects[i]->dynamic) {
                     ++objects;
                     Serializer::serializeGameObject(buffer, bufferSize, gameObjects[i]);
+
+                    Sprite s = gameObjects[i]->sprite->sprite;
+                    std::cout << "TexCoords: " << s.texCoords[0].x << ", " << s.texCoords[0].y << "; " << s.texCoords[1].x << ", " << s.texCoords[1].y;
+                    std::cout << "; " << s.texCoords[2].x << ", " << s.texCoords[2].y << "; " << s.texCoords[3].x << ", " << s.texCoords[3].y;
+                    std::cout << "\n\n";
 
                 } else {
                     // check for resizing
@@ -366,7 +372,7 @@ namespace Dralgeer {
             delete[] gameObjects;
         }
 
-        // todo bugged texture when loading back in
+        // todo floats do not get serialized properly
 
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});
@@ -380,7 +386,15 @@ namespace Dralgeer {
         gameObjects = new GameObject*[objects+numSprites];
 
         // read in all of the GameObjects
-        for (uint16_t i = 0; i < objects; ++i) { gameObjects[i] = Deserializer::deserializeGameObject(buffer, curr); }
+        for (uint16_t i = 0; i < objects; ++i) {
+            gameObjects[i] = Deserializer::deserializeGameObject(buffer, curr);
+            Sprite s = gameObjects[i]->sprite->sprite;
+
+            std::cout << "GameObject " << i << ":\n";
+            std::cout << "TexCoords: " <<  s.texCoords[0].x << ", " << s.texCoords[0].y << "; " << s.texCoords[1].x << ", " << s.texCoords[1].y;
+            std::cout << "; " << s.texCoords[2].x << ", " << s.texCoords[2].y << "; " << s.texCoords[3].x << ", " << s.texCoords[3].y;
+            std::cout << "\n\n";
+        }
 
         // read in all of the SpriteRenderers
         // since this is the level editor scene we know they all must be dynamic and will turn them into GameObjects

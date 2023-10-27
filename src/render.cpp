@@ -400,7 +400,7 @@ namespace Dralgeer {
     EditorBatch& EditorBatch::operator = (EditorBatch const &batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorBatch object. Do NOT use the '=' operator."); };
     EditorBatch& EditorBatch::operator = (EditorBatch &&batch) { throw std::runtime_error("[ERROR] Cannot reassign a EditorBatch object. Do NOT use the '=' operator."); };
     
-    // Do not have to delete the textures as the sprites should take care of that for us.
+    // Do not have to delete the textures as the AssetPool should take care of that for us.
     EditorBatch::~EditorBatch() {
         for (int i = 0; i < numSprites; ++i) { delete sprites[i]; }
 
