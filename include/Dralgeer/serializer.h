@@ -42,23 +42,40 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Float Serializer
 
+        inline uint32_t pack754(float f, uint8_t bits, uint8_t expbits) {
+            float fnorm;
+            int shift;
+            uint32_t sign, exp, significand;
+            uint8_t significandbits = bits - expbits - 1; // -1 for sign bit
+
+            if (f == 0.0) return 0; // get this special case out of the way
+
+            // check sign and begin normalization
+            if (f < 0) { sign = 1; fnorm = -f; }
+            else { sign = 0; fnorm = f; }
+
+            // get the normalized form of f and track the exponent
+            shift = 0;
+            while(fnorm >= 2.0) { fnorm /= 2.0; shift++; }
+            while(fnorm < 1.0) { fnorm *= 2.0; shift--; }
+            fnorm = fnorm - 1.0;
+
+            // calculate the binary form (non-float) of the significand data
+            significand = fnorm * ((1LL<<significandbits) + 0.5f);
+
+            // get the biased exponent
+            exp = shift + ((1<<(expbits-1)) - 1); // shift + bias
+
+            // return the final answer
+            return (sign<<(bits-1)) | (exp<<(bits-expbits-1)) | significand;
+        };
+
         inline void serializeFloat(char* buffer, size_t &bufferSize, float n) {
-            // assume the float size to be 32bits
-            uint32_t num = *(uint32_t*) &n;
+            // ? Assume the float size to be 32bits and IEEE754 compliant.
+            // ? Note, this serializer will fail for any other float format.
 
-            // check endianness so that we know the order in which to serialize the float's bytes
-            // PDP endianness is not supported
-            // we cannot use a preprocessor macro due to the dependence on casting
-
-            if (IS_BIG_ENDIAN) { // big endian
-                serializeUint32(buffer, bufferSize, num);
-                
-            } else { // little endian
-                buffer[bufferSize++] = num;
-                buffer[bufferSize++] = num >> 8;
-                buffer[bufferSize++] = num >> 16;
-                buffer[bufferSize++] = num >> 24;
-            }
+            uint32_t num = pack754(n, 32, 8);
+            serializeUint32(buffer, bufferSize, num);
         };
 
         // * ========================================================================================
