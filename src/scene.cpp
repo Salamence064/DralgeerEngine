@@ -372,7 +372,7 @@ namespace Dralgeer {
             delete[] gameObjects;
         }
 
-        // todo floats do not get serialized properly
+        // todo the float 0.428571 does not get serialized properly
 
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});

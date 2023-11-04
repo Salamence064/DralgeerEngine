@@ -42,6 +42,8 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Float Serializer
 
+        // Pack an IEEE-754 float.
+        // Code from Brian Hall's Guide to Network Programming.
         inline uint32_t pack754(float f, uint8_t bits, uint8_t expbits) {
             float fnorm;
             int shift;
@@ -239,20 +241,46 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Float Deserializer
 
+        // Unpack an IEEE-754 float.
+        // Code from Brian Hall's Guide to Network Programming.
+        inline float unpack754(uint32_t i, uint8_t bits, uint8_t expbits) {
+            float result;
+            long long shift;
+            uint32_t bias;
+            uint8_t significandbits = bits - expbits - 1; // -1 for sign bit
+
+            if (i == 0) return 0.0;
+
+            // pull the significand
+            result = (i&((1LL<<significandbits)-1)); // mask
+            result /= (1LL<<significandbits); // convert back to float
+            result += 1.0f; // add the one back on
+
+            // deal with the exponent
+            bias = (1<<(expbits-1)) - 1;
+            shift = ((i>>significandbits)&((1LL<<expbits)-1)) - bias;
+            while(shift > 0) { result *= 2.0; shift--; }
+            while(shift < 0) { result /= 2.0; shift++; }
+
+            // sign it
+            result *= (i>>(bits-1))&1? -1.0: 1.0;
+
+            return result;
+        };
+
+
         inline float deserializeFloat(char* buffer, size_t &currIndex) {
             // ? It is assumed that floats are 32bit
-            // ? If your machine is PDP Endian you will not get the proper float value back as it will not have serialized properly
 
             uint32_t n = deserializeUint32(buffer, currIndex);
-            return *(float*) &n;
+            return unpack754(n, 32, 8);
         };
 
         inline float deserializeFloat(std::vector<char> const &buffer, size_t &currIndex) {
             // ? It is assumed that floats are 32bit
-            // ? If your machine is PDP Endian you will not get the proper float value back as it will not have serialized properly
 
             uint32_t n = deserializeUint32(buffer, currIndex);
-            return *(float*) &n;
+            return unpack754(n, 32, 8);
         };
 
         // * ========================================================================================
