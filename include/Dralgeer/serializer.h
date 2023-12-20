@@ -42,6 +42,8 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Float Serializer
 
+        // todo write my own IEEE-754 float packer and unpacker
+
         // Pack an IEEE-754 float.
         // Code from Brian Hall's Guide to Network Programming.
         inline uint32_t pack754(float f, uint8_t bits, uint8_t expbits) {
@@ -244,6 +246,8 @@ namespace Dralgeer {
         // Unpack an IEEE-754 float.
         // Code from Brian Hall's Guide to Network Programming.
         inline float unpack754(uint32_t i, uint8_t bits, uint8_t expbits) {
+            std::cout << "howdy\n";
+
             float result;
             long long shift;
             uint32_t bias;

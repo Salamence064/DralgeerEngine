@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef ASSET_POOL_H
-#define ASSET_POOL_H
+// #ifndef ASSET_POOL_H
+// #define ASSET_POOL_H
 
 #include "component.h"
 
@@ -58,4 +58,4 @@ namespace Dralgeer {
     }
 }
 
-#endif // !ASSET_POOL_H
+// #endif // !ASSET_POOL_H
