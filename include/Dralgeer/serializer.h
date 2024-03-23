@@ -9,6 +9,9 @@ namespace Dralgeer {
     // * ===================
 
     namespace Serializer {
+        // todo will remove in the future
+        static_assert(sizeof(float) == sizeof(uint32_t) && alignof(float) == alignof(uint32_t), "Sizes of float and uint32 must match");
+
         // * ========================================================================================
         // * Uint Serializers
 
@@ -44,6 +47,15 @@ namespace Dralgeer {
 
         // todo write my own IEEE-754 float packer and unpacker
 
+        // ? The IEEE-754 float format is as follows:
+        // ?   1 bit for the sign
+        // ?   8 bits for the exponent
+        // ?   23 bits for the mantissa/significand/fraction
+        // ? Bits 0-22 are the fraction/mantissa/significand
+        // ? Bits 23-30 are the exponent
+        // ? Bit 31 is the sign
+
+
         // Pack an IEEE-754 float.
         // Code from Brian Hall's Guide to Network Programming.
         inline uint32_t pack754(float f, uint8_t bits, uint8_t expbits) {
@@ -78,7 +90,8 @@ namespace Dralgeer {
             // ? Assume the float size to be 32bits and IEEE754 compliant.
             // ? Note, this serializer will fail for any other float format.
 
-            uint32_t num = pack754(n, 32, 8);
+            uint32_t num;
+            memcpy(&num, &n, sizeof(float));
             serializeUint32(buffer, bufferSize, num);
         };
 
@@ -246,7 +259,7 @@ namespace Dralgeer {
         // Unpack an IEEE-754 float.
         // Code from Brian Hall's Guide to Network Programming.
         inline float unpack754(uint32_t i, uint8_t bits, uint8_t expbits) {
-            std::cout << "howdy\n";
+            // std::cout << "howdy\n";
 
             float result;
             long long shift;
@@ -272,19 +285,20 @@ namespace Dralgeer {
             return result;
         };
 
-
+        // It is assumed that floats are 32bit and IEEE754 compliant
         inline float deserializeFloat(char* buffer, size_t &currIndex) {
-            // ? It is assumed that floats are 32bit
-
+            float r;
             uint32_t n = deserializeUint32(buffer, currIndex);
-            return unpack754(n, 32, 8);
+            memcpy(&r, &n, sizeof(uint32_t));
+            return r;
         };
 
+        // It is assumed that floats are 32bit and IEEE compliant
         inline float deserializeFloat(std::vector<char> const &buffer, size_t &currIndex) {
-            // ? It is assumed that floats are 32bit
-
+            float r;
             uint32_t n = deserializeUint32(buffer, currIndex);
-            return unpack754(n, 32, 8);
+            memcpy(&r, &n, sizeof(uint32_t));
+            return r;
         };
 
         // * ========================================================================================
@@ -295,7 +309,7 @@ namespace Dralgeer {
             int strSize = 0;
 
             // read in the string
-            while(buffer[currIndex+strSize]) { str[strSize] = buffer[(currIndex++)+strSize++]; }
+            while(buffer[currIndex]) { str[strSize++] = buffer[currIndex++]; }
             str[strSize] = '\0';
             ++currIndex;
 

@@ -112,7 +112,7 @@ namespace Dralgeer {
             indices[iIndex + 2] = iOffset + 2;
             
             indices[iIndex + 3] = iOffset + 2;
-            indices[iIndex+ 4] = iOffset + 3;
+            indices[iIndex + 4] = iOffset + 3;
             indices[iIndex + 5] = iOffset;
 
             iOffset += 4;
@@ -597,7 +597,7 @@ namespace Dralgeer {
             }
 
             ADDED:
-            numSprites++;
+            ++numSprites;
         }
     };
 

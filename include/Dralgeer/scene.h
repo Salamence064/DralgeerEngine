@@ -55,6 +55,7 @@ namespace Dralgeer {
             inline SubScene() {};
 
             // * Do not allow for construction of a SubScene from another SubScene
+            // todo update these guys to be constexpr and use static_assert instead
             inline SubScene(SubScene const &ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
             inline SubScene(SubScene &&ss) { throw std::runtime_error("Cannot construct a SubScene object from another SubScene object."); };
 

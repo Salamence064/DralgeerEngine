@@ -300,6 +300,7 @@ namespace Dralgeer {
         // todo swap the order between the game objects and sprite renderers for where they're stored
         // todo since we expect to have more static sprites, this would help us a lot in the average case
 
+        // todo could use a vector for the buffer instead
         char buffer[SERIALIZER_BUFFER_SIZE]; // buffer to write to the file
         size_t bufferSize = 4; // used entries in the buffer -- start at 4 to reserve the first byte for the numObjects, numSprites, and numAreas
 
