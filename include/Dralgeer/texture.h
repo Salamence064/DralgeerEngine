@@ -47,8 +47,6 @@ namespace Dralgeer {
             // * Only call if already in use.
             inline void uploadMat3(char const* name, glm::mat3 const &mat) const {
                 int loc = glGetUniformLocation(shaderID, name);
-                float buffer[9];
-                for (int i = 0; i < 3; ++i) { for (int j = 0; j < 3; ++j) { buffer[3*i + j] = mat[j][i]; }}
                 glUniformMatrix3fv(loc, 1, 0, &mat[0][0]);
             };
 

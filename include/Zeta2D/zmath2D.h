@@ -51,9 +51,6 @@ namespace ZMath {
             // * Instantiate a Vec3D object with each component assigned.
             Vec2D(float i, float j) : x(i), y(j) {};
 
-            // * Instantiate a copy of the Vec3D object passed in.
-            Vec2D(const Vec2D &vec) : x(vec.x), y(vec.y) {};
-
             // * ============================
             // * Functions
             // * ============================
@@ -214,14 +211,6 @@ namespace ZMath {
             Mat2D() {
                 c1 = Vec2D(1, 0);
                 c2 = Vec2D(0, 1);
-            };
-
-            // Create a 2D matrix from another 2D matrix.
-            Mat2D (const Mat2D &mat) {
-                c1.x = mat.c1.x;
-                c1.y = mat.c1.y;
-                c2.x = mat.c2.x;
-                c2.y = mat.c2.y;
             };
 
             // Create a 2D matrix from 2 column vectors.

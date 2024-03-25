@@ -2,16 +2,16 @@
 
 #include "component.h"
 #include "assetpool.h"
+#include <cstring>
 
 namespace Dralgeer {
     // * ===================
     // * Serializer Stuff
     // * ===================
 
-    namespace Serializer {
-        // todo will remove in the future
-        static_assert(sizeof(float) == sizeof(uint32_t) && alignof(float) == alignof(uint32_t), "Sizes of float and uint32 must match");
+    // todo can probs make the stuff here static
 
+    namespace Serializer {
         // * ========================================================================================
         // * Uint Serializers
 
@@ -86,12 +86,13 @@ namespace Dralgeer {
             return (sign<<(bits-1)) | (exp<<(bits-expbits-1)) | significand;
         };
 
+        // ? Assume the float size to be 32bits and IEEE754 compliant.
+        // ? Note, this serializer will fail for any other float format.
         inline void serializeFloat(char* buffer, size_t &bufferSize, float n) {
-            // ? Assume the float size to be 32bits and IEEE754 compliant.
-            // ? Note, this serializer will fail for any other float format.
+            static_assert(sizeof(float) == sizeof(uint32_t) && alignof(float) == alignof(uint32_t), "Sizes of float and uint32 must match");
 
             uint32_t num;
-            memcpy(&num, &n, sizeof(float));
+            std::memcpy(&num, &n, sizeof(float));
             serializeUint32(buffer, bufferSize, num);
         };
 
@@ -99,7 +100,7 @@ namespace Dralgeer {
         // * String Serializer
 
         inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
-            int n = 0;
+            size_t n = 0;
             while (str[n]) { buffer[bufferSize++] = str[n++]; } // null character = 00000000
             buffer[bufferSize++] = str[n]; // add the null character to the buffer to ensure we know when our string ends for deserializing
         };
@@ -289,15 +290,17 @@ namespace Dralgeer {
         inline float deserializeFloat(char* buffer, size_t &currIndex) {
             float r;
             uint32_t n = deserializeUint32(buffer, currIndex);
-            memcpy(&r, &n, sizeof(uint32_t));
+            std::memcpy(&r, &n, sizeof(uint32_t));
             return r;
         };
 
-        // It is assumed that floats are 32bit and IEEE compliant
+        // It is assumed that floats are 32bit and IEEE754 compliant
         inline float deserializeFloat(std::vector<char> const &buffer, size_t &currIndex) {
+            static_assert(sizeof(float) == sizeof(uint32_t) && alignof(float) == alignof(uint32_t), "Sizes of float and uint32 must match");
+
             float r;
             uint32_t n = deserializeUint32(buffer, currIndex);
-            memcpy(&r, &n, sizeof(uint32_t));
+            std::memcpy(&r, &n, sizeof(uint32_t));
             return r;
         };
 
@@ -323,7 +326,7 @@ namespace Dralgeer {
 
             // read in the string
             while(buffer[currIndex]) { str[strSize++] = buffer[currIndex++]; }
-            str[strSize++] = '\0';
+            str[strSize] = '\0';
             ++currIndex;
 
             // create a string object
@@ -401,7 +404,7 @@ namespace Dralgeer {
 
             // deserialize and unpack the rotation
             uint16_t n = deserializeUint16(buffer, currIndex);
-            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f);
+            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f); // todo this is not being deserialized properly
 
             return transform;
         };
@@ -426,7 +429,7 @@ namespace Dralgeer {
 
             // deserialize and unpack the rotation
             uint16_t n = deserializeUint16(buffer, currIndex);
-            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f);
+            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f); // todo this is not being deserialized properly
 
             return transform;
         };
