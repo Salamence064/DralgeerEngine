@@ -123,7 +123,7 @@ namespace Dralgeer {
     // * Deserializer Stuff
     // * =====================
 
-    // ? Note: The deserializers expect the data at the given buffer index to be valid for the retuned type.
+    // Note: The deserializers expect the data at the given buffer index to be valid for the returned type.
     namespace Deserializer {
         // * ========================================================================================
         // * Primitive Deserializers
