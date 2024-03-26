@@ -311,8 +311,6 @@ namespace Dralgeer {
         uint16_t cap = 32;
         SpriteRenderer** spr = new SpriteRenderer*[32];
 
-        // todo go through and print out the floats stuff to test
-
         // serialize game objects
         for (uint16_t i = 0; i < numObjects; ++i) {
             if (gameObjects[i]->serialize) {
@@ -373,16 +371,14 @@ namespace Dralgeer {
             delete[] gameObjects;
         }
 
-        // todo the float 0.428571 does not get serialized properly
-
         // use some std library tricks to get all the data into a buffer
         std::vector<char> buffer(std::istreambuf_iterator<char>(f), {});
         size_t curr = 0; // current index at the buffer
         f.close();
 
         // read in the numObjects and numSprites
-        uint16_t objects = Deserializer::deserializeUint16(buffer, curr);
-        uint16_t numSprites = Deserializer::deserializeUint16(buffer, curr);
+        uint16_t objects = Deserializer::deserializePrimitive<uint16_t>(buffer, curr);
+        uint16_t numSprites = Deserializer::deserializePrimitive<uint16_t>(buffer, curr);
 
         gameObjects = new GameObject*[objects+numSprites];
 

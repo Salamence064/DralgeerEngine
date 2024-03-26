@@ -9,119 +9,48 @@ namespace Dralgeer {
     // * Serializer Stuff
     // * ===================
 
-    // todo can probs make the stuff here static
+    // todo test which functions can be made constexpr and which can't once I get everything working
+    // todo only fails on some string stuff now
 
     namespace Serializer {
         // * ========================================================================================
-        // * Uint Serializers
+        // * Primitive Serializer
 
-        inline void serializeUint64(char* buffer, size_t &bufferSize, uint64_t n) {
-            buffer[bufferSize++] = n >> 56;
-            buffer[bufferSize++] = n >> 48;
-            buffer[bufferSize++] = n >> 40;
-            buffer[bufferSize++] = n >> 32;
-            buffer[bufferSize++] = n >> 24;
-            buffer[bufferSize++] = n >> 16;
-            buffer[bufferSize++] = n >> 8;
-            buffer[bufferSize++] = n;
-        };
-
-        inline void serializeUint32(char* buffer, size_t &bufferSize, uint32_t n) {
-            buffer[bufferSize++] = n >> 24;
-            buffer[bufferSize++] = n >> 16;
-            buffer[bufferSize++] = n >> 8;
-            buffer[bufferSize++] = n;
-        };
-
-        inline void serializeUint16(char* buffer, size_t &bufferSize, uint16_t n) {
-            buffer[bufferSize++] = n >> 8;
-            buffer[bufferSize++] = n;
-        };
-
-        inline void serializeUint8(char* buffer, size_t &bufferSize, uint8_t n) {
-            buffer[bufferSize++] = n;
-        };
-
-        // * ========================================================================================
-        // * Float Serializer
-
-        // todo write my own IEEE-754 float packer and unpacker
-
-        // ? The IEEE-754 float format is as follows:
-        // ?   1 bit for the sign
-        // ?   8 bits for the exponent
-        // ?   23 bits for the mantissa/significand/fraction
-        // ? Bits 0-22 are the fraction/mantissa/significand
-        // ? Bits 23-30 are the exponent
-        // ? Bit 31 is the sign
-
-
-        // Pack an IEEE-754 float.
-        // Code from Brian Hall's Guide to Network Programming.
-        inline uint32_t pack754(float f, uint8_t bits, uint8_t expbits) {
-            float fnorm;
-            int shift;
-            uint32_t sign, exp, significand;
-            uint8_t significandbits = bits - expbits - 1; // -1 for sign bit
-
-            if (f == 0.0) return 0; // get this special case out of the way
-
-            // check sign and begin normalization
-            if (f < 0) { sign = 1; fnorm = -f; }
-            else { sign = 0; fnorm = f; }
-
-            // get the normalized form of f and track the exponent
-            shift = 0;
-            while(fnorm >= 2.0) { fnorm /= 2.0; shift++; }
-            while(fnorm < 1.0) { fnorm *= 2.0; shift--; }
-            fnorm = fnorm - 1.0;
-
-            // calculate the binary form (non-float) of the significand data
-            significand = fnorm * ((1LL<<significandbits) + 0.5f);
-
-            // get the biased exponent
-            exp = shift + ((1<<(expbits-1)) - 1); // shift + bias
-
-            // return the final answer
-            return (sign<<(bits-1)) | (exp<<(bits-expbits-1)) | significand;
-        };
-
-        // ? Assume the float size to be 32bits and IEEE754 compliant.
-        // ? Note, this serializer will fail for any other float format.
-        inline void serializeFloat(char* buffer, size_t &bufferSize, float n) {
-            static_assert(sizeof(float) == sizeof(uint32_t) && alignof(float) == alignof(uint32_t), "Sizes of float and uint32 must match");
-
-            uint32_t num;
-            std::memcpy(&num, &n, sizeof(float));
-            serializeUint32(buffer, bufferSize, num);
+        // Serialize an arbitrary primitive of type T.
+        // Do NOT use this function on non-trivial datatypes.
+        // It is not recommended to use on pointers as only the memory address will be serialized.
+        template <typename T>
+        static constexpr void serializePrimitive(char* buffer, size_t &bufferSize, T n) {
+            std::memcpy(&buffer[bufferSize], &n, sizeof(T));
+            bufferSize += sizeof(T);
         };
 
         // * ========================================================================================
         // * String Serializer
 
-        inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
+        static inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
             size_t n = 0;
-            while (str[n]) { buffer[bufferSize++] = str[n++]; } // null character = 00000000
+            while (str[n]) { buffer[bufferSize++] = str[n++]; } // null character = 0x00000000
             buffer[bufferSize++] = str[n]; // add the null character to the buffer to ensure we know when our string ends for deserializing
         };
 
         // * ========================================================================================
         // * Sprite Serializer
 
-        inline void serializeSprite(char* buffer, size_t &bufferSize, Sprite const &sprite) {
+        static inline void serializeSprite(char* buffer, size_t &bufferSize, Sprite const &sprite) {
             // store the width and height
-            serializeUint16(buffer, bufferSize, (uint16_t) sprite.width);
-            serializeUint16(buffer, bufferSize, (uint16_t) sprite.height);
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) sprite.width);
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) sprite.height);
 
             // store the texCoords
-            serializeFloat(buffer, bufferSize, sprite.texCoords[0].x);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[0].y);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[1].x);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[1].y);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[2].x);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[2].y);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[3].x);
-            serializeFloat(buffer, bufferSize, sprite.texCoords[3].y);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[0].x);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[0].y);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[1].x);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[1].y);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[2].x);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[2].y);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[3].x);
+            serializePrimitive<float>(buffer, bufferSize, sprite.texCoords[3].y);
 
             // store the texture's filepath
             size_t n = sprite.texture->filepath.find_last_of('/') + 1;
@@ -132,22 +61,22 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Transform Serializer
 
-        inline void serializeTransform(char* buffer, size_t &bufferSize, Transform const &transform) {
+        static inline void serializeTransform(char* buffer, size_t &bufferSize, Transform const &transform) {
             // store the position
-            serializeUint16(buffer, bufferSize, (uint16_t) transform.pos.x);
-            serializeUint16(buffer, bufferSize, (uint16_t) transform.pos.y);
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) transform.pos.x);
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) transform.pos.y);
             
             // store the width and height
-            serializeUint16(buffer, bufferSize, (uint16_t) transform.scale.x);
-            serializeUint16(buffer, bufferSize, (uint16_t) transform.scale.y);
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) transform.scale.x);
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) transform.scale.y);
 
             // store the zIndex
-            serializeUint16(buffer, bufferSize, (uint16_t) (transform.zIndex + 499));
+            serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) (transform.zIndex + 499));
 
             // pack the rotation data into 16 bits
             // first 9 bits are the non-decimal values
             // last 7 bits are the first 2 decimal places of the rotation
-            serializeUint16(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floor(transform.rotation/360.0f)))<<7) | 
+            serializePrimitive<uint16_t>(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floor(transform.rotation/360.0f)))<<7) | 
                                                 ((uint16_t) ((transform.rotation - (int) transform.rotation)*100)));
             
             // more readable version of what's happening above
@@ -160,12 +89,12 @@ namespace Dralgeer {
         // * SpriteRenderer Serializer
 
         // Takes in spr as a pointer since the engine stores its SpriteRenderers as pointers in most parts
-        inline void serializeSpriteRenderer(char* buffer, size_t &bufferSize, SpriteRenderer* spr) {
+        static inline void serializeSpriteRenderer(char* buffer, size_t &bufferSize, SpriteRenderer* spr) {
             // store the color values
-            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.r));
-            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.g));
-            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.b));
-            serializeUint8(buffer, bufferSize, (uint8_t) (255*spr->color.a));
+            serializePrimitive<uint8_t>(buffer, bufferSize, (uint8_t) (255*spr->color.r));
+            serializePrimitive<uint8_t>(buffer, bufferSize, (uint8_t) (255*spr->color.g));
+            serializePrimitive<uint8_t>(buffer, bufferSize, (uint8_t) (255*spr->color.b));
+            serializePrimitive<uint8_t>(buffer, bufferSize, (uint8_t) (255*spr->color.a));
 
             // serialize the sprite
             serializeSprite(buffer, bufferSize, spr->sprite);
@@ -178,7 +107,7 @@ namespace Dralgeer {
         // * GameObject Serializer
 
         // GameObjects are stored as pointers in most parts of the engine so it takes in GameObject as a pointer.
-        inline void serializeGameObject(char* buffer, size_t &bufferSize, GameObject* go) {
+        static inline void serializeGameObject(char* buffer, size_t &bufferSize, GameObject* go) {
             // store the name
             serializeString(buffer, bufferSize, go->name.c_str());
 
@@ -197,117 +126,34 @@ namespace Dralgeer {
     // ? Note: The deserializers expect the data at the given buffer index to be valid for the retuned type.
     namespace Deserializer {
         // * ========================================================================================
-        // * Uint Deserializers
+        // * Primitive Deserializers
 
-        inline uint64_t deserializeUint64(char* buffer, size_t &currIndex) {
-            return (uint64_t) buffer[currIndex++] << 56
-                    | (uint64_t) buffer[currIndex++] << 48
-                    | (uint64_t) buffer[currIndex++] << 40
-                    | (uint64_t) buffer[currIndex++] << 32
-                    | (uint32_t) buffer[currIndex++] << 24
-                    | (uint32_t) buffer[currIndex++] << 16
-                    | (uint16_t) buffer[currIndex++] << 8
-                    | (uint8_t) buffer[currIndex++];
+        // Deserialize an arbitrary primitive of type T.
+        // Do NOT use this function on non-trivial datatypes.
+        // It is not recommended to use on pointers as only the memory address will be serialized.
+        template <typename T>
+        static constexpr T deserializePrimitive(char* buffer, size_t &currIndex) {
+            T n;
+            std::memcpy(&n, &buffer[currIndex], sizeof(T));
+            currIndex += sizeof(T);
+            return n;
         };
 
-        inline uint32_t deserializeUint32(char* buffer, size_t &currIndex) {
-            return (uint32_t) buffer[currIndex++] << 24
-                    | (uint32_t) buffer[currIndex++] << 16
-                    | (uint16_t) buffer[currIndex++] << 8
-                    | (uint8_t) buffer[currIndex++];
-        };
-
-        inline uint16_t deserializeUint16(char* buffer, size_t &currIndex) {
-            return (uint16_t) buffer[currIndex++] << 8
-                    | (uint8_t) buffer[currIndex++];
-        };
-
-        inline uint8_t deserializeUint8(char* buffer, size_t &currIndex) { return (uint8_t) buffer[currIndex++]; };
-
-
-        // * =======================
-        // * STD Library Friendly
-        // * =======================
-
-        inline uint64_t deserializeUint64(std::vector<char> const &buffer, size_t &currIndex) {
-            return (uint64_t) buffer[currIndex++] << 56
-                    | (uint64_t) buffer[currIndex++] << 48
-                    | (uint64_t) buffer[currIndex++] << 40
-                    | (uint64_t) buffer[currIndex++] << 32
-                    | (uint32_t) buffer[currIndex++] << 24
-                    | (uint32_t) buffer[currIndex++] << 16
-                    | (uint16_t) buffer[currIndex++] << 8
-                    | (uint8_t) buffer[currIndex++];
-        };
-
-        inline uint32_t deserializeUint32(std::vector<char> const &buffer, size_t &currIndex) {
-            return (uint32_t) buffer[currIndex++] << 24
-                    | (uint32_t) buffer[currIndex++] << 16
-                    | (uint16_t) buffer[currIndex++] << 8
-                    | (uint8_t) buffer[currIndex++];
-        };
-
-        inline uint16_t deserializeUint16(std::vector<char> const &buffer, size_t &currIndex) {
-            return (uint16_t) buffer[currIndex++] << 8
-                    | (uint8_t) buffer[currIndex++];
-        };
-
-        inline uint8_t deserializeUint8(std::vector<char> const &buffer, size_t &currIndex) { return (uint8_t) buffer[currIndex++]; };
-
-        // * ========================================================================================
-        // * Float Deserializer
-
-        // Unpack an IEEE-754 float.
-        // Code from Brian Hall's Guide to Network Programming.
-        inline float unpack754(uint32_t i, uint8_t bits, uint8_t expbits) {
-            // std::cout << "howdy\n";
-
-            float result;
-            long long shift;
-            uint32_t bias;
-            uint8_t significandbits = bits - expbits - 1; // -1 for sign bit
-
-            if (i == 0) return 0.0;
-
-            // pull the significand
-            result = (i&((1LL<<significandbits)-1)); // mask
-            result /= (1LL<<significandbits); // convert back to float
-            result += 1.0f; // add the one back on
-
-            // deal with the exponent
-            bias = (1<<(expbits-1)) - 1;
-            shift = ((i>>significandbits)&((1LL<<expbits)-1)) - bias;
-            while(shift > 0) { result *= 2.0; shift--; }
-            while(shift < 0) { result /= 2.0; shift++; }
-
-            // sign it
-            result *= (i>>(bits-1))&1? -1.0: 1.0;
-
-            return result;
-        };
-
-        // It is assumed that floats are 32bit and IEEE754 compliant
-        inline float deserializeFloat(char* buffer, size_t &currIndex) {
-            float r;
-            uint32_t n = deserializeUint32(buffer, currIndex);
-            std::memcpy(&r, &n, sizeof(uint32_t));
-            return r;
-        };
-
-        // It is assumed that floats are 32bit and IEEE754 compliant
-        inline float deserializeFloat(std::vector<char> const &buffer, size_t &currIndex) {
-            static_assert(sizeof(float) == sizeof(uint32_t) && alignof(float) == alignof(uint32_t), "Sizes of float and uint32 must match");
-
-            float r;
-            uint32_t n = deserializeUint32(buffer, currIndex);
-            std::memcpy(&r, &n, sizeof(uint32_t));
-            return r;
+        // Deserialize an arbitrary primitive of type T.
+        // Do NOT use this function on non-trivial datatypes.
+        // It is not recommended to use on pointers as only the memory address will be serialized.
+        template <typename T>
+        static constexpr T deserializePrimitive(std::vector<char> const &buffer, size_t &currIndex) {
+            T n;
+            std::memcpy(&n, &buffer[currIndex], sizeof(T));
+            currIndex += sizeof(T);
+            return n;
         };
 
         // * ========================================================================================
         // * String Deserializer
 
-        inline std::string deserializeString(char* buffer, size_t &currIndex) {
+        static inline std::string deserializeString(char* buffer, size_t &currIndex) {
             char str[SERIALIZER_MAX_STRING_SIZE]; // read characters into a buffer used to instantiate a string
             int strSize = 0;
 
@@ -320,7 +166,7 @@ namespace Dralgeer {
             return std::string(str);
         };
 
-        inline std::string deserializeString(std::vector<char> const &buffer, size_t &currIndex) {
+        static inline std::string deserializeString(std::vector<char> const &buffer, size_t &currIndex) {
             char str[SERIALIZER_MAX_STRING_SIZE]; // read characters into a buffer used to instantiate a string
             int strSize = 0;
 
@@ -336,44 +182,44 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Sprite Deserializer
 
-        inline Sprite deserializeSprite(char* buffer, size_t &currIndex) {
+        static inline Sprite deserializeSprite(char* buffer, size_t &currIndex) {
             Sprite sprite;
 
             // read in the width and height of the sprite
-            sprite.width = deserializeUint16(buffer, currIndex);
-            sprite.height = deserializeUint16(buffer, currIndex);
+            sprite.width = deserializePrimitive<uint16_t>(buffer, currIndex);
+            sprite.height = deserializePrimitive<uint16_t>(buffer, currIndex);
 
             // read in the texture coordinates
-            sprite.texCoords[0].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[0].y = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[1].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[1].y = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[2].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[2].y = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[3].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[3].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[0].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[0].y = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[1].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[1].y = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[2].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[2].y = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[3].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[3].y = deserializePrimitive<float>(buffer, currIndex);
 
             // read in the texture's filepath and initialize it
             sprite.texture = AssetPool::getTexture("../../assets/images/spritesheets/" + deserializeString(buffer, currIndex) + ".png");
             return sprite;
         };
 
-        inline Sprite deserializeSprite(std::vector<char> const &buffer, size_t &currIndex) {
+        static inline Sprite deserializeSprite(std::vector<char> const &buffer, size_t &currIndex) {
             Sprite sprite;
 
             // read in the width and height of the sprite
-            sprite.width = deserializeUint16(buffer, currIndex);
-            sprite.height = deserializeUint16(buffer, currIndex);
+            sprite.width = deserializePrimitive<uint16_t>(buffer, currIndex);
+            sprite.height = deserializePrimitive<uint16_t>(buffer, currIndex);
 
             // read in the texture coordinates
-            sprite.texCoords[0].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[0].y = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[1].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[1].y = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[2].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[2].y = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[3].x = deserializeFloat(buffer, currIndex);
-            sprite.texCoords[3].y = deserializeFloat(buffer, currIndex);
+            sprite.texCoords[0].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[0].y = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[1].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[1].y = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[2].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[2].y = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[3].x = deserializePrimitive<float>(buffer, currIndex);
+            sprite.texCoords[3].y = deserializePrimitive<float>(buffer, currIndex);
 
             // read in the texture's filepath and initialize it
             std::string str = deserializeString(buffer, currIndex);
@@ -384,7 +230,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Transform Deserializer
 
-        inline Transform deserializeTransform(char* buffer, size_t &currIndex) {
+        static inline Transform deserializeTransform(char* buffer, size_t &currIndex) {
             Transform transform;
 
             // bit masks
@@ -392,24 +238,24 @@ namespace Dralgeer {
             const uint16_t decimal = 0b0000000001111111;
 
             // deserialize the position
-            transform.pos.x = deserializeUint16(buffer, currIndex);
-            transform.pos.y = deserializeUint16(buffer, currIndex);
+            transform.pos.x = deserializePrimitive<uint16_t>(buffer, currIndex);
+            transform.pos.y = deserializePrimitive<uint16_t>(buffer, currIndex);
 
             // deserialize the width and height
-            transform.scale.x = deserializeUint16(buffer, currIndex);
-            transform.scale.y = deserializeUint16(buffer, currIndex);
+            transform.scale.x = deserializePrimitive<uint16_t>(buffer, currIndex);
+            transform.scale.y = deserializePrimitive<uint16_t>(buffer, currIndex);
 
             // deserialize the zIndex
-            transform.zIndex = (int) deserializeUint16(buffer, currIndex) - 499;
+            transform.zIndex = (int) deserializePrimitive<uint16_t>(buffer, currIndex) - 499;
 
             // deserialize and unpack the rotation
-            uint16_t n = deserializeUint16(buffer, currIndex);
+            uint16_t n = deserializePrimitive<uint16_t>(buffer, currIndex);
             transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f); // todo this is not being deserialized properly
 
             return transform;
         };
 
-        inline Transform deserializeTransform(std::vector<char> const &buffer, size_t &currIndex) {
+        static inline Transform deserializeTransform(std::vector<char> const &buffer, size_t &currIndex) {
             Transform transform;
 
             // bit masks
@@ -417,18 +263,18 @@ namespace Dralgeer {
             const uint16_t decimal = 0b0000000001111111;
 
             // deserialize the position
-            transform.pos.x = deserializeUint16(buffer, currIndex);
-            transform.pos.y = deserializeUint16(buffer, currIndex);
+            transform.pos.x = deserializePrimitive<uint16_t>(buffer, currIndex);
+            transform.pos.y = deserializePrimitive<uint16_t>(buffer, currIndex);
 
             // deserialize the width and height
-            transform.scale.x = deserializeUint16(buffer, currIndex);
-            transform.scale.y = deserializeUint16(buffer, currIndex);
+            transform.scale.x = deserializePrimitive<uint16_t>(buffer, currIndex);
+            transform.scale.y = deserializePrimitive<uint16_t>(buffer, currIndex);
 
             // deserialize the zIndex
-            transform.zIndex = (int) deserializeUint16(buffer, currIndex) - 499;
+            transform.zIndex = (int) deserializePrimitive<uint16_t>(buffer, currIndex) - 499;
 
             // deserialize and unpack the rotation
-            uint16_t n = deserializeUint16(buffer, currIndex);
+            uint16_t n = deserializePrimitive<uint16_t>(buffer, currIndex);
             transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f); // todo this is not being deserialized properly
 
             return transform;
@@ -437,14 +283,14 @@ namespace Dralgeer {
         // * ========================================================================================
         // * SpriteRenderer Deserializer
 
-        inline SpriteRenderer* deserializeSpriteRenderer(char* buffer, size_t &currIndex) {
+        static inline SpriteRenderer* deserializeSpriteRenderer(char* buffer, size_t &currIndex) {
             SpriteRenderer* spr = new SpriteRenderer();
 
             // deserialize the color values
-            spr->color.r = deserializeUint8(buffer, currIndex)/255.0f;
-            spr->color.g = deserializeUint8(buffer, currIndex)/255.0f;
-            spr->color.b = deserializeUint8(buffer, currIndex)/255.0f;
-            spr->color.a = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.r = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
+            spr->color.g = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
+            spr->color.b = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
+            spr->color.a = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
 
             // deserialize the sprite
             spr->sprite = deserializeSprite(buffer, currIndex);
@@ -455,14 +301,14 @@ namespace Dralgeer {
             return spr;
         };
 
-        inline SpriteRenderer* deserializeSpriteRenderer(std::vector<char> const &buffer, size_t &currIndex) {
+        static inline SpriteRenderer* deserializeSpriteRenderer(std::vector<char> const &buffer, size_t &currIndex) {
             SpriteRenderer* spr = new SpriteRenderer();
 
             // deserialize the color values
-            spr->color.r = deserializeUint8(buffer, currIndex)/255.0f;
-            spr->color.g = deserializeUint8(buffer, currIndex)/255.0f;
-            spr->color.b = deserializeUint8(buffer, currIndex)/255.0f;
-            spr->color.a = deserializeUint8(buffer, currIndex)/255.0f;
+            spr->color.r = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
+            spr->color.g = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
+            spr->color.b = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
+            spr->color.a = deserializePrimitive<uint8_t>(buffer, currIndex)/255.0f;
 
             // deserialize the sprite
             spr->sprite = deserializeSprite(buffer, currIndex);
@@ -476,7 +322,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * GameObject Serializer
 
-        inline GameObject* deserializeGameObject(char* buffer, size_t &currIndex) {
+        static inline GameObject* deserializeGameObject(char* buffer, size_t &currIndex) {
             GameObject* go = new GameObject();
 
             // deserialize the name
@@ -491,7 +337,7 @@ namespace Dralgeer {
             return go;
         };
 
-        inline GameObject* deserializeGameObject(std::vector<char> const &buffer, size_t &currIndex) {
+        static inline GameObject* deserializeGameObject(std::vector<char> const &buffer, size_t &currIndex) {
             GameObject* go = new GameObject();
 
             // deserialize the name
