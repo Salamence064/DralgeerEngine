@@ -25,7 +25,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * String Serializer
 
-        static inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
+        static constexpr void serializeString(char* buffer, size_t &bufferSize, const char* str) {
             size_t n = 0;
             while (str[n]) { buffer[bufferSize++] = str[n++];} // null character = 0x00000000
             buffer[bufferSize++] = str[n]; // add the null character to the buffer to ensure we know when our string ends for deserializing
@@ -58,7 +58,7 @@ namespace Dralgeer {
         // * ========================================================================================
         // * Transform Serializer
 
-        static inline void serializeTransform(char* buffer, size_t &bufferSize, Transform const &transform) {
+        static constexpr void serializeTransform(char* buffer, size_t &bufferSize, Transform const &transform) {
             // store the position
             serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) transform.pos.x);
             serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) transform.pos.y);
