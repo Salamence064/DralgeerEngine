@@ -302,7 +302,7 @@ namespace Dralgeer {
 
         // todo could use a vector for the buffer instead
         char buffer[SERIALIZER_BUFFER_SIZE]; // buffer to write to the file
-        size_t bufferSize = 4; // used entries in the buffer -- start at 4 to reserve the first byte for the numObjects, numSprites, and numAreas
+        size_t bufferSize = 4; // used entries in the buffer -- we reserve the first 4 bytes for the object and sprite counts
 
         uint16_t objects = 0;
         uint16_t numSprites = 0;
@@ -317,11 +317,6 @@ namespace Dralgeer {
                 if (gameObjects[i]->dynamic) {
                     ++objects;
                     Serializer::serializeGameObject(buffer, bufferSize, gameObjects[i]);
-
-                    Sprite s = gameObjects[i]->sprite->sprite;
-                    std::cout << "TexCoords: " << s.texCoords[0].x << ", " << s.texCoords[0].y << "; " << s.texCoords[1].x << ", " << s.texCoords[1].y;
-                    std::cout << "; " << s.texCoords[2].x << ", " << s.texCoords[2].y << "; " << s.texCoords[3].x << ", " << s.texCoords[3].y;
-                    std::cout << "\n\n";
 
                 } else {
                     // check for resizing
@@ -347,10 +342,8 @@ namespace Dralgeer {
         delete[] spr;
 
         // serialize the object and sprite renderer counts
-        buffer[0] = objects >> 8;
-        buffer[1] = objects;
-        buffer[2] = numSprites >> 8;
-        buffer[3] = numSprites;
+        std::memcpy(&buffer[0], &objects, sizeof(uint16_t));
+        std::memcpy(&buffer[2], &numSprites, sizeof(uint16_t));
 
         // write the buffer to the file
         std::fstream f("../scenes/levelEditor.scene", std::ios::binary | std::ios::out | std::fstream::trunc);
@@ -386,11 +379,6 @@ namespace Dralgeer {
         for (uint16_t i = 0; i < objects; ++i) {
             gameObjects[i] = Deserializer::deserializeGameObject(buffer, curr);
             Sprite s = gameObjects[i]->sprite->sprite;
-
-            std::cout << "GameObject " << i << ":\n";
-            std::cout << "TexCoords: " <<  s.texCoords[0].x << ", " << s.texCoords[0].y << "; " << s.texCoords[1].x << ", " << s.texCoords[1].y;
-            std::cout << "; " << s.texCoords[2].x << ", " << s.texCoords[2].y << "; " << s.texCoords[3].x << ", " << s.texCoords[3].y;
-            std::cout << "\n\n";
         }
 
         // read in all of the SpriteRenderers

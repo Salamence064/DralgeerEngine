@@ -9,9 +9,6 @@ namespace Dralgeer {
     // * Serializer Stuff
     // * ===================
 
-    // todo test which functions can be made constexpr and which can't once I get everything working
-    // todo only fails on some string stuff now
-
     namespace Serializer {
         // * ========================================================================================
         // * Primitive Serializer
@@ -30,7 +27,7 @@ namespace Dralgeer {
 
         static inline void serializeString(char* buffer, size_t &bufferSize, const char* str) {
             size_t n = 0;
-            while (str[n]) { buffer[bufferSize++] = str[n++]; } // null character = 0x00000000
+            while (str[n]) { buffer[bufferSize++] = str[n++];} // null character = 0x00000000
             buffer[bufferSize++] = str[n]; // add the null character to the buffer to ensure we know when our string ends for deserializing
         };
 
@@ -73,16 +70,8 @@ namespace Dralgeer {
             // store the zIndex
             serializePrimitive<uint16_t>(buffer, bufferSize, (uint16_t) (transform.zIndex + 499));
 
-            // pack the rotation data into 16 bits
-            // first 9 bits are the non-decimal values
-            // last 7 bits are the first 2 decimal places of the rotation
-            serializePrimitive<uint16_t>(buffer, bufferSize, (((uint16_t) (transform.rotation - 360 * (int) std::floor(transform.rotation/360.0f)))<<7) | 
-                                                ((uint16_t) ((transform.rotation - (int) transform.rotation)*100)));
-            
-            // more readable version of what's happening above
-            // uint16_t n = (uint16_t) (transform.rotation - 360 * (int) std::floorf(transform.rotation));
-            // uint16_t d = (uint16_t) ((transform.rotation - (int) transform.rotation)*100);
-            // uint16_t r = n<<7|d; where r is the value serialized
+            // store the rotation
+            serializePrimitive<float>(buffer, bufferSize, transform.rotation);
         };
 
         // * ========================================================================================
@@ -233,10 +222,6 @@ namespace Dralgeer {
         static inline Transform deserializeTransform(char* buffer, size_t &currIndex) {
             Transform transform;
 
-            // bit masks
-            const uint16_t nonDecimal = 0b1111111110000000;
-            const uint16_t decimal = 0b0000000001111111;
-
             // deserialize the position
             transform.pos.x = deserializePrimitive<uint16_t>(buffer, currIndex);
             transform.pos.y = deserializePrimitive<uint16_t>(buffer, currIndex);
@@ -248,9 +233,8 @@ namespace Dralgeer {
             // deserialize the zIndex
             transform.zIndex = (int) deserializePrimitive<uint16_t>(buffer, currIndex) - 499;
 
-            // deserialize and unpack the rotation
-            uint16_t n = deserializePrimitive<uint16_t>(buffer, currIndex);
-            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f); // todo this is not being deserialized properly
+            // deserialize the rotation
+            transform.rotation = deserializePrimitive<float>(buffer, currIndex);
 
             return transform;
         };
@@ -258,10 +242,6 @@ namespace Dralgeer {
         static inline Transform deserializeTransform(std::vector<char> const &buffer, size_t &currIndex) {
             Transform transform;
 
-            // bit masks
-            const uint16_t nonDecimal = 0b1111111110000000;
-            const uint16_t decimal = 0b0000000001111111;
-
             // deserialize the position
             transform.pos.x = deserializePrimitive<uint16_t>(buffer, currIndex);
             transform.pos.y = deserializePrimitive<uint16_t>(buffer, currIndex);
@@ -273,9 +253,8 @@ namespace Dralgeer {
             // deserialize the zIndex
             transform.zIndex = (int) deserializePrimitive<uint16_t>(buffer, currIndex) - 499;
 
-            // deserialize and unpack the rotation
-            uint16_t n = deserializePrimitive<uint16_t>(buffer, currIndex);
-            transform.rotation = (n&nonDecimal) + ((n&decimal)/100.0f); // todo this is not being deserialized properly
+            // deserialize the rotation
+            transform.rotation = deserializePrimitive<float>(buffer, currIndex);
 
             return transform;
         };

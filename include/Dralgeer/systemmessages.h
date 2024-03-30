@@ -3,6 +3,7 @@
 #pragma once
 
 // ? A header including macros for system messages
+// todo update to just be constexprs
 
 
 #define DEBUG_MESSAGE(objectType, name, description, expected, obtained) \
